@@ -1,0 +1,13 @@
+h1 span {
+    display: inline-block; /* Allows applying width, height, margins, etc. */
+    animation: fadeLoop 2s infinite alternate; /* Apply the animation */
+  }
+  
+  @keyframes fadeLoop {
+    from {
+      opacity: 0.2;
+    }
+    to {
+      opacity: 1;
+    }
+  }
