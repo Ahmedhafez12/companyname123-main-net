@@ -1,13 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Mail,
+  Envelope,
   Phone,
   MapPin,
-  Network,
+  ShareNetwork,
   ArrowRight,
-  LucideIcon,
-} from "lucide-react";
+} from "phosphor-react";
 import { Link } from "react-router-dom";
 import {
   FaFacebookF,
@@ -143,6 +142,53 @@ const FooterLogo: React.FC<{ className?: string }> = ({ className }) => (
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
+  const renderLinkColumns = (links: { name: string; href: string }[]) => {
+    const columns: { name: string; href: string }[][] = [];
+    for (let i = 0; i < links.length; i += 3) columns.push(links.slice(i, i + 3));
+
+    if (columns.length <= 1) {
+      return (
+        <ul className="space-y-1">
+          {links.map((link) => (
+            <li key={link.name}>
+              <Link
+                to={link.href}
+                className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
+              >
+                <div className="p-0.5 mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
+                {link.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-2 gap-x-8">
+        {columns.slice(0, 2).map((col, idx) => (
+          <ul key={idx} className="space-y-1">
+            {col.map((link) => (
+              <li key={link.name}>
+                <Link
+                  to={link.href}
+                  className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
+                >
+                  <div className="p-0.5 mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <ArrowRight weight="thin" size={20} />
+                  </div>
+                  {link.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ))}
+      </div>
+    );
+  };
+
   // Category 1: Legal & Utility
   const legalUtilityLinks = [
     { name: "Privacy Policy", href: "/privacy" },
@@ -162,9 +208,9 @@ const Footer: React.FC = () => {
   // About Us Page Hash Anchors (1x2)
   const aboutUsAnchors = [
     { name: "What We Do", href: "/about/overview#what-we-do" },
-    // { name: "Company Identity", href: "/about/overview#company-identity" },
+    { name: "Company Identity", href: "/about/overview#company-identity" },
     // { name: "Value Proposition", href: "/about/overview#value-proposition" },
-    // { name: "Competitive Edge", href: "/about/overview#competitive-edge" },
+    { name: "Competitive Edge", href: "/about/overview#competitive-edge" },
     { name: "Our Journey", href: "/about/overview#our-journey" },
     { name: "Vision and Mission", href: "/about/overview#vision-mission" },
     { name: "Core Strengths", href: "/about/overview#core-strengths" },
@@ -185,8 +231,8 @@ const Footer: React.FC = () => {
   ];
 
   // Contact Info and Link
-  const contactInfo: { icon: LucideIcon; text: string; type: string }[] = [
-    { icon: Mail, text: "contact@example.com", type: "email" },
+  const contactInfo: { icon: React.ComponentType<{ className?: string }>; text: string; type: string }[] = [
+    { icon: Envelope, text: "contact@example.com", type: "email" },
     { icon: Phone, text: "+1 (555) 123-4567", type: "phone" },
     { icon: MapPin, text: "123 Tech Street, Innovation City", type: "address" },
   ];
@@ -246,22 +292,7 @@ const Footer: React.FC = () => {
                 <h3 className="text-[#ECF0F1] text-sm font-bold mb-3">
                   Quick Links
                 </h3>
-                <ul className="space-y-1">
-                  {quickLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
-                      >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {renderLinkColumns(quickLinks)}
               </motion.div>
 
               {/* Row 1, Column 2 (1x2): All Hash Anchors of AboutUsPage.tsx */}
@@ -274,22 +305,7 @@ const Footer: React.FC = () => {
                 <h3 className="text-[#ECF0F1] text-sm font-bold mb-3">
                   About Us
                 </h3>
-                <ul className="space-y-1">
-                  {aboutUsAnchors.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
-                      >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {renderLinkColumns(aboutUsAnchors)}
               </motion.div>
 
               {/* Row 1, Column 3 (1x3): Contact Category */}
@@ -308,18 +324,20 @@ const Footer: React.FC = () => {
                       key={index}
                       className="flex items-center text-[#ECF0F1]/75 text-xs"
                     >
-                      <item.icon className="h-3.5 w-3.5 mr-1.5" />
+                      <div className="p-0.5 mr-1.5">
+                        <item.icon weight="thin" size={20} />
+                      </div>
                       {item.type === "email" ? (
                         <a
                           href={`mailto:${item.text}`}
-                          className="hover:text-[#44c8f5] transition-colors duration-300"
+                          className="hover:text-[#005E96] transition-colors duration-300"
                         >
                           {item.text}
                         </a>
                       ) : item.type === "phone" ? (
                         <a
                           href={`tel:${item.text.replace(/\D/g, "")}`}
-                          className="hover:text-[#44c8f5] transition-colors duration-300"
+                          className="hover:text-[#005E96] transition-colors duration-300"
                         >
                           {item.text}
                         </a>
@@ -344,24 +362,11 @@ const Footer: React.FC = () => {
                 <div className="space-y-2">
                   {/* Telecommunications Section */}
                   <div>
-                    <ul className="space-y-1">
-                      {whatWeDoAnchors
+                    {renderLinkColumns(
+                      whatWeDoAnchors
                         .filter((link) => link.category === "Telecommunications")
-                        .map((link) => (
-                          <li key={link.name}>
-                            <Link
-                              to={link.href}
-                              className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
-                            >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                              {link.name}
-                            </Link>
-                          </li>
-                        ))}
-                    </ul>
+                        .map(({ name, href }) => ({ name, href }))
+                    )}
                   </div>
                   {/* Command & Control Section */}
                   {/* <div>
@@ -377,10 +382,9 @@ const Footer: React.FC = () => {
                               to={link.href}
                               className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
                             >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
+                      <div className="p-0.5 mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ArrowRight weight="thin" size={20} />
+                      </div>
                               {link.name}
                             </Link>
                           </li>
@@ -400,22 +404,7 @@ const Footer: React.FC = () => {
                 <h3 className="text-[#ECF0F1] text-sm font-bold mb-3">
                   Command & Control
                 </h3>
-                <ul className="space-y-1">
-                  {ourImpactLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
-                      >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {renderLinkColumns(ourImpactLinks.map(({ name, href }) => ({ name, href })))}
               </motion.div>
 
               {/* Row 2, Column 3 (2x3): Legal Category */}
@@ -428,22 +417,7 @@ const Footer: React.FC = () => {
                 <h3 className="text-[#ECF0F1] text-sm font-bold mb-3">
                   Legal & Utility
                 </h3>
-                <ul className="space-y-1">
-                  {legalUtilityLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        to={link.href}
-                        className="text-[#ECF0F1]/75 hover:text-[#44c8f5] text-xs transition-colors duration-300 flex items-center group"
-                      >
-                      <ArrowRight
-                        size={12}
-                        className="mr-1.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                      />
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {renderLinkColumns(legalUtilityLinks.map(({ name, href }) => ({ name, href })))}
               </motion.div>
             </div>
           </div>
@@ -456,7 +430,9 @@ const Footer: React.FC = () => {
             className="border-t border-[#ECF0F1]/10 mt-8 pt-6 flex justify-center"
           >
             <div className="flex items-center text-[#ECF0F1]/60 text-xs">
-              <Network className="h-4 w-4 mr-1.5" />
+              <div className="p-0.5 mr-1.5">
+                <ShareNetwork weight="thin" size={20} />
+              </div>
               <span>
                 &copy; {currentYear} Hajz Telecommunication Co Ltd.. All rights reserved.
               </span>

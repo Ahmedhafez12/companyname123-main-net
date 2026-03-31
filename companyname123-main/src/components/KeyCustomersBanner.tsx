@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CaretLeft, CaretRight } from "phosphor-react";
 
 interface KeyCustomer {
   name: string;
   logo: string;
+  url?: string;
 }
 
 interface KeyCustomersBannerProps {
@@ -54,7 +55,8 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const loopInterval = useRef<NodeJS.Timeout | null>(null);
+  const loopInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isResettingRef = useRef(false);
 
   // Check if device is mobile
   const checkMobile = useCallback(() => {
@@ -71,15 +73,12 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
   useEffect(() => {
     checkMobile();
     calculateWidths();
-    window.addEventListener("resize", () => {
+    const onResize = () => {
       checkMobile();
       calculateWidths();
-    });
-    return () =>
-      window.removeEventListener("resize", () => {
-        checkMobile();
-        calculateWidths();
-      });
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [calculateWidths, checkMobile, keyCustomers]);
 
   const scroll = useCallback((newPosition: number) => {
@@ -92,11 +91,25 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
     }
   }, []);
 
+  // One set of items width (we render two sets for seamless loop)
+  const singleSetWidth = contentWidth > 0 ? contentWidth / 2 : 0;
+
   const handleScroll = useCallback(() => {
-    if (containerRef.current) {
-      setScrollPosition(containerRef.current.scrollLeft);
+    if (!containerRef.current || isResettingRef.current) return;
+    const el = containerRef.current;
+    const left = el.scrollLeft;
+    setScrollPosition(left);
+
+    // Seamless infinite loop: when we've scrolled one full set, jump back by one set width (no visible jump)
+    if (!isMobile && singleSetWidth > 0 && left >= singleSetWidth - 1) {
+      isResettingRef.current = true;
+      el.scrollLeft = left - singleSetWidth;
+      setScrollPosition(el.scrollLeft);
+      requestAnimationFrame(() => {
+        isResettingRef.current = false;
+      });
     }
-  }, []);
+  }, [isMobile, singleSetWidth]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -106,35 +119,39 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
     }
   }, [handleScroll]);
 
-  // Infinite loop for desktop
+  // Infinite loop for desktop: scroll continuously, reset seamlessly when past first set
   const startLoop = useCallback(() => {
     if (
       !containerRef.current ||
       !contentRef.current ||
       isHovering ||
       contentWidth <= containerWidth ||
-      isMobile
+      isMobile ||
+      singleSetWidth <= 0
     ) {
       return;
     }
 
     loopInterval.current = setInterval(() => {
-      if (containerRef.current) {
-        const currentPosition = containerRef.current.scrollLeft;
-        const maxScroll = contentWidth - containerWidth;
-        const scrollStep = 2; // Increased scroll speed
+      if (!containerRef.current || isResettingRef.current) return;
+      const el = containerRef.current;
+      const scrollStep = 2;
+      const newPosition = el.scrollLeft + scrollStep;
 
-        if (currentPosition >= maxScroll) {
-          // Reset to beginning for infinite loop
-          containerRef.current.scrollLeft = 0;
-          setScrollPosition(0);
-        } else {
-          containerRef.current.scrollLeft += scrollStep;
-          setScrollPosition(containerRef.current.scrollLeft);
-        }
+      // If we've scrolled past the first set, instantly jump back (seamless - duplicate content looks the same)
+      if (newPosition >= singleSetWidth) {
+        isResettingRef.current = true;
+        el.scrollLeft = newPosition - singleSetWidth;
+        setScrollPosition(el.scrollLeft);
+        requestAnimationFrame(() => {
+          isResettingRef.current = false;
+        });
+      } else {
+        el.scrollLeft = newPosition;
+        setScrollPosition(el.scrollLeft);
       }
-    }, 25); // Faster interval for increased speed
-  }, [containerWidth, contentWidth, isHovering, isMobile]);
+    }, 25);
+  }, [containerWidth, contentWidth, isHovering, isMobile, singleSetWidth]);
 
   const stopLoop = useCallback(() => {
     if (loopInterval.current) {
@@ -236,19 +253,23 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
             <button
               onClick={scrollLeft}
               disabled={scrollPosition <= 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:text-[#44C8F5] hover:bg-white/30 transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:text-cta hover:bg-white/30 transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
               aria-label="Scroll left"
             >
-              <ChevronLeft size={20} />
+              <div className="p-1.5">
+                <CaretLeft weight="thin" size={20} />
+              </div>
             </button>
 
             <button
               onClick={scrollRight}
               disabled={scrollPosition >= contentWidth - containerWidth}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:text-[#44C8F5] hover:bg-white/30 transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:text-cta hover:bg-white/30 transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg"
               aria-label="Scroll right"
             >
-              <ChevronRight size={20} />
+              <div className="p-1.5">
+                <CaretRight weight="thin" size={20} />
+              </div>
             </button>
           </>
         )}
@@ -259,29 +280,35 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
             <button
               onClick={scrollLeft}
               disabled={scrollPosition <= 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white hover:text-[#44C8F5] transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white hover:text-cta transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
               aria-label="Scroll left"
             >
-              <ChevronLeft
-                size={40}
-                className={scrollPosition <= 0 ? "opacity-50" : "opacity-100"}
-              />
+              <div className="p-2">
+                <CaretLeft
+                  weight="thin"
+                  size={20}
+                  className={scrollPosition <= 0 ? "opacity-50" : "opacity-100"}
+                />
+              </div>
             </button>
 
             <button
               onClick={scrollRight}
               disabled={scrollPosition >= contentWidth - containerWidth}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white hover:text-[#44C8F5] transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white hover:text-cta transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
               aria-label="Scroll right"
             >
-              <ChevronRight
-                size={40}
-                className={
-                  scrollPosition >= contentWidth - containerWidth
-                    ? "opacity-50"
-                    : "opacity-100"
-                }
-              />
+              <div className="p-2">
+                <CaretRight
+                  weight="thin"
+                  size={20}
+                  className={
+                    scrollPosition >= contentWidth - containerWidth
+                      ? "opacity-50"
+                      : "opacity-100"
+                  }
+                />
+              </div>
             </button>
           </>
         )}
@@ -325,13 +352,15 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
               >
                 <a
                   href={
+                    customer.url ??
                     customerWebsites[
                       customer.name as keyof typeof customerWebsites
-                    ] || "#"
+                    ] ??
+                    "#"
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/10"
+                  className="flex items-center justify-center bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-md"
                   style={{
                     width: isMobile ? 'clamp(80px, 16vw, 100px)' : 'clamp(100px, 20vw, 120px)',
                     height: isMobile ? 'clamp(40px, 8vw, 50px)' : 'clamp(50px, 10vw, 60px)',
@@ -363,13 +392,15 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
                 >
                   <a
                     href={
+                      customer.url ??
                       customerWebsites[
                         customer.name as keyof typeof customerWebsites
-                      ] || "#"
+                      ] ??
+                      "#"
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center bg-white/5 backdrop-blur-sm rounded-lg border border-white/20 hover:border-white/40 transition-all duration-300 hover:bg-white/10"
+                    className="flex items-center justify-center bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-md"
                     style={{
                       width: isMobile ? 'clamp(80px, 16vw, 100px)' : 'clamp(100px, 20vw, 120px)',
                       height: isMobile ? 'clamp(40px, 8vw, 50px)' : 'clamp(50px, 10vw, 60px)',

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Network, ArrowRight, ExternalLink } from 'lucide-react';
+import { Envelope, Phone, MapPin, ShareNetwork, ArrowRight, ArrowSquareOut } from 'phosphor-react';
 
 const ContactFooter: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,9 @@ const ContactFooter: React.FC = () => {
                 className="bg-transparent border border-white/10 rounded-lg p-4 flex items-center justify-center space-x-3 hover:border-white/30 transition-colors duration-300"
               >
                 <div className="w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center">
-                  <Mail className="h-4 w-4 text-[#44C8F5]" />
+                  <div className="p-0.5">
+                    <Envelope weight="thin" size={20} className="text-cta" />
+                  </div>
                 </div>
                 <span className="text-white text-sm">contact@htc.com</span>
               </motion.a>
@@ -72,7 +74,7 @@ const ContactFooter: React.FC = () => {
                 className="bg-transparent border border-white/10 rounded-lg p-4 flex items-center justify-center space-x-3 hover:border-white/30 transition-colors duration-300"
               >
                 <div className="w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center">
-                  <Phone className="h-4 w-4 text-[#A6CE39]" />
+                  <Phone className="h-4 w-4 text-cta" />
                 </div>
                 <span className="text-white text-sm">+1 (555) 123-4567</span>
               </motion.a>
@@ -84,7 +86,7 @@ const ContactFooter: React.FC = () => {
                 className="bg-transparent border border-white/10 rounded-lg p-4 flex items-center justify-center space-x-3 hover:border-white/30 transition-colors duration-300"
               >
                 <div className="w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center">
-                  <MapPin className="h-4 w-4 text-[#7CCCBF]" />
+                  <MapPin className="h-4 w-4 text-cta" />
                 </div>
                 <span className="text-white text-sm">123 Tech Street, Innovation City</span>
               </motion.a>
@@ -123,10 +125,12 @@ const ContactFooter: React.FC = () => {
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="flex-1 px-3 py-2 rounded-l-lg bg-transparent border-white/20 border border-r-0 text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-[#44C8F5] text-xs"
+                  className="flex-1 px-3 py-2 rounded-l-lg bg-transparent border-white/20 border border-r-0 text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-cta text-xs"
                 />
-                <button className="bg-[#44C8F5] px-3 rounded-r-lg hover:bg-[#7CCCBF] transition-colors duration-300 text-white font-medium text-xs flex items-center">
-                  <ArrowRight size={14} />
+                <button className="bg-cta px-3 rounded-r-lg hover:bg-accent transition-colors duration-300 text-white font-medium text-xs flex items-center">
+                  <div className="p-0.5">
+                    <ArrowRight weight="thin" size={20} />
+                  </div>
                 </button>
               </div>
             </div>
@@ -143,7 +147,9 @@ const ContactFooter: React.FC = () => {
         >
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-3 sm:mb-0">
-              <Network className="h-4 w-4 text-white" />
+              <div className="p-0.5">
+                <ShareNetwork weight="thin" size={20} className="text-white" />
+              </div>
               <span className="text-xs text-white font-sans">HTC Telecommunications</span>
             </div>
             
@@ -155,7 +161,9 @@ const ContactFooter: React.FC = () => {
                   className="hover:text-white transition-colors duration-300 flex items-center"
                 >
                   <span>{link.name}</span>
-                  <ExternalLink size={10} className="ml-1 opacity-70" />
+                  <div className="p-0.5 ml-1 opacity-70">
+                    <ArrowSquareOut weight="thin" size={20} />
+                  </div>
                 </a>
               ))}
             </div>

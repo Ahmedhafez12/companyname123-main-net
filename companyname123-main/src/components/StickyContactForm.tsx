@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, CheckCircle, AlertCircle, ChevronUp } from 'lucide-react';
+import { X, PaperPlaneTilt, CheckCircle, WarningCircle, CaretUp } from 'phosphor-react';
 import { z } from 'zod';
 import emailjs from '@emailjs/browser';
 
@@ -117,7 +117,7 @@ const StickyContactForm: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-[0.5in] z-50">
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -133,7 +133,9 @@ const StickyContactForm: React.FC = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-white/70 hover:text-white transition-colors"
                 >
-                  <X size={20} />
+                  <div className="p-1">
+                    <X weight="thin" size={20} />
+                  </div>
                 </button>
               </div>
 
@@ -143,7 +145,9 @@ const StickyContactForm: React.FC = () => {
                   animate={{ opacity: 1 }}
                   className="text-center py-8"
                 >
-                  <CheckCircle className="w-12 h-12 text-[#A6CE39] mx-auto mb-4" />
+                  <div className="p-2 mx-auto mb-4">
+                    <CheckCircle weight="thin" size={20} className="text-cta" />
+                  </div>
                   <p className="text-white text-lg mb-2">Message Sent!</p>
                   <p className="text-white/70">We'll get back to you soon.</p>
                 </motion.div>
@@ -153,7 +157,9 @@ const StickyContactForm: React.FC = () => {
                   animate={{ opacity: 1 }}
                   className="text-center py-8"
                 >
-                  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                  <div className="p-2 mx-auto mb-4">
+                    <WarningCircle weight="thin" size={20} className="text-red-500" />
+                  </div>
                   <p className="text-white text-lg mb-2">Something went wrong</p>
                   <p className="text-white/70">Please try again later.</p>
                 </motion.div>
@@ -218,16 +224,18 @@ const StickyContactForm: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-[#A6CE39] text-white px-4 py-2 rounded-lg font-medium hover:bg-[#7CCCBF] transition-colors duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-cta text-white px-4 py-2 rounded-lg font-medium hover:bg-accent transition-colors duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                        Sending...
+                        PaperPlaneTilting...
                       </>
                     ) : (
                       <>
-                        <Send size={16} className="mr-2" />
+                        <div className="p-0.5 mr-2">
+                          <PaperPlaneTilt weight="thin" size={20} />
+                        </div>
                         Send Message
                       </>
                     )}
@@ -242,9 +250,11 @@ const StickyContactForm: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             onClick={() => setIsOpen(true)}
-            className="bg-[#A6CE39] text-white p-4 rounded-full shadow-lg hover:bg-[#7CCCBF] transition-colors duration-300"
+            className="bg-cta text-white p-4 rounded-full shadow-lg hover:bg-accent transition-colors duration-300"
           >
-            <ChevronUp size={24} />
+            <div className="p-1">
+              <CaretUp weight="thin" size={20} />
+            </div>
           </motion.button>
         )}
       </AnimatePresence>

@@ -8,6 +8,8 @@
     --color-secondary: #44c8f5;
     --color-accent: #7cccbf;
     --color-cta: #a6ce39;
+    --font-primary: "Montserrat", system-ui, sans-serif;
+    --font-secondary: "Rubik", system-ui, sans-serif;
     --safe-area-inset-top: env(safe-area-inset-top);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     --safe-area-inset-left: env(safe-area-inset-left);
@@ -101,6 +103,49 @@
     .min-h-screen {
       min-height: -webkit-fill-available;
     }
+  }
+}
+
+/* Infinite marquee (customer logos) — keyframes in global CSS so animation always runs */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee-scroll 50s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Smooth snap-scrolling for full-page layouts (HomePage, AboutUsPage) */
+@layer components {
+  .scroll-snap-page {
+    scroll-snap-type: y mandatory;
+    /* smooth + ScrollTrigger scrub/pin fight each other in nested scrollers */
+    scroll-behavior: auto;
+    transform: translateZ(0);
+    isolation: isolate;
+  }
+  .scroll-snap-page section {
+    scroll-snap-align: start;
+  }
+  /* One snap at section start; do not force snap-stop through the scrub zone (pin spacer). */
+  .scroll-snap-page .network-hero-canvas-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+  .scroll-snap-page section:last-of-type {
+    scroll-snap-stop: always;
+  }
+
+  /* Toggled by NetworkHeroCanvas while its ScrollTrigger is active (pin/scrub zone). */
+  .scroll-snap-page.network-hero-snap-off {
+    scroll-snap-type: none;
   }
 
   /* Status bar styles */
@@ -273,12 +318,17 @@
   }
 
   .nav-link {
-    @apply relative text-white text-ui font-sans hover:text-[#A6CE39] transition-colors duration-300;
+    @apply relative text-white text-ui font-sans transition-colors duration-300;
+    --tw-text-opacity: 1;
+  }
+  .nav-link:hover {
+    color: var(--color-cta);
   }
 
   .nav-link::after {
     content: "";
-    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-[#A6CE39] transition-all duration-300;
+    @apply absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300;
+    background-color: var(--color-cta);
   }
 
   .nav-link:hover::after {
@@ -286,7 +336,14 @@
   }
 
   .btn-primary {
-    @apply bg-[#A6CE39] text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg hover:bg-[#7CCCBF] transition-all duration-300 shadow-lg font-sans text-ui font-medium tracking-wide transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#A6CE39] focus:ring-offset-2 focus:ring-offset-transparent;
+    @apply text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg transition-all duration-300 shadow-lg font-sans text-ui font-medium tracking-wide transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent;
+    background-color: var(--color-cta);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-accent);
+  }
+  .btn-primary:focus {
+    --tw-ring-color: var(--color-cta);
   }
 
   .btn-secondary {

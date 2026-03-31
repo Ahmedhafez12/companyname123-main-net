@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  Menu,
+  List,
   X,
-  Mail,
+  Envelope,
   Phone,
   Globe,
-  ChevronDown,
-  ChevronRight,
+  CaretDown,
+  CaretRight,
   ArrowLeft,
-} from "lucide-react";
+} from "phosphor-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
@@ -34,7 +34,7 @@ interface NavItem {
 export default function Header({ isOpen, setIsOpen }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({});
+  const [openSubLists, setOpenSubLists] = useState<Record<string, boolean>>({});
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const location = useLocation();
   // Change this ref to specifically store references to the submenu motion.div elements
@@ -111,9 +111,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // Check if the click is outside of ALL currently open submenus
-      const isClickOutsideAnySubmenu = Object.keys(openSubMenus).every(
+      const isClickOutsideAnySubmenu = Object.keys(openSubLists).every(
         (itemId) => {
-          if (openSubMenus[itemId]) {
+          if (openSubLists[itemId]) {
             // Only check for open submenus
             const submenuRef = submenuContentRefs.current[itemId];
             // Also check if the click is outside the button that toggles the submenu
@@ -133,13 +133,13 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
       );
 
       if (isClickOutsideAnySubmenu) {
-        setOpenSubMenus({});
+        setOpenSubLists({});
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openSubMenus]); // Depend on openSubMenus to re-run the effect when submenu states change
+  }, [openSubLists]); // Depend on openSubLists to re-run the effect when submenu states change
 
   // Effect to handle body scroll
   useEffect(() => {
@@ -230,8 +230,8 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
     }
   };
 
-  const toggleSubMenu = (itemId: string) => {
-    setOpenSubMenus((prev) => {
+  const toggleSubList = (itemId: string) => {
+    setOpenSubLists((prev) => {
       const newState = { ...prev };
       // Close all other submenus, except the one being toggled
       Object.keys(newState).forEach((key) => {
@@ -247,11 +247,11 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
     setActiveSubmenu(itemId);
   };
 
-  const handleBackToMainMenu = () => {
+  const handleBackToMainList = () => {
     setActiveSubmenu(null);
   };
 
-  const hasSubMenu = (item: NavItem) => {
+  const hasSubList = (item: NavItem) => {
     return item.subItems && item.subItems.length > 0;
   };
 
@@ -306,7 +306,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                   // You might still want a ref here for other purposes, but not for click outside logic
                   // ref={(el) => { submenuRefs.current[item.id] = el; }}
                 >
-                  {hasSubMenu(item) ? (
+                  {hasSubList(item) ? (
                     // Button with submenu - now with Link around it
                     <div className="relative">
                       <div className="flex items-center">
@@ -335,27 +335,31 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                         <button
                           id={`submenu-toggle-${item.id}`} // Add an ID to the button
                           className={`relative py-2 px-1 text-sm font-medium transition-colors duration-300 rounded-md inline-block ${
-                            openSubMenus[item.id]
+                            openSubLists[item.id]
                               ? "text-[#005E96]"
                               : "text-[#005E96]/70 hover:text-[#005E96]"
                           }`}
                           onMouseEnter={() => setHoverIndex(i)}
                           onMouseLeave={() => setHoverIndex(null)}
-                          onClick={() => toggleSubMenu(item.id)}
-                          aria-expanded={openSubMenus[item.id]}
+                          onClick={() => toggleSubList(item.id)}
+                          aria-expanded={openSubLists[item.id]}
                           aria-controls={`submenu-${item.id}`}
                         >
-                          <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-300 ${
-                              openSubMenus[item.id] ? "rotate-180" : "rotate-0"
-                            }`}
-                          />
+                          <div className="p-0.5">
+                            <CaretDown
+                              weight="thin"
+                              size={20}
+                              className={`transition-transform duration-300 ${
+                                openSubLists[item.id] ? "rotate-180" : "rotate-0"
+                              }`}
+                            />
+                          </div>
                         </button>
                       </div>
 
                       {/* Submenu */}
                       <AnimatePresence>
-                        {openSubMenus[item.id] && (
+                        {openSubLists[item.id] && (
                           <motion.div
                             id={`submenu-${item.id}`}
                             initial={{ opacity: 0, y: 10 }}
@@ -385,7 +389,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                                     key={subItem.name}
                                     to={subItem.href || "#"}
                                     className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 w-full text-left transition-colors duration-300"
-                                    onClick={() => setOpenSubMenus({})}
+                                    onClick={() => setOpenSubLists({})}
                                   >
                                     {subItem.name}
                                   </Link>
@@ -427,7 +431,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
             <div className="ml-auto flex items-center space-x-2">
               {/* Support */}
               <p className="hidden lg:flex px-4 py-2 text-[#005E96]/70 transition-colors duration-300 text-sm font-medium items-center">
-                <Globe className="w-4 h-4 mr-2" />
+                <div className="p-0.5 mr-2">
+                  <Globe weight="thin" size={20} />
+                </div>
                 SUPPORT
               </p>
 
@@ -436,7 +442,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                 href="tel:+1234567890"
                 className="hidden lg:flex px-4 py-2 text-[#005E96]/70 hover:text-[#005E96] transition-colors duration-300 text-sm font-medium items-center"
               >
-                <Phone className="w-4 h-4 mr-2" />
+                <div className="p-0.5 mr-2">
+                  <Phone weight="thin" size={20} />
+                </div>
                 +1 (234) 567-890
               </a>
 
@@ -453,8 +461,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
 
                 <span className="absolute h-full w-1/3 bg-gradient-to-r from-transparent via-black/10 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-[400%] transition-transform duration-1000 ease-in-out" />
 
-                <Mail
-                  size={14}
+                <Envelope
+                  weight="thin"
+                  size={20}
                   className="mr-1.5 relative z-10 group-hover:text-[#005E96] transition-colors duration-300"
                 />
                 <span className="relative z-10 group-hover:text-[#005E96] transition-colors duration-300">
@@ -481,7 +490,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                   exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <X size={24} />
+                  <div className="p-1">
+                    <X weight="thin" size={20} />
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
@@ -491,7 +502,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                   exit={{ opacity: 0, scale: 0.8, rotate: -90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <Menu size={24} />
+                  <div className="p-1">
+                    <List weight="thin" size={20} />
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -511,7 +524,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                 aria-hidden="true"
               />
 
-              {/* Main Mobile Menu */}
+              {/* Main Mobile List */}
               <motion.div
                 id="mobile-menu"
                 initial="closed"
@@ -540,7 +553,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                           animate="open"
                           exit="closed"
                         >
-                          {hasSubMenu(item) ? (
+                          {hasSubList(item) ? (
                             <div className="relative">
                               <div className="flex items-center w-full">
                                 <Link
@@ -560,7 +573,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                                   }
                                   aria-label={`Open ${item.name} submenu`}
                                 >
-                                  <ChevronRight className="w-5 h-5" />
+                                  <div className="p-0.5">
+                                    <CaretRight weight="thin" size={20} />
+                                  </div>
                                 </button>
                               </div>
                             </div>
@@ -591,7 +606,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                       href="tel:+1234567890"
                       className="flex items-center px-4 py-3 text-[#005E96]/70 hover:text-[#005E96] transition-colors duration-300"
                     >
-                      <Phone className="w-5 h-5 mr-3" />
+                      <div className="p-0.5 mr-3">
+                        <Phone weight="thin" size={20} />
+                      </div>
                       <span className="text-base">+1 (234) 567-890</span>
                     </a>
 
@@ -599,7 +616,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                       to="/support"
                       className="flex items-center px-4 py-3 text-[#005E96]/70 hover:text-[#005E96] transition-colors duration-300"
                     >
-                      <Globe className="w-5 h-5 mr-3" />
+                      <div className="p-0.5 mr-3">
+                        <Globe weight="thin" size={20} />
+                      </div>
                       <span className="text-base">Support Center</span>
                     </Link>
                   </div>
@@ -616,7 +635,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                       className="w-full py-3 px-4 bg-[#005E96] text-white rounded-lg font-medium text-base transform hover:-translate-y-0.5 transition-all font-sans flex items-center justify-center relative overflow-hidden group"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Mail size={18} className="mr-2" />
+                      <div className="p-0.5 mr-2">
+                        <Envelope weight="thin" size={20} />
+                      </div>
                       <span>Contact Us</span>
                     </Link>
                   </motion.div>
@@ -646,11 +667,13 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                       {/* Submenu Header with Back Button */}
                       <div className="flex items-center px-6 py-4 border-b border-gray-200/30 bg-white/50 backdrop-blur-sm">
                         <button
-                          onClick={handleBackToMainMenu}
+                          onClick={handleBackToMainList}
                           className="flex items-center text-[#005E96]/90 hover:text-[#005E96] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005E96] rounded-lg p-2 -ml-2"
                           aria-label="Back to main menu"
                         >
-                          <ArrowLeft className="w-5 h-5 mr-2" />
+                          <div className="p-0.5 mr-2">
+                            <ArrowLeft weight="thin" size={20} />
+                          </div>
                           <span className="text-sm font-medium">Back</span>
                         </button>
                         <div className="flex-1 text-center">
@@ -699,7 +722,9 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                                     <span className="flex-1">
                                       {subItem.name}
                                     </span>
-                                    <ChevronRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
+                                    <div className="p-0.5 opacity-50 group-hover:opacity-100 transition-opacity duration-300">
+                                      <CaretRight weight="thin" size={20} />
+                                    </div>
                                   </Link>
                                 )}
                               </motion.li>

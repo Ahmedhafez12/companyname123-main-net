@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Globe, Clock, MessageSquare } from 'lucide-react';
+import { Envelope, Phone, MapPin, Globe, Clock, ChatCircle } from 'phosphor-react';
 import ContactSection from '../components/ContactSection';
 import Footer from '../components/Footer';
 
 function ContactPage() {
   const contactInfo = [
     {
-      icon: <Phone className="w-6 h-6" />,
+      icon: <div className="p-1"><Phone weight="thin" size={20} /></div>,
       title: "Call Us",
       details: [
         "+1 (555) 123-4567",
@@ -16,7 +16,7 @@ function ContactPage() {
       ]
     },
     {
-      icon: <Mail className="w-6 h-6" />,
+      icon: <div className="p-1"><Envelope weight="thin" size={20} /></div>,
       title: "Email Us",
       details: [
         "contact@hajztelecom.com",
@@ -24,7 +24,7 @@ function ContactPage() {
       ]
     },
     {
-      icon: <MapPin className="w-6 h-6" />,
+      icon: <div className="p-1"><MapPin weight="thin" size={20} /></div>,
       title: "Visit Us",
       details: [
         "123 Tech Street",
@@ -77,8 +77,8 @@ function ContactPage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 'clamp(5rem, 10vh, 7rem)',
-          paddingBottom: 'clamp(1rem, 2vh, 2rem)'
+          paddingTop: 'clamp(5rem, 10vh, 6rem)',
+          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 w-full">
@@ -140,14 +140,14 @@ function ContactPage() {
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
               >
                 <h3 className="text-xl font-bold text-white mb-2">{office.city}</h3>
-                <p className="text-[#A6CE39] mb-4">{office.country}</p>
+                <p className="text-cta mb-4">{office.country}</p>
                 <div className="space-y-3 text-white/70">
                   <p className="flex items-center">
-                    <MapPin size={16} className="mr-2 text-[#44C8F5]" />
+                    <div className="p-0.5 mr-2"><MapPin weight="thin" size={20} className="text-cta" /></div>
                     {office.address}
                   </p>
                   <p className="flex items-center">
-                    <Phone size={16} className="mr-2 text-[#44C8F5]" />
+                    <div className="p-0.5 mr-2"><Phone weight="thin" size={20} className="text-cta" /></div>
                     {office.phone}
                   </p>
                 </div>
@@ -168,7 +168,7 @@ function ContactPage() {
               transition={{ duration: 0.5 }}
               className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
             >
-              <Globe className="w-8 h-8 text-[#44C8F5] mb-4" />
+              <div className="p-1 mb-4"><Globe weight="thin" size={20} className="text-cta" /></div>
               <h3 className="text-lg font-semibold text-white mb-2">Global Support</h3>
               <p className="text-white/70">
                 24/7 technical support available worldwide in multiple languages.
@@ -182,7 +182,7 @@ function ContactPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
             >
-              <Clock className="w-8 h-8 text-[#44C8F5] mb-4" />
+              <div className="p-1 mb-4"><Clock weight="thin" size={20} className="text-cta" /></div>
               <h3 className="text-lg font-semibold text-white mb-2">Business Hours</h3>
               <p className="text-white/70">
                 Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
@@ -196,7 +196,7 @@ function ContactPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
             >
-              <MessageSquare className="w-8 h-8 text-[#44C8F5] mb-4" />
+              <div className="p-1 mb-4"><ChatCircle weight="thin" size={20} className="text-cta" /></div>
               <h3 className="text-lg font-semibold text-white mb-2">Live Chat</h3>
               <p className="text-white/70">
                 Connect with our team instantly through our live chat support.

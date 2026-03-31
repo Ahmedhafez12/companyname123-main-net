@@ -204,8 +204,8 @@ const NavLink = styled(Link).withConfig({
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
   color: ${props => {
-    if (!props.$scrolled) return BRAND_COLORS.white;
-    return props.isActive ? BRAND_COLORS.primary : `${BRAND_COLORS.primary}CC`;
+    if (!props.$scrolled) return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
+    return props.isActive ? BRAND_COLORS.secondary : `${BRAND_COLORS.primary}CC`;
   }};
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -246,8 +246,8 @@ const NavItemButton = styled.button.withConfig({
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
   color: ${props => {
-    if (!props.$scrolled) return BRAND_COLORS.white;
-    return props.isActive ? BRAND_COLORS.primary : `${BRAND_COLORS.primary}CC`;
+    if (!props.$scrolled) return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
+    return props.isActive ? BRAND_COLORS.secondary : `${BRAND_COLORS.primary}CC`;
   }};
   background: transparent;
   border: none;
@@ -634,11 +634,11 @@ const MobileSubSubItem = styled(Link)`
   }
 `;
 
-interface TestRefactorNavBarProps {
+interface WhitBgNavbarProps {
   basePath?: string;
 }
 
-const TestRefactorNavBar: React.FC<TestRefactorNavBarProps> = ({ basePath }) => {
+const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
   const location = useLocation();
   const currentBasePath = basePath || "";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -717,7 +717,11 @@ const TestRefactorNavBar: React.FC<TestRefactorNavBarProps> = ({ basePath }) => 
             style={{ display: "flex", alignItems: "center" }}
           >
             <Link to={`${currentBasePath}/`} style={{ padding: "0.1875rem 0", display: "flex", alignItems: "center", justifyContent: "center", width: "14rem", transition: "opacity 0.3s ease" }} onMouseEnter={(e) => e.currentTarget.style.opacity = "0.8"} onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
-              <Logo className="w-full h-full" scrolled={scrolled} />
+              <Logo
+                className="w-full h-full"
+                scrolled={scrolled}
+                textColorOverride={scrolled ? BRAND_COLORS.primary : BRAND_COLORS.white}
+              />
             </Link>
           </motion.div>
           <VerticalSeparator $scrolled={scrolled} />
@@ -1105,7 +1109,4 @@ const TestRefactorNavBar: React.FC<TestRefactorNavBarProps> = ({ basePath }) => 
   );
 };
 
-export default TestRefactorNavBar;
-
-
-
+export default WhitBgNavbar;

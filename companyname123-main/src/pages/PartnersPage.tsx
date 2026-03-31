@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Handshake, Users, Globe, Award, ArrowRight, Shield, Zap, Target } from 'lucide-react';
+import { Handshake, Users, Globe, Trophy, ArrowRight, Shield, Lightning, Target } from 'phosphor-react';
 import PartnersSection from '../components/PartnersSection';
-import PartnerLogos from '../components/PartnerLogos';
+import KeyCustomersBanner from '../components/KeyCustomersBanner';
 import Footer from '../components/Footer';
 
 function PartnersPage() {
   const partnerTypes = [
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
       title: "Technology Partners",
       description: "Leading technology providers who complement our solutions.",
       benefits: [
@@ -19,7 +19,7 @@ function PartnersPage() {
       ]
     },
     {
-      icon: <Zap className="w-12 h-12" />,
+      icon: <div className="p-2"><Lightning weight="thin" size={20} /></div>,
       title: "Solution Partners",
       description: "System integrators and solution providers who implement our technology.",
       benefits: [
@@ -29,7 +29,7 @@ function PartnersPage() {
       ]
     },
     {
-      icon: <Target className="w-12 h-12" />,
+      icon: <div className="p-2"><Target weight="thin" size={20} /></div>,
       title: "Strategic Partners",
       description: "Long-term partnerships focused on innovation and market expansion.",
       benefits: [
@@ -41,10 +41,22 @@ function PartnersPage() {
   ];
 
   const stats = [
-    { icon: <Handshake className="w-6 h-6" />, value: "200+", label: "Active Partners" },
-    { icon: <Users className="w-6 h-6" />, value: "5000+", label: "Certified Professionals" },
-    { icon: <Globe className="w-6 h-6" />, value: "50+", label: "Countries" },
-    { icon: <Award className="w-6 h-6" />, value: "25+", label: "Industry Awards" }
+    { icon: <div className="p-1"><Handshake weight="thin" size={20} /></div>, value: "200+", label: "Active Partners" },
+    { icon: <div className="p-1"><Users weight="thin" size={20} /></div>, value: "5000+", label: "Certified Professionals" },
+    { icon: <div className="p-1"><Globe weight="thin" size={20} /></div>, value: "50+", label: "Countries" },
+    { icon: <div className="p-1"><Trophy weight="thin" size={20} /></div>, value: "25+", label: "Industry Awards" }
+  ];
+
+  const keyPartners = [
+    { name: "FORA", logo: "https://cdn.shopify.com/s/files/1/0510/8655/7362/files/FORA_Logo_e69f5314-5a32-440e-9f1b-a3d2f9676bb1.png", url: "https://foracare.com/" },
+    { name: "Cambium Networks", logo: "/assets/Cambium-Networks-Logo.png", url: "https://www.cambiumnetworks.com/" },
+    { name: "Patton", logo: "https://tritech.co.il/wp-content/uploads/2018/04/formation-patton-1.png", url: "https://www.patton.com/" },
+    { name: "Ip Tech", logo: "https://iptechlabs.com/wp-content/uploads/BrandingGraphicsLogos/IPTL_Logo_Transparent_PNG.png", url: "https://iptechlabs.com/" },
+    { name: "M5 Technologies", logo: "https://documentation.media5corp.com/download/attachments/524289/atl.site.logo?version=7&modificationDate=1771424618039&api=v2", url: "https://www.m5technologies.com/" },
+    { name: "Kerpen", logo: "https://www.secomp.nl/thumbor/OrDiZJB3a2ytXjNkifZBsqPip3A=/filters:cachevalid(2022-11-18T15:16:15.230772):strip_icc():strip_exif()/cms_secde/cms/ueber_uns/markenwelt/kerpen_datacom/kerpen-datacom.png", url: "https://kerpen-data.com/en/" },
+    { name: "Avaya", logo: "/assets/avaya_red_logo_600x300.jpg", url: "https://www.avaya.com/" },
+    { name: "3cx", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c9/3CX_logo.svg", url: "https://www.3cx.com/" },
+    { name: "J&R Technology", logo: "https://www.jrtelephone.com/uploads/7137/logo.png", url: "https://www.jrtelephone.com/" },
   ];
 
   useEffect(() => {
@@ -69,8 +81,8 @@ function PartnersPage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 'clamp(6rem, 12vh, 8rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 3rem)'
+          paddingTop: 'clamp(5rem, 10vh, 6rem)',
+          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 w-full">
@@ -112,7 +124,9 @@ function PartnersPage() {
                 </p>
                 <button className="btn-primary inline-flex items-center group">
                   <span><a href="/solutions" className="button">Apply Now</a></span>
-                  <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
+                    <ArrowRight weight="thin" size={20} />
+                  </div>
                 </button>
               </motion.div>
             </div>
@@ -128,7 +142,7 @@ function PartnersPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
                 >
-                  <div className="text-[#005E96] mb-4 flex justify-center">{stat.icon}</div>
+                  <div className="text-cta mb-4 flex justify-center">{stat.icon}</div>
                   <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
                   <div className="text-white/70 text-sm">{stat.label}</div>
                 </motion.div>
@@ -136,9 +150,9 @@ function PartnersPage() {
             </div> */}
           </motion.div>
           
-          {/* Key Partners Section */}
+          {/* Key Partners Banner */}
           <div style={{ marginTop: 'clamp(1rem, 2vh, 1.5rem)' }}>
-            <PartnerLogos />
+            <KeyCustomersBanner keyCustomers={keyPartners} />
           </div>
         </div>
       </section>
@@ -171,7 +185,7 @@ function PartnersPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:border-white/20 transition-all duration-300"
               >
-                <div className="text-[#005E96] mb-6">{type.icon}</div>
+                <div className="text-cta mb-6">{type.icon}</div>
                 <h3 className="text-2xl font-bold text-white mb-4">{type.title}</h3>
                 <p className="text-white/80 mb-6">{type.description}</p>
                 
@@ -179,7 +193,9 @@ function PartnersPage() {
                   <h4 className="text-white font-semibold mb-2">Key Benefits:</h4>
                   {type.benefits.map((benefit) => (
                     <div key={benefit} className="flex items-center text-white/70">
-                      <ArrowRight size={16} className="mr-2 text-[#A6CE39]" />
+                      <div className="p-0.5 mr-2">
+                        <ArrowRight weight="thin" size={20} className="text-cta" />
+                      </div>
                       {benefit}
                     </div>
                   ))}
@@ -187,7 +203,9 @@ function PartnersPage() {
 
                 <button className="mt-8 btn-primary w-full flex items-center justify-center group">
                   <span>Learn More</span>
-                  <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
+                    <ArrowRight weight="thin" size={20} />
+                  </div>
                 </button>
               </motion.div>
             ))}

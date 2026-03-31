@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Network, Shield, Users } from 'lucide-react';
+import { ShareShareNetwork, Shield, Users } from 'phosphor-react';
 
 export default function EnhancedDimensions() {
   const [selectedDimension, setSelectedDimension] = useState<number | null>(null);
@@ -9,19 +9,19 @@ export default function EnhancedDimensions() {
       name: "htc with operator",
       description: "Our advanced telecommunications infrastructure forms the backbone of global connectivity. We deploy and maintain cutting-edge networks that power businesses and communities worldwide, ensuring reliable and high-speed communication across continents.",
       color: "bg-[#44C8F5]",
-      icon: <Network className="w-8 h-8 text-white" />
+      icon: <div className="p-1.5"><ShareNetwork weight="thin" size={20} className="text-white" /></div>
     },
     {
       name: "htc with Customers",
       description: "Understand the current setup and technology, offer the solution regards less the operator technology to integrate and match the customer requirements.",
       color: "bg-[#7CCCBF]",
-      icon: <Shield className="w-8 h-8 text-white" />
+      icon: <div className="p-1.5"><Shield weight="thin" size={20} className="text-white" /></div>
     },
     {
       name: "htc manage service",
       description: "Provide End to End services hassle free with Single Point of contact which provide long term relation with the customer.",
       color: "bg-[#A6CE39]",
-      icon: <Users className="w-8 h-8 text-white" />
+      icon: <div className="p-1.5"><Users weight="thin" size={20} className="text-white" /></div>
     }
   ];
 

@@ -3,33 +3,20 @@ import { Helmet } from 'react-helmet-async';
 import { motion, useInView } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { 
-  Zap, 
-  Settings, 
-  Rocket, 
-  Wrench, 
-  DollarSign, 
-  Monitor, 
-  Code, 
-  LayoutGrid, 
-  Server, 
-  Brain,
-  Cloud,
-  BarChart3,
-  Network,
+  CaretLeft,
+  CaretRight,
+  CaretDown,
+  PencilSimple,
+  Rocket,
+  Gear,
+  Sliders,
+  TrendDown,
+  Globe,
+  SlidersHorizontal,
+  ShieldCheck,
   Cpu,
-  Building2,
-  Shield,
-  Building,
-  Factory,
-  Plane,
-  Ship,
-  Car,
-  Train,
-  Activity,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown
-} from 'lucide-react';
+  Lifebuoy
+} from 'phosphor-react';
 import Footer from '../components/Footer';
 
 // Scroll animation variants
@@ -55,7 +42,7 @@ const staggerContainer = {
 
 // Compound Component: Feature Card
 const FeatureCard = ({ icon, title, description, image, index }: {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   title: string;
   description: string;
   image?: string;
@@ -86,16 +73,20 @@ const FeatureCard = ({ icon, title, description, image, index }: {
           <img 
             src={image} 
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
             loading="lazy"
           />
         </div>
       )}
-      <div className="text-[#44C8F5] mb-4 flex justify-center" style={{ marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)' }}>
-        {React.cloneElement(icon as React.ReactElement, { 
-          style: { width: 'clamp(1.25rem, 2.5vh, 1.625rem)', height: 'clamp(1.25rem, 2.5vh, 1.625rem)' }
-        })}
-      </div>
+      {icon && (
+        <div className="text-cta mb-4 flex justify-center items-center" style={{ marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)' }}>
+          <div className="flex items-center justify-center">
+            {React.cloneElement(icon as React.ReactElement, { 
+              style: { width: 'clamp(1.25rem, 2.5vh, 1.625rem)', height: 'clamp(1.25rem, 2.5vh, 1.625rem)' }
+            })}
+          </div>
+        </div>
+      )}
       <h3 className="font-bold text-white mb-2 text-center" style={{ 
         fontSize: 'clamp(0.875rem, 1.75vh, 1.0625rem)',
         marginBottom: 'clamp(0.25rem, 0.5vh, 0.375rem)'
@@ -108,9 +99,8 @@ const FeatureCard = ({ icon, title, description, image, index }: {
   );
 };
 
-// Compound Component: Tech Stack Card with Z-pattern layout
-const TechStackCard = ({ icon, title, description, image, index, isReversed }: {
-  icon: React.ReactNode;
+// Compound Component: Tech Stack Card with Z-pattern layout (no icon when section has images)
+const TechStackCard = ({ title, description, image, index, isReversed }: {
   title: string;
   description: string;
   image: string;
@@ -144,22 +134,13 @@ const TechStackCard = ({ icon, title, description, image, index, isReversed }: {
           <img 
             src={image} 
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/60 via-transparent to-transparent" />
         </div>
       </div>
       <div className={`${isReversed ? 'md:col-start-1 md:row-start-1' : ''} ${!isReversed ? 'md:text-right' : ''}`}>
-        <div className={`text-[#44C8F5] mb-4 inline-flex rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 ${!isReversed ? 'md:ml-auto' : ''}`} style={{
-          padding: 'clamp(0.5rem, 1vh, 0.75rem)',
-          marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)',
-          borderRadius: 'clamp(0.5rem, 1vh, 0.75rem)'
-        }}>
-          {React.cloneElement(icon as React.ReactElement, { 
-            style: { width: 'clamp(2rem, 4vh, 3rem)', height: 'clamp(2rem, 4vh, 3rem)' }
-          })}
-        </div>
         <h3 className="font-bold text-white mb-4" style={{ 
           fontSize: 'clamp(1.25rem, 2.5vh, 1.875rem)',
           marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
@@ -176,7 +157,7 @@ const TechStackCard = ({ icon, title, description, image, index, isReversed }: {
 // Compound Component: Industry Accordion
 const IndustryAccordion = ({ title, industries, image }: {
   title: string;
-  industries: Array<{ name: string; icon: React.ReactNode; description?: string }>;
+  industries: Array<{ name: string; icon?: React.ReactNode; description?: string }>;
   image: string;
 }) => {
   const [openItems, setOpenItems] = useState<Set<number>>(new Set());
@@ -211,7 +192,7 @@ const IndustryAccordion = ({ title, industries, image }: {
         <img 
           src={image} 
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-fill"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/90 via-[#005E96]/50 to-transparent" />
@@ -245,19 +226,24 @@ const IndustryAccordion = ({ title, industries, image }: {
               }}
             >
               <div className="flex items-center" style={{ gap: 'clamp(0.5rem, 1vh, 0.75rem)' }}>
-                <div className="text-[#44C8F5]">
-                  {React.cloneElement(industry.icon as React.ReactElement, { 
-                    style: { width: 'clamp(1rem, 2vh, 1.5rem)', height: 'clamp(1rem, 2vh, 1.5rem)' }
-                  })}
-                </div>
+                {industry.icon && (
+                  <div className="text-cta flex items-center justify-center">
+                    {React.cloneElement(industry.icon as React.ReactElement, { 
+                      style: { width: 'clamp(1rem, 2vh, 1.5rem)', height: 'clamp(1rem, 2vh, 1.5rem)' }
+                    })}
+                  </div>
+                )}
                 <span className="font-medium text-white" style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>{industry.name}</span>
               </div>
-              <ChevronDown 
-                className={`text-white/60 transition-transform ${
-                  openItems.has(index) ? 'rotate-180' : ''
-                }`}
-                style={{ width: 'clamp(1rem, 2vh, 1.25rem)', height: 'clamp(1rem, 2vh, 1.25rem)' }}
-              />
+              <div className="p-0.5">
+                <CaretDown 
+                  weight="bold"
+                  size={20}
+                  className={`text-white/60 transition-transform ${
+                    openItems.has(index) ? 'rotate-180' : ''
+                  }`}
+                />
+              </div>
             </button>
             {openItems.has(index) && industry.description && (
               <motion.div
@@ -344,62 +330,90 @@ function CommandControlPage() {
 
   const corePillars = [
     {
-      icon: <Settings className="w-8 h-8" />,
+      icon: <PencilSimple weight="bold" size={20} />,
       title: "Design",
       description: "Requirements gathering, site surveys, and feasibility studies."
     },
     {
-      icon: <Rocket className="w-8 h-8" />,
+      icon: <Rocket weight="bold" size={20} />,
       title: "Deploy",
       description: "Execution with in-house engineering and trusted partners."
     },
     {
-      icon: <Wrench className="w-8 h-8" />,
+      icon: <Gear weight="bold" size={20} />,
       title: "Manage",
       description: "AMC/SLA support for system longevity."
     },
     {
-      icon: <Code className="w-8 h-8" />,
+      icon: <Sliders weight="bold" size={20} />,
       title: "Tailor-Made",
       description: "Custom AI and software solutions beyond off-the-shelf products."
     },
     {
-      icon: <DollarSign className="w-8 h-8" />,
+      icon: <TrendDown weight="bold" size={20} />,
       title: "Cost Cutting",
       description: "Reducing manpower and operational costs through integration."
     }
   ];
 
+  const technicalAdvantages = [
+    {
+      title: "Expertise & Experience",
+      description:
+        "At htc we Have a Team world class Engineers who have consult and deployed command center across the Globe",
+      accent: "secondary",
+    },
+    {
+      title: "Tailored Solutions",
+      description:
+        "Our Solutions/design are 100 % tailor made for Each Requirement; we don’t sell what we have but its customer requirement only",
+      accent: "secondary",
+    },
+    {
+      title: "Security First",
+      description:
+        "Our prime focus during designing solution is, to secure our customer control room and premises and sites by the use of Technologies",
+      accent: "secondary",
+    },
+    {
+      title: "Future-Proof Architecture",
+      description:
+        "Our scalable solutions grow with your business and support emerging technologies like AI and IoT.and can be Scalable for future",
+      accent: "secondary",
+    },
+    {
+      title: "End-to-End Support",
+      description:
+        "From initial planning to post-deployment support, we’re with you every step of the way.",
+      accent: "secondary",
+    },
+  ] as const;
+
   const subSolutions = [
     { 
       name: "Control Room Furniture", 
-      icon: <Monitor className="w-6 h-6" />,
       description: "Ergonomic and functional control room furniture designed for 24/7 operations, ensuring comfort and efficiency for operators managing critical systems.",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_726d6a0985.jpeg"
     },
     { 
       name: "Software", 
-      icon: <Code className="w-6 h-6" />,
       description: "Custom software solutions tailored to your command and control needs, providing intuitive interfaces and powerful analytics capabilities.",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_42589d16b5.jpeg"
     },
     { 
       name: "Video Walls", 
-      icon: <LayoutGrid className="w-6 h-6" />,
       description: "High-resolution video wall systems for real-time monitoring and visualization, enabling comprehensive oversight of all critical operations.",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80"
+      image: "/assets/CommandandControl/Control_room_with_screens_37be293209.jpeg"
     },
     { 
       name: "Servers", 
-      icon: <Server className="w-6 h-6" />,
       description: "Flexible server infrastructure solutions supporting on-premises, cloud, or hybrid deployments to meet your specific security and scalability requirements.",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg"
     },
     { 
       name: "AI/Custom Software", 
-      icon: <Brain className="w-6 h-6" />,
       description: "Advanced AI-powered custom software solutions that go beyond off-the-shelf products, delivering intelligent automation and predictive insights.",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg"
     }
   ];
 
@@ -415,55 +429,46 @@ function CommandControlPage() {
 
   const techStack = [
     {
-      icon: <Cloud className="w-12 h-12" />,
       title: "Cloud & AI",
       description: "Hybrid architecture and predictive insights for scalable, intelligent operations.",
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg"
     },
     {
-      icon: <BarChart3 className="w-12 h-12" />,
       title: "Software & Analytics",
       description: "Advanced dashboards and data-driven decision tools for comprehensive insights.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_f1c5ecea36.jpeg"
     },
     {
-      icon: <Network className="w-12 h-12" />,
-      title: "Network & Integration",
+      title: "Server On-premises/Cloud/Hybrid",
       description: "Secure communication protocols between ELV and IT systems for seamless operations.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_92c4643513.jpeg"
     },
     {
-      icon: <Cpu className="w-12 h-12" />,
       title: "Hardware",
       description: "Enterprise-grade consoles, servers, and physical infrastructure for mission-critical applications.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg"
     }
   ];
 
   const publicIndustries = [
     { 
       name: "Smart Cities", 
-      icon: <Building2 className="w-6 h-6" />,
       description: "Integrated urban management systems for traffic, utilities, and public safety."
     },
     { 
       name: "Defense", 
-      icon: <Shield className="w-6 h-6" />,
       description: "Mission-critical command centers for defense operations and strategic planning."
     },
     { 
       name: "Transportation", 
-      icon: <Train className="w-6 h-6" />,
       description: "Traffic management and logistics control systems for efficient transportation networks."
     },
     { 
       name: "Healthcare", 
-      icon: <Activity className="w-6 h-6" />,
       description: "Hospital command centers and emergency response coordination systems."
     },
     { 
       name: "Energy & Utilities", 
-      icon: <Zap className="w-6 h-6" />,
       description: "Power grid monitoring and utility management for reliable energy distribution."
     }
   ];
@@ -471,32 +476,26 @@ function CommandControlPage() {
   const corporateIndustries = [
     { 
       name: "Banking & Finance", 
-      icon: <DollarSign className="w-6 h-6" />,
       description: "Trading floors and financial operations centers for real-time market monitoring."
     },
     { 
       name: "Manufacturing", 
-      icon: <Factory className="w-6 h-6" />,
       description: "Production control rooms and quality assurance monitoring systems."
     },
     { 
       name: "Aviation", 
-      icon: <Plane className="w-6 h-6" />,
       description: "Air traffic control and airport operations management centers."
     },
     { 
       name: "Maritime", 
-      icon: <Ship className="w-6 h-6" />,
       description: "Port operations and vessel traffic management systems."
     },
     { 
       name: "Automotive", 
-      icon: <Car className="w-6 h-6" />,
       description: "Manufacturing control centers and supply chain coordination systems."
     },
     { 
       name: "Corporate Offices", 
-      icon: <Building className="w-6 h-6" />,
       description: "Enterprise command centers for facilities management and security operations."
     }
   ];
@@ -512,9 +511,6 @@ function CommandControlPage() {
         <meta name="description" content="Comprehensive Command & Control solutions connecting ELV and IT systems for intelligent automation and improved performance." />
       </Helmet>
 
-      {/* Background gradient */}
-      <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
-      
       {/* Hero Section */}
       <section 
         ref={heroRef} 
@@ -523,10 +519,13 @@ function CommandControlPage() {
           minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          paddingTop: 'clamp(5rem, 10vh, 6rem)'
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 w-full">
+        {/* Hero-only overlay so content below is not faded */}
+        <div className="absolute inset-0 bg-[#005E96] opacity-20 pointer-events-none" aria-hidden="true" />
+        <div className="container mx-auto px-4 sm:px-6 w-full relative z-10">
           <div 
             className="grid lg:grid-cols-2 items-center"
             style={{ gap: 'clamp(1.5rem, 3vh, 2rem)' }}
@@ -547,7 +546,6 @@ function CommandControlPage() {
                   marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
                 }}
               >
-                <Zap className="text-[#A6CE39]" style={{ width: 'clamp(14px, 1.5vh, 16px)', height: 'clamp(14px, 1.5vh, 16px)' }} />
                 <span className="text-white/90" style={{ fontSize: 'clamp(0.75rem, 1.25vh, 0.875rem)' }}>Command & Control</span>
               </div>
               
@@ -582,9 +580,9 @@ function CommandControlPage() {
                 }}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80"
+                  src="/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
                   alt="Command & Control Operations Center"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-fill"
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/40 via-transparent to-transparent" />
@@ -599,9 +597,7 @@ function CommandControlPage() {
         id="core-solutions" 
         className="relative scroll-mt-20"
         style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
+          paddingTop: 'clamp(7rem, 14vh, 9rem)',
         }}
       >
         <div className="container mx-auto px-4 sm:px-6">
@@ -680,7 +676,7 @@ function CommandControlPage() {
                       initial={{ opacity: 0, scale: 1.1 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-fill"
                       style={{ height: '100%' }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#005E96]/60 via-[#005E96]/20 to-transparent lg:from-[#005E96]/40 lg:via-transparent" />
@@ -719,7 +715,9 @@ function CommandControlPage() {
                     height: 'clamp(1.625rem, 3.25vh, 2rem)'
                   }}
                 >
-                  <ChevronLeft className="group-hover:translate-x-[-2px] transition-transform" style={{ width: 'clamp(0.875rem, 1.75vh, 1rem)', height: 'clamp(0.875rem, 1.75vh, 1rem)' }} />
+                  <div className="p-0.5 group-hover:translate-x-[-2px] transition-transform">
+                    <CaretLeft weight="bold" size={20} />
+                  </div>
                 </button>
               </div>
 
@@ -733,7 +731,9 @@ function CommandControlPage() {
                     height: 'clamp(1.625rem, 3.25vh, 2rem)'
                   }}
                 >
-                  <ChevronRight className="group-hover:translate-x-[2px] transition-transform" style={{ width: 'clamp(0.875rem, 1.75vh, 1rem)', height: 'clamp(0.875rem, 1.75vh, 1rem)' }} />
+                  <div className="p-0.5 group-hover:translate-x-[2px] transition-transform">
+                    <CaretRight weight="bold" size={20} />
+                  </div>
                 </button>
               </div>
 
@@ -774,7 +774,7 @@ function CommandControlPage() {
                   }`}
                 >
                   <div className={`mb-2 transition-colors ${
-                    index === activeSubSolutionIndex ? 'text-[#44C8F5]' : 'text-white/70'
+                    index === activeSubSolutionIndex ? 'text-cta' : 'text-white/70'
                   }`}>
                     {solution.icon}
                   </div>
@@ -790,14 +790,110 @@ function CommandControlPage() {
         </div>
       </section>
 
+      {/* Technical Advantages */}
+      <section style={{ paddingTop: 'clamp(7rem, 14vh, 9rem)' }}>
+            <div className="mx-auto max-w-6xl">
+              <div className="mb-6 sm:mb-8 text-center">
+              <h2 className="font-bold text-white mb-4" style={{ 
+              fontSize: 'clamp(1.5rem, 3.5vh, 2.5rem)',
+              marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
+            }}>
+              Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Advantages</span>
+            </h2>
+              </div>
+
+              {/* Banner + Grid */}
+              <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                {/* Expertise banner */}
+                <div className="relative">
+                  <div className="rounded-2xl p-[1px] bg-white/10">
+                    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-[0_22px_70px_-48px_rgba(0,0,0,0.45)]">
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#005E96]/35 via-transparent to-[#44C8F5]/20" aria-hidden="true" />
+                      <div className="relative p-6 sm:p-8">
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+                          <div className="relative h-12 w-12 rounded-2xl border border-white/15 bg-white/10 flex items-center justify-center">
+                            <div className="absolute -inset-6 rounded-full bg-[#44C8F5]/10 blur-2xl opacity-70" aria-hidden="true" />
+                            <Globe weight="bold" size={22} className="relative text-cta" aria-hidden="true" />
+                          </div>
+                          <div className="min-w-0">
+                            <h4 className="font-bold text-white text-lg sm:text-xl">
+                              {technicalAdvantages[0].title}
+                            </h4>
+                            <p className="mt-2 text-white/80 text-sm sm:text-base leading-relaxed max-w-4xl">
+                              {technicalAdvantages[0].description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Remaining 4 cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch">
+                  {technicalAdvantages.slice(1).map((item) => (
+                    <div key={item.title} className="relative h-full">
+                      <div className="rounded-2xl p-[1px] bg-white/10 h-full">
+                        <div
+                          className={[
+                            "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md h-full",
+                            "shadow-[0_18px_60px_-50px_rgba(0,0,0,0.45)]",
+                            (item as any).highlight ? "ring-1 ring-[#A6CE39]/40" : "",
+                          ].join(" ")}
+                        >
+                          <div className="p-5 sm:p-6 h-full flex flex-col">
+                            <div className="mb-4">
+                              <div
+                                className={[
+                                  "relative h-11 w-11 rounded-full border border-white/15 bg-white/10",
+                                  "flex items-center justify-center",
+                                  (item as any).highlight ? "shadow-[0_0_0_10px_rgba(166,206,57,0.12)]" : "shadow-[0_0_0_10px_rgba(68,200,245,0.10)]",
+                                  "transition-transform duration-300",
+                                ].join(" ")}
+                              >
+                                <div
+                                  className={[
+                                    "absolute -inset-6 rounded-full blur-2xl opacity-70",
+                                    (item as any).highlight ? "bg-[#A6CE39]/12" : "bg-[#44C8F5]/10",
+                                  ].join(" ")}
+                                  aria-hidden="true"
+                                />
+                                {item.title === "Tailored Solutions" ? (
+                                  <SlidersHorizontal weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
+                                ) : item.title === "Security First" ? (
+                                  <ShieldCheck weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
+                                ) : item.title === "Future-Proof Architecture" ? (
+                                  <Cpu weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
+                                ) : (
+                                  <Lifebuoy weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
+                                )}
+                              </div>
+                            </div>
+                            <h4 className="font-bold text-white text-base sm:text-lg">
+                              {item.title}
+                            </h4>
+                            <p className="mt-2 text-white/75 text-sm sm:text-base leading-relaxed flex-1">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+      </section>
+
+
       {/* Section 2: Technology Stack - Z-Pattern Layout */}
       <section 
         id="tech-stack" 
         className="relative scroll-mt-20"
         style={{
           minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(7rem, 14vh, 9rem)'
+          paddingTop: 'clamp(7rem, 14vh, 9rem)',
+          paddingBottom: 'clamp(3rem, 6vh, 5rem)',
         }}
       >
         <div className="container mx-auto px-4 sm:px-6">
@@ -810,8 +906,8 @@ function CommandControlPage() {
             style={{ marginBottom: 'clamp(2rem, 4vh, 3rem)' }}
           >
             <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
+              fontSize: 'clamp(1.5rem, 3.5vh, 2.5rem)',
+              marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
             }}>
               The Backbone of Every <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Command & Control Solution</span>
             </h2>
@@ -821,7 +917,6 @@ function CommandControlPage() {
             {techStack.map((tech, index) => (
               <TechStackCard
                 key={tech.title}
-                icon={tech.icon}
                 title={tech.title}
                 description={tech.description}
                 image={tech.image}
@@ -838,9 +933,8 @@ function CommandControlPage() {
         id="industries-served" 
         className="relative scroll-mt-20"
         style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
+          paddingTop: 'clamp(7rem, 14vh, 9rem)',
+          paddingBottom: 'clamp(7rem, 14vh, 9rem)',
         }}
       >
         <div className="container mx-auto px-4 sm:px-6">
@@ -867,12 +961,12 @@ function CommandControlPage() {
             <IndustryAccordion
               title="Public & Infrastructure"
               industries={publicIndustries}
-              image="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=1200&q=80"
+              image="/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg"
             />
             <IndustryAccordion
               title="Corporate & Enterprise"
               industries={corporateIndustries}
-              image="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
+              image="/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_3fbc7ceb1d.jpeg"
             />
           </div>
 

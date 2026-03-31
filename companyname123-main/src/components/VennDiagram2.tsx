@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Network, Shield, Users, Zap, Globe, Code } from "lucide-react";
+import { ShareNetwork, Shield, Users, Lightning, Globe, Code } from "phosphor-react";
 
 export default function VennDiagram2() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export default function VennDiagram2() {
       name: "Operators",
       color: "#A6CE39",
       hoverColor: "#95bb33",
-      icon: <Shield className="w-6 h-6" />,
+      icon: <div className="p-1"><Shield weight="thin" size={20} /></div>,
       description:
         "Offer traffic with the latest technology just focus to manage the network with minimum edge equipment to minimise the OPEX.",
     },
@@ -35,7 +35,7 @@ export default function VennDiagram2() {
       name: "Customer",
       color: "#44C8F5",
       hoverColor: "#3ab4e0",
-      icon: <Zap className="w-6 h-6" />,
+      icon: <div className="p-1"><Lightning weight="thin" size={20} /></div>,
       description:
         "Bullet1: Invested on the technology setup and need up and running services. Bullet2: Doesn't know the technology to invest correctly. Bullet3: Have security issue to use the new technology.",
     },
@@ -44,7 +44,7 @@ export default function VennDiagram2() {
       name: "htc",
       color: "#7CCCBF",
       hoverColor: "#6ab8ac",
-      icon: <Network className="w-6 h-6" />,
+      icon: <div className="p-1"><ShareNetwork weight="thin" size={20} /></div>,
       description:
         "Deliver technology solutions that meet customer needs while generating demand for traffic from operators.",
     },
@@ -53,7 +53,7 @@ export default function VennDiagram2() {
       name: "Our Core Excellence",
       color: "#fd79a8",
       hoverColor: "#e86a97",
-      icon: <Globe className="w-6 h-6" />,
+      icon: <div className="p-1"><Globe weight="thin" size={20} /></div>,
       description: "HTC bridging the Technology and Solution gap",
     },
   ];

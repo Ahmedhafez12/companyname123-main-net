@@ -1,7 +1,8 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import TestRefactorNavBar from './components/TestRefactorNavBar';
+import WhiteBgNavbar from './components/WhiteBgNavbar';
+import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import AboutUsPage from './pages/AboutUsPage';
@@ -16,13 +17,21 @@ import SitemapPage from './pages/SitemapPage';
 import CommandControlPage from './pages/CommandControlPage';
 import TelecommunicationsPage from './pages/TelecommunicationsPage';
 import StickyContactForm from './components/StickyContactForm';
+import Navbar2PreviewPage from './pages/Navbar2PreviewPage';
+
+/** Transparent navbar is only for Home and About Overview. */
+const TRANSPARENT_NAVBAR_PATHS = ['/', '/about/overview'] as const;
+
+const NAVBAR2_PREVIEW_PATH = '/preview/navbar2';
 
 function App() {
   const location = useLocation();
+  const useTransparentNavbar = (TRANSPARENT_NAVBAR_PATHS as readonly string[]).includes(location.pathname);
+  const isNavbar2Preview = location.pathname === NAVBAR2_PREVIEW_PATH;
 
   return (
     <div className="relative">
-      <TestRefactorNavBar />
+      {!isNavbar2Preview && (useTransparentNavbar ? <Navbar /> : <WhiteBgNavbar basePath="" />)}
       
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -39,10 +48,11 @@ function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/sitemap" element={<SitemapPage />} />
+          <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
         </Routes>
       </AnimatePresence>
 
-      <StickyContactForm />
+      {!isNavbar2Preview && <StickyContactForm />}
     </div>
   );
 }

@@ -1,18 +1,20 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Wifi,
+  CaretLeft,
+  CaretRight,
+  WifiHighHigh,
   Cloud,
-  Network,
-  Smartphone,
-  Server,
+  ShareShareNetwork,
+  DeviceMobile,
+  HardDrives,
   Globe,
   Database,
   Shield,
   ArrowRight,
-} from "lucide-react";
+  ShareNetwork,
+  WifiHigh,
+} from "phosphor-react";
 import { Link } from "react-router-dom";
 
 interface SolutionItem {
@@ -27,7 +29,7 @@ const solutions: SolutionItem[] = [
   {
     id: "5g-infrastructure",
     title: "Managed WiFi",
-    icon: <Wifi size={32} />,
+    icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
     description:
       "Next-generation mobile network infrastructure for unprecedented speed and reliability.",
     image:
@@ -36,7 +38,7 @@ const solutions: SolutionItem[] = [
   {
     id: "cloud-services",
     title: "Managed Fixed Wireless Access",
-    icon: <Cloud size={32} />,
+    icon: <div className="p-2"><Cloud weight="thin" size={20} /></div>,
     description: "Scalable cloud solutions for modern business needs.",
     image:
       "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500",
@@ -44,7 +46,7 @@ const solutions: SolutionItem[] = [
   {
     id: "iot-networks",
     title: "Managed UC",
-    icon: <Network size={32} />,
+    icon: <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
     description:
       "Comprehensive IoT network solutions for smart cities and industries.",
     image:
@@ -53,7 +55,7 @@ const solutions: SolutionItem[] = [
   {
     id: "mobile-solutions",
     title: "Infrastructure",
-    icon: <Smartphone size={32} />,
+    icon: <div className="p-2"><DeviceMobile weight="thin" size={20} /></div>,
     description:
       "Enterprise-grade mobile connectivity and management platforms.",
     image:
@@ -62,7 +64,7 @@ const solutions: SolutionItem[] = [
   {
     id: "data-centers",
     title: "Special MODA Solutions",
-    icon: <Server size={32} />,
+    icon: <div className="p-2"><HardDrives weight="thin" size={20} /></div>,
     description: "High-performance data center infrastructure and management.",
     image:
       "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=500",
@@ -70,7 +72,7 @@ const solutions: SolutionItem[] = [
   {
     id: "global-connectivity",
     title: "Remote Patient Management ( RPM )",
-    icon: <Globe size={32} />,
+    icon: <div className="p-2"><Globe weight="thin" size={20} /></div>,
     description:
       "Seamless international connectivity solutions for global enterprises.",
     image:
@@ -187,7 +189,7 @@ const SolutionsCarousel: React.FC = () => {
                   {/* Left: Icon and Title */}
                   <div className="md:w-1/3 text-center md:text-left">
                     <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center mx-auto md:mx-0 mb-6">
-                      <div className="text-[#44C8F5]">
+                      <div className="text-cta">
                         {React.cloneElement(
                           selectedSolution.icon as React.ReactElement,
                           { size: 40 }
@@ -207,10 +209,9 @@ const SolutionsCarousel: React.FC = () => {
                           Learn More
                         </a>
                       </span>
-                      <ArrowRight
-                        size={18}
-                        className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300"
-                      />
+                      <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
+                        <ArrowRight weight="thin" size={20} />
+                      </div>
                     </button>
                   </div>
                 </div>
@@ -233,7 +234,7 @@ const SolutionsCarousel: React.FC = () => {
                   className="absolute inset-0 rounded-full"
                   style={{ backgroundColor: "#005E96", opacity: 0.3 }}
                 ></div>
-                <ChevronLeft size={16} className="relative z-10" />
+                <CaretLeft size={16} className="relative z-10" />
               </button>
 
               <div className="flex space-x-1">
@@ -262,7 +263,9 @@ const SolutionsCarousel: React.FC = () => {
                   className="absolute inset-0 rounded-full"
                   style={{ backgroundColor: "#005E96", opacity: 0.3 }}
                 ></div>
-                <ChevronRight size={16} className="relative z-10" />
+                <div className="p-0.5 relative z-10">
+                  <CaretRight weight="thin" size={20} />
+                </div>
               </button>
             </div>
 

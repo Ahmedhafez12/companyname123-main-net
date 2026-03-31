@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Building2, Globe, Award, Users, ArrowRight, Star, CheckCircle, TrendingUp } from 'lucide-react';
+import { Buildings, GlobeHemisphereWest, Trophy, Users, ArrowRight, Star, CheckCircle, TrendUp } from 'phosphor-react';
 import Footer from '../components/Footer';
 import KeyCustomersBanner from '../components/KeyCustomersBanner';
 
@@ -54,27 +54,27 @@ function CustomersPage() {
   ];
 
   const stats = [
-    { icon: <Building2 className="w-6 h-6" />, value: "500+", label: "Enterprise Clients" },
-    { icon: <Globe className="w-6 h-6" />, value: "50+", label: "Countries Served" },
-    { icon: <Award className="w-6 h-6" />, value: "98%", label: "Client Satisfaction" },
-    { icon: <Users className="w-6 h-6" />, value: "1M+", label: "End Users" }
+    { icon: <div className="p-1"><Buildings weight="thin" size={20} /></div>, value: "500+", label: "Enterprise Clients" },
+    { icon: <div className="p-1"><GlobeHemisphereWest weight="thin" size={20} /></div>, value: "50+", label: "Countries Served" },
+    { icon: <div className="p-1"><Trophy weight="thin" size={20} /></div>, value: "98%", label: "Client Satisfaction" },
+    { icon: <div className="p-1"><Users weight="thin" size={20} /></div>, value: "1M+", label: "End Users" }
   ];
 
   const successMetrics = [
     {
-      icon: <Star className="w-12 h-12" />,
+      icon: <div className="p-2"><Star weight="thin" size={20} /></div>,
       title: "Customer Success",
       description: "Our customers achieve their business objectives faster with our solutions.",
       metric: "95% success rate"
     },
     {
-      icon: <CheckCircle className="w-12 h-12" />,
+      icon: <div className="p-2"><CheckCircle weight="thin" size={20} /></div>,
       title: "Implementation",
       description: "Smooth and efficient implementation of complex telecommunications projects.",
       metric: "On-time delivery"
     },
     {
-      icon: <TrendingUp className="w-12 h-12" />,
+      icon: <div className="p-2"><TrendUp weight="thin" size={20} /></div>,
       title: "ROI",
       description: "Significant return on investment through optimized infrastructure.",
       metric: "3x average ROI"
@@ -82,18 +82,18 @@ function CustomersPage() {
   ];
 
   const keyCustomers = [
-    { name: "STC", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/STC-01.svg/2560px-STC-01.svg.png" },
+    { name: "STC", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg" },
     { name: "BT", logo: "https://static.cdnlogo.com/logos/b/58/bt-3.svg" },
     { name: "Ericsson", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png" },
     { name: "HP", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png" },
-    { name: "Microsoft", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/440px-Microsoft_logo_%282012%29.svg.png" },
-    { name: "Nokia", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nokia_wordmark.svg/440px-Nokia_wordmark.svg.png" },
-    { name: "Citibank", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Citi.svg/440px-Citi.svg.png" },
-    { name: "IBM", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/440px-IBM_logo.svg.png" },
-    { name: "Goldman Sachs", logo: "https://cdn.worldvectorlogo.com/logos/goldman-sachs-2.svg" },
-    { name: "Oracle", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Oracle_logo.svg/440px-Oracle_logo.svg.png" },
-    { name: "Xerox", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Xerox_logo.svg/2560px-Xerox_logo.svg.png" },
-    { name: "JP Morgan", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/J_P_Morgan_Logo_2008_1.svg/440px-J_P_Morgan_Logo_2008_1.svg.png" }
+    { name: "Microsoft", logo: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png" },
+    { name: "Nokia", logo: "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg" },
+    { name: "Citibank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Citi.svg" },
+    { name: "IBM", logo: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" },
+    { name: "Goldman Sachs", logo: "https://www.vhv.rs/dpng/d/504-5049178_goldman-sachs-logo-goldman-sachs-logo-svg-hd.png" },
+    { name: "Oracle", logo: "/assets/oracle-logo.svg" },
+    { name: "Xerox", logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Xerox_logo.svg" },
+    { name: "JP Morgan", logo: "https://www.jpmorgan.com/content/dam/logos-global/logo-jpm-brown.svg" }
   ];
 
   useEffect(() => {
@@ -118,8 +118,8 @@ function CustomersPage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 'clamp(6rem, 12vh, 8rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 3rem)'
+          paddingTop: 'clamp(5rem, 10vh, 6rem)',
+          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 w-full">
@@ -177,11 +177,9 @@ function CustomersPage() {
                   fontSize: 'clamp(0.75rem, 1.25vh, 0.875rem)'
                 }}>
                   <span><a href="/contact" className="button">Get Started</a></span>
-                  <ArrowRight style={{ 
-                    width: 'clamp(14px, 1.5vh, 16px)', 
-                    height: 'clamp(14px, 1.5vh, 16px)',
-                    marginLeft: 'clamp(0.375rem, 0.75vw, 0.5rem)'
-                  }} className="transform group-hover:translate-x-1 transition-transform duration-300" />
+                  <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
+                    <ArrowRight weight="thin" size={20} />
+                  </div>
                 </button>
               </motion.div>
             </div>

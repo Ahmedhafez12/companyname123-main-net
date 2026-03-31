@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, useInView } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { 
-  Network,
+  ShareNetwork,
   Shield,
   Rocket,
   ArrowRight
-} from 'lucide-react';
+} from 'phosphor-react';
 import Footer from '../components/Footer';
 
 // Scroll animation variants
@@ -65,7 +65,7 @@ const BusinessUnitSection = ({ title, description, image, index, isReversed, id 
           <img 
             src={image} 
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/60 via-transparent to-transparent" />
@@ -93,7 +93,9 @@ const BusinessUnitSection = ({ title, description, image, index, isReversed, id 
             }}
           >
             <span>Learn More</span>
-            <ArrowRight className="group-hover:translate-x-1 transition-transform duration-300" style={{ width: 'clamp(14px, 1.5vh, 16px)', height: 'clamp(14px, 1.5vh, 16px)' }} />
+            <div className="p-0.5 group-hover:translate-x-1 transition-transform duration-300">
+              <ArrowRight weight="bold" size={20} />
+            </div>
           </a>
         </div>
       </div>
@@ -103,7 +105,6 @@ const BusinessUnitSection = ({ title, description, image, index, isReversed, id 
 
 // Compound Component: Service Hallmark Card
 const HallmarkCard = ({ title, description, index }: {
-//   icon: React.ReactNode;
   title: string;
   description: string;
   index: number;
@@ -124,17 +125,19 @@ const HallmarkCard = ({ title, description, index }: {
         borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
       }}
     >
-      {/* <div className="text-[#44C8F5] mb-4 inline-flex p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
-        {icon}
-      </div> */}
-      <h3 className="font-bold text-white mb-4" style={{ 
-        fontSize: 'clamp(1.125rem, 2.25vh, 1.5rem)',
-        marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-      }}>{title}</h3>
+      <h3
+        className="font-bold text-white mb-4"
+        style={{
+          fontSize: 'clamp(1.25rem, 2.5vh, 1.75rem)',
+          marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)',
+        }}
+      >
+        {title}
+      </h3>
       <p className="text-white/80 leading-relaxed" style={{ 
-        fontSize: 'clamp(0.875rem, 1.5vh, 1.125rem)',
-        lineHeight: '1.6'
-      }}>{description}</p>
+      fontSize: 'clamp(1.125rem, 2.25vh, 1.5rem)',
+      lineHeight: '1.6'
+    }}>{description}</p>
     </motion.div>
   );
 };
@@ -197,36 +200,36 @@ function TelecommunicationsPage() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Telecommunication Business Unit Sections
+  // Telecommunication Business Unit Sections (images from /assets/Telecommunications/ only)
   const businessUnits = [
     {
       title: "System Integration",
       description: "We design our solutions to fit your network supporting your digital transformation, not the other way around. Whether your infrastructure is fiber or copper (CAT6, CAT5 or CAT3), we seamlessly connect to it while supporting a full range of interfaces—from legacy E1, STM1, DS3, and RS232 to modern Ethernet and optical. We simplify complex signaling by bridging IP, legacy protocols, and RTP so different systems work together smoothly. With support for IP/MPLS, microwave, and VSAT uplinks, our platforms deliver end-to-end security, high availability, and automatic failover, ensuring your communication remains stable, resilient, and protected.",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80",
+      image: "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_fa3aa790f3.jpeg",
       id: "system-integration"
     },
     {
       title: "Connectivity and Transmission",
       description: "Break Down Connectivity Barriers, we stop letting incompatible systems dictate your IT strategy. Our intelligent gateway ecosystem transforms infrastructure chaos into competitive advantage seamlessly connecting your data streams, voice communications, legacy investments, and video assets through one unified architecture. No rip-and-replace required, just smart evolution that protects your past while accelerating your future.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+      image: "/assets/Telecommunications/Telecom_tower_with_glowing_waves_ae5fd516ef.jpeg",
       id: "connectivity-transmission"
     },
     {
       title: "Unified Communication",
       description: "We eliminate the false choice between cutting-edge cloud collaboration and your existing hardware investments, seamlessly bridging legacy analog systems, ISDN lines, and modern SIP trunks through enterprise grade gateways while unleashing IP PBX rich suite of video conferencing, mobile apps, and CRM integration across your workforce. Whether you're enabling hybrid teams with crystal-clear connectivity anywhere, plus securing your network with military-grade encryption, our integrated platform future-proofs your communications without the rip-and-replace disruption—delivering enterprise resilience with startup agility, today.",
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80",
+      image: "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_63fec3bc12.jpeg",
       id: "unified-communication"
     },
     {
       title: "Access LAN and OSP",
       description: "From fiber in the ground to Wi-Fi in the air, we architect the complete connectivity ecosystem that turns infrastructure into competitive advantage delivering hardened Outside Plant foundations, intelligent Enterprise Networking with seamless wired and wireless integration. Whether you're scaling secure Access layers, modernizing core Routers and Switches for software defined agility, or extending high speed connectivity to remote frontiers, our end-to-end portfolio eliminates multi-vendor complexity and accelerates your digital transformation with a single partner that builds the physical pathways and intelligent networks your business demands to thrive in an always on world.",
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80",
+      image: "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.png",
       id: "access-lan-osp"
     },
     {
       title: "Military and Critical Communication",
       description: "Our Military and Critical Communication solutions transform tactical connectivity into decisive combat advantage delivering encrypted hotlines, AES-256 secured voice and fax transmission, and aerial photo distribution. Through NPOX (New Off-Premises Extension), we extend secure C2 capabilities to forward operating bases and mobile warfighters, while NALL (New Analog Lease Line) provides electromagnetic-hardened circuits that guarantee unbroken connectivity when digital networks fail. Integrated with encrypted E1 trunking, agile SIP Distribution systems, and automated early warning platforms, every component of our portfolio is engineered to enhance the combat efficiency of military units ensuring your forces maintain superior situational awareness, seamless coordination, and unwavering command authority.",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
+      image: "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg",
       id: "military-critical-communication"
     }
   ];
@@ -234,20 +237,20 @@ function TelecommunicationsPage() {
   // Service Standards
   const serviceStandards = [
     {
-      icon: <Network className="w-12 h-12" />,
       title: "Seamless Integration & Migration",
-      description: "HTC delivers end‑to‑end solutions that are carefully designed to fit each customer's environment, ensuring smooth integration across existing systems, networks, and platforms with minimal disruption to operations."
+      description:
+        "HTC delivers end‑to‑end solutions that are carefully designed to fit each customer's environment, ensuring smooth integration across existing systems, networks, and platforms with minimal disruption to operations.",
     },
     {
-      icon: <Rocket className="w-12 h-12" />,
       title: "Agile Delivery & Reliable Execution",
-      description: "Our lean, senior-led teams deliver projects with speed and precision, swiftly adapting to shifting requirements, timelines, and budgets to ensure solutions arrive on time, perform flawlessly, and fit seamlessly into your real-world operations."
+      description:
+        "Our lean, senior-led teams deliver projects with speed and precision, swiftly adapting to shifting requirements, timelines, and budgets to ensure solutions arrive on time, perform flawlessly, and fit seamlessly into your real-world operations.",
     },
     {
-      icon: <Shield className="w-12 h-12" />,
       title: "Managed, Secure & Always-On Operations",
-      description: "HTC goes beyond implementation to actively run and support your environment as a managed service, with proactive monitoring, end‑to‑end security, and built‑in resilience and failover to keep your communications continuously stable, available, and protected."
-    }
+      description:
+        "HTC goes beyond implementation to actively run and support your environment as a managed service, with proactive monitoring, end‑to‑end security, and built‑in resilience and failover to keep your communications continuously stable, available, and protected.",
+    },
   ];
 
   // Hero section ref for scroll animations
@@ -272,7 +275,8 @@ function TelecommunicationsPage() {
           minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          paddingTop: 'clamp(5rem, 10vh, 6rem)'
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 w-full">
@@ -296,7 +300,6 @@ function TelecommunicationsPage() {
                   marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
                 }}
               >
-                <Network className="text-[#A6CE39]" style={{ width: 'clamp(14px, 1.5vh, 16px)', height: 'clamp(14px, 1.5vh, 16px)' }} />
                 <span className="text-white/90" style={{ fontSize: 'clamp(0.75rem, 1.25vh, 0.875rem)' }}>Telecommunications</span>
               </div>
               
@@ -331,9 +334,9 @@ function TelecommunicationsPage() {
                 }}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=1200&q=80"
+                  src="/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_fb8c7d724c.jpeg"
                   alt="Telecommunications Network Infrastructure"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-fill"
                   loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/40 via-transparent to-transparent" />
@@ -349,7 +352,7 @@ function TelecommunicationsPage() {
         className="relative scroll-mt-20"
         style={{
           minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
+          paddingTop: 'clamp(5rem, 10vh, 7rem)',
           paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
@@ -363,15 +366,15 @@ function TelecommunicationsPage() {
             style={{ marginBottom: 'clamp(2rem, 4vh, 3rem)' }}
           >
             <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-            }}>
+            fontSize: 'clamp(2rem, 4.5vh, 3.25rem)',
+            marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
+          }}>
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Core Solutions</span>
             </h2>
             <p className="text-white/80 max-w-3xl mx-auto" style={{ 
-              fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-              lineHeight: '1.6'
-            }}>
+            fontSize: 'clamp(1.0625rem, 2vh, 1.25rem)',
+            lineHeight: '1.6'
+          }}>
               Comprehensive telecommunications solutions designed to meet your enterprise needs
             </p>
           </motion.div>
@@ -398,7 +401,7 @@ function TelecommunicationsPage() {
         className="relative scroll-mt-20"
         style={{
           minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
+          paddingTop: 'clamp(5rem, 10vh, 7rem)',
           paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
@@ -436,7 +439,6 @@ function TelecommunicationsPage() {
             {serviceStandards.map((hallmark, index) => (
               <HallmarkCard
                 key={hallmark.title}
-                // icon={hallmark.icon}
                 title={hallmark.title}
                 description={hallmark.description}
                 index={index}

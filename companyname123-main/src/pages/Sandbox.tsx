@@ -7,7 +7,7 @@ import {
   useInView,
 } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronLeft, ChevronRight, Wifi, Cloud, Network, Shield, Database, Server, Cpu, Globe, Zap, Lock, Radio, Target, Award, Users, TrendingUp, Mail, Phone, MapPin, X, Calendar, Gauge, Rocket, TrendingUp as TrendingUpIcon } from "lucide-react";
+import { ArrowRight, CaretLeft, CaretRight, WifiHigh, Cloud, ShareNetwork, Shield, Database, HardDrives, Cpu, GlobeHemisphereWest, Lightning, Lock, Radio, Target, Trophy, Users, TrendUp, EnvelopeSimple, Phone, MapPin, X, Calendar, Gauge, Rocket } from "phosphor-react";
 import styled, { keyframes } from "styled-components";
 import AnimatedCounter from "../components/AnimatedCounter";
 import {
@@ -1415,7 +1415,9 @@ const IdentityPopUp = () => {
             onClick={() => setIsDismissed(true)}
             aria-label="Close mission card"
           >
-            <X size={20} />
+            <div className="p-0.5">
+              <X weight="thin" size={20} />
+            </div>
           </CloseButton>
         </MissionCardHeader>
         <MissionCardContent>
@@ -1680,7 +1682,7 @@ const LearnMoreLink = styled(Link)`
   margin-top: auto;
 `;
 
-const ArrowIcon = styled(ArrowRight)`
+const ArrowIconWrapper = styled.div`
   opacity: 0;
   transform: translateX(-10px);
   transition: all 0.3s ease-out;
@@ -1695,47 +1697,47 @@ const ArrowIcon = styled(ArrowRight)`
 const ServicesGridComponent = () => {
   const services = [
     {
-      icon: <Wifi className="w-12 h-12" />,
+      icon: <div className="p-1"><WifiHigh weight="thin" size={48} /></div>,
       title: "Managed WiFi",
       description: "Seamless connectivity solutions with centralized management and enhanced security for scalable network operations.",
     },
     {
-      icon: <Cloud className="w-12 h-12" />,
+      icon: <div className="p-1"><Cloud weight="thin" size={48} /></div>,
       title: "Cloud Solutions",
       description: "High-speed wireless broadband with rapid deployment and scalable bandwidth solutions for enterprise needs.",
     },
     {
-      icon: <Network className="w-12 h-12" />,
+      icon: <div className="p-1"><ShareNetwork weight="thin" size={48} /></div>,
       title: "Network Infrastructure",
       description: "Comprehensive network architecture with cloud deployments and automated management for optimal performance.",
     },
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-1"><Shield weight="thin" size={48} /></div>,
       title: "Security Services",
       description: "Advanced cybersecurity measures protecting your infrastructure with real-time threat response and compliance.",
     },
     {
-      icon: <Database className="w-12 h-12" />,
+      icon: <div className="p-1"><Database weight="thin" size={48} /></div>,
       title: "Data Management",
       description: "State-of-the-art data centers for secure storage and processing with disaster recovery capabilities.",
     },
     {
-      icon: <Server className="w-12 h-12" />,
+      icon: <div className="p-1"><HardDrives weight="thin" size={48} /></div>,
       title: "Server Solutions",
       description: "Scalable server infrastructure with edge computing capabilities for real-time processing and optimization.",
     },
     {
-      icon: <Cpu className="w-12 h-12" />,
+      icon: <div className="p-1"><Cpu weight="thin" size={48} /></div>,
       title: "Network Automation",
       description: "Intelligent automation solutions for network management with AI-powered optimization and analytics.",
     },
     {
-      icon: <Globe className="w-12 h-12" />,
+      icon: <div className="p-1"><GlobeHemisphereWest weight="thin" size={48} /></div>,
       title: "Global Connectivity",
       description: "Worldwide network coverage with seamless integration and multi-region deployment capabilities.",
     },
     {
-      icon: <Zap className="w-12 h-12" />,
+      icon: <div className="p-1"><Lightning weight="thin" size={48} /></div>,
       title: "Performance Optimization",
       description: "Advanced performance tuning and optimization services to maximize efficiency and reduce operational costs.",
     },
@@ -1774,7 +1776,9 @@ const ServicesGridComponent = () => {
               <ServiceDescription>{service.description}</ServiceDescription>
               <LearnMoreLink to="/solutions">
                 Learn More
-                <ArrowIcon size={16} />
+                <ArrowIconWrapper>
+                  <ArrowRight weight="thin" size={20} />
+                </ArrowIconWrapper>
               </LearnMoreLink>
             </ServiceCard>
           ))}
@@ -2054,22 +2058,22 @@ const ValuePropImagePlaceholder = styled.div`
 const ValuePropSplitComponent = () => {
   const features = [
     {
-      icon: <Target className="w-6 h-6" />,
+      icon: <div className="p-0.5"><Target weight="thin" size={24} /></div>,
       heading: "Strategic Vision",
       subtext: "We maintain a clear focus on long-term goals while delivering immediate value to our clients through innovative solutions.",
     },
     {
-      icon: <Award className="w-6 h-6" />,
+      icon: <div className="p-0.5"><Trophy weight="thin" size={24} /></div>,
       heading: "Excellence Driven",
       subtext: "We strive for excellence in everything we do, from technical solutions to customer service and support.",
     },
     {
-      icon: <Users className="w-6 h-6" />,
+      icon: <div className="p-0.5"><Users weight="thin" size={24} /></div>,
       heading: "Customer Commitment",
       subtext: "Our success is measured by the success of our clients and their satisfaction with our comprehensive solutions.",
     },
     {
-      icon: <TrendingUp className="w-6 h-6" />,
+      icon: <div className="p-0.5"><TrendUp weight="thin" size={24} /></div>,
       heading: "Continuous Growth",
       subtext: "We invest in research and development to stay ahead of technological advancements and market trends.",
     },
@@ -2293,14 +2297,18 @@ const LatestUpdatesComponent = () => {
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
               <UpdateDateBadge>
-                <Calendar size={16} />
+                <div className="p-0.5">
+                  <Calendar weight="thin" size={20} />
+                </div>
                 {update.date}
               </UpdateDateBadge>
               <UpdateTitle>{update.title}</UpdateTitle>
               <UpdateExcerpt>{update.excerpt}</UpdateExcerpt>
               <UpdateLink to={update.href}>
                 Read More
-                <ArrowRight size={16} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </UpdateLink>
             </UpdateCard>
           ))}
@@ -2591,7 +2599,9 @@ const EnterpriseFooterComponent = () => {
             {servicesLinks.map((link) => (
               <FooterLink key={link.name} to={link.href}>
                 {link.name}
-                <ArrowRight size={14} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </FooterLink>
             ))}
           </FooterColumn>
@@ -2606,7 +2616,9 @@ const EnterpriseFooterComponent = () => {
             {aboutLinks.map((link) => (
               <FooterLink key={link.name} to={link.href}>
                 {link.name}
-                <ArrowRight size={14} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </FooterLink>
             ))}
           </FooterColumn>
@@ -2621,7 +2633,9 @@ const EnterpriseFooterComponent = () => {
             {legalLinks.map((link) => (
               <FooterLink key={link.name} to={link.href}>
                 {link.name}
-                <ArrowRight size={14} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </FooterLink>
             ))}
           </FooterColumn>
@@ -2644,7 +2658,9 @@ const EnterpriseFooterComponent = () => {
               />
               <NewsletterButton type="button" aria-label="Subscribe to newsletter">
                 Subscribe
-                <ArrowRight size={16} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </NewsletterButton>
             </NewsletterContainer>
           </FooterColumn>
@@ -2658,7 +2674,9 @@ const EnterpriseFooterComponent = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
         >
           <CopyrightText>
-            <Network size={14} />
+            <div className="p-0.5">
+              <ShareNetwork weight="thin" size={20} />
+            </div>
             &copy; {currentYear} Hajz Telecommunications. All rights reserved.
           </CopyrightText>
         </FooterCopyright>
@@ -3130,13 +3148,17 @@ const CarouselComponent = ({
           onClick={() => paginate(-1)}
           aria-label="Previous slide"
         >
-          <ChevronLeft size={24} />
+          <div className="p-1">
+            <CaretLeft weight="thin" size={20} />
+          </div>
         </CarouselNavButton>
         <CarouselNavButton
           onClick={() => paginate(1)}
           aria-label="Next slide"
         >
-          <ChevronRight size={24} />
+          <div className="p-1">
+            <CaretRight weight="thin" size={20} />
+          </div>
         </CarouselNavButton>
       </CarouselNavButtons>
 
@@ -3170,7 +3192,9 @@ const CarouselComponent = ({
               </CarouselText>
               <CarouselCTA onClick={() => console.log(`CTA clicked: ${carouselItems[currentIndex].ctaText}`)}>
                 {carouselItems[currentIndex].ctaText}
-                <ArrowRight size={18} />
+                <div className="p-0.5">
+                  <ArrowRight weight="thin" size={20} />
+                </div>
               </CarouselCTA>
             </CarouselContentItem>
           </CarouselSlideItem>
@@ -3348,7 +3372,7 @@ const CardComponent = ({
   badge = "Featured",
   buttonText = "Learn More"
 }: CardComponentProps) => {
-  const defaultIcon = <Rocket size={24} />;
+  const defaultIcon = <div className="p-1"><Rocket weight="thin" size={20} /></div>;
 
   return (
     <Card
@@ -3369,7 +3393,9 @@ const CardComponent = ({
       <CardFooter>
         <CardButton>
           {buttonText}
-          <ArrowRight size={16} />
+          <div className="p-0.5">
+            <ArrowRight weight="thin" size={20} />
+          </div>
         </CardButton>
       </CardFooter>
     </Card>
@@ -3511,12 +3537,12 @@ const DigitalDemandsComponent = () => {
     {
       title: "Reach",
       description: "Extend your network coverage to every corner of your operation with seamless connectivity solutions.",
-      icon: Globe,
+      icon: GlobeHemisphereWest,
     },
     {
       title: "Scale",
       description: "Grow your infrastructure effortlessly with flexible solutions that adapt to your business needs.",
-      icon: TrendingUp,
+      icon: TrendUp,
     },
     {
       title: "Speed",
@@ -3534,7 +3560,9 @@ const DigitalDemandsComponent = () => {
             return (
               <DemandCard key={index}>
                 <DemandIconWrapper>
-                  <IconComponent size={48} />
+                  <div className="p-1">
+                    <IconComponent weight="thin" size={48} />
+                  </div>
                 </DemandIconWrapper>
                 <DemandHeading>{demand.title}</DemandHeading>
                 <DemandBody>{demand.description}</DemandBody>

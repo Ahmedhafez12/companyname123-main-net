@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Award, Shield, Zap } from 'lucide-react';
+import { Trophy, Shield, Lightning } from 'phosphor-react';
 
 interface Partner {
   id: number;
@@ -51,11 +51,11 @@ const partners: Partner[] = [
 const getCategoryIcon = (category: string) => {
   switch(category) {
     case 'technology':
-      return <Zap size={16} className="text-[#44C8F5]" />;
+      return <div className="p-0.5"><Lightning weight="thin" size={20} className="text-cta" /></div>;
     case 'service':
-      return <Shield size={16} className="text-[#A6CE39]" />;
+      return <div className="p-0.5"><Shield weight="thin" size={20} className="text-cta" /></div>;
     case 'innovation':
-      return <Award size={16} className="text-[#7CCCBF]" />;
+      return <div className="p-0.5"><Trophy weight="thin" size={20} className="text-cta" /></div>;
     default:
       return null;
   }

@@ -1,181 +1,197 @@
 import React, { useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, useInView } from 'framer-motion';
-import { useLocation, Link } from 'react-router-dom';
-import { 
-  Target,
-  Eye,
-  Heart,
-  Award,
+import { Link, useLocation } from 'react-router-dom';
+import {
+  Trophy,
   Calendar,
-  ArrowRight,
-  Network,
+  ShareNetwork,
   Rocket,
   Shield,
-  CheckCircle,
-  Zap,
-  Users
-} from 'lucide-react';
-import Footer from '../components/Footer';
+  Lightning,
+  Users,
+  ArrowsLeftRight,
+  Package,
+  ChartLineUp,
+  TrendUp,
+  ArrowRight,
+} from 'phosphor-react';
 import HorizontalTimeline from '../components/HorizontalTimeline';
+import CompanyIdentityCarousel from '../components/CompanyIdentityCarousel';
+import ScrollReveal from '../components/ScrollReveal';
+import HeroScrollIndicator from '../components/HeroScrollIndicator';
+import WhyChooseUsSection from '../components/WhyChooseUsSection';
 
-// Scroll animation variants
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
-  }
+// Content constants (max 3 short sentences per block for above-the-fold fit)
+const ABOUT_CONSTANTS = {
+  hero: {
+    badge: 'About HTC',
+    headline: 'Who We',
+    headlineHighlight: 'Are',
+    summary:
+      '32+ years of telecommunications excellence. We partner in legacy-to-digital migration, unified communications, and command & control. Driven by clarity, respect, and commitment.',
+    heroImageSrc: '/assets/abstracts/Soft_focus_abstract_network_blurred_glowing_partic_delpmaspu.png',
+    heroImageAlt: 'HTC telecommunications and connectivity',
+  },
+  identity: {
+    mission:
+      'Hajz Telecom crafts dependable, high-performance communication systems that propel businesses forward. We partner closely with enterprises, government, and defense clients across our markets to overcome operational hurdles with precision-engineered support and unwavering reliability nurturing homegrown talent to pioneer solutions that deliver enduring value and excellence. ',
+    vision:
+      'Bridging legacies and technology gaps to unlock true digital innovation. We empower enterprises, government, and defense across our markets with mission critical, unbreakable connectivity igniting a new generation of local experts to innovate, customize, and conquer your toughest challenges with unwavering confidence. ',
+    missionBullets: ['Empowering communities through cutting-edge technology.', 'Driving progress with high-quality solutions.', 'Enhancing connectivity for daily life and growth.'],
+    visionBullets: ['Personalized solutions for unique needs.', 'Top-tier services and products that add value.', 'Improving businesses and lives.'],
+  },
+  whyUs: {
+    sectionTitle: 'Why Us',
+    sectionSubtitle: 'What sets HTC apart in telecommunications excellence.',
+    valueProps: [
+      { title: 'Seamless Migration', description: 'Zero-downtime transitions from legacy to modern systems.' },
+      { title: 'Turnkey Projects', description: 'End-to-end delivery from design to ongoing management.' },
+      { title: 'Proactive Managed Services', description: 'Continuous monitoring and optimization for peak performance.' },
+      { title: 'Agile Delivery', description: 'Flexible teams adapt to your timelines and budgets.' },
+      { title: 'Tangible Impact', description: 'Focus on productivity, customer experience, and growth.' },
+    ],
+  },
+  journey: {
+    intro: 'From our founding to today, we have led telecommunications innovation.',
+    events: [
+      { date: '1994', title: 'First Cloud Service', description: 'Offer Worldspan ticketing system as service in the kingdom to travel agencies over STC legacy technology X.25 and connected with the world servers 700+ agencies' },
+      { date: '1998', title: 'First DID/DOD Service', description: 'STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pregain solution and serve more than 2500+ key customer' },
+      { date: '2002', title: 'First MPLS Technology', description: 'We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches' },
+      { date: '2009', title: 'First SIP Trunk', description: 'We provided with STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer' },
+      { date: '2012', title: 'STC NGN Migration', description: 'Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links' },
+      { date: '2016', title: 'STC Hazm Room', description: 'htc have been chosen by STC, MODA and RSADF to provide off hook service to all the remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links' },
+      { date: '2022', title: 'STC Service Concept and 2 Contract', description: 'Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer. Key customer Active equipment project (exclusive for htc) Customer premises equipment project' },
+    ],
+  },
+  companyIdentity: {
+    sectionTitle: 'Company Identity',
+    sectionSubtitle: 'The three pillars that define who we are and how we work with our customers and communities.',
+    blocks: [
+      {
+        title: 'Clarity, Respect & Commitment',
+        paragraphs: [
+          'We believe clarity drives confidence. By communicating transparently and aligning our actions with our words, we ensure that our goals and expectations are always understood.',
+          'Respect guides how we engage with our colleagues, customers, and partners—fostering a culture of trust, inclusiveness, and mutual growth.',
+          'Our commitment defines our reliability. We take ownership of every promise, consistently delivering quality, value, and results that strengthen our long-term partnerships and reputation.',
+        ],
+      },
+      {
+        title: 'Innovation, Quality & Community Impact',
+        paragraphs: [
+          'We strive for innovation that drives progress, developing advanced communication technologies that connect people and empower businesses.',
+          'Our commitment to quality ensures reliable, high-performance solutions that meet the evolving needs of our customers and partners.',
+          'We believe in making a positive difference—fostering economic development and enhancing the quality of life in every community we serve.',
+        ],
+      },
+      {
+        title: 'Customer Partnership, Excellence & Lasting Impact',
+        paragraphs: [
+          'We see every customer relationship as a partnership built on understanding, innovation, and shared success. By listening first and designing with purpose, we create smart, customized solutions that turn challenges into opportunities.',
+          'Our drive for excellence pushes us to go beyond expectations—delivering experiences that empower businesses, elevate performance, and enrich everyday life.',
+        ],
+      },
+    ],
+  },
+  competitiveEdge: {
+    sectionTitle: 'Competitive Edge',
+    sectionSubtitle: 'What makes us the partner of choice for complex communications and control environments.',
+    items: [
+      'Specialist in moving from legacy systems to modern, integrated communication platforms with minimal risk and disruption.',
+      'Designs and deploys end-to-end solutions across UC, IP PBX, contact center, gateways, fixed wireless access, and command and control as a single accountable partner.',
+      'Provides ongoing managed services, ensuring your environment is monitored, supported, and continuously optimized.',
+      'Operates with agile, senior-led teams that adapt to your timelines, budgets, and operational constraints.',
+      'Focuses on clear business outcomes: higher productivity, better customer experience, and improved cost efficiency.',
+    ],
+  },
+  coreStrengths: {
+    intro: 'The capabilities that drive our success and deliver value to clients.',
+    items: [
+      { title: '32+ Years', description: 'Expertise in telecom, system integration, and legacy-to-digital migration.' },
+      { title: 'Legacy-to-Digital', description: 'Transitioning legacy systems to modern infrastructure without disruption.' },
+      { title: 'Agile Delivery', description: 'Senior-led teams deliver on time and within budget.' },
+      { title: 'Senior-Led Teams', description: 'Deep industry knowledge and technical excellence on every project.' },
+      { title: 'Risk-Free Migration', description: 'Proven methodologies protect operations while enabling transformation.' },
+      { title: 'Proven Track Record', description: 'Success across defense, infrastructure, banking, and enterprise.' },
+    ],
+  },
+  cta: {
+    heading: 'Ready to Learn More?',
+    body: 'Explore our journey and see how we have shaped the telecommunications landscape.',
+  },
 };
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
-    }
-  }
+// Core Strength card (uses project .card styling, bento-friendly)
+const StrengthCard = ({ icon, title, description, className = '' }: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  index: number;
+  className?: string;
+}) => {
+  return (
+    <div
+      className={`p-5 lg:p-6 h-full flex flex-col rounded-xl bg-primary/20 border border-primary/30 backdrop-blur-sm shadow-lg ${className}`.trim()}
+    >
+      <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 flex items-center gap-2">
+        <span className="text-cta flex-shrink-0">{React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}</span>
+        {title}
+      </h3>
+      <p className="text-base sm:text-lg text-white/70 leading-relaxed flex-grow">{description}</p>
+    </div>
+  );
 };
 
-// Compound Component: Identity Card
-const IdentityCard = ({ icon, title, description, index }: {
+// Why Us card for Bento grid (uses project .card styling)
+const WhyUsCard = ({ icon, title, description }: {
   icon: React.ReactNode;
   title: string;
   description: string;
   index: number;
 }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
   return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      transition={{ delay: index * 0.15 }}
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl h-full flex flex-col"
-      style={{
-        padding: 'clamp(1.25rem, 2.5vh, 2rem)',
-        borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
-      }}
-    >
-      <div className="text-white/40 mb-4 inline-flex" style={{ marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)' }}>
-        {React.cloneElement(icon as React.ReactElement, { 
-          style: { width: 'clamp(1rem, 2vh, 1.25rem)', height: 'clamp(1rem, 2vh, 1.25rem)' }
-        })}
+    <div className="card p-5 lg:p-6 h-full flex flex-col">
+      <div className="text-cta mb-3 flex-shrink-0">
+        {React.cloneElement(icon as React.ReactElement, { className: 'w-6 h-6' })}
       </div>
-      <h3 className="font-bold text-white mb-3" style={{ 
-        fontSize: 'clamp(1.125rem, 2.25vh, 1.5rem)',
-        marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
-      }}>{title}</h3>
-      <p className="text-white/80 leading-relaxed" style={{ 
-        fontSize: 'clamp(0.875rem, 1.5vh, 1rem)',
-        lineHeight: '1.6'
-      }}>{description}</p>
-    </motion.div>
-  );
-};
-
-
-// Compound Component: Strength Card
-const StrengthCard = ({  title, description, index }: {
-  // icon: React.ReactNode;
-  title: string;
-  description: string;
-  index: number;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      transition={{ delay: index * 0.1 }}
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl h-full flex flex-col"
-      style={{
-        padding: 'clamp(1.25rem, 2.5vh, 2rem)',
-        borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
-      }}
-    >
-      {/* <div className="text-[#44C8F5] mb-4 inline-flex p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10">
-        {icon}
-      </div> */}
-      <h3 className="font-bold text-white mb-3" style={{ 
-        fontSize: 'clamp(1rem, 2vh, 1.25rem)',
-        marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
-      }}>{title}</h3>
-      <p className="text-white/70 leading-relaxed" style={{ 
-        fontSize: 'clamp(0.8125rem, 1.5vh, 0.875rem)',
-        lineHeight: '1.6'
-      }}>{description}</p>
-    </motion.div>
-  );
-};
-
-// Compound Component: Value Prop Item
-const ValuePropItem = ({ icon, title, description, index }: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  index: number;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      transition={{ delay: index * 0.15 }}
-      className="flex items-start"
-      style={{ gap: 'clamp(0.75rem, 1.5vh, 1rem)' }}
-    >
-      <div className="text-[#A6CE39] mt-1 flex-shrink-0">
-        {React.cloneElement(icon as React.ReactElement, { 
-          style: { width: 'clamp(1.25rem, 2.5vh, 1.5rem)', height: 'clamp(1.25rem, 2.5vh, 1.5rem)' }
-        })}
-      </div>
-      <div>
-        <h4 className="font-bold text-white mb-2" style={{ 
-          fontSize: 'clamp(1rem, 2vh, 1.125rem)',
-          marginBottom: 'clamp(0.375rem, 0.75vh, 0.5rem)'
-        }}>{title}</h4>
-        <p className="text-white/80 leading-relaxed" style={{ 
-          fontSize: 'clamp(0.875rem, 1.5vh, 1rem)',
-          lineHeight: '1.6'
-        }}>{description}</p>
-      </div>
-    </motion.div>
+      <h4 className="text-lg sm:text-xl font-semibold text-white mb-2">{title}</h4>
+      <p className="text-base sm:text-lg text-white/80 leading-relaxed flex-grow">{description}</p>
+    </div>
   );
 };
 
 function AboutUsPage() {
   const location = useLocation();
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Function to scroll to hash element
   const scrollToHash = (hash: string) => {
     if (!hash) return;
-    
-    const element = document.querySelector(hash);
-    if (element) {
-      requestAnimationFrame(() => {
+
+    const container = scrollContainerRef.current;
+    const element = (container?.querySelector(hash) ?? document.querySelector(hash)) as HTMLElement | null;
+    if (!element) return;
+
+    requestAnimationFrame(() => {
+      const offset = 80;
+
+      if (container) {
+        const elementTop =
+          element.getBoundingClientRect().top -
+          container.getBoundingClientRect().top +
+          container.scrollTop;
+
+        container.scrollTo({
+          top: elementTop - offset,
+          behavior: 'smooth',
+        });
+      } else {
         const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-        const offset = 80;
         window.scrollTo({
           top: elementTop - offset,
-          behavior: 'smooth'
+          behavior: 'smooth',
         });
-      });
-    }
+      }
+    });
   };
 
   // Handle hash on mount and route changes
@@ -184,14 +200,11 @@ function AboutUsPage() {
     
     if (hash) {
       const attemptScroll = (attempts = 0) => {
-        const element = document.querySelector(hash);
+        const container = scrollContainerRef.current;
+        const element = container?.querySelector(hash) ?? document.querySelector(hash);
+
         if (element) {
-          const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-          const offset = 80;
-          window.scrollTo({
-            top: elementTop - offset,
-            behavior: 'smooth'
-          });
+          scrollToHash(hash);
         } else if (attempts < 5) {
           setTimeout(() => attemptScroll(attempts + 1), 100 * (attempts + 1));
         }
@@ -199,7 +212,12 @@ function AboutUsPage() {
       
       setTimeout(() => attemptScroll(), 100);
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   }, [location.hash, location.pathname]);
 
@@ -216,577 +234,339 @@ function AboutUsPage() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Company Identity Values
-  const identityValues = [
-    {
-      icon: <CheckCircle className="w-5 h-5" />,
-      title: "Core Values",
-      description: "We believe clarity drives confidence through transparent communication and aligned actions. Respect guides our engagement with colleagues, customers, and partners, fostering trust and mutual growth. Our commitment defines our reliability—we take ownership of every promise, consistently delivering quality, value, and results that strengthen long-term partnerships."
-    },
-    {
-      icon: <CheckCircle className="w-5 h-5" />,
-      title: "Innovation & Quality",
-      description: "We strive for innovation that drives progress, developing advanced communication technologies that connect people and empower businesses. Our commitment to quality ensures reliable, high-performance solutions that meet evolving needs. We believe in making a positive difference, fostering economic development and enhancing quality of life in every community we serve."
-    },
-    {
-      icon: <CheckCircle className="w-5 h-5" />,
-      title: "Customer Excellence",
-      description: "We see every customer relationship as a partnership built on understanding, innovation, and shared success. By listening first and designing with purpose, we create smart, customized solutions that turn challenges into opportunities. Our drive for excellence pushes us beyond expectations, delivering experiences that empower businesses, elevate performance, and enrich everyday life."
-    }
+  const valuePropIcons = [
+    <ArrowsLeftRight key="a" weight="bold" size={20} />,
+    <Package key="p" weight="bold" size={20} />,
+    <ChartLineUp key="c" weight="bold" size={20} />,
+    <Rocket key="r" weight="bold" size={20} />,
+    <TrendUp key="t" weight="bold" size={20} />,
+  ];
+  const strengthIcons = [
+    <Calendar key="c" weight="bold" size={20} />,
+    <ShareNetwork key="s" weight="bold" size={20} />,
+    <Lightning key="l" weight="bold" size={20} />,
+    <Users key="u" weight="bold" size={20} />,
+    <Shield key="sh" weight="bold" size={20} />,
+    <Trophy key="t" weight="bold" size={20} />,
   ];
 
-
-  // Core Strengths (6 items for 3x2 grid)
-  const coreStrengths = [
-    {
-      icon: <Calendar className="w-8 h-8" />,
-      title: "32+ Years of Experience",
-      description: "Three decades of expertise in telecommunications, system integration, and legacy-to-digital migration across diverse industries."
-    },
-    {
-      icon: <Network className="w-8 h-8" />,
-      title: "Legacy-to-Digital Migration",
-      description: "Specialized expertise in seamlessly transitioning legacy systems to modern digital infrastructure without disrupting operations."
-    },
-    {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Agile Delivery",
-      description: "Senior-led teams that adapt quickly to changing requirements, delivering solutions on time and within budget with precision."
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Senior-Led Teams",
-      description: "Experienced professionals at the helm, ensuring every project benefits from deep industry knowledge and technical excellence."
-    },
-    {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Risk-Free Migration",
-      description: "Proven methodologies that minimize risk during system transitions, protecting your operations while enabling transformation."
-    },
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Proven Track Record",
-      description: "Successfully delivered projects across defense, infrastructure, banking, and enterprise sectors with measurable results."
-    }
-  ];
-
-  // Journey Timeline Events
-  const journeyEvents = [
-    {
-      date: "1994",
-      title: "First Cloud Service",
-      description: "Offer Worldspan ticketing system as service in the kingdom to travel agencies over STC legacy technology X.25 and connected with the world servers 700+ agencies"
-    },
-    {
-      date: "1998",
-      title: "First DID/DOD Service",
-      description: "STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pregain solution and serve more than 2500+ key customer"
-    },
-    {
-      date: "2002",
-      title: "First MPLS Technology",
-      description: "We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches"
-    },
-    {
-      date: "2009",
-      title: "First SIP Trunk",
-      description: "We provided with STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer"
-    },
-    {
-      date: "2012",
-      title: "STC NGN Migration",
-      description: "Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links"
-    },
-    {
-      date: "2016",
-      title: "STC Hazm Room",
-      description: "htc have been chosen by STC, MODA and RSADF to provide off hook service to all the remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links"
-    },
-    {
-      date: "2022",
-      title: "STC Service Concept and 2 Contract",
-      description: "Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer. Key customer Active equipment project (exclusive for htc) Customer premises equipment project"
-    }
-  ];
-
-  // Value Proposition
-  const valueProps = [
-    {
-      icon: <CheckCircle className="w-6 h-6" />,
-      title: "Seamless Migration",
-      description: "Zero-downtime transitions from legacy to modern systems, ensuring business continuity throughout the transformation process."
-    },
-    {
-      icon: <CheckCircle className="w-6 h-6" />,
-      title: "Turnkey Projects",
-      description: "End-to-end project delivery from design and deployment to ongoing management, eliminating multi-vendor complexity."
-    },
-    {
-      icon: <CheckCircle className="w-6 h-6" />,
-      title: "Proactive Managed Services",
-      description: "Continuous monitoring, maintenance, and optimization of your communication infrastructure to ensure peak performance and reliability."
-    },
-    {
-      icon: <CheckCircle className="w-6 h-6" />,
-      title: "Agile Delivery, Real-World Fit",
-      description: "Our flexible, hands-on teams adapt to your timelines, budgets, and constraints, ensuring projects are delivered efficiently with predictable outcomes."
-    },
-    {
-      icon: <CheckCircle className="w-6 h-6" />,
-      title: "Tangible Business Impact",
-      description: "We focus on results: enhanced productivity, improved customer experience, and stronger performance that support your growth and digital ambitions."
-    }
-  ];
-
-  // Hero section ref for scroll animations
-  const heroRef = useRef(null);
-  const heroInView = useInView(heroRef, { once: true, margin: "-100px" });
+  const sectionClass = 'h-screen min-h-[600px] flex flex-col justify-center snap-start relative overflow-hidden shrink-0';
+  // Decorative blob component for visual anchors
+  const DecorativeBlob = ({ className = '' }: { className?: string }) => (
+    <div
+      className={`absolute rounded-full blur-3xl opacity-30 pointer-events-none ${className}`}
+      style={{ background: 'var(--color-primary)', width: 'min(28rem, 80vw)', height: 'min(28rem, 80vw)' }}
+      aria-hidden
+    />
+  );
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden">
       <Helmet>
-        <title>About Us - Hajz Telecommunication Co Ltd. | Company Identity & Values</title>
-        <meta name="description" content="Learn about HTC's company identity, vision, mission, core strengths, and value proposition. 32+ years of telecommunications excellence." />
+        <title>About Us - Hajz Telecommunication Co Ltd. | Identity, Vision & Mission</title>
+        <meta name="description" content="HTC: 32+ years of telecommunications excellence. Our identity, vision, mission, why we stand out, and core strengths." />
       </Helmet>
 
-      {/* Background gradient */}
-      <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
-      
-      {/* Section 1: What We Do */}
-      <section 
-        id="what-we-do" 
-        className="relative scroll-mt-20"
-        style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(12rem, 24vh, 14rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
-        }}
+      <div className="fixed inset-0 bg-primary/20 pointer-events-none -z-10" style={{ transform: 'translateZ(0)' }} />
+
+      <HeroScrollIndicator
+        sectionIds={[
+          "what-we-do",
+          "company-identity",
+          "our-journey",
+          "vision-mission",
+          "core-strengths",
+          "why-choose-us",
+          "competitive-edge",
+          "cta",
+        ]}
+      />
+
+      <div
+        ref={scrollContainerRef}
+        className="scroll-snap-page h-screen overflow-y-scroll overflow-x-hidden"
       >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(2rem, 4vh, 3rem)' }}
-          >
-            <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)'
-            }}>
-              Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Identity</span>
-            </h2>
-            <p className="text-white/80 max-w-3xl mx-auto" style={{ 
-              fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-              marginBottom: 'clamp(1.5rem, 3vh, 2rem)',
-              lineHeight: '1.6'
-            }}>
-                At HTC, our core values of Clarity, Respect, and Commitment define who we are and guide everything we do. These principles shape our approach to every project, partnership, and solution we deliver.
+      {/* Hero: 50/50 grid, image side 100% height */}
+      <section id="what-we-do" className={sectionClass}>
+        <DecorativeBlob className="-top-24 -right-24 lg:right-[25%]" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full flex-1 min-h-0">
+          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pl-16 xl:pl-24 pt-8 sm:pt-12 pb-12 order-2 lg:order-1">
+            <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
+              <div className="inline-flex items-center bg-primary/20 backdrop-blur-[2px] border border-primary/30 py-2 px-5 rounded-full mb-6">
+                <span className="text-lg text-white/90">{ABOUT_CONSTANTS.hero.badge}</span>
+              </div>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 font-sans leading-tight">
+                Who <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">We Are</span>
+              </h1>
+              <p className="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
+                {ABOUT_CONSTANTS.hero.summary}
               </p>
-          </motion.div>
-
-          {/* Company Identity */}
-          <div ref={heroRef} id="company-identity" className="scroll-mt-20" style={{ marginBottom: 'clamp(2rem, 4vh, 3rem)' }}>
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid md:grid-cols-3 max-w-6xl mx-auto"
-            style={{ 
-              gap: 'clamp(1rem, 2vh, 1.5rem)',
-              paddingBottom: 'clamp(5rem, 10vh, 6rem)'
-            }}
-          >
-            {identityValues.map((value, index) => (
-              <IdentityCard
-                key={value.title}
-                icon={value.icon}
-                title={value.title}
-                description={value.description}
-                index={index}
-              />
-            ))}
-          </motion.div>
+            </div>
           </div>
+          <div className="relative w-full h-[50vh] lg:h-full min-h-[280px] order-1 lg:order-2 overflow-hidden">
+            <img
+              src={ABOUT_CONSTANTS.hero.heroImageSrc}
+              alt={ABOUT_CONSTANTS.hero.heroImageAlt}
+              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-center"
+              style={{ width: '100%', height: '100%' }}
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-primary/20 pointer-events-none" />
+          </div>
+        </div>
+      </section>
 
-          {/* Value Proposition */}
-          <div id="value-proposition" className="scroll-mt-20" style={{ marginBottom: 'clamp(2rem, 4vh, 3rem)' }}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-4xl mx-auto text-center"
-              style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}
-            >
-              <h3 className="font-bold text-white mb-4" style={{ 
-                fontSize: 'clamp(1.5rem, 3vh, 2.25rem)',
-                marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-              }}>
-                Value <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Proposition</span>
-              </h3>
-              <p className="text-white/80 max-w-3xl mx-auto" style={{ 
-                fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-                marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
-                lineHeight: '1.6'
-              }}>
-                What sets HTC apart in delivering telecommunications excellence
+      {/* Company Identity: 1:1 text + carousel */}
+      <section id="company-identity" className={sectionClass}>
+        <DecorativeBlob className="top-1/2 -translate-y-1/2 -right-32 opacity-25" />
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-0 w-full flex-1 min-h-0">
+          <div className="relative w-full min-h-[50vh] lg:min-h-0 lg:h-full order-1 lg:order-1 flex-1 min-h-0 flex flex-col">
+            <CompanyIdentityCarousel
+              blocks={ABOUT_CONSTANTS.companyIdentity.blocks}
+              images={[
+                "/assets/abstracts/Highresolution_abstract_digital_art_for_web_compon_delpmaspu.png",
+                "/assets/abstracts/Highresolution_abstract_digital_art_for_web_compon_delpmaspu1.png",
+                "/assets/abstracts/Highresolution_abstract_digital_art_for_web_compon_delpmaspu2.png",
+              ]}
+              imagePositions={["right center", "left center", "right center"]}
+            />
+          </div>
+          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pr-16 xl:pr-24 py-12 order-2 lg:order-2 min-h-0">
+            <div className="max-w-xl">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans mb-4">
+                Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Identity</span>
+              </h2>
+              <p className="text-lg sm:text-xl text-white/80 leading-relaxed">
+                {ABOUT_CONSTANTS.companyIdentity.sectionSubtitle}
               </p>
-            </motion.div>
-
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              className="max-w-3xl mx-auto"
-              style={{ gap: 'clamp(1rem, 2vh, 1.5rem)', display: 'flex', flexDirection: 'column' }}
-            >
-              {valueProps.map((prop, index) => (
-                <ValuePropItem
-                  key={prop.title}
-                  icon={prop.icon}
-                  title={prop.title}
-                  description={prop.description}
-                  index={index}
-                />
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Competitive Edge */}
-          <div 
-            id="competitive-edge" 
-            className="scroll-mt-20"
-            style={{
-              paddingTop: 'clamp(4rem, 8vh, 5rem)',
-              paddingBottom: 'clamp(10rem, 20vh, 11rem)'
-            }}
-          >
-            <div className="max-w-4xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl"
-                style={{
-                  padding: 'clamp(1.5rem, 3vh, 2.5rem)',
-                  borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
-                }}
-              >
-                <h3 className="font-bold text-white mb-6" style={{ 
-                  fontSize: 'clamp(1.5rem, 3vh, 2.25rem)',
-                  marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
-                }}>
-                  Competitive <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Edge</span>
-                </h3>
-                <p className="text-white/80 leading-relaxed mb-6" style={{ 
-                  fontSize: 'clamp(0.9375rem, 1.75vh, 1.25rem)',
-                  marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
-                  lineHeight: '1.6'
-                }}>
-                  Clients choose HTC for our specialized expertise in risk-free migration and senior-led agile teams. We don't just implement solutions—we engineer them to fit your unique environment, ensuring seamless integration with existing systems while unlocking the full potential of digital transformation.
-                </p>
-                <p className="text-white/80 leading-relaxed" style={{ 
-                  fontSize: 'clamp(0.9375rem, 1.75vh, 1.25rem)',
-                  lineHeight: '1.6'
-                }}>
-                  Our approach combines deep technical knowledge with business acumen, delivering solutions that are not only technically superior but also strategically aligned with your long-term objectives. With 32+ years of experience and a proven track record across critical industries, HTC is the partner you can trust to bridge your legacy infrastructure to a digital future.
-                </p>
-              </motion.div>
+              <div className="mt-6 text-2xl sm:text-3xl font-bold text-cta font-sans">
+                {ABOUT_CONSTANTS.companyIdentity.blocks.length} Pillars
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 2: Our Journey */}
-      <section 
-        id="our-journey" 
-        className="relative scroll-mt-20"
-        style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}
-          >
-            <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-            }}>
-              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Journey</span>
-            </h2>
-            <p className="text-white/80 max-w-3xl mx-auto" style={{ 
-              fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-              lineHeight: '1.6'
-            }}>
-              From our founding to today, we've been at the forefront of telecommunications innovation, delivering groundbreaking solutions that shape the industry.
-            </p>
-          </motion.div>
+      {/* Our Journey: decorative blob + stat */}
+      <section id="our-journey" className={sectionClass}>
+        <DecorativeBlob className="top-0 right-0 translate-x-1/3 -translate-y-1/3 opacity-20" />
+        <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center min-h-0">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
+                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Journey</span>
+              </h2>
+              <p className="text-lg text-white/80 mt-2">{ABOUT_CONSTANTS.journey.intro}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl sm:text-5xl font-bold text-accent font-sans">32+</div>
+              <div className="text-lg text-white/70 font-medium">Years of Excellence</div>
+            </div>
+          </div>
+          <HorizontalTimeline events={ABOUT_CONSTANTS.journey.events} />
+        </div>
+        </ScrollReveal>
+      </section>
 
-          <HorizontalTimeline events={journeyEvents} />
+      {/* Identity: Mission | Vision — 50/50 grid, right panel full height */}
+      <section id="vision-mission" className={sectionClass}>
+        <DecorativeBlob className="-bottom-24 -left-24 opacity-20" />
+        <div className="flex-1 min-h-0 w-full h-full flex flex-col">
+        <ScrollReveal direction="up" delay={0} className="h-full flex-1 min-h-0 flex flex-col">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full h-full min-h-0 flex-1">
+          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pl-16 xl:pl-24 py-12 order-2 lg:order-1">
+            <div className="max-w-2xl mx-auto lg:mx-0 space-y-8">
+              <div className="card p-6 lg:p-8 relative">
+                <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
+                <h2 className="relative z-10 text-2xl font-semibold text-white mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Mission</span></h2>
+                <p className="relative z-10 text-lg sm:text-xl text-white/80 leading-relaxed mb-4">
+                  {ABOUT_CONSTANTS.identity.mission}
+                </p>
+                {/* <ul className="relative z-10 text-base sm:text-lg text-white/70 flex flex-col gap-2">
+                  {ABOUT_CONSTANTS.identity.missionBullets.map((bullet, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <span className="rounded-full w-2 h-2 flex-shrink-0 bg-cta" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul> */}
+              </div>
+              <div className="card p-6 lg:p-8 relative">
+                <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
+                <h2 className="relative z-10 text-2xl font-semibold text-white mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Vision</span></h2>
+                <p className="relative z-10 text-lg sm:text-xl text-white/80 leading-relaxed mb-4">
+                  {ABOUT_CONSTANTS.identity.vision}
+                </p>
+                {/* <ul className="relative z-10 text-base sm:text-lg text-white/70 flex flex-col gap-2">
+                  {ABOUT_CONSTANTS.identity.visionBullets.map((bullet, i) => (
+                    <li key={i} className="flex items-center gap-2">
+                      <span className="rounded-full w-2 h-2 flex-shrink-0 bg-cta" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul> */}
+              </div>
+            </div>
+          </div>
+          <div className="hidden lg:block w-full h-full min-h-0 relative overflow-hidden order-1 lg:order-2 flex-1">
+            <img
+              src="/assets/abstracts/Abstract_isometric_grid_of_interconnected_hexagons_delpmaspu.png"
+              alt="Telecommunications and connectivity"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-primary/10 to-secondary/20" aria-hidden />
+            <DecorativeBlob className="bottom-0 right-0 translate-x-1/3 translate-y-1/3 opacity-40" />
+          </div>
+        </div>
+        </ScrollReveal>
         </div>
       </section>
 
-      {/* Section 3: Vision and Mission */}
-      <section 
-        id="vision-mission" 
-        className="relative scroll-mt-20"
-        style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}
+      {/* Core Strengths: Bento grid with col/row span */}
+      <section id="core-strengths" className={sectionClass}>
+        <DecorativeBlob className="-bottom-24 right-1/4 opacity-25" />
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex-1 flex flex-col justify-center py-8 min-h-0">
+          <ScrollReveal direction="up" delay={0}>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
+                Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Strengths</span>
+              </h2>
+              <p className="text-lg text-white/80 max-w-2xl mt-2">{ABOUT_CONSTANTS.coreStrengths.intro}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl sm:text-5xl font-bold text-secondary font-sans">6</div>
+              <div className="text-lg text-white/70 font-medium">Core Capabilities</div>
+            </div>
+          </div>
+          </ScrollReveal>
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-3 gap-4 w-full min-h-[50vh]"
+            style={{ gridAutoRows: 'minmax(140px, 1fr)' }}
           >
-            <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-            }}>
-              Vision & <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Mission</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 items-stretch max-w-6xl mx-auto" style={{ gap: 'clamp(1.5rem, 3vh, 2rem)' }}>
-            {/* Mission Card */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl h-full flex flex-col"
-              style={{
-                padding: 'clamp(1.5rem, 3vh, 2.5rem)',
-                borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
-              }}
-            >
-              {/* Dark overlay */}
-              <div className="absolute inset-0 bg-[#005E96] opacity-30 rounded-xl"></div>
-              
-              <h2 className="relative z-10 font-bold text-white mb-6" style={{ 
-                fontSize: 'clamp(1.5rem, 3vh, 2rem)',
-                marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
-              }}>
-                Our Mission
-              </h2>
-              <p className="relative z-10 text-white/80 leading-relaxed mb-6" style={{ 
-                fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-                marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
-                lineHeight: '1.6'
-              }}>
-                " Our mission Is to deliver advanced, high-quality communication technology services that enrich the quality of life and foster economic development in the communities we serve. We are committed to providing innovative solutions that positively impact the areas where we operate. "
-              </p>
-              
-              <ul className="relative z-10 text-white/70" style={{ gap: 'clamp(0.5rem, 1vh, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#44C8F5',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Empowering communities through cutting-edge communication technology.</span>
-                </li>
-                
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#7CCCBF',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Driving progress and innovation with high-quality solutions.</span>
-                </li>
-                
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#A6CE39',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Enhancing connectivity and accessibility to improve daily life and economic growth.</span>
-                </li>
-              </ul>
-            </motion.div>
-            
-            {/* Vision Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl h-full flex flex-col"
-              style={{
-                padding: 'clamp(1.5rem, 3vh, 2.5rem)',
-                borderRadius: 'clamp(0.75rem, 1.5vh, 1rem)'
-              }}
-            >
-              {/* Dark overlay */}
-              <div className="absolute inset-0 bg-[#005E96] opacity-30 rounded-xl"></div>
-              
-              <h2 className="relative z-10 font-bold text-white mb-6" style={{ 
-                fontSize: 'clamp(1.5rem, 3vh, 2rem)',
-                marginBottom: 'clamp(1rem, 2vh, 1.5rem)'
-              }}>
-                Our Vision
-              </h2>
-              <p className="relative z-10 text-white/80 leading-relaxed mb-6" style={{ 
-                fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-                marginBottom: 'clamp(1rem, 2vh, 1.5rem)',
-                lineHeight: '1.6'
-              }}>
-                " Centered around providing tailored solutions to our customers, aiming to address their unique needs and challenges. We are committed to delivering the best possible services and products in the industry, ensuring that they contribute to the enhancement of our customers' businesses and lives. "
-              </p>
-              
-              <ul className="relative z-10 text-white/70" style={{ gap: 'clamp(0.5rem, 1vh, 0.75rem)', display: 'flex', flexDirection: 'column' }}>
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#44C8F5',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Focused on personalized solutions that serves to the unique needs of customers.</span>
-                </li>
-                
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#7CCCBF',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Dedicated to delivering top-tier services and products that add value.</span>
-                </li>
-                
-                <li className="flex items-center">
-                  <div className="rounded-full mr-3" style={{ 
-                    width: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    height: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    backgroundColor: '#A6CE39',
-                    minWidth: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    minHeight: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-                    marginRight: 'clamp(0.5rem, 1vh, 0.75rem)'
-                  }}></div>
-                  <span style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>Committed to improving businesses and lives through high-quality offerings.</span>
-                </li>
-              </ul>
-            </motion.div>
+            {ABOUT_CONSTANTS.coreStrengths.items.map((strength, index) => (
+              <ScrollReveal key={strength.title} direction="up" delay={index * 0.1}>
+              <div
+                className={`h-full min-h-[140px] ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+              >
+                <StrengthCard
+                  icon={strengthIcons[index]}
+                  title={strength.title}
+                  description={strength.description}
+                  index={index}
+                />
+              </div>
+              </ScrollReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Section 4: Core Strengths */}
-      <section 
-        id="core-strengths" 
-        className="relative scroll-mt-20"
-        style={{
-          minHeight: '100dvh',
-          paddingTop: 'clamp(2rem, 4vh, 4rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}
-          >
-            <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.75rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)'
-            }}>
-              Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Strengths</span>
-            </h2>
-            <p className="text-white/80 max-w-3xl mx-auto" style={{ 
-              fontSize: 'clamp(0.9375rem, 1.75vh, 1.125rem)',
-              lineHeight: '1.6'
-            }}>
-              The foundational capabilities that drive our success and deliver exceptional value to our clients
-            </p>
-          </motion.div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid md:grid-cols-3 max-w-6xl mx-auto"
-            style={{ gap: 'clamp(1rem, 2vh, 1.5rem)' }}
-          >
-            {coreStrengths.map((strength, index) => (
-              <StrengthCard
-                key={strength.title}
-                // icon={strength.icon}
-                title={strength.title}
-                description={strength.description}
-                index={index}
-              />
-            ))}
-          </motion.div>
-        </div>
+      {/* Why Choose Us — Value Proposition (accordion) */}
+      <section id="why-choose-us" className={sectionClass}>
+        <DecorativeBlob className="-bottom-24 -left-24 opacity-20" />
+        <WhyChooseUsSection />
       </section>
 
-      {/* CTA Section */}
-      {/* <section className="relative py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl mx-auto text-center"
+      {/* Why Us: Bento grid with varying card sizes */}
+      {/* <section id="why-us" className={sectionClass}>
+        <DecorativeBlob className="-top-24 left-1/2 -translate-x-1/2 opacity-20" />
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center py-8">
+          <ScrollReveal direction="up" delay={0}>
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">{ABOUT_CONSTANTS.whyUs.sectionTitle}</h2>
+              <p className="text-lg text-white/80 max-w-2xl mt-2">{ABOUT_CONSTANTS.whyUs.sectionSubtitle}</p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl sm:text-5xl font-bold text-secondary font-sans">99%</div>
+              <div className="text-lg text-white/70 font-medium">Success Rate</div>
+            </div>
+          </div>
+          </ScrollReveal>
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 w-full min-h-[50vh]"
+            style={{ gridAutoRows: 'minmax(140px, 1fr)' }}
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-              Ready to Learn More?
-            </h2>
-            <p className="text-lg text-white/80 mb-8">
-              Explore our journey, discover our milestones, and see how we've shaped the telecommunications landscape over three decades.
-            </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center gap-2 bg-[#A6CE39] text-white px-8 py-4 rounded-lg hover:bg-[#7CCCBF] transition-all duration-300 shadow-lg font-sans text-lg font-medium tracking-wide transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#A6CE39] focus:ring-offset-2 focus:ring-offset-transparent"
-            >
-              <span>Explore Our Journey</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </motion.div>
+            {ABOUT_CONSTANTS.whyUs.valueProps.map((prop, index) => (
+              <ScrollReveal key={prop.title} direction="up" delay={index * 0.1}>
+              <div
+                className={`h-full min-h-[140px] ${index === 3 ? 'md:col-span-2' : ''}`}
+              >
+                <WhyUsCard
+                  icon={valuePropIcons[index]}
+                  title={prop.title}
+                  description={prop.description}
+                  index={index}
+                />
+              </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </section> */}
 
-      <Footer />
+      {/* Competitive Edge: decorative blob + stat */}
+      <section id="competitive-edge" className={sectionClass}>
+        <DecorativeBlob className="bottom-0 left-0 -translate-x-1/4 translate-y-1/4 opacity-25" />
+        <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center min-h-0">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center py-8">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
+                Competitive <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Edge</span>
+              </h2>
+              <p className="text-lg text-white/80 max-w-2xl mt-2">
+                {ABOUT_CONSTANTS.competitiveEdge.sectionSubtitle}
+              </p>
+            </div>
+            <div className="text-right">
+              <div className="text-4xl sm:text-5xl font-bold text-cta font-sans">5</div>
+              <div className="text-lg text-white/70 font-medium">Key Advantages</div>
+            </div>
+          </div>
+          <div className="card p-6 lg:p-8 max-w-4xl relative">
+            <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none z-0" aria-hidden />
+            <ul className="relative z-10 text-base sm:text-lg text-white/80 flex flex-col gap-4">
+              {ABOUT_CONSTANTS.competitiveEdge.items.map((item, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="rounded-full w-2 h-2 flex-shrink-0 mt-2 bg-cta" />
+                  <span className="leading-relaxed">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        </ScrollReveal>
+      </section>
+
+      {/* CTA: decorative blob + stat */}
+      <section id="cta" className={sectionClass}>
+        <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
+        <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center items-center min-h-0">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center items-center text-center py-12">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md mb-4 font-sans">
+              Ready to Learn More?
+            </h2>
+            <p className="text-lg sm:text-xl text-white/95 drop-shadow-sm mb-8">
+              {ABOUT_CONSTANTS.cta.body}
+            </p>
+            <Link
+              to="/contact"
+              className="btn-primary inline-flex items-center gap-2 group"
+            >
+              <span>Contact Us</span>
+              <span className="p-0.5 group-hover:translate-x-0.5">
+                <ArrowRight weight="bold" size={20} />
+              </span>
+            </Link>
+          </div>
+        </div>
+        </ScrollReveal>
+      </section>
+      </div>
     </div>
   );
 }

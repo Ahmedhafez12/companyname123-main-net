@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Wifi, Cloud, Network, Shield, ArrowRight, Zap, Globe, Database, Server, Cpu, Lock } from 'lucide-react';
+import { WifiHighHigh, Cloud, ShareShareNetwork, Shield, ArrowRight, Lightning, Globe, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
 import SolutionsCarousel from '../components/SolutionsCarousel';
 import Footer from '../components/Footer';
 
 function WhatwedoPage() {
   const solutions = [
     {
-      icon: <Wifi className="w-12 h-12" />,
+      icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
       title: "Managed WiFi",
       features: [
         "Seamless Connectivity",
@@ -21,19 +21,19 @@ function WhatwedoPage() {
       benefits: [
         "Improved User Experience",
         "Reduced IT Burden",
-        "Optimized Network Performance"
+        "Optimized ShareNetwork Performance"
       ],
       image: "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500"
     },
     {
-      icon: <Cloud className="w-12 h-12" />,
+      icon: <div className="p-2"><Cloud weight="thin" size={20} /></div>,
       title: "Managed Fixed Wireless access",
       features: [
         "High-Speed Wireless Broadband",
         "Rapid Deployment",
         "Scalable Bandwidth Solutions",
         'Advanced Security & Encryption',
-        'Network Redundancy'
+        'ShareNetwork Redundancy'
       ],
       benefits: [
         "Cost-Effective Deployment",
@@ -43,7 +43,7 @@ function WhatwedoPage() {
       image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500"
     },
     {
-      icon: <Network className="w-12 h-12" />,
+      icon: <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
       title: "Managed UC",
       description: "Comprehensive IoT connectivity solutions for smart cities and industries.",
       features: [
@@ -61,11 +61,11 @@ function WhatwedoPage() {
       image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500"
     },
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
       title: "Infrastructure",
       description: "Advanced security measures protecting your telecommunications infrastructure.",
       features: [
-        "Scalable Network Architecture",
+        "Scalable ShareNetwork Architecture",
         "Cloud & Hybrid Deployments",
         "Automated Management",
         "High-Speed Fiber Backbone",
@@ -79,11 +79,11 @@ function WhatwedoPage() {
       image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
     },
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
       title: "Special MODA solutions",
       description: "Advanced security measures protecting your telecommunications infrastructure.",
       features: [
-        "Tailored Network Deployment",
+        "Tailored ShareNetwork Deployment",
         "Advanced Cybersecurity Measures",
         "Mission-Critical Connectivity",
         "Encrypted Data Transmission",
@@ -97,7 +97,7 @@ function WhatwedoPage() {
       image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
     },
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
       title: " RPM ( Remote Patient Management )",
       description: "Advanced security measures protecting your telecommunications infrastructure.",
       features: [
@@ -118,18 +118,18 @@ function WhatwedoPage() {
 
   const additionalSolutions = [
     {
-      icon: <Server className="w-8 h-8" />,
+      icon: <div className="p-1.5"><HardDrives weight="thin" size={20} /></div>,
       title: "Edge Computing",
       description: "Distributed computing infrastructure for real-time processing."
     },
     {
-      icon: <Database className="w-8 h-8" />,
+      icon: <div className="p-1.5"><Database weight="thin" size={20} /></div>,
       title: "Data Centers",
       description: "State-of-the-art facilities for secure data storage and processing."
     },
     {
-      icon: <Cpu className="w-8 h-8" />,
-      title: "Network Automation",
+      icon: <div className="p-1.5"><Cpu weight="thin" size={20} /></div>,
+      title: "ShareNetwork Automation",
       description: "Intelligent automation solutions for network management."
     },
     {
@@ -163,7 +163,7 @@ function WhatwedoPage() {
             className="max-w-4xl mx-auto text-center"
           >
             <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-[2px] border border-white/10 rounded-full px-4 py-1.5 mb-6">
-              <Zap size={16} className="text-[#A6CE39]" />
+              <Lightning size={16} className="text-cta" />
               <span className="text-sm text-white/90">Next-Generation Solutions</span>
             </div>
             
@@ -196,7 +196,7 @@ function WhatwedoPage() {
                 </div>
                 
                 <div className="relative p-8 min-h-[400px] flex flex-col">
-                  <div className="text-[#44C8F5] mb-4">{solution.icon}</div>
+                  <div className="text-cta mb-4">{solution.icon}</div>
                   <h3 className="text-2xl font-bold text-white mb-4">{solution.title}</h3>
                   <p className="text-white/80 mb-6">{solution.description}</p>
                   
@@ -205,7 +205,7 @@ function WhatwedoPage() {
                     <ul className="space-y-3">
                       {solution.features.map((feature) => (
                         <li key={feature} className="flex items-center text-white/70">
-                          <ArrowRight size={16} className="mr-2 text-[#A6CE39]" />
+                          <ArrowRight size={16} className="mr-2 text-cta" />
                           {feature}
                         </li>
                       ))}
@@ -217,7 +217,7 @@ function WhatwedoPage() {
                     <ul className="space-y-2">
                       {solution.benefits.map((benefit) => (
                         <li key={benefit} className="text-white/70 flex items-center">
-                          <div className="w-2 h-2 bg-[#A6CE39] rounded-full mr-3"></div>
+                          <div className="w-2 h-2 bg-cta rounded-full mr-3"></div>
                           {benefit}
                         </li>
                       ))}
@@ -266,7 +266,7 @@ function WhatwedoPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
               >
-                <div className="text-[#44C8F5] mb-4">{solution.icon}</div>
+                <div className="text-cta mb-4">{solution.icon}</div>
                 <h3 className="text-xl font-semibold text-white mb-2">{solution.title}</h3>
                 <p className="text-white/70">{solution.description}</p>
               </motion.div>

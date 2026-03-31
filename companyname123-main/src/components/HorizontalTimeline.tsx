@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Calendar } from 'phosphor-react';
 
 export interface TimelineEvent {
   date: string;
@@ -13,6 +14,9 @@ interface HorizontalTimelineProps {
 }
 
 const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], className = '' }) => {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const isHoveringRef = useRef(false);
+
   // Safety check: return early if no events
   if (!events || events.length === 0) {
     return (
@@ -26,12 +30,74 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
 
   // Calculate minimum width for the timeline container (viewport-aware)
   const minWidth = events.length * 200; // Reduced base width, will be adjusted with clamp
+
+  // Automatic horizontal scrolling with hover pause
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    let frameId: number;
+    const direction = 1;
+
+    const step = () => {
+      if (!scrollContainerRef.current) return;
+
+      const el = scrollContainerRef.current;
+
+      if (!el) return;
+
+      const maxScroll = el.scrollWidth - el.clientWidth;
+
+      if (maxScroll <= 0) {
+        return;
+      }
+
+      if (!isHoveringRef.current) {
+        el.scrollLeft += direction * 0.5;
+
+        if (el.scrollLeft >= maxScroll - 1) {
+          el.scrollLeft = 0; // jump back to start
+        }
+      }
+
+      frameId = window.requestAnimationFrame(step);
+    };
+
+    const handleMouseEnter = () => {
+      isHoveringRef.current = true;
+    };
+
+    const handleMouseLeave = () => {
+      isHoveringRef.current = false;
+    };
+
+    container.addEventListener('mouseenter', handleMouseEnter);
+    container.addEventListener('mouseleave', handleMouseLeave);
+
+    frameId = window.requestAnimationFrame(step);
+
+    return () => {
+      container.removeEventListener('mouseenter', handleMouseEnter);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [events.length]);
   
   return (
     <>
-      {/* Custom scrollbar styles matching global design */}
+      {/* Scrollbar visible only on hover */}
       <style>{`
+        .timeline-scroll-container {
+          scrollbar-width: none;
+          scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+        .timeline-scroll-container:hover {
+          scrollbar-width: thin;
+        }
         .timeline-scroll-container::-webkit-scrollbar {
+          height: 0;
+        }
+        .timeline-scroll-container:hover::-webkit-scrollbar {
           height: 6px;
         }
         .timeline-scroll-container::-webkit-scrollbar-track {
@@ -46,24 +112,24 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
           background-color: rgba(255, 255, 255, 0.3);
         }
         @media (max-width: 640px) {
-          .timeline-scroll-container::-webkit-scrollbar {
+          .timeline-scroll-container:hover::-webkit-scrollbar {
             height: 3px;
           }
           .timeline-scroll-container::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.1);
           }
         }
-        .timeline-scroll-container {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
       `}</style>
       <div className={`w-full ${className}`}>
       {/* Timeline Container with horizontal scroll on mobile */}
-      <div className="relative overflow-x-auto overflow-y-visible timeline-scroll-container" style={{ paddingBottom: 'clamp(1rem, 2vh, 2rem)' }}>
+      <div
+        ref={scrollContainerRef}
+        className="relative overflow-x-auto overflow-y-visible timeline-scroll-container"
+        style={{ paddingBottom: 'clamp(1rem, 2vh, 2rem)' }}
+      >
         <div className="relative" style={{ minWidth: `max(${minWidth}px, 100%)` }}>
           {/* Horizontal line - runs through center of markers */}
-          <div className="absolute top-1/2 left-0 right-0 bg-white/20 transform -translate-y-1/2 z-0" style={{ height: 'clamp(1px, 0.2vh, 2px)' }}>
+          <div className="absolute top-1/2 left-0 right-0 bg-primary/30 transform -translate-y-1/2 z-0" style={{ height: 'clamp(1px, 0.2vh, 2px)' }}>
             <div 
               className="absolute inset-0 bg-gradient-to-r from-transparent via-[var(--color-secondary)] to-transparent opacity-50" 
               style={{ 
@@ -106,22 +172,23 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
                   >
                     {/* Card */}
                     <div 
-                      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl transition-all duration-300 group-hover:bg-white/10 group-hover:border-white/20 group-hover:shadow-lg group-hover:-translate-y-1"
+                      className="bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-xl transition-all duration-300 group-hover:bg-primary/30 group-hover:border-primary/40 group-hover:shadow-lg group-hover:-translate-y-1"
                       style={{
                         padding: 'clamp(0.75rem, 1.5vh, 1.5rem)',
                         borderRadius: 'clamp(0.5rem, 1vh, 0.75rem)',
                         marginBottom: 'clamp(0.5rem, 1vh, 1rem)'
                       }}
                     >
-                      {/* Date */}
+                      {/* Date with icon */}
                       <div 
-                        className="font-sans font-semibold"
+                        className="font-sans font-semibold flex items-center gap-2"
                         style={{ 
-                          color: 'var(--color-secondary)',
+                          color: 'var(--color-cta)',
                           fontSize: 'clamp(0.75rem, 1.25vh, 0.875rem)',
                           marginBottom: 'clamp(0.375rem, 0.75vh, 0.5rem)'
                         }}
                       >
+                        <Calendar weight="thin" size={16} className="flex-shrink-0" />
                         {event.date}
                       </div>
                       

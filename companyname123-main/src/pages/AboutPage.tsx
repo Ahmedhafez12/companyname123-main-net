@@ -3,19 +3,17 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import {
   Users,
-  Award,
+  Trophy,
   Globe,
   Rocket,
   Target,
   Heart,
   Lightbulb,
   Shield,
-} from "lucide-react";
+} from "phosphor-react";
 import HorizontalTimeline from "../components/HorizontalTimeline";
 import VennDiagram2 from "../components/VennDiagram2";
 import EnhancedDimensions from "../components/EnhancedDimensions";
-import Footer from "../components/Footer";
-
 function AboutPage() {
   // Timeline events data
   const timelineEvents = [
@@ -57,25 +55,25 @@ function AboutPage() {
   ];
   const values = [
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <div className="p-1.5"><Users weight="thin" size={20} /></div>,
       title: "People First",
       description:
         "Our team is our greatest asset. We foster a culture of innovation, collaboration, and continuous learning.",
     },
     {
-      icon: <Award className="w-8 h-8" />,
+      icon: <div className="p-1.5"><Trophy weight="thin" size={20} /></div>,
       title: "Excellence",
       description:
         "We strive for excellence in everything we do, from technical solutions to customer service.",
     },
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <div className="p-1.5"><Globe weight="thin" size={20} /></div>,
       title: "Global Impact",
       description:
         "Making a positive difference in communities worldwide through innovative telecommunications solutions.",
     },
     {
-      icon: <Rocket className="w-8 h-8" />,
+      icon: <div className="p-1.5"><Rocket weight="thin" size={20} /></div>,
       title: "Innovation",
       description:
         "Pushing boundaries and embracing new technologies to shape the future of telecommunications.",
@@ -84,25 +82,25 @@ function AboutPage() {
 
   const principles = [
     {
-      icon: <Target className="w-12 h-12" />,
+      icon: <div className="p-2"><Target weight="thin" size={20} /></div>,
       title: "Strategic Vision",
       description:
         "We maintain a clear focus on long-term goals while delivering immediate value to our clients.",
     },
     {
-      icon: <Heart className="w-12 h-12" />,
+      icon: <div className="p-2"><Heart weight="thin" size={20} /></div>,
       title: "Customer Commitment",
       description:
         "Our success is measured by the success of our clients and their satisfaction with our solutions.",
     },
     {
-      icon: <Lightbulb className="w-12 h-12" />,
+      icon: <div className="p-2"><Lightbulb weight="thin" size={20} /></div>,
       title: "Continuous Innovation",
       description:
         "We invest in research and development to stay ahead of technological advancements.",
     },
     {
-      icon: <Shield className="w-12 h-12" />,
+      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
       title: "Sustainable Growth",
       description:
         "We believe in responsible expansion that benefits our stakeholders and the environment.",
@@ -200,7 +198,7 @@ function AboutPage() {
                                    
                     <li className="flex items-center">
                                        
-                      <div className="w-2 h-2 bg-[#A6CE39] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div>
                                         Enhancing connectivity and accessibility
                       to improve daily life and economic growth.                
                     </li>
@@ -249,7 +247,7 @@ function AboutPage() {
                                    
                     <li className="flex items-center">
                                        
-                      <div className="w-2 h-2 bg-[#A6CE39] rounded-full mr-3"></div>
+                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div>
                                         Committed to improving businesses and
                       lives through high-quality offerings.                
                     </li>
@@ -275,7 +273,7 @@ function AboutPage() {
                 className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
               >
                 <div className="absolute inset-0 bg-[#005E96] opacity-30 rounded-xl"></div>
-                <div className="relative z-10 text-[#44C8F5] mb-4">{value.icon}</div>
+                <div className="relative z-10 text-cta mb-4">{value.icon}</div>
                 <h3 className="relative z-10 text-xl font-semibold text-white mb-2">{value.title}</h3>
                 <p className="relative z-10 text-white/70">{value.description}</p>
               </motion.div>
@@ -377,7 +375,7 @@ function AboutPage() {
                 className="relative text-center"
               >
                 <div className="absolute inset-0 bg-[#005E96] opacity-30 rounded-full"></div> // Note: rounded-full for this specific element
-                <div className="relative z-10 w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#44C8F5]">
+                <div className="relative z-10 w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-cta">
                   {principle.icon}
                 </div>
                 <h3 className="relative z-10 text-xl font-semibold text-white mb-3">{principle.title}</h3>
@@ -404,10 +402,8 @@ function AboutPage() {
           </p> */}
                  
         </motion.div>
-                <HorizontalTimeline events={timelineEvents} />     
+         <HorizontalTimeline events={timelineEvents} />     
       </div>
-            {/* Footer */}
-            <Footer />   
     </div>
   );
 }

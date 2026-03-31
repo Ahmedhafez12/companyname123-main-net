@@ -1,12 +1,21 @@
+import { useId } from "react";
+
 interface LogoProps {
   className?: string;
   scrolled?: boolean;
+  /** Override wordmark + text color (icon stays unchanged). */
+  textColorOverride?: string;
 }
 
-export default function Logo({ className = "", scrolled = false }: LogoProps) {
-  const textColor = scrolled ? "#005E96" : "#FFFFFF";
-  const trademarkColor = scrolled ? "#005E96" : "#FFFFFF";
-  
+export default function Logo({ className = "", scrolled = false, textColorOverride }: LogoProps) {
+  const textColor = textColorOverride ?? (scrolled ? "#005E96" : "#FFFFFF");
+  const trademarkColor = textColor;
+  /** Unique gradient ids so multiple logos on one page do not steal each other's defs. */
+  const gid = useId().replace(/[^a-zA-Z0-9_-]/g, "") || "logo";
+  const g1 = `${gid}-lg1`;
+  const g2 = `${gid}-lg2`;
+  const g3 = `${gid}-lg3`;
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +27,7 @@ export default function Logo({ className = "", scrolled = false }: LogoProps) {
     >
       <defs>
         <linearGradient
-          id="linear-gradient"
+          id={g1}
           x1="326.4"
           y1="91.94"
           x2="194.11"
@@ -31,44 +40,44 @@ export default function Logo({ className = "", scrolled = false }: LogoProps) {
           <stop offset="1" stopColor="#005e96" />
         </linearGradient>
         <linearGradient
-          id="linear-gradient-2"
+          id={g2}
           x1="415.8"
           y1="139.74"
           x2="291.08"
           y2="435.95"
-          xlinkHref="#linear-gradient"
+          xlinkHref={`#${g1}`}
         />
         <linearGradient
-          id="linear-gradient-3"
+          id={g3}
           x1="230.68"
           y1="61.8"
           x2="105.96"
           y2="358"
-          xlinkHref="#linear-gradient"
+          xlinkHref={`#${g1}`}
         />
       </defs>
       <g>
         <path
-          fill="url(#linear-gradient)"
+          fill={`url(#${g1})`}
           d="M226.71,404.3c-7.14,0-14.01-2.17-19.87-6.28-15.64-10.97-19.45-32.61-8.48-48.26,4.35-6.21,10.75-10.89,18.03-13.17,20.95-6.58,34.64-26.68,33.1-48.58-1.54-21.9-17.91-39.89-39.58-43.47-6.18-1.02-11.97-3.4-17.19-7.07-19.02-13.33-23.65-39.65-10.31-58.67,7.46-10.64,19.67-17.33,32.67-17.91,24.06-1.06,43.51-19.99,45.23-44.02.47-6.64,2.82-16.34,11.33-24.84,7.5-7.5,17.07-11.47,27.68-11.47s20.18,3.96,27.68,11.47c7.37,7.37,11.43,17.2,11.43,27.68s-4.06,20.31-11.43,27.68c-5.1,5.1-11.14,8.56-17.95,10.28-21.69,5.47-36.61,25.35-35.81,47.7.8,22.35,17.11,41.11,39.14,45.01,6.01,1.06,11.64,3.42,16.74,6.99,9.35,6.55,15.33,15.96,17.31,27.2,1.98,11.24-.44,22.12-6.99,31.47-7.55,10.77-19.92,17.47-33.08,17.92-22.98.79-42.09,17.94-45.34,40.71-.77,5.37-2.75,10.37-5.9,14.86-6.48,9.24-17.09,14.76-28.39,14.76Z"
         />
         <circle
-          fill="url(#linear-gradient-2)"
+          fill={`url(#${g2})`}
           cx="385.54"
           cy="211.6"
           r="40.76"
         />
         <circle
-          fill="url(#linear-gradient-3)"
+          fill={`url(#${g3})`}
           cx="139.04"
           cy="279.43"
           r="33.45"
         />
       </g>
       <text
-        fontFamily="Rubik-SemiBold, Rubik"
+        fontFamily="Montserrat, system-ui, sans-serif"
         fontSize="27.58px"
-        fontWeight="1000"
+        fontWeight="700"
         fill={textColor}
         transform="translate(498 403.08)"
       >
