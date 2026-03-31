@@ -458,10 +458,10 @@ export default function NetworkHeroCanvas({
               ref={heroHeadlinesRef}
               className="flex w-full max-w-[min(88vw,58rem)] flex-col items-center gap-0 will-change-transform"
             >
-              {/* Eyebrow label */}
+              {/* Eyebrow label — brand accent */}
               <p
-                className="mb-5 flex items-center gap-2.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.3em] sm:text-[0.72rem] sm:tracking-[0.28em]"
-                style={{ color: `${COLOR_ACCENT}cc` }}
+                className="mb-5 flex items-center gap-2.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.26em] [text-shadow:0_1px_14px_rgba(0,18,28,0.45)]"
+                style={{ color: COLOR_ACCENT }}
               >
                 <span
                   className="inline-block h-px w-6 sm:w-8"
@@ -488,26 +488,28 @@ export default function NetworkHeroCanvas({
                 Secure.
               </h1>
 
-              {/* Secondary headline */}
+              {/* Secondary headline — brand teal */}
               <h2
                 className="
                   mt-3 w-full text-center
-                  font-sans text-[clamp(1.5rem,4.5vw,3.25rem)]
+                  font-sans text-[clamp(1.65rem,4.8vw,3.35rem)]
                   font-semibold leading-[1.15] tracking-[-0.015em]
+                  [text-shadow:0_1px_24px_rgba(0,20,30,0.55)]
                 "
                 style={{ color: COLOR_TEAL }}
               >
                 Networks You Can Trust.
               </h2>
 
-              {/* Tertiary / sub-head */}
+              {/* Tertiary / sub-head — brand sky at full opacity (readability via weight + shadow, not greying the hue) */}
               <p
                 className="
-                  mt-4 max-w-[38rem] text-center
-                  font-sans text-[clamp(0.9rem,2vw,1.15rem)]
-                  font-normal leading-relaxed
+                  mt-4 max-w-[40rem] text-center
+                  font-sans text-[clamp(1rem,2.15vw,1.2rem)]
+                  font-medium leading-relaxed
+                  [text-shadow:0_1px_18px_rgba(0,18,28,0.5)]
                 "
-                style={{ color: `${COLOR_SKY}bb` }}
+                style={{ color: COLOR_SKY }}
               >
                 Powering mission-critical infrastructure for the world's most
                 demanding organisations — with zero compromise on performance or
@@ -581,8 +583,8 @@ export default function NetworkHeroCanvas({
                   style={{ background: "rgba(255,255,255,0.1)" }}
                 />
                 <p
-                  className="whitespace-nowrap text-center font-mono text-[0.58rem] font-medium uppercase tracking-[0.28em]"
-                  style={{ color: "rgba(255,255,255,0.35)" }}
+                  className="whitespace-nowrap text-center font-mono text-[0.65rem] font-semibold uppercase tracking-[0.22em] sm:text-xs sm:tracking-[0.2em] [text-shadow:0_1px_10px_rgba(0,18,28,0.4)]"
+                  style={{ color: COLOR_TEAL }}
                 >
                   Trusted By
                 </p>

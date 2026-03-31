@@ -15,9 +15,122 @@ import {
   SlidersHorizontal,
   ShieldCheck,
   Cpu,
-  Lifebuoy
+  Lifebuoy,
+  type IconProps,
 } from 'phosphor-react';
 import Footer from '../components/Footer';
+
+/** Duotone icons for Technical Advantages bento — keyed by `technicalAdvantages[].title`. */
+const TECHNICAL_ADVANTAGES_ICON_MAP: Record<
+  string,
+  React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>
+> = {
+  "Expertise & Experience": Globe,
+  "Tailored Solutions": SlidersHorizontal,
+  "Security First": ShieldCheck,
+  "Future-Proof Architecture": Cpu,
+  "End-to-End Support": Lifebuoy,
+};
+
+function TechnicalAdvantagesIcon({
+  title,
+  size,
+  className,
+}: {
+  title: string;
+  size: number;
+  className?: string;
+}) {
+  const Cmp = TECHNICAL_ADVANTAGES_ICON_MAP[title];
+  if (!Cmp) return null;
+  return <Cmp weight="duotone" size={size} className={className} aria-hidden />;
+}
+
+type TechnicalAdvantageEntry = {
+  readonly title: string;
+  readonly description: string;
+  readonly accent?: string;
+  readonly highlight?: boolean;
+};
+
+function TechnicalAdvantagesBento({
+  items,
+}: {
+  items: readonly TechnicalAdvantageEntry[];
+}) {
+  const [hero, ...rest] = items;
+  if (!hero) return null;
+
+  const cardBase =
+    "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20";
+
+  return (
+    <section className="relative overflow-hidden py-16 sm:py-20 lg:py-24">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(68,200,245,0.18),transparent_55%),radial-gradient(ellipse_70%_50%_at_100%_50%,rgba(0,94,150,0.22),transparent_50%),radial-gradient(ellipse_60%_45%_at_0%_80%,rgba(166,206,57,0.08),transparent_45%)]"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mb-8 text-center sm:mb-10">
+          <h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl lg:text-4xl">
+            Technical{" "}
+            <span className="bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5] bg-clip-text text-transparent">
+              Advantages
+            </span>
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6">
+          {/* Hero — first item */}
+          <div
+            className={[
+              cardBase,
+              "p-6 sm:p-8 lg:p-10",
+              hero.highlight ? "ring-2 ring-[#A6CE39]/30" : "",
+            ].join(" ")}
+          >
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:gap-8">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cta md:h-16 md:w-16">
+                <TechnicalAdvantagesIcon title={hero.title} size={32} className="text-cta" />
+              </div>
+              <div className="min-w-0 flex-1 text-left">
+                <h3 className="text-xl font-bold text-white sm:text-2xl lg:text-3xl">
+                  {hero.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base lg:text-lg">
+                  {hero.description}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bento grid — remaining items: 1 col mobile, 2 tablet, 4 desktop */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:gap-6">
+            {rest.map((item) => (
+              <article
+                key={item.title}
+                className={[
+                  cardBase,
+                  "flex h-full flex-col p-5 sm:p-6",
+                  item.highlight ? "ring-2 ring-[#A6CE39]/30" : "",
+                ].join(" ")}
+              >
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-cta">
+                  <TechnicalAdvantagesIcon title={item.title} size={22} className="text-cta" />
+                </div>
+                <h4 className="text-base font-bold text-white sm:text-lg">{item.title}</h4>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-white/75 sm:text-base">
+                  {item.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 // Scroll animation variants
 const fadeInUp = {
@@ -790,100 +903,7 @@ function CommandControlPage() {
         </div>
       </section>
 
-      {/* Technical Advantages */}
-      <section style={{ paddingTop: 'clamp(7rem, 14vh, 9rem)' }}>
-            <div className="mx-auto max-w-6xl">
-              <div className="mb-6 sm:mb-8 text-center">
-              <h2 className="font-bold text-white mb-4" style={{ 
-              fontSize: 'clamp(1.5rem, 3.5vh, 2.5rem)',
-              marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)'
-            }}>
-              Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Advantages</span>
-            </h2>
-              </div>
-
-              {/* Banner + Grid */}
-              <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                {/* Expertise banner */}
-                <div className="relative">
-                  <div className="rounded-2xl p-[1px] bg-white/10">
-                    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md shadow-[0_22px_70px_-48px_rgba(0,0,0,0.45)]">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#005E96]/35 via-transparent to-[#44C8F5]/20" aria-hidden="true" />
-                      <div className="relative p-6 sm:p-8">
-                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-                          <div className="relative h-12 w-12 rounded-2xl border border-white/15 bg-white/10 flex items-center justify-center">
-                            <div className="absolute -inset-6 rounded-full bg-[#44C8F5]/10 blur-2xl opacity-70" aria-hidden="true" />
-                            <Globe weight="bold" size={22} className="relative text-cta" aria-hidden="true" />
-                          </div>
-                          <div className="min-w-0">
-                            <h4 className="font-bold text-white text-lg sm:text-xl">
-                              {technicalAdvantages[0].title}
-                            </h4>
-                            <p className="mt-2 text-white/80 text-sm sm:text-base leading-relaxed max-w-4xl">
-                              {technicalAdvantages[0].description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Remaining 4 cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 items-stretch">
-                  {technicalAdvantages.slice(1).map((item) => (
-                    <div key={item.title} className="relative h-full">
-                      <div className="rounded-2xl p-[1px] bg-white/10 h-full">
-                        <div
-                          className={[
-                            "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md h-full",
-                            "shadow-[0_18px_60px_-50px_rgba(0,0,0,0.45)]",
-                            (item as any).highlight ? "ring-1 ring-[#A6CE39]/40" : "",
-                          ].join(" ")}
-                        >
-                          <div className="p-5 sm:p-6 h-full flex flex-col">
-                            <div className="mb-4">
-                              <div
-                                className={[
-                                  "relative h-11 w-11 rounded-full border border-white/15 bg-white/10",
-                                  "flex items-center justify-center",
-                                  (item as any).highlight ? "shadow-[0_0_0_10px_rgba(166,206,57,0.12)]" : "shadow-[0_0_0_10px_rgba(68,200,245,0.10)]",
-                                  "transition-transform duration-300",
-                                ].join(" ")}
-                              >
-                                <div
-                                  className={[
-                                    "absolute -inset-6 rounded-full blur-2xl opacity-70",
-                                    (item as any).highlight ? "bg-[#A6CE39]/12" : "bg-[#44C8F5]/10",
-                                  ].join(" ")}
-                                  aria-hidden="true"
-                                />
-                                {item.title === "Tailored Solutions" ? (
-                                  <SlidersHorizontal weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
-                                ) : item.title === "Security First" ? (
-                                  <ShieldCheck weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
-                                ) : item.title === "Future-Proof Architecture" ? (
-                                  <Cpu weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
-                                ) : (
-                                  <Lifebuoy weight="bold" size={20} className="relative text-cta" aria-hidden="true" />
-                                )}
-                              </div>
-                            </div>
-                            <h4 className="font-bold text-white text-base sm:text-lg">
-                              {item.title}
-                            </h4>
-                            <p className="mt-2 text-white/75 text-sm sm:text-base leading-relaxed flex-1">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-      </section>
+      <TechnicalAdvantagesBento items={technicalAdvantages} />
 
 
       {/* Section 2: Technology Stack - Z-Pattern Layout */}
