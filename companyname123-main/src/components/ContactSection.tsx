@@ -15,6 +15,19 @@ import {
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
 
+/** Accent chevrons for custom-styled subject selects (native `appearance: none`). */
+const SUBJECT_CHEVRON_ORBITAL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%237CCCBF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`;
+const SUBJECT_CHEVRON_DEFAULT = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%2344C8F5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`;
+
+const SUBJECT_OPTIONS: { value: string; label: string }[] = [
+  { value: "", label: "Select a subject" },
+  { value: "general", label: "General inquiry" },
+  { value: "sales", label: "Sales" },
+  { value: "support", label: "Support" },
+  { value: "partnership", label: "Partnership" },
+  { value: "other", label: "Other" },
+];
+
 // Form validation schema
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -244,14 +257,50 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                 </div>
                 <div>
                   <label htmlFor="orbital-subject" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Subject</label>
-                  <select id="orbital-subject" name="subject" value={formData.subject} onChange={handleChange} className={`${formInputClass} cursor-pointer`} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '0.9375rem', appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.5rem center', backgroundSize: '1rem', paddingRight: '2rem' }}>
-                    <option value="">Select a subject</option>
-                    <option value="general">General inquiry</option>
-                    <option value="sales">Sales</option>
-                    <option value="support">Support</option>
-                    <option value="partnership">Partnership</option>
-                    <option value="other">Other</option>
-                  </select>
+                  <div
+                    className={[
+                      "relative rounded-xl transition-all duration-200",
+                      "border border-white/25 bg-gradient-to-b from-white/[0.09] to-white/[0.03]",
+                      "shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
+                      "hover:border-[#7CCCBF]/50",
+                      "focus-within:border-[#7CCCBF] focus-within:shadow-[0_0_0_1px_rgba(124,204,191,0.45),0_4px_28px_rgba(68,200,245,0.14)]",
+                      errors.subject ? "border-red-400/80 ring-1 ring-red-400/35" : "",
+                    ].join(" ")}
+                  >
+                    <div
+                      className="pointer-events-none absolute inset-y-0 right-0 w-11 rounded-r-xl border-l border-white/10 bg-white/[0.06]"
+                      aria-hidden
+                    />
+                    <select
+                      id="orbital-subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      disabled={isSubmitting}
+                      className={[
+                        "w-full cursor-pointer rounded-xl bg-transparent text-[0.9375rem] outline-none transition-colors",
+                        "border-0 py-2.5 pl-3 pr-12",
+                        "focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+                        formData.subject ? "text-white" : "text-white/45",
+                      ].join(" ")}
+                      style={{
+                        fontFamily: "var(--font-secondary)",
+                        appearance: "none",
+                        WebkitAppearance: "none",
+                        backgroundImage: SUBJECT_CHEVRON_ORBITAL,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "right 0.9375rem center",
+                        backgroundSize: "1.125rem",
+                        colorScheme: "dark",
+                      }}
+                    >
+                      {SUBJECT_OPTIONS.map(({ value, label }) => (
+                        <option key={value || "placeholder"} value={value} className="bg-[#0a2f3d] text-[#ECF0F1]">
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   {errors.subject && <p className="mt-1 text-red-400 text-sm">{errors.subject}</p>}
                 </div>
                 <div>
@@ -262,7 +311,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-3 w-full py-4 rounded-xl font-bold text-primary text-lg shadow-lg ring-2 ring-[var(--color-cta)]/40 hover:ring-[var(--color-cta)]/60 hover:shadow-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-cta)]"
+                  className="mt-3 w-full py-4 rounded-xl font-bold text-lg text-white shadow-lg ring-2 ring-[var(--color-cta)]/40 hover:ring-[var(--color-cta)]/60 hover:shadow-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-cta)] disabled:text-white/60"
                   style={{ backgroundColor: 'var(--color-cta)', fontFamily: 'var(--font-primary)' }}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
@@ -279,7 +328,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
             className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
             style={{ animationDelay: '0s', background: secondary20, borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="font-mono text-[var(--color-accent)]/80 text-xs tracking-wider block mb-3" style={{ fontFamily: 'ui-monospace, monospace' }}>01 // VOICE</span>
+            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>01 // VOICE</span>
             <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Communication Hub</h3>
             <a href="tel:+15551234567" className="flex items-center gap-2 text-white/95 text-sm hover:text-[var(--color-accent)] transition-colors mb-2" style={{ fontFamily: 'var(--font-secondary)' }}>
               <Phone weight="regular" size={20} />
@@ -296,7 +345,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
             className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
             style={{ animationDelay: '1.5s', background: 'rgba(255,255,255,0.06)', borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="font-mono text-[var(--color-accent)]/80 text-xs tracking-wider block mb-3" style={{ fontFamily: 'ui-monospace, monospace' }}>02 // PLACE</span>
+            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>02 // PLACE</span>
             <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Physical Presence</h3>
             <div className="flex items-start gap-3">
               <MapPin weight="regular" size={22} className="flex-shrink-0 mt-0.5 text-[var(--color-accent)]" />
@@ -309,7 +358,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
             className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
             style={{ animationDelay: '3s', background: 'rgba(255,255,255,0.06)', borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="font-mono text-[var(--color-accent)]/80 text-xs tracking-wider block mb-3" style={{ fontFamily: 'ui-monospace, monospace' }}>03 // DIGITAL</span>
+            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>03 // DIGITAL</span>
             <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Digital Footprint</h3>
             <ul className="flex flex-col gap-2" role="list">
               {[
@@ -678,52 +727,70 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                         <label htmlFor="subject" className="block text-white font-sans font-medium mb-1.5" style={{ fontSize: size === 'extraLarge' ? 'clamp(0.8125rem, 1.5vh, 0.9375rem)' : size === 'large' ? 'clamp(0.75rem, 1.25vh, 0.875rem)' : 'clamp(0.6875rem, 1.125vh, 0.8125rem)' }}>
                           Subject
                         </label>
-                        <select
-                          id="subject"
-                          name="subject"
-                          value={formData.subject}
-                          onChange={handleChange}
-                          className={`form-input ${
-                            errors.subject ? "border-red-500" : ""
-                          }`}
-                          disabled={isSubmitting}
-                          aria-required="true"
-                          aria-invalid={!!errors.subject}
-                          aria-describedby={
-                            errors.subject ? "subject-error" : undefined
-                          }
-                          style={{
-                            padding: size === 'extraLarge' 
-                              ? 'clamp(0.625rem, 1.25vh, 0.75rem) clamp(0.75rem, 1.5vh, 1rem)'
-                              : size === 'large' 
-                              ? 'clamp(0.375rem, 0.75vh, 0.5rem) clamp(0.5rem, 1vh, 0.625rem)'
-                              : 'clamp(0.25rem, 0.5vh, 0.375rem) clamp(0.375rem, 0.75vh, 0.5rem)',
-                            fontSize: size === 'extraLarge' 
-                              ? 'clamp(0.875rem, 1.5vh, 1rem)'
-                              : size === 'large' 
-                              ? 'clamp(0.6875rem, 1.25vh, 0.8125rem)'
-                              : 'clamp(0.625rem, 1.125vh, 0.75rem)',
-                            borderRadius: size === 'extraLarge' 
-                              ? 'clamp(0.375rem, 0.75vh, 0.5rem)'
-                              : size === 'large' 
-                              ? 'clamp(0.25rem, 0.5vh, 0.375rem)'
-                              : 'clamp(0.1875rem, 0.375vh, 0.25rem)',
-                            appearance: 'none',
-                            cursor: 'pointer',
-                            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'right 0.75rem center',
-                            backgroundSize: '1.25rem',
-                            paddingRight: '2.5rem'
-                          }}
+                        <div
+                          className={[
+                            "relative transition-all duration-300",
+                            size === 'extraLarge' ? "rounded-[clamp(0.375rem,0.75vh,0.5rem)]" : size === 'large' ? "rounded-[clamp(0.25rem,0.5vh,0.375rem)]" : "rounded-[clamp(0.1875rem,0.375vh,0.25rem)]",
+                            "border bg-white/[0.04] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
+                            "hover:border-white/35",
+                            "focus-within:border-[#44C8F5]/90 focus-within:ring-2 focus-within:ring-[#44C8F5]/30",
+                            errors.subject ? "border-red-500 ring-2 ring-red-500/25" : "border-white/20",
+                          ].join(" ")}
                         >
-                          <option value="">Select a subject</option>
-                          <option value="general">General inquiry</option>
-                          <option value="sales">Sales</option>
-                          <option value="support">Support</option>
-                          <option value="partnership">Partnership</option>
-                          <option value="other">Other</option>
-                        </select>
+                          <div
+                            className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:w-11 border-l border-white/10 bg-white/[0.05]"
+                            style={{
+                              borderTopRightRadius: size === 'extraLarge' ? 'clamp(0.375rem, 0.75vh, 0.5rem)' : size === 'large' ? 'clamp(0.25rem, 0.5vh, 0.375rem)' : 'clamp(0.1875rem, 0.375vh, 0.25rem)',
+                              borderBottomRightRadius: size === 'extraLarge' ? 'clamp(0.375rem, 0.75vh, 0.5rem)' : size === 'large' ? 'clamp(0.25rem, 0.5vh, 0.375rem)' : 'clamp(0.1875rem, 0.375vh, 0.25rem)',
+                            }}
+                            aria-hidden
+                          />
+                          <select
+                            id="subject"
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleChange}
+                            className={[
+                              "w-full cursor-pointer border-0 bg-transparent font-body text-white outline-none transition-colors",
+                              "focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+                              !formData.subject ? "text-white/50" : "text-white",
+                              size === 'extraLarge' ? "rounded-[clamp(0.375rem,0.75vh,0.5rem)]" : size === 'large' ? "rounded-[clamp(0.25rem,0.5vh,0.375rem)]" : "rounded-[clamp(0.1875rem,0.375vh,0.25rem)]",
+                            ].join(" ")}
+                            disabled={isSubmitting}
+                            aria-required="true"
+                            aria-invalid={!!errors.subject}
+                            aria-describedby={
+                              errors.subject ? "subject-error" : undefined
+                            }
+                            style={{
+                              padding:
+                                size === "extraLarge"
+                                  ? "clamp(0.625rem, 1.25vh, 0.75rem) clamp(2.65rem, 5vh, 3rem) clamp(0.625rem, 1.25vh, 0.75rem) clamp(0.75rem, 1.5vh, 1rem)"
+                                  : size === "large"
+                                    ? "clamp(0.375rem, 0.75vh, 0.5rem) clamp(2.35rem, 4.5vh, 2.65rem) clamp(0.375rem, 0.75vh, 0.5rem) clamp(0.5rem, 1vh, 0.625rem)"
+                                    : "clamp(0.25rem, 0.5vh, 0.375rem) clamp(2.15rem, 4vh, 2.4rem) clamp(0.25rem, 0.5vh, 0.375rem) clamp(0.375rem, 0.75vh, 0.5rem)",
+                              fontSize:
+                                size === "extraLarge"
+                                  ? "clamp(0.875rem, 1.5vh, 1rem)"
+                                  : size === "large"
+                                    ? "clamp(0.6875rem, 1.25vh, 0.8125rem)"
+                                    : "clamp(0.625rem, 1.125vh, 0.75rem)",
+                              appearance: "none",
+                              WebkitAppearance: "none",
+                              backgroundImage: SUBJECT_CHEVRON_DEFAULT,
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "right 0.9375rem center",
+                              backgroundSize: "1.125rem",
+                              colorScheme: "dark",
+                            }}
+                          >
+                            {SUBJECT_OPTIONS.map(({ value, label }) => (
+                              <option key={value || "placeholder"} value={value} className="bg-[#06354a] text-[#ECF0F1]">
+                                {label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                         {errors.subject && (
                           <p
                             id="subject-error"

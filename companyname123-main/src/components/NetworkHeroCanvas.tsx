@@ -12,64 +12,36 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ─── Design Tokens ────────────────────────────────────────────────────────────
 
-/** CTA / badge accent — lime-green brand colour */
 const COLOR_ACCENT = "#A6CE39";
-/** Teal — secondary brand colour used for sub-headline & decor */
-const COLOR_TEAL = "#7CCCBF";
-/** Sky-blue — tertiary brand colour for tertiary headline */
-const COLOR_SKY = "#44C8F5";
-/** Overlay that dims the frame sequence (deep navy, matches site bg) */
-const OVERLAY_COLOR = "rgba(0, 44, 61, 0.55)";
+const COLOR_TEAL   = "#7CCCBF";
+const COLOR_SKY    = "#44C8F5";
+const COLOR_NAVY   = "#005E96";
 
 // ─── Sequence config ─────────────────────────────────────────────────────────
 
-const FRAME_COUNT = 190;
-const MIN_LOADED_COUNT = Math.ceil(FRAME_COUNT * 0.2);
-const SEQUENCE_BASE = "/images/hero-sequence";
-/** Strip watermark rows from bottom of each source frame */
+const FRAME_COUNT       = 190;
+const MIN_LOADED_COUNT  = Math.ceil(FRAME_COUNT * 0.2);
+const SEQUENCE_BASE     = "/images/hero-sequence";
 const SOURCE_CROP_BOTTOM_PX = 50;
 
-// ─── Scroll-animation config ──────────────────────────────────────────────────
+// ─── Scroll-animation config ─────────────────────────────────────────────────
 
-/** Scroll progress (0–1) at which the headline motion completes */
 const HERO_TITLE_MOTION_END = 0.28;
-/** Peak scale factor for the headline block */
-const HERO_TITLE_SCALE_MAX = 1.1;
-/** Max upward drift (px) shared by headline block & Trusted-By strip */
-const HERO_COPY_Y_MAX = 90;
-
-/** Tailwind padding-top to clear the fixed transparent navbar */
-const NAV_CLEARANCE = "pt-16 sm:pt-20";
+const HERO_TITLE_SCALE_MAX  = 1.1;
+const HERO_COPY_Y_MAX       = 90;
+const NAV_CLEARANCE         = "pt-16 sm:pt-20";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Partner = { name: string; src: string };
 
 const PARTNERS: Partner[] = [
-  {
-    name: "Saudi Ministry of Defense",
-    src: "https://upload.wikimedia.org/wikipedia/ar/d/d7/Saudi_Ministry_of_Defense_Logo.svg",
-  },
-  {
-    name: "STC",
-    src: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg",
-  },
-  {
-    name: "HP",
-    src: "https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg",
-  },
-  {
-    name: "Microsoft",
-    src: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png",
-  },
-  {
-    name: "IBM",
-    src: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg",
-  },
-  {
-    name: "Oracle",
-    src: "/assets/oracle-logo.svg",
-  },
+  { name: "Saudi Ministry of Defense", src: "https://upload.wikimedia.org/wikipedia/ar/d/d7/Saudi_Ministry_of_Defense_Logo.svg" },
+  { name: "STC",       src: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg" },
+  { name: "HP",        src: "https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" },
+  { name: "Microsoft", src: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png" },
+  { name: "IBM",       src: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" },
+  { name: "Oracle",    src: "/assets/oracle-logo.svg" },
 ];
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -98,7 +70,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.decoding = "async";
-    img.onload = () => resolve(img);
+    img.onload  = () => resolve(img);
     img.onerror = () => reject(new Error(`Failed to load ${src}`));
     img.src = src;
   });
@@ -142,44 +114,30 @@ export type NetworkHeroCanvasProps = {
   scrollScrollerRef?: RefObject<HTMLElement | null>;
 };
 
-/**
- * NetworkHeroCanvas
- *
- * 400 vh scroll-scrubbed canvas hero (scene00001 – scene00190).
- * Full-bleed frame sequence · GSAP scroll animation on headline stack
- * · Trusted-By partner strip · graceful boot/error states.
- */
-export default function NetworkHeroCanvas({
-  scrollScrollerRef,
-}: NetworkHeroCanvasProps) {
+export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanvasProps) {
   // ── Refs ──────────────────────────────────────────────────────────────────
-  const trackRef = useRef<HTMLElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
-  const canvasShellRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  /** Single transform wrapper so all headline lines scale as one unit */
-  const heroHeadlinesRef = useRef<HTMLDivElement>(null);
-  const trustedBannerRef = useRef<HTMLDivElement>(null);
+  const trackRef          = useRef<HTMLElement>(null);
+  const stickyRef         = useRef<HTMLDivElement>(null);
+  const canvasShellRef    = useRef<HTMLDivElement>(null);
+  const canvasRef         = useRef<HTMLCanvasElement>(null);
+  const heroHeadlinesRef  = useRef<HTMLDivElement>(null);
+  const trustedBannerRef  = useRef<HTMLDivElement>(null);
 
-  const imagesRef = useRef<(HTMLImageElement | undefined)[]>(
+  const imagesRef     = useRef<(HTMLImageElement | undefined)[]>(
     new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined)
   );
-  const loadCountRef = useRef(0);
-  const lastFrameRef = useRef(-1);
-  const canPaintRef = useRef(false);
+  const loadCountRef  = useRef(0);
+  const lastFrameRef  = useRef(-1);
+  const canPaintRef   = useRef(false);
 
   // ── State ─────────────────────────────────────────────────────────────────
-  const [loadPhase, setLoadPhase] = useState<"boot" | "interactive" | "error">(
-    "boot"
-  );
+  const [loadPhase, setLoadPhase] = useState<"boot" | "interactive" | "error">("boot");
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   const clearHeroCopyTransforms = useCallback(() => {
-    const headlines = heroHeadlinesRef.current;
-    if (headlines) gsap.set(headlines, { clearProps: "transform" });
-    const banner = trustedBannerRef.current;
-    if (banner) gsap.set(banner, { clearProps: "transform" });
+    if (heroHeadlinesRef.current) gsap.set(heroHeadlinesRef.current, { clearProps: "transform" });
+    if (trustedBannerRef.current) gsap.set(trustedBannerRef.current, { clearProps: "transform" });
   }, []);
 
   const measureViewport = useCallback(() => {
@@ -189,14 +147,12 @@ export default function NetworkHeroCanvas({
         return { w: Math.round(r.width), h: Math.round(r.height) };
     }
     return {
-      w: typeof window !== "undefined" ? window.innerWidth : 0,
+      w: typeof window !== "undefined" ? window.innerWidth  : 0,
       h: typeof window !== "undefined" ? window.innerHeight : 0,
     };
   }, []);
 
-  const prepareCanvas = useCallback(():
-    | { ctx: CanvasRenderingContext2D; w: number; h: number }
-    | null => {
+  const prepareCanvas = useCallback((): { ctx: CanvasRenderingContext2D; w: number; h: number } | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const ctx = canvas.getContext("2d");
@@ -210,9 +166,9 @@ export default function NetworkHeroCanvas({
     const nh = Math.round(h * dpr);
 
     if (canvas.width !== nw || canvas.height !== nh) {
-      canvas.width = nw;
+      canvas.width  = nw;
       canvas.height = nh;
-      canvas.style.width = `${w}px`;
+      canvas.style.width  = `${w}px`;
       canvas.style.height = `${h}px`;
     }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -220,10 +176,10 @@ export default function NetworkHeroCanvas({
   }, [measureViewport]);
 
   const findDrawableFrame = useCallback((idx: number) => {
-    const arr = imagesRef.current;
-    const ready = (im?: HTMLImageElement) => im?.complete && im.naturalWidth;
+    const arr    = imagesRef.current;
+    const ready  = (im?: HTMLImageElement) => im?.complete && im.naturalWidth;
     if (ready(arr[idx])) return arr[idx]!;
-    for (let j = idx; j >= 0; j--) if (ready(arr[j])) return arr[j]!;
+    for (let j = idx; j >= 0; j--)          if (ready(arr[j])) return arr[j]!;
     for (let j = idx + 1; j < FRAME_COUNT; j++) if (ready(arr[j])) return arr[j]!;
     return null;
   }, []);
@@ -247,26 +203,22 @@ export default function NetworkHeroCanvas({
   }, [paintFrame]);
 
   const applyHeroCopyScroll = useCallback((scrollProgress: number) => {
-    const p = Math.min(1, Math.max(0, scrollProgress));
-    const t = Math.min(1, Math.max(0, p / HERO_TITLE_MOTION_END));
+    const p    = Math.min(1, Math.max(0, scrollProgress));
+    const t    = Math.min(1, Math.max(0, p / HERO_TITLE_MOTION_END));
     const ease = 1 - (1 - t) * (1 - t);
     const scale = gsap.utils.interpolate(1, HERO_TITLE_SCALE_MAX, ease);
-    const y = -gsap.utils.interpolate(0, HERO_COPY_Y_MAX, ease);
+    const y     = -gsap.utils.interpolate(0, HERO_COPY_Y_MAX, ease);
 
     if (heroHeadlinesRef.current) {
       gsap.set(heroHeadlinesRef.current, {
-        opacity: 1,
-        scale,
-        y,
+        opacity: 1, scale, y,
         transformOrigin: "50% 100%",
         force3D: true,
       });
     }
     if (trustedBannerRef.current) {
       gsap.set(trustedBannerRef.current, {
-        opacity: 1,
-        visibility: "visible",
-        y,
+        opacity: 1, visibility: "visible", y,
         force3D: true,
       });
     }
@@ -274,7 +226,7 @@ export default function NetworkHeroCanvas({
 
   const drawFrame = useCallback(
     (progress: number) => {
-      const p = Math.min(1, Math.max(0, progress));
+      const p      = Math.min(1, Math.max(0, progress));
       const index0 = Math.min(FRAME_COUNT - 1, Math.round(p * (FRAME_COUNT - 1)));
       applyHeroCopyScroll(p);
       if (index0 !== lastFrameRef.current) {
@@ -289,10 +241,10 @@ export default function NetworkHeroCanvas({
 
   useLayoutEffect(() => {
     let cancelled = false;
-    const slots = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
-    imagesRef.current = slots;
+    const slots   = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
+    imagesRef.current    = slots;
     loadCountRef.current = 0;
-    canPaintRef.current = false;
+    canPaintRef.current  = false;
     setLoadPhase("boot");
 
     const onOneLoaded = () => {
@@ -309,30 +261,21 @@ export default function NetworkHeroCanvas({
     const bumpSettled = () => {
       settled += 1;
       if (cancelled) return;
-      if (settled >= FRAME_COUNT && loadCountRef.current < MIN_LOADED_COUNT) {
-        setLoadPhase("error");
-      }
+      if (settled >= FRAME_COUNT && loadCountRef.current < MIN_LOADED_COUNT) setLoadPhase("error");
       if (settled === FRAME_COUNT) requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 
-    Array.from({ length: FRAME_COUNT }, (_, i) => frameUrl(i + 1)).forEach(
-      (src, i) => {
-        loadImage(src)
-          .then((img) => {
-            if (!cancelled) {
-              slots[i] = img;
-              onOneLoaded();
-            }
-          })
-          .catch(() => {})
-          .finally(bumpSettled);
-      }
-    );
+    Array.from({ length: FRAME_COUNT }, (_, i) => frameUrl(i + 1)).forEach((src, i) => {
+      loadImage(src)
+        .then((img) => { if (!cancelled) { slots[i] = img; onOneLoaded(); } })
+        .catch(() => {})
+        .finally(bumpSettled);
+    });
 
     return () => {
-      cancelled = true;
+      cancelled           = true;
       canPaintRef.current = false;
-      imagesRef.current = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
+      imagesRef.current   = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
     };
   }, []);
 
@@ -340,10 +283,8 @@ export default function NetworkHeroCanvas({
 
   useLayoutEffect(() => {
     if (loadPhase !== "interactive") return;
-
-    const track = trackRef.current;
+    const track    = trackRef.current;
     if (!track) return;
-
     const scroller = scrollScrollerRef?.current ?? undefined;
 
     const toggleSnap = (active: boolean) => {
@@ -353,14 +294,14 @@ export default function NetworkHeroCanvas({
     };
 
     const stConfig: ScrollTrigger.Vars = {
-      id: "network-hero-canvas-st",
-      trigger: track,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 1,
+      id:                  "network-hero-canvas-st",
+      trigger:             track,
+      start:               "top top",
+      end:                 "bottom bottom",
+      scrub:               1,
       invalidateOnRefresh: true,
-      onUpdate: (self) => drawFrame(self.progress),
-      onToggle: (self) => toggleSnap(self.isActive),
+      onUpdate:  (self) => drawFrame(self.progress),
+      onToggle:  (self) => toggleSnap(self.isActive),
       onRefresh: () => {
         clearHeroCopyTransforms();
         requestAnimationFrame(() => {
@@ -373,7 +314,6 @@ export default function NetworkHeroCanvas({
 
     const st = ScrollTrigger.create(stConfig);
     if (scroller && st.isActive) toggleSnap(true);
-
     drawFrame(st.progress);
 
     const onResize = () => {
@@ -382,12 +322,8 @@ export default function NetworkHeroCanvas({
       resizeAndRedraw();
       drawFrame(st.progress);
     };
-
     window.addEventListener("resize", onResize);
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-      drawFrame(st.progress);
-    });
+    requestAnimationFrame(() => { ScrollTrigger.refresh(); drawFrame(st.progress); });
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -407,13 +343,13 @@ export default function NetworkHeroCanvas({
       style={{ background: "#000d14" }}
       aria-label="Network hero sequence"
     >
-      {/* ── Sticky viewport ──────────────────────────────────────────────── */}
+      {/* ── Sticky viewport ────────────────────────────────────────────────── */}
       <div
         ref={stickyRef}
         className="sticky top-0 h-[min(100dvh,100svh)] min-h-[100dvh] w-full overflow-hidden"
         style={{ background: "#000d14" }}
       >
-        {/* ── Canvas + overlay ─────────────────────────────────────────── */}
+        {/* ── Canvas + overlay stack ──────────────────────────────────────── */}
         <div
           ref={canvasShellRef}
           className="pointer-events-none absolute inset-0 z-0"
@@ -421,24 +357,45 @@ export default function NetworkHeroCanvas({
         >
           <canvas ref={canvasRef} className="block h-full w-full" aria-hidden />
 
-          {/* Gradient overlay — bottom vignette + colour tint */}
+          {/* Base colour-tint overlay */}
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ backgroundColor: OVERLAY_COLOR }}
+            style={{ background: "rgba(0,44,61,0.45)" }}
             aria-hidden
           />
-          {/* Bottom-up dark vignette for legibility */}
+
+          {/* Bottom-up vignette — deeper & taller for more contrast under copy */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "linear-gradient(to top, rgba(0,13,20,0.72) 0%, transparent 45%)",
+                "linear-gradient(to top, rgba(0,13,20,0.90) 0%, rgba(0,13,20,0.55) 28%, transparent 55%)",
+            }}
+            aria-hidden
+          />
+
+          {/* Top-down vignette — keeps nav area dark enough */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,13,20,0.60) 0%, transparent 22%)",
+            }}
+            aria-hidden
+          />
+
+          {/* Radial centre glow — softens the hard frame edges */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 70% 55% at 50% 50%, transparent 40%, rgba(0,13,20,0.35) 100%)",
             }}
             aria-hidden
           />
         </div>
 
-        {/* ── Hero copy layer ───────────────────────────────────────────── */}
+        {/* ── Hero copy layer ─────────────────────────────────────────────── */}
         <div
           className="pointer-events-none relative flex h-full w-full flex-col"
           style={{ zIndex: 10 }}
@@ -447,69 +404,72 @@ export default function NetworkHeroCanvas({
             className={`
               pointer-events-none absolute inset-0
               flex flex-col items-center justify-center
-              gap-12 px-5
-              sm:gap-16 sm:px-8
+              gap-14 px-5
+              sm:gap-18 sm:px-8
               md:gap-20
               ${NAV_CLEARANCE}
             `}
           >
-            {/* ── Headline stack ──────────────────────────────────────── */}
+            {/* ── Headline stack ────────────────────────────────────────── */}
             <div
               ref={heroHeadlinesRef}
               className="flex w-full max-w-[min(88vw,58rem)] flex-col items-center gap-0 will-change-transform"
             >
-              {/* Eyebrow label — brand accent */}
-              <p
-                className="mb-5 flex items-center gap-2.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.28em] sm:text-xs sm:tracking-[0.26em] [text-shadow:0_1px_14px_rgba(0,18,28,0.45)]"
-                style={{ color: COLOR_ACCENT }}
-              >
+              {/* Eyebrow */}
+              <div className="mb-6 flex items-center gap-3">
                 <span
-                  className="inline-block h-px w-6 sm:w-8"
-                  style={{ background: COLOR_ACCENT, opacity: 0.6 }}
+                  className="h-px w-8"
+                  style={{ background: `linear-gradient(to right, transparent, ${COLOR_ACCENT})` }}
                 />
-                Enterprise Network Solutions
+                <p
+                  className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.28em] sm:text-[0.7rem]"
+                  style={{
+                    color: COLOR_ACCENT,
+                    textShadow: "0 1px 14px rgba(0,18,28,0.6)",
+                  }}
+                >
+                  Real Transformation
+                </p>
                 <span
-                  className="inline-block h-px w-6 sm:w-8"
-                  style={{ background: COLOR_ACCENT, opacity: 0.6 }}
+                  className="h-px w-8"
+                  style={{ background: `linear-gradient(to left, transparent, ${COLOR_ACCENT})` }}
                 />
-              </p>
+              </div>
 
               {/* Primary headline */}
               <h1
-                className="
-                  w-full text-center
-                  font-sans text-[clamp(2.4rem,7vw,5.25rem)]
-                  font-black leading-[1.0] tracking-[-0.025em]
-                "
-                style={{ color: "#ffffff" }}
+                className="w-full text-center font-sans font-black leading-[1.0] tracking-[-0.025em]"
+                style={{
+                  fontSize: "clamp(2.4rem,7vw,5.25rem)",
+                  color: "#ffffff",
+                  textShadow: "0 2px 32px rgba(0,13,20,0.6)",
+                }}
               >
                 Simple.{" "}
                 <span style={{ color: COLOR_ACCENT }}>Fast.</span>{" "}
                 Secure.
               </h1>
 
-              {/* Secondary headline — brand teal */}
+              {/* Secondary headline */}
               <h2
-                className="
-                  mt-3 w-full text-center
-                  font-sans text-[clamp(1.65rem,4.8vw,3.35rem)]
-                  font-semibold leading-[1.15] tracking-[-0.015em]
-                  [text-shadow:0_1px_24px_rgba(0,20,30,0.55)]
-                "
-                style={{ color: COLOR_TEAL }}
+                className="mt-4 w-full text-center font-sans font-semibold leading-[1.15] tracking-[-0.015em]"
+                style={{
+                  fontSize: "clamp(1.5rem,4.4vw,3rem)",
+                  color: COLOR_TEAL,
+                  textShadow: "0 1px 24px rgba(0,20,30,0.65)",
+                }}
               >
                 Networks You Can Trust.
               </h2>
 
-              {/* Tertiary / sub-head — brand sky at full opacity (readability via weight + shadow, not greying the hue) */}
+              {/* Body copy */}
               <p
-                className="
-                  mt-4 max-w-[40rem] text-center
-                  font-sans text-[clamp(1rem,2.15vw,1.2rem)]
-                  font-medium leading-relaxed
-                  [text-shadow:0_1px_18px_rgba(0,18,28,0.5)]
-                "
-                style={{ color: COLOR_SKY }}
+                className="mt-5 max-w-[36rem] text-center font-sans font-normal leading-relaxed"
+                style={{
+                  fontSize: "clamp(0.9rem,1.9vw,1.1rem)",
+                  color: "rgba(255,255,255,0.72)",
+                  textShadow: "0 1px 18px rgba(0,18,28,0.55)",
+                }}
               >
                 Powering mission-critical infrastructure for the world's most
                 demanding organisations — with zero compromise on performance or
@@ -517,83 +477,86 @@ export default function NetworkHeroCanvas({
               </p>
 
               {/* CTA row */}
-              <div className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-4">
-                <button
-                  type="button"
+              <div className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-3">
+                {/* Primary CTA */}
+                <a
+                  href="/contact"
                   className="
-                    inline-flex items-center gap-2
+                    inline-flex items-center gap-2.5
                     rounded-full px-7 py-3
                     text-sm font-semibold tracking-wide
                     transition-all duration-200
-                    hover:scale-[1.04] active:scale-[0.98]
+                    hover:scale-[1.04] active:scale-[0.97]
                     focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
                   "
                   style={{
                     background: COLOR_ACCENT,
-                    color: "#0a1a0a",
-                    boxShadow: `0 0 0 0 ${COLOR_ACCENT}`,
-                    outline: `2px solid transparent`,
+                    color: "#000000",
+                    boxShadow: `0 0 24px rgba(166,206,57,0.35), 0 2px 8px rgba(0,0,0,0.4)`,
                     outlineColor: COLOR_ACCENT,
                   }}
                 >
                   Get Started
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 14 14"
-                    fill="none"
-                    aria-hidden
-                  >
+                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden>
                     <path
                       d="M3 7h8M7.5 3.5L11 7l-3.5 3.5"
                       stroke="currentColor"
-                      strokeWidth="1.6"
+                      strokeWidth="1.8"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>
+                </a>
 
-                <button
-                  type="button"
+                {/* Secondary CTA */}
+                <a
+                  href="/what-we-do/telecommunications"
                   className="
-                    inline-flex items-center gap-2
-                    rounded-full border px-7 py-3
+                    inline-flex items-center gap-2.5
+                    rounded-full px-7 py-3
                     text-sm font-semibold tracking-wide
-                    text-white/80 transition-all duration-200
-                    hover:text-white hover:border-white/50
-                    active:scale-[0.98]
+                    transition-all duration-200
+                    hover:bg-white/10 active:scale-[0.97]
                   "
-                  style={{ borderColor: "rgba(255,255,255,0.22)" }}
+                  style={{
+                    color: "rgba(255,255,255,0.85)",
+                    border: "1px solid rgba(255,255,255,0.22)",
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                  }}
                 >
                   View Solutions
-                </button>
+                </a>
               </div>
             </div>
 
             {/* ── Trusted By strip ──────────────────────────────────────── */}
             <div
               ref={trustedBannerRef}
-              className="flex w-full max-w-5xl flex-col items-center gap-4 will-change-transform"
+              className="flex w-full max-w-3xl flex-col items-center gap-5 will-change-transform"
             >
-              {/* Divider */}
-              <div className="flex w-full max-w-sm items-center gap-4">
+              {/* Label with flanking lines */}
+              <div className="flex w-full max-w-xs items-center gap-3">
                 <div
                   className="h-px flex-1"
-                  style={{ background: "rgba(255,255,255,0.1)" }}
+                  style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.14))" }}
                 />
                 <p
-                  className="whitespace-nowrap text-center font-mono text-[0.65rem] font-semibold uppercase tracking-[0.22em] sm:text-xs sm:tracking-[0.2em] [text-shadow:0_1px_10px_rgba(0,18,28,0.4)]"
-                  style={{ color: COLOR_TEAL }}
+                  className="whitespace-nowrap font-mono text-[0.6rem] font-semibold uppercase tracking-[0.24em] sm:text-[0.65rem]"
+                  style={{
+                    color: "rgba(255,255,255,0.45)",
+                    textShadow: "0 1px 10px rgba(0,18,28,0.4)",
+                  }}
                 >
                   Trusted By
                 </p>
                 <div
                   className="h-px flex-1"
-                  style={{ background: "rgba(255,255,255,0.1)" }}
+                  style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.14))" }}
                 />
               </div>
 
+              {/* Logo row */}
               <ul
                 className="m-0 flex w-full list-none flex-wrap items-center justify-center gap-7 p-0 sm:gap-10 md:gap-12"
                 aria-label="Trusted partner logos"
@@ -613,7 +576,8 @@ export default function NetworkHeroCanvas({
                       className="
                         h-6 w-auto max-w-[5rem] object-contain object-center
                         brightness-0 invert
-                        opacity-40 transition-opacity duration-300 hover:opacity-70
+                        opacity-35 transition-all duration-300
+                        hover:opacity-75 hover:scale-105
                         sm:h-7 sm:max-w-[6rem]
                         md:h-8 md:max-w-[7rem]
                       "
@@ -625,62 +589,78 @@ export default function NetworkHeroCanvas({
           </div>
         </div>
 
-        {/* ── Boot / loading state ──────────────────────────────────────── */}
+        {/* ── Boot / loading state ────────────────────────────────────────── */}
         {loadPhase === "boot" && (
           <div
-            className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-5"
+            className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-6"
             style={{ background: "#000d14" }}
             aria-live="polite"
             aria-busy
           >
-            {/* Animated ring */}
-            <div className="relative h-12 w-12" aria-hidden>
+            {/* Progress ring */}
+            <div className="relative h-11 w-11" aria-hidden>
+              {/* Track */}
               <div
                 className="absolute inset-0 rounded-full border-2"
-                style={{ borderColor: "rgba(255,255,255,0.08)" }}
+                style={{ borderColor: "rgba(255,255,255,0.07)" }}
               />
+              {/* Spinner */}
               <div
-                className="absolute inset-0 animate-spin rounded-full border-2 border-t-transparent"
-                style={{ borderColor: `${COLOR_ACCENT} transparent transparent transparent` }}
+                className="absolute inset-0 animate-spin rounded-full border-2 border-transparent"
+                style={{ borderTopColor: COLOR_ACCENT }}
+              />
+              {/* Inner dot */}
+              <div
+                className="absolute inset-0 m-auto h-1.5 w-1.5 rounded-full"
+                style={{ background: COLOR_ACCENT, opacity: 0.7 }}
               />
             </div>
+
+            {/* Label */}
             <p
-              className="font-mono text-[0.7rem] uppercase tracking-[0.2em]"
-              style={{ color: "rgba(255,255,255,0.3)" }}
+              className="font-mono text-[0.65rem] uppercase tracking-[0.22em]"
+              style={{ color: "rgba(255,255,255,0.25)" }}
             >
-              Loading…
+              Initialising
             </p>
           </div>
         )}
 
-        {/* ── Error state ───────────────────────────────────────────────── */}
+        {/* ── Error state ─────────────────────────────────────────────────── */}
         {loadPhase === "error" && (
           <div
             className="absolute inset-0 z-30 flex items-center justify-center px-6 text-center"
             style={{ background: "#000d14" }}
             role="alert"
           >
-            <div className="flex flex-col items-center gap-3">
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 32 32"
-                fill="none"
-                aria-hidden
+            <div className="flex flex-col items-center gap-4 max-w-xs">
+              {/* Icon */}
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-full border"
+                style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}
               >
-                <circle cx="16" cy="16" r="14" stroke="rgba(255,255,255,0.12)" strokeWidth="1.5" />
-                <path d="M16 10v7M16 21v1" stroke={COLOR_TEAL} strokeWidth="1.8" strokeLinecap="round" />
-              </svg>
+                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden>
+                  <path
+                    d="M16 10v7M16 21v1"
+                    stroke={COLOR_TEAL}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              {/* Message */}
               <p
-                className="max-w-xs font-sans text-sm leading-relaxed"
+                className="font-sans text-sm leading-relaxed"
                 style={{ color: "rgba(255,255,255,0.45)" }}
               >
                 Couldn&apos;t load the frame sequence. Please verify{" "}
                 <code
-                  className="rounded px-1.5 py-0.5 text-xs"
+                  className="mt-1 block rounded-md px-2.5 py-1.5 text-xs"
                   style={{
-                    background: "rgba(255,255,255,0.07)",
+                    background: "rgba(255,255,255,0.06)",
                     color: COLOR_SKY,
+                    border: "1px solid rgba(255,255,255,0.08)",
                   }}
                 >
                   /images/hero-sequence/scene#####.webp

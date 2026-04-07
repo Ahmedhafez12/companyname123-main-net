@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -283,11 +283,18 @@ function Navbar() {
                               {child.anchors && child.anchors.length > 0 && (
                                 <button
                                   type="button"
-                                  className="w-12 shrink-0 rounded-lg text-xl text-white/70 transition-colors hover:bg-white/10 lg:hidden"
-                                  aria-label={`Toggle sections for ${child.label}`}
+                                  className="flex w-12 shrink-0 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/10"
+                                  aria-label={
+                                    displayedSecondaryPath === child.path
+                                      ? `Collapse sections for ${child.label}`
+                                      : `Expand sections for ${child.label}`
+                                  }
+                                  aria-expanded={displayedSecondaryPath === child.path}
                                   onClick={() => toggleSecondary(child.path)}
                                 >
-                                  {activeSecondaryPath === child.path ? "−" : "+"}
+                                  <span className="text-lg opacity-60" aria-hidden>
+                                    {displayedSecondaryPath === child.path ? "−" : "+"}
+                                  </span>
                                 </button>
                               )}
                             </div>

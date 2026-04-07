@@ -89,7 +89,7 @@ function ContactPage() {
             className="max-w-4xl mx-auto text-center"
             style={{ marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)' }}
           >
-            <h1 className="font-bold text-white" style={{ 
+            {/* <h1 className="font-bold text-white" style={{ 
               fontSize: 'clamp(1.5rem, 3vh, 2.25rem)',
               marginBottom: 'clamp(0.375rem, 0.75vh, 0.5rem)',
               lineHeight: '1.2'
@@ -102,7 +102,7 @@ function ContactPage() {
               lineHeight: '1.4'
             }}>
               Let's discuss how we can help transform your telecommunications infrastructure.
-            </p>
+            </p> */}
           </motion.div>
           
           {/* Contact Section */}

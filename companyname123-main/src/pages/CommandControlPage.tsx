@@ -505,13 +505,13 @@ function CommandControlPage() {
   const subSolutions = [
     { 
       name: "Control Room Furniture", 
-      description: "Ergonomic and functional control room furniture designed for 24/7 operations, ensuring comfort and efficiency for operators managing critical systems.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_726d6a0985.jpeg"
+      description: "We are committed to delivering innovative, reliable, and future-ready control room furniture solutions that meet the highest industry standards. By combining design expertise with technical understanding, we help organizations build efficient and comfortable control room environments that support critical decision-making around the clock with the support of our world class OEM Partner.",
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_30f0a44d43.jpeg"
     },
     { 
       name: "Software", 
       description: "Custom software solutions tailored to your command and control needs, providing intuitive interfaces and powerful analytics capabilities.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_42589d16b5.jpeg"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg"
     },
     { 
       name: "Video Walls", 
@@ -521,12 +521,12 @@ function CommandControlPage() {
     { 
       name: "Servers", 
       description: "Flexible server infrastructure solutions supporting on-premises, cloud, or hybrid deployments to meet your specific security and scalability requirements.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg"
     },
     { 
       name: "AI/Custom Software", 
       description: "Advanced AI-powered custom software solutions that go beyond off-the-shelf products, delivering intelligent automation and predictive insights.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg"
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_9802d7d127.jpeg"
     }
   ];
 
@@ -543,23 +543,23 @@ function CommandControlPage() {
   const techStack = [
     {
       title: "Cloud & AI",
-      description: "Hybrid architecture and predictive insights for scalable, intelligent operations.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg"
+      description: "Our Cloud and AI solutions delivers innovative, scalable, and intelligent technology solutions that help organizations transform, automate, and grow in a digital-first world. We provide solution with all major provider Like AWS, Azure Etc, By combining the power of cloud computing with advanced artificial intelligence, we enable businesses to optimize operations, enhance decision-making. Our Solutions/Applications can be run over Cloud, On Premises or Hybrid model solutions.",
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg"
     },
     {
       title: "Software & Analytics",
-      description: "Advanced dashboards and data-driven decision tools for comprehensive insights.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_f1c5ecea36.jpeg"
+      description: "Our OEM’s design and develop high-performance integration software applications tailored to meet the unique needs of businesses across various industries. From enterprise systems and web applications to mobile platforms and automation tools, our solutions are built to enhance productivity, improve user experience, and support business growth. These platforms are capable to integrate CCTV, access control, ANPR Frs ,IOTs, databases, etc.",
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b46db2bfed.jpeg"
     },
     {
       title: "Server On-premises/Cloud/Hybrid",
-      description: "Secure communication protocols between ELV and IT systems for seamless operations.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_92c4643513.jpeg"
+      description: "We offer cloud-based server solutions hosted on leading platforms such as Amazon Web Services, Microsoft Azure, and Google Cloud Platform, enabling businesses to scale resources on demand, reduce capital expenditure, and ensure high availability. At the same time, we deliver robust on-premises server solutions for organizations that require full control over their data, enhanced security, or compliance with regulatory standards. Our on-site infrastructure services include server installation, configuration, virtualization, storage solutions, and ongoing maintenance. By integrating both environments into a hybrid model, we ensure seamless data flow, optimized performance, and operational flexibility. This approach allows businesses to keep critical workloads on-premises while leveraging the cloud for scalability, backup, and disaster recovery.",
+      image: "/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg"
     },
     {
-      title: "Hardware",
-      description: "Enterprise-grade consoles, servers, and physical infrastructure for mission-critical applications.",
-      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg"
+      title: "Video Wall",
+      description: "We provide high-performance video wall systems tailored for control rooms, command centers, corporate environments, retail spaces, and public venues. We offer end-to-end services—from consultation and design to installation and ongoing support—ensuring that each video wall system meets the specific operational and spatial requirements of our clients. Our systems are designed for 24/7 performance, minimal downtime, and easy scalability.",
+      image: "/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg"
     }
   ];
 
@@ -583,6 +583,14 @@ function CommandControlPage() {
     { 
       name: "Energy & Utilities", 
       description: "Power grid monitoring and utility management for reliable energy distribution."
+    },
+    {
+      name: "Education",
+      description: "Campus safety, facilities, and district-wide operations centers for schools and universities."
+    },
+    {
+      name: "Oil & Gas",
+      description: "Upstream, midstream, and downstream monitoring for pipelines, plants, and field operations."
     }
   ];
 
@@ -596,20 +604,24 @@ function CommandControlPage() {
       description: "Production control rooms and quality assurance monitoring systems."
     },
     { 
-      name: "Aviation", 
-      description: "Air traffic control and airport operations management centers."
-    },
-    { 
-      name: "Maritime", 
-      description: "Port operations and vessel traffic management systems."
-    },
-    { 
       name: "Automotive", 
       description: "Manufacturing control centers and supply chain coordination systems."
     },
     { 
       name: "Corporate Offices", 
       description: "Enterprise command centers for facilities management and security operations."
+    },
+    {
+      name: "Real Estate",
+      description: "Property operations, smart buildings, and portfolio-wide security and facilities oversight."
+    },
+    {
+      name: "Retail",
+      description: "Store networks, distribution centers, and loss-prevention operations with unified visibility."
+    },
+    {
+      name: "Health",
+      description: "Life sciences, payers, and health services operations centers beyond acute-care hospital settings."
     }
   ];
 
@@ -674,7 +686,7 @@ function CommandControlPage() {
                 marginBottom: 'clamp(1.5rem, 3vh, 2rem)',
                 lineHeight: '1.6'
               }}>
-                Connecting the dots between your ELV and other systems—ensuring smooth data flow, improved performance, and intelligent automation.
+                Control Room Solution is a centralized system designed to monitor, manage, and control multiple devices (Surveillance Cameras, IOT Devices, Databases, AI, etc.) across a facility or a network of sites. It plays a critical role in ensuring safety, security, and operational efficiency in environments such as airports, banks, city surveillance systems, industrial plants, and commercial buildings.
               </p>
             </motion.div>
 

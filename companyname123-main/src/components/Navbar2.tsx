@@ -45,6 +45,61 @@ const C = {
   navMuted:   "rgba(0, 94, 150, 0.60)",
 } as const;
 
+/** Top bar only (dropdown / mobile sheet interiors stay on `C` for contrast on white). */
+type BarTheme = {
+  logoInk: string;
+  navSolid: string;
+  navMuted: string;
+  phoneIcon: string;
+  barDivider: string;
+  ctaBg: string;
+  ctaText: string;
+  ctaShadow: string;
+  ctaHoverGradient: string;
+  ctaRing: string;
+  menuBtnBg: string;
+  menuBtnBgOpen: string;
+  menuBtnBorder: string;
+  menuIcon: string;
+};
+
+const DEFAULT_BAR: BarTheme = {
+  logoInk: C.navy,
+  navSolid: C.navy,
+  navMuted: C.navMuted,
+  phoneIcon: C.sky,
+  barDivider: C.divider,
+  ctaBg: C.navy,
+  ctaText: "#ffffff",
+  ctaShadow: "0 2px 12px rgba(0, 94, 150, 0.30)",
+  ctaHoverGradient: `linear-gradient(135deg, ${C.navy}, #006fa8)`,
+  ctaRing: C.navy,
+  menuBtnBg: `${C.navy}14`,
+  menuBtnBgOpen: `${C.navy}26`,
+  menuBtnBorder: C.divider,
+  menuIcon: C.navy,
+};
+
+/** Inverted bar for dark home hero sections: white type, white CTA shell with navy label. */
+const HOME_ON_DARK_BAR: BarTheme = {
+  logoInk: "#FFFFFF",
+  navSolid: "#FFFFFF",
+  navMuted: "rgba(255, 255, 255, 0.70)",
+  phoneIcon: "#A8E6FF",
+  barDivider: "rgba(255, 255, 255, 0.25)",
+  ctaBg: "#FFFFFF",
+  ctaText: C.navy,
+  ctaShadow: "0 2px 18px rgba(0, 0, 0, 0.2)",
+  ctaHoverGradient: "linear-gradient(135deg, #ffffff, #d4ebf7)",
+  ctaRing: "#FFFFFF",
+  menuBtnBg: "rgba(255, 255, 255, 0.14)",
+  menuBtnBgOpen: "rgba(255, 255, 255, 0.26)",
+  menuBtnBorder: "rgba(255, 255, 255, 0.30)",
+  menuIcon: "#FFFFFF",
+};
+
+export const HOME_NAVBAR_BAR_THEME_EVENT = "home-navbar-bar-theme";
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type Navbar2Props = {
@@ -67,31 +122,42 @@ const isHome   = (pathname: string, base: string) =>
  * the same navy palette without needing two separate class strings.
  */
 const NAV_LINK =
-  "group relative inline-flex items-center gap-1.5 px-3.5 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.1em] transition-colors duration-300";
+  "group relative inline-flex items-center gap-2 px-4 py-2.5 text-[0.875rem] font-semibold uppercase tracking-[0.1em] transition-colors duration-300";
 
 /** Teal-to-lime animated underline (scale in on hover / active) */
 const NAV_UNDERLINE =
-  "absolute bottom-0.5 left-1/2 h-[1.5px] w-[calc(100%-1.5rem)] -translate-x-1/2 scale-x-0 rounded-full bg-gradient-to-r from-[#7CCCBF] to-[#A6CE39] transition-transform duration-300 group-hover:scale-x-100";
+  "absolute bottom-0.5 left-1/2 h-[2px] w-[calc(100%-1.75rem)] -translate-x-1/2 scale-x-0 rounded-full bg-gradient-to-r from-[#7CCCBF] to-[#A6CE39] transition-transform duration-300 group-hover:scale-x-100";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 // ── Logo ──────────────────────────────────────────────────────────────────────
 
-function LogoBlock({ base, className }: { base: string; className?: string }) {
+function LogoBlock({
+  base,
+  className,
+  bar,
+}: {
+  base: string;
+  className?: string;
+  bar: BarTheme;
+}) {
   return (
     <Link
       to={homePath(base)}
       className={clsx(
         "flex items-center transition-opacity duration-300 hover:opacity-75",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#005E96]/40 focus-visible:ring-offset-2",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        bar === HOME_ON_DARK_BAR
+          ? "focus-visible:ring-white/45"
+          : "focus-visible:ring-[#005E96]/40",
         className
       )}
       aria-label="Hajz Telecommunications — Home"
     >
       <Logo
-        className="h-9 w-auto max-h-11 shrink-0 sm:h-10 lg:h-11"
+        className="h-11 w-auto max-h-[3.25rem] shrink-0 sm:h-12 lg:h-[3.5rem]"
         scrolled
-        textColorOverride={C.navy}
+        textColorOverride={bar.logoInk}
       />
     </Link>
   );
@@ -112,7 +178,7 @@ function DropdownPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -6, scale: 0.985 }}
       transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute left-0 top-full z-20 mt-4 overflow-hidden rounded-2xl"
+      className="absolute left-0 top-full z-20 mt-5 overflow-hidden rounded-2xl"
       style={{
         minWidth,
         background: C.panelBg,
@@ -160,8 +226,8 @@ function DropdownItem({
         className={clsx(
           "flex-1 transition-colors duration-200",
           indent
-            ? "py-2.5 pl-8 pr-5 text-[0.8rem]"
-            : "px-5 py-3 text-sm font-medium"
+            ? "py-3 pl-9 pr-5 text-[0.9rem]"
+            : "px-6 py-3.5 text-base font-medium"
         )}
         style={{
           color: indent ? C.navMuted : C.navy,
@@ -171,7 +237,7 @@ function DropdownItem({
       </span>
       {!indent && (
         <ArrowUpRight
-          className="mr-4 h-3.5 w-3.5 shrink-0 opacity-0 transition-all duration-200 group-hover:translate-x-px group-hover:-translate-y-px group-hover:opacity-40"
+          className="mr-5 h-4 w-4 shrink-0 opacity-0 transition-all duration-200 group-hover:translate-x-px group-hover:-translate-y-px group-hover:opacity-40"
           style={{ color: C.teal }}
           aria-hidden
         />
@@ -183,7 +249,7 @@ function DropdownItem({
 function DropdownSectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="px-5 pb-1 pt-3.5 font-mono text-[0.6rem] font-bold uppercase tracking-[0.22em]"
+      className="px-6 pb-1.5 pt-4 font-mono text-[0.7rem] font-bold uppercase tracking-[0.22em]"
       style={{ color: C.teal }}
     >
       {children}
@@ -198,11 +264,13 @@ function DesktopDropdowns({
   pathname,
   openDropdown,
   setOpenDropdown,
+  bar,
 }: {
   base: string;
   pathname: string;
   openDropdown: DropdownId | null;
   setOpenDropdown: (v: DropdownId | null) => void;
+  bar: BarTheme;
 }) {
   const impactActive =
     pathname.startsWith(`${base}/our-impact`) ||
@@ -225,22 +293,22 @@ function DesktopDropdowns({
         type="button"
         aria-expanded={openDropdown === id}
         className={NAV_LINK}
-        style={{ color: isActive ? C.navy : C.navMuted }}
+        style={{ color: isActive ? bar.navSolid : bar.navMuted }}
       >
         {label}
         <ChevronDown
           className={clsx(
-            "h-3.5 w-3.5 shrink-0 transition-transform duration-300",
+            "h-4 w-4 shrink-0 transition-transform duration-300",
             openDropdown === id && "rotate-180"
           )}
-          style={{ color: isActive ? C.teal : C.navMuted }}
+          style={{ color: isActive ? C.teal : bar.navMuted }}
           aria-hidden
         />
         <span className={NAV_UNDERLINE} aria-hidden />
         {/* Active dot indicator */}
         {isActive && (
           <span
-            className="absolute bottom-0.5 left-1/2 h-[1.5px] w-[calc(100%-1.5rem)] -translate-x-1/2 rounded-full"
+            className="absolute bottom-0.5 left-1/2 h-[2px] w-[calc(100%-1.75rem)] -translate-x-1/2 rounded-full"
             style={{ background: `linear-gradient(90deg, ${C.teal}, ${C.lime})` }}
             aria-hidden
           />
@@ -260,13 +328,13 @@ function DesktopDropdowns({
       <Link
         to={homePath(base)}
         className={NAV_LINK}
-        style={{ color: isHome(pathname, base) ? C.navy : C.navMuted }}
+        style={{ color: isHome(pathname, base) ? bar.navSolid : bar.navMuted }}
       >
         Home
         <span className={NAV_UNDERLINE} aria-hidden />
         {isHome(pathname, base) && (
           <span
-            className="absolute bottom-0.5 left-1/2 h-[1.5px] w-[calc(100%-1.5rem)] -translate-x-1/2 rounded-full"
+            className="absolute bottom-0.5 left-1/2 h-[2px] w-[calc(100%-1.75rem)] -translate-x-1/2 rounded-full"
             style={{ background: `linear-gradient(90deg, ${C.teal}, ${C.lime})` }}
             aria-hidden
           />
@@ -285,7 +353,7 @@ function DesktopDropdowns({
           <DropdownItem to={`${base}/about/overview#vision-mission`} indent>Vision &amp; Mission</DropdownItem>
           <DropdownItem to={`${base}/about/overview#core-strengths`} indent>Core Strengths</DropdownItem>
         </div>,
-        260
+        300
       )}
 
       {/* Solutions */}
@@ -305,7 +373,7 @@ function DesktopDropdowns({
           <DropdownItem to={`${base}/what-we-do/command-control#tech-stack`} indent>Technology Stack</DropdownItem>
           <DropdownItem to={`${base}/what-we-do/command-control#industries-served`} indent>Industries We Serve</DropdownItem>
         </div>,
-        280
+        320
       )}
 
       {/* Our Impact */}
@@ -317,7 +385,7 @@ function DesktopDropdowns({
           <DropdownItem to={`${base}/customers`}>Our Customers</DropdownItem>
           <DropdownItem to={`${base}/partners`}>Our Partners</DropdownItem>
         </div>,
-        220
+        260
       )}
     </div>
   );
@@ -325,50 +393,53 @@ function DesktopDropdowns({
 
 // ── Right-rail: phone + CTA ───────────────────────────────────────────────────
 
-function PhoneAndContact({ base }: { base: string }) {
+function PhoneAndContact({ base, bar }: { base: string; bar: BarTheme }) {
   return (
-    <div className="flex shrink-0 items-center gap-3">
+    <div className="flex shrink-0 items-center gap-4">
       {/* Phone — xl only */}
       <a
         href={PHONE_HREF}
-        className="hidden items-center gap-2 text-[0.72rem] font-medium transition-colors duration-300 xl:flex"
-        style={{ color: C.navMuted }}
+        className="hidden items-center gap-2.5 text-[0.875rem] font-medium transition-colors duration-300 xl:flex"
+        style={{ color: bar.navMuted }}
         aria-label={`Call ${PHONE_LABEL}`}
       >
-        <Phone className="h-3.5 w-3.5 shrink-0" style={{ color: C.sky }} aria-hidden />
+        <Phone className="h-4 w-4 shrink-0" style={{ color: bar.phoneIcon }} aria-hidden />
         <span className="whitespace-nowrap tracking-wide">{PHONE_LABEL}</span>
       </a>
 
       {/* Vertical rule */}
       <div
-        className="hidden h-4 w-px xl:block"
-        style={{ background: C.divider }}
+        className="hidden h-5 w-px xl:block"
+        style={{ background: bar.barDivider }}
         aria-hidden
       />
 
-      {/* Contact CTA — solid navy pill */}
+      {/* Contact CTA — navy pill (default) or white pill on dark home hero */}
       <Link
         to={`${base}/contact`}
-        className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-5 py-2 text-[0.72rem] font-bold uppercase tracking-[0.1em] text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        className={clsx(
+          "group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full px-6 py-2.5 text-[0.8125rem] font-bold uppercase tracking-[0.1em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+          bar === HOME_ON_DARK_BAR
+            ? "focus-visible:ring-white/50"
+            : "focus-visible:ring-[#005E96]/45"
+        )}
         style={{
-          background: C.navy,
-          boxShadow: `0 2px 12px rgba(0, 94, 150, 0.30)`,
-          // ring offset matches page bg
-          outlineColor: C.navy,
+          background: bar.ctaBg,
+          color: bar.ctaText,
+          boxShadow: bar.ctaShadow,
+          outlineColor: bar.ctaRing,
         }}
         aria-label="Contact us"
       >
-        {/* Hover: shift to teal-tinted navy */}
         <span
           className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background: `linear-gradient(135deg, ${C.navy}, #006fa8)`,
-          }}
+          style={{ background: bar.ctaHoverGradient }}
           aria-hidden
         />
         <span className="relative">Contact Us</span>
         <ArrowUpRight
-          className="relative h-3.5 w-3.5 shrink-0 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+          className="relative h-4 w-4 shrink-0 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+          style={{ color: bar.ctaText }}
           aria-hidden
         />
       </Link>
@@ -395,7 +466,7 @@ function MobileAccordion({
     <div className="border-t" style={{ borderColor: C.divider }}>
       <button
         type="button"
-        className="flex w-full items-center justify-between px-2 py-4 text-left text-xs font-bold uppercase tracking-[0.12em] transition-colors duration-200"
+        className="flex w-full items-center justify-between px-2 py-5 text-left text-sm font-bold uppercase tracking-[0.12em] transition-colors duration-200"
         style={{ color: open ? C.navy : C.navMuted }}
         aria-expanded={open}
         aria-controls={`mobile-menu-${id}`}
@@ -404,7 +475,7 @@ function MobileAccordion({
         {label}
         <ChevronDown
           className={clsx(
-            "h-4 w-4 transition-transform duration-300",
+            "h-5 w-5 transition-transform duration-300",
             open && "rotate-180"
           )}
           style={{ color: open ? C.teal : C.navMuted }}
@@ -449,7 +520,7 @@ function MobileLink({
     <Link
       to={to}
       onClick={onClick}
-      className="block py-2.5 text-sm transition-colors duration-200"
+      className="block py-3 text-base transition-colors duration-200"
       style={{ color: indent ? `${C.navy}80` : C.navMuted }}
     >
       {children}
@@ -460,7 +531,8 @@ function MobileLink({
 // ─── Main export ──────────────────────────────────────────────────────────────
 
 /**
- * Navbar2 — transparent-always landing page navbar, light-page edition.
+ * Navbar2 — transparent landing navbar; on Home, first scroll sections use an
+ * inverted bar (white type + white CTA) over dark heroes via scroll sync.
  *
  * Palette roles:
  *   Navy  #005E96 — primary text, active links, CTA fill, dropdown border
@@ -469,7 +541,7 @@ function MobileLink({
  *   Lime  #A6CE39 — underline gradient tail, active indicator
  *
  * States:
- *   • Top of page  : fully transparent bar, navy text (readable on light hero)
+ *   • Top of page  : transparent bar; Home early sections → white nav / inverted CTA
  *   • Scrolled     : white frosted glass backdrop, navy text, soft navy shadow
  *   • Mobile open  : white sheet panel, navy text, teal accent line at top
  */
@@ -481,7 +553,15 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
   const [mobileOpen,     setMobileOpen]     = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
   const [openDropdown,   setOpenDropdown]   = useState<DropdownId | null>(null);
+  /** Home only: true while viewport is in network hero + carousel + teaser (before Telecom). */
+  const [homeDarkHeroBar, setHomeDarkHeroBar] = useState(true);
   const headerRef = useRef<HTMLElement>(null);
+
+  const isHomePath = pathname === "/" || pathname === "";
+  const bar: BarTheme =
+    isHomePath && homeDarkHeroBar && !isScrolled && !mobileOpen
+      ? HOME_ON_DARK_BAR
+      : DEFAULT_BAR;
 
   // ── Scroll listener ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -497,6 +577,20 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
     window.addEventListener("open-menu", handler);
     return () => window.removeEventListener("open-menu", handler);
   }, []);
+
+  // ── Home page: first sections vs rest (scroll container is not window) ──
+  useEffect(() => {
+    const onTheme = (e: Event) => {
+      const ce = e as CustomEvent<{ onDark?: boolean }>;
+      if (typeof ce.detail?.onDark === "boolean") setHomeDarkHeroBar(ce.detail.onDark);
+    };
+    window.addEventListener(HOME_NAVBAR_BAR_THEME_EVENT, onTheme);
+    return () => window.removeEventListener(HOME_NAVBAR_BAR_THEME_EVENT, onTheme);
+  }, []);
+
+  useEffect(() => {
+    if (!isHomePath) setHomeDarkHeroBar(true);
+  }, [isHomePath]);
 
   // ── Body scroll lock when mobile sheet is open ───────────────────────────
   useEffect(() => {
@@ -520,7 +614,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, closeMobile]);
 
-  const navProps = { base, pathname, openDropdown, setOpenDropdown };
+  const navProps = { base, pathname, openDropdown, setOpenDropdown, bar };
 
   // ── Header background ────────────────────────────────────────────────────
   // Transparent at rest; white-frosted once scrolled or mobile is open.
@@ -543,22 +637,31 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
       ref={headerRef}
       className={clsx(
         "fixed inset-x-0 top-0 z-[100] transition-all duration-500 ease-out",
-        isScrolled ? "py-3" : "py-4 sm:py-5"
+        isScrolled ? "py-4" : "py-5 sm:py-6"
       )}
       style={headerStyle}
     >
-      <div className="container mx-auto max-w-[1400px] px-5 sm:px-7 lg:px-10">
+      <div className="w-full max-w-none px-6 sm:px-8 lg:px-12 xl:px-14 2xl:px-16">
 
-        {/* ── Mobile bar (below lg) ──────────────────────────────────────── */}
-        <div className="relative z-[60] flex items-center justify-between lg:hidden">
-          <LogoBlock base={base} />
+        {/* ── Mobile bar (below lg): logo centered, menu right ─────────────── */}
+        <div className="relative z-[60] flex min-h-[3rem] items-center justify-end lg:hidden">
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2">
+            <div className="pointer-events-auto">
+              <LogoBlock base={base} bar={bar} />
+            </div>
+          </div>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            className={clsx(
+              "relative z-[30] inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              bar === HOME_ON_DARK_BAR
+                ? "focus-visible:ring-white/45"
+                : "focus-visible:ring-[#005E96]/40"
+            )}
             style={{
-              background:   mobileOpen ? `${C.navy}0f` : `${C.navy}08`,
-              border:       `1px solid ${C.divider}`,
-              outlineColor: C.navy,
+              background:   mobileOpen ? bar.menuBtnBgOpen : bar.menuBtnBg,
+              border:       `1px solid ${bar.menuBtnBorder}`,
+              outlineColor: bar.ctaRing,
             }}
             aria-expanded={mobileOpen}
             aria-controls="navbar2-mobile-panel"
@@ -575,7 +678,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                   transition={{ duration: 0.16 }}
                   className="flex"
                 >
-                  <X className="h-[1.125rem] w-[1.125rem]" style={{ color: C.navy }} aria-hidden />
+                  <X className="h-5 w-5" style={{ color: bar.menuIcon }} aria-hidden />
                 </motion.span>
               ) : (
                 <motion.span
@@ -586,41 +689,29 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                   transition={{ duration: 0.16 }}
                   className="flex"
                 >
-                  <Menu className="h-[1.125rem] w-[1.125rem]" style={{ color: C.navy }} aria-hidden />
+                  <Menu className="h-5 w-5" style={{ color: bar.menuIcon }} aria-hidden />
                 </motion.span>
               )}
             </AnimatePresence>
           </button>
         </div>
 
-        {/* ── Desktop: top (nav | logo | actions) ──────────────────────── */}
-        {!isScrolled && (
-          <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-6">
-            <nav className="flex justify-start overflow-visible" aria-label="Primary navigation">
+        {/* ── Desktop (lg+): logo fixed to visual center; nav left / actions right ── */}
+        <div className="relative hidden lg:flex lg:items-center lg:min-h-[3.5rem]">
+          <div className="relative z-[30] flex min-w-0 flex-1 justify-start">
+            <nav className="overflow-visible" aria-label="Primary navigation">
               <DesktopDropdowns {...navProps} />
             </nav>
-            <div className="flex justify-center">
-              <LogoBlock base={base} />
-            </div>
-            <div className="flex justify-end">
-              <PhoneAndContact base={base} />
+          </div>
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-[10] -translate-x-1/2 -translate-y-1/2">
+            <div className="pointer-events-auto">
+              <LogoBlock base={base} bar={bar} />
             </div>
           </div>
-        )}
-
-        {/* ── Desktop: scrolled (logo | nav centred | actions) ─────────── */}
-        {isScrolled && (
-          <div className="relative hidden lg:flex lg:items-center lg:justify-between">
-            <LogoBlock base={base} className="shrink-0" />
-            <nav
-              className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 justify-center overflow-visible"
-              aria-label="Primary navigation"
-            >
-              <DesktopDropdowns {...navProps} />
-            </nav>
-            <PhoneAndContact base={base} />
+          <div className="relative z-[20] flex min-w-0 flex-1 justify-end">
+            <PhoneAndContact base={base} bar={bar} />
           </div>
-        )}
+        </div>
       </div>
 
       {/* ── Mobile sheet ──────────────────────────────────────────────────── */}
@@ -634,7 +725,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute inset-x-0 top-full z-[90] max-h-[calc(100dvh-4.5rem)] overflow-y-auto"
+              className="absolute inset-x-0 top-full z-[90] max-h-[calc(100dvh-5.75rem)] overflow-y-auto"
               style={{
                 background:          C.panelBg,
                 backdropFilter:      "blur(24px) saturate(160%)",
@@ -653,14 +744,14 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
               />
 
               <nav
-                className="container mx-auto max-w-[1400px] px-5 py-4 sm:px-7"
+                className="w-full max-w-none px-6 py-5 sm:px-8 lg:px-12 xl:px-14 2xl:px-16"
                 aria-label="Mobile primary"
               >
                 {/* Home */}
                 <Link
                   to={homePath(base)}
                   onClick={closeMobile}
-                  className="block px-2 py-4 text-xs font-bold uppercase tracking-[0.12em] transition-colors duration-200"
+                  className="block px-2 py-5 text-sm font-bold uppercase tracking-[0.12em] transition-colors duration-200"
                   style={{ color: isHome(pathname, base) ? C.navy : C.navMuted }}
                 >
                   Home
@@ -685,14 +776,14 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                   open={openMobileMenu === "what-we-do"}
                   onToggle={() => setOpenMobileMenu(openMobileMenu === "what-we-do" ? null : "what-we-do")}
                 >
-                  <p className="pb-1 pt-3 font-mono text-[0.6rem] font-bold uppercase tracking-[0.18em]" style={{ color: C.teal }}>
+                  <p className="pb-1 pt-3 font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em]" style={{ color: C.teal }}>
                     Telecommunications
                   </p>
                   <MobileLink to={`${base}/what-we-do/telecommunications`} onClick={closeMobile}>Overview</MobileLink>
                   <MobileLink to={`${base}/what-we-do/telecommunications#business-unit`} onClick={closeMobile} indent>Our Core Solutions</MobileLink>
                   <MobileLink to={`${base}/what-we-do/telecommunications#service-Standards`} onClick={closeMobile} indent>Service Standards</MobileLink>
 
-                  <p className="pb-1 pt-4 font-mono text-[0.6rem] font-bold uppercase tracking-[0.18em]" style={{ color: C.teal }}>
+                  <p className="pb-1 pt-4 font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em]" style={{ color: C.teal }}>
                     Command &amp; Control
                   </p>
                   <MobileLink to={`${base}/what-we-do/command-control`} onClick={closeMobile}>Overview</MobileLink>
@@ -713,21 +804,21 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
 
                 {/* Bottom action row */}
                 <div
-                  className="mt-4 flex flex-col gap-3 border-t py-5"
+                  className="mt-5 flex flex-col gap-4 border-t py-6"
                   style={{ borderColor: C.divider }}
                 >
                   <a
                     href={PHONE_HREF}
-                    className="flex items-center gap-3 px-2 text-sm transition-colors duration-200"
+                    className="flex items-center gap-3 px-2 text-base transition-colors duration-200"
                     style={{ color: C.navMuted }}
                   >
-                    <Phone className="h-4 w-4 shrink-0" style={{ color: C.sky }} aria-hidden />
+                    <Phone className="h-5 w-5 shrink-0" style={{ color: C.sky }} aria-hidden />
                     {PHONE_LABEL}
                   </a>
                   <Link
                     to={`${base}/contact`}
                     onClick={closeMobile}
-                    className="group flex items-center justify-center gap-2 rounded-xl py-3.5 text-xs font-bold uppercase tracking-[0.1em] text-white transition-all duration-200"
+                    className="group flex items-center justify-center gap-2.5 rounded-xl py-4 text-sm font-bold uppercase tracking-[0.1em] text-white transition-all duration-200"
                     style={{
                       background: C.navy,
                       boxShadow:  `0 2px 16px rgba(0, 94, 150, 0.25)`,
@@ -735,7 +826,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                   >
                     Contact Us
                     <ArrowUpRight
-                      className="h-3.5 w-3.5 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                      className="h-4 w-4 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
                       aria-hidden
                     />
                   </Link>
@@ -755,7 +846,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
               style={{
                 top: headerRef.current
                   ? `${headerRef.current.getBoundingClientRect().bottom}px`
-                  : "4.5rem",
+                  : "5.75rem",
                 background:           "rgba(0, 30, 50, 0.35)",
                 backdropFilter:       "blur(2px)",
                 WebkitBackdropFilter: "blur(2px)",

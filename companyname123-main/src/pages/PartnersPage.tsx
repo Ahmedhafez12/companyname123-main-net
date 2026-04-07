@@ -2,236 +2,302 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Handshake, Users, Globe, Trophy, ArrowRight, Shield, Lightning, Target } from 'phosphor-react';
-import PartnersSection from '../components/PartnersSection';
 import KeyCustomersBanner from '../components/KeyCustomersBanner';
 import Footer from '../components/Footer';
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
 function PartnersPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const partnerTypes = [
     {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: "Technology Partners",
-      description: "Leading technology providers who complement our solutions.",
-      benefits: [
-        "Access to cutting-edge technology",
-        "Integrated solutions",
-        "Technical expertise"
-      ]
+      icon: <Shield weight="thin" size={28} />,
+      accentClass: 'text-[#44C8F5]',
+      accentBg: 'bg-[#44C8F5]/10',
+      accentBorder: 'border-[#44C8F5]/20',
+      dotColor: 'bg-[#44C8F5]',
+      title: 'Technology Partners',
+      description: 'Leading technology providers who complement and extend our solution portfolio.',
+      benefits: ['Access to cutting-edge technology', 'Deeply integrated solutions', 'Shared technical expertise'],
     },
     {
-      icon: <div className="p-2"><Lightning weight="thin" size={20} /></div>,
-      title: "Solution Partners",
-      description: "System integrators and solution providers who implement our technology.",
-      benefits: [
-        "Comprehensive support",
-        "Training programs",
-        "Marketing resources"
-      ]
+      icon: <Lightning weight="thin" size={28} />,
+      accentClass: 'text-[#A6CE39]',
+      accentBg: 'bg-[#A6CE39]/10',
+      accentBorder: 'border-[#A6CE39]/20',
+      dotColor: 'bg-[#A6CE39]',
+      title: 'Solution Partners',
+      description: 'System integrators and solution providers who deploy our technology at scale.',
+      benefits: ['Comprehensive onboarding support', 'Training & certification programs', 'Co-marketing resources'],
     },
     {
-      icon: <div className="p-2"><Target weight="thin" size={20} /></div>,
-      title: "Strategic Partners",
-      description: "Long-term partnerships focused on innovation and market expansion.",
-      benefits: [
-        "Joint development",
-        "Market access",
-        "Revenue sharing"
-      ]
-    }
+      icon: <Target weight="thin" size={28} />,
+      accentClass: 'text-[#7CCCBF]',
+      accentBg: 'bg-[#7CCCBF]/10',
+      accentBorder: 'border-[#7CCCBF]/20',
+      dotColor: 'bg-[#7CCCBF]',
+      title: 'Strategic Partners',
+      description: 'Long-term alliances built on shared innovation and global market expansion.',
+      benefits: ['Joint product development', 'Priority market access', 'Revenue-sharing models'],
+    },
   ];
 
   const stats = [
-    { icon: <div className="p-1"><Handshake weight="thin" size={20} /></div>, value: "200+", label: "Active Partners" },
-    { icon: <div className="p-1"><Users weight="thin" size={20} /></div>, value: "5000+", label: "Certified Professionals" },
-    { icon: <div className="p-1"><Globe weight="thin" size={20} /></div>, value: "50+", label: "Countries" },
-    { icon: <div className="p-1"><Trophy weight="thin" size={20} /></div>, value: "25+", label: "Industry Awards" }
+    { icon: <Handshake weight="thin" size={28} />, value: '200+', label: 'Active Partners' },
+    { icon: <Users weight="thin" size={28} />, value: '5,000+', label: 'Certified Professionals' },
+    { icon: <Globe weight="thin" size={28} />, value: '50+', label: 'Countries' },
+    { icon: <Trophy weight="thin" size={28} />, value: '25+', label: 'Industry Awards' },
   ];
 
   const keyPartners = [
-    { name: "FORA", logo: "https://cdn.shopify.com/s/files/1/0510/8655/7362/files/FORA_Logo_e69f5314-5a32-440e-9f1b-a3d2f9676bb1.png", url: "https://foracare.com/" },
-    { name: "Cambium Networks", logo: "/assets/Cambium-Networks-Logo.png", url: "https://www.cambiumnetworks.com/" },
-    { name: "Patton", logo: "https://tritech.co.il/wp-content/uploads/2018/04/formation-patton-1.png", url: "https://www.patton.com/" },
-    { name: "Ip Tech", logo: "https://iptechlabs.com/wp-content/uploads/BrandingGraphicsLogos/IPTL_Logo_Transparent_PNG.png", url: "https://iptechlabs.com/" },
-    { name: "M5 Technologies", logo: "https://documentation.media5corp.com/download/attachments/524289/atl.site.logo?version=7&modificationDate=1771424618039&api=v2", url: "https://www.m5technologies.com/" },
-    { name: "Kerpen", logo: "https://www.secomp.nl/thumbor/OrDiZJB3a2ytXjNkifZBsqPip3A=/filters:cachevalid(2022-11-18T15:16:15.230772):strip_icc():strip_exif()/cms_secde/cms/ueber_uns/markenwelt/kerpen_datacom/kerpen-datacom.png", url: "https://kerpen-data.com/en/" },
-    { name: "Avaya", logo: "/assets/avaya_red_logo_600x300.jpg", url: "https://www.avaya.com/" },
-    { name: "3cx", logo: "https://upload.wikimedia.org/wikipedia/commons/c/c9/3CX_logo.svg", url: "https://www.3cx.com/" },
-    { name: "J&R Technology", logo: "https://www.jrtelephone.com/uploads/7137/logo.png", url: "https://www.jrtelephone.com/" },
+    { name: 'FORA', logo: 'https://cdn.shopify.com/s/files/1/0510/8655/7362/files/FORA_Logo_e69f5314-5a32-440e-9f1b-a3d2f9676bb1.png', url: 'https://foracare.com/' },
+    { name: 'Cambium Networks', logo: '/assets/Cambium-Networks-Logo.png', url: 'https://www.cambiumnetworks.com/' },
+    { name: 'Patton', logo: 'https://tritech.co.il/wp-content/uploads/2018/04/formation-patton-1.png', url: 'https://www.patton.com/' },
+    { name: 'Ip Tech', logo: 'https://iptechlabs.com/wp-content/uploads/BrandingGraphicsLogos/IPTL_Logo_Transparent_PNG.png', url: 'https://iptechlabs.com/' },
+    { name: 'M5 Technologies', logo: 'https://documentation.media5corp.com/download/attachments/524289/atl.site.logo?version=7&modificationDate=1771424618039&api=v2', url: 'https://www.m5technologies.com/' },
+    { name: 'Kerpen', logo: 'https://www.secomp.nl/thumbor/OrDiZJB3a2ytXjNkifZBsqPip3A=/filters:cachevalid(2022-11-18T15:16:15.230772):strip_icc():strip_exif()/cms_secde/cms/ueber_uns/markenwelt/kerpen_datacom/kerpen-datacom.png', url: 'https://kerpen-data.com/en/' },
+    { name: 'Avaya', logo: '/assets/avaya_red_logo_600x300.jpg', url: 'https://www.avaya.com/' },
+    { name: '3CX', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c9/3CX_logo.svg', url: 'https://www.3cx.com/' },
+    { name: 'J&R Technology', logo: 'https://www.jrtelephone.com/uploads/7137/logo.png', url: 'https://www.jrtelephone.com/' },
   ];
 
-  useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [/* dependencies that indicate a route change */]);
+  const processSteps = [
+    { step: '01', title: 'Apply', description: 'Submit your partnership application and tell us about your organisation.' },
+    { step: '02', title: 'Evaluate', description: 'Our partnership team reviews your application and aligns on mutual goals.' },
+    { step: '03', title: 'Onboard', description: 'Complete certification and gain access to resources, tools, and training.' },
+    { step: '04', title: 'Grow', description: 'Launch joint initiatives and grow your business alongside Hajz.' },
+  ];
 
   return (
     <div className="relative">
       <Helmet>
-        <title>Our Partners - Hajz Telecommunication Co Ltd. | Global Partnership Program</title>
-        <meta name="description" content="Join Hajz Telecommunication Co Ltd.'s partner ecosystem and help shape the future of telecommunications. Discover partnership opportunities and benefits." />
+        <title>Our Partners – Hajz Telecommunication Co Ltd. | Global Partnership Program</title>
+        <meta name="description" content="Join Hajz Telecommunication Co Ltd.'s partner ecosystem and help shape the future of telecommunications." />
       </Helmet>
 
-      {/* Background gradient */}
+      {/* Background */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
-      
-      {/* Hero Section */}
-      <section 
-        className="relative overflow-hidden scroll-mt-20"
+
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section
+        className="relative overflow-hidden"
         style={{
           minHeight: '100dvh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           paddingTop: 'clamp(5rem, 10vh, 6rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
+          paddingBottom: 'clamp(2rem, 4vh, 4rem)',
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 w-full">
+        <div className="container mx-auto px-4 sm:px-6 w-full max-w-6xl">
+
+          {/* Eyebrow */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.5rem, 3vh, 2rem)' }}
+            variants={fadeUp} initial="hidden" animate="show" custom={0}
+            className="flex items-center justify-center gap-3 mb-6"
           >
-            <h1 className="font-bold text-white" style={{ 
-              fontSize: 'clamp(2rem, 4vh, 3rem)',
-              marginBottom: 'clamp(0.75rem, 1.5vh, 1rem)',
-              lineHeight: '1.2'
-            }}>
-              Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">With Us</span>
-            </h1>
-            <p className="text-white/80" style={{ 
-              fontSize: 'clamp(1rem, 1.75vh, 1.125rem)',
-              marginBottom: 'clamp(1.5rem, 3vh, 2rem)',
-              lineHeight: '1.5'
-            }}>
-              Join our global ecosystem of partners and help shape the future of telecommunications.
-            </p>
-
-            {/* CTA Section */}
-          {/* <div className="py-16 md:py-24 relative bg-white/5 backdrop-blur-sm">
-            <div className="container mx-auto px-4 sm:px-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-center"
-              >
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Become a Partner</h2>
-                <p className="text-white/80 text-lg max-w-2xl mx-auto mb-8">
-                  Join our partner ecosystem and help shape the future of telecommunications.
-                </p>
-                <button className="btn-primary inline-flex items-center group">
-                  <span><a href="/solutions" className="button">Apply Now</a></span>
-                  <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
-                    <ArrowRight weight="thin" size={20} />
-                  </div>
-                </button>
-              </motion.div>
-            </div>
-          </div> */}
-
-            {/* Stats */}
-            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
-                >
-                  <div className="text-cta mb-4 flex justify-center">{stat.icon}</div>
-                  <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-                  <div className="text-white/70 text-sm">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div> */}
+            <span className="h-px w-8 bg-[#A6CE39]/50" />
+            <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#A6CE39]">
+              Partnership Program
+            </span>
+            <span className="h-px w-8 bg-[#A6CE39]/50" />
           </motion.div>
-          
-          {/* Key Partners Banner */}
-          <div style={{ marginTop: 'clamp(1rem, 2vh, 1.5rem)' }}>
-            <KeyCustomersBanner keyCustomers={keyPartners} />
-          </div>
+
+          {/* Headline */}
+          <motion.h1
+            variants={fadeUp} initial="hidden" animate="show" custom={1}
+            className="font-bold text-white text-center"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1 }}
+          >
+            Build the future{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
+              together
+            </span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp} initial="hidden" animate="show" custom={2}
+            className="text-white/80 text-center max-w-xl mx-auto mt-4"
+            style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.125rem)', lineHeight: 1.6 }}
+          >
+            Join a global ecosystem of innovators and help shape the next generation of telecommunications.
+          </motion.p>
+
+          {/* CTA buttons */}
+          <motion.div
+            variants={fadeUp} initial="hidden" animate="show" custom={3}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8"
+          >
+            <button className="btn-primary inline-flex items-center gap-2 group">
+              <span><a href="/contact">Become a Partner</a></span>
+              <div className="transform group-hover:translate-x-1 transition-transform duration-300">
+                <ArrowRight weight="thin" size={20} />
+              </div>
+            </button>
+            <a
+              href="#partner-types"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold text-white border border-white/20 hover:border-white/40 transition-colors duration-300"
+            >
+              Explore Programs
+            </a>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.div
+            variants={fadeUp} initial="hidden" animate="show" custom={4}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-14"
+          >
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 text-center hover:border-white/20 transition-colors duration-300"
+              >
+                <div className="text-[#A6CE39] flex justify-center mb-3">{s.icon}</div>
+                <div className="text-3xl font-bold text-white mb-1">{s.value}</div>
+                <div className="text-xs text-white/50 tracking-wide uppercase">{s.label}</div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-     
+      {/* ═══════════════ KEY PARTNERS BANNER ═══════════════ */}
+      <section className="relative py-10 border-t border-white/10">
+        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+          <p className="text-center text-xs tracking-[0.15em] uppercase text-white/30 mb-8">
+            Our global partner network
+          </p>
+          <KeyCustomersBanner keyCustomers={keyPartners} />
+        </div>
+      </section>
 
-      {/* Partnership Types */}
-      {/* <section className="py-16 md:py-24 relative bg-white/5 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6">
+      {/* ═══════════════ PARTNERSHIP TYPES ═══════════════ */}
+      <section id="partner-types" className="relative py-24 px-4 sm:px-6">
+        <div className="container mx-auto max-w-6xl">
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+            className="mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Partnership Programs</h2>
-            <p className="text-white/80 text-lg max-w-2xl mx-auto">
-              Choose the partnership type that best aligns with your business goals.
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#A6CE39] mb-3">
+              Partnership Programs
             </p>
+            <h2 className="font-bold text-white" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+              Find the right fit for your business.
+            </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {partnerTypes.map((type, index) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {partnerTypes.map((pt, i) => (
               <motion.div
-                key={type.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8 hover:border-white/20 transition-all duration-300"
+                key={pt.title}
+                variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i * 0.5}
+                className="group rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-7 hover:border-white/20 transition-all duration-300 flex flex-col"
               >
-                <div className="text-cta mb-6">{type.icon}</div>
-                <h3 className="text-2xl font-bold text-white mb-4">{type.title}</h3>
-                <p className="text-white/80 mb-6">{type.description}</p>
-                
-                <div className="space-y-3">
-                  <h4 className="text-white font-semibold mb-2">Key Benefits:</h4>
-                  {type.benefits.map((benefit) => (
-                    <div key={benefit} className="flex items-center text-white/70">
-                      <div className="p-0.5 mr-2">
-                        <ArrowRight weight="thin" size={20} className="text-cta" />
-                      </div>
-                      {benefit}
-                    </div>
-                  ))}
-                </div>
+                {/* Top accent bar */}
+                <div className={`h-[2px] w-full mb-6 rounded-full ${pt.dotColor} opacity-60`} />
 
-                <button className="mt-8 btn-primary w-full flex items-center justify-center group">
-                  <span>Learn More</span>
-                  <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
-                    <ArrowRight weight="thin" size={20} />
-                  </div>
-                </button>
+                <div className={`${pt.accentClass} mb-4`}>{pt.icon}</div>
+
+                <h3 className="text-white font-bold text-xl mb-3">{pt.title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-6 flex-1">{pt.description}</p>
+
+                <ul className="space-y-2.5 mb-7">
+                  {pt.benefits.map((b) => (
+                    <li key={b} className="flex items-start gap-2.5 text-sm text-white/60">
+                      <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${pt.dotColor}`} />
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href="/contact"
+                  className={`inline-flex items-center gap-2 text-sm font-semibold ${pt.accentClass} group-hover:gap-3 transition-all duration-200`}
+                >
+                  Learn more
+                  <ArrowRight weight="bold" size={14} />
+                </a>
               </motion.div>
             ))}
           </div>
         </div>
-      </section> */}
+      </section>
 
-      {/* Partners Showcase */}
-      {/* <section className="py-16 md:py-24 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Our Partners</h2>
-          <p className="text-white/80 text-lg max-w-2xl mx-auto">
-            Meet the innovative companies who partner with us to deliver excellence.
-          </p>
-        </motion.div>
-        <PartnersSection />
-      </section> */}
+      {/* ═══════════════ HOW IT WORKS ═══════════════ */}
+      <section className="relative py-20 px-4 sm:px-6 border-t border-white/10">
+        <div className="container mx-auto max-w-6xl">
 
+          <motion.div
+            variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+            className="mb-12"
+          >
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#44C8F5] mb-3">
+              How It Works
+            </p>
+            <h2 className="font-bold text-white" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
+              From application to growth.
+            </h2>
+          </motion.div>
 
-      {/* Footer */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {processSteps.map((s, i) => (
+              <motion.div
+                key={s.step}
+                variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i * 0.5}
+                className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 hover:border-white/20 transition-colors duration-300"
+              >
+                <span className="text-4xl font-bold text-white/10 block mb-4 leading-none">
+                  {s.step}
+                </span>
+                <h4 className="text-white font-bold text-lg mb-2">{s.title}</h4>
+                <p className="text-white/50 text-sm leading-relaxed">{s.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ CTA ═══════════════ */}
+      <section className="relative py-24 px-4 sm:px-6">
+        <div className="container mx-auto max-w-3xl">
+          <motion.div
+            variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+            className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm text-center p-12"
+          >
+            <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#A6CE39] mb-4">
+              Join Us
+            </p>
+            <h2
+              className="font-bold text-white mb-4"
+              style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.2 }}
+            >
+              Ready to partner with Hajz?
+            </h2>
+            <p className="text-white/60 max-w-md mx-auto mb-8 leading-relaxed">
+              Join 200+ active partners across 50+ countries and unlock new opportunities in telecommunications.
+            </p>
+            <button className="btn-primary inline-flex items-center gap-2 group">
+              <span><a href="/contact">Apply Now</a></span>
+              <div className="transform group-hover:translate-x-1 transition-transform duration-300">
+                <ArrowRight weight="thin" size={20} />
+              </div>
+            </button>
+          </motion.div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );

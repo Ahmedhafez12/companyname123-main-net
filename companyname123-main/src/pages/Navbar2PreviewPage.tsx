@@ -2,7 +2,7 @@ import Navbar2 from "../components/Navbar2";
 
 /**
  * Standalone preview for Navbar2 (transparent top vs scrolled bar). Home / About Overview use
- * Navbar.tsx via App; open /preview/navbar2 to compare Navbar2 in isolation.
+ * Navbar2 only (home uses `Navbar.tsx` overlay menu from App). Open /preview/navbar2 to preview in isolation.
  */
 export default function Navbar2PreviewPage() {
   return (
