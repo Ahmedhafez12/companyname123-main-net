@@ -97,7 +97,7 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
     const el = containerRef.current;
     const left = el.scrollLeft;
     setScrollPosition(left);
-    if (!isMobile && singleSetWidth > 0 && left >= singleSetWidth - 1) {
+    if (singleSetWidth > 0 && left >= singleSetWidth - 1) {
       isResettingRef.current = true;
       el.scrollLeft = left - singleSetWidth;
       setScrollPosition(el.scrollLeft);
@@ -105,7 +105,7 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
         isResettingRef.current = false;
       });
     }
-  }, [isMobile, singleSetWidth]);
+  }, [singleSetWidth]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -121,7 +121,6 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
       !contentRef.current ||
       isHovering ||
       contentWidth <= containerWidth ||
-      isMobile ||
       singleSetWidth <= 0
     ) return;
 
@@ -142,7 +141,7 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
         setScrollPosition(el.scrollLeft);
       }
     }, 25);
-  }, [containerWidth, contentWidth, isHovering, isMobile, singleSetWidth]);
+  }, [containerWidth, contentWidth, isHovering, singleSetWidth]);
 
   const stopLoop = useCallback(() => {
     if (loopInterval.current) {
@@ -152,10 +151,9 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
   }, []);
 
   useEffect(() => {
-    if (!isMobile) startLoop();
-    else stopLoop();
+    startLoop();
     return () => stopLoop();
-  }, [startLoop, stopLoop, isMobile]);
+  }, [startLoop, stopLoop]);
 
   const handleMouseEnter = () => {
     if (!isMobile) {
@@ -188,40 +186,27 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
     <div
       className="relative overflow-hidden w-full"
       style={{
-        paddingTop: "clamp(0.5rem, 1.5vh, 1rem)",
-        paddingBottom: "clamp(0.5rem, 1.5vh, 1rem)",
+        paddingTop: "clamp(0.375rem, 1vh, 0.75rem)",
+        paddingBottom: "clamp(0.375rem, 1vh, 0.75rem)",
       }}
     >
+      {/* Semi-transparent backdrop strip so logos read on any bg */}
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-sm pointer-events-none z-0" aria-hidden />
+
       <div
-        className={`relative w-full ${fullWidth ? "px-0" : "px-4 sm:px-6"}`}
+        className={`relative w-full z-10 ${fullWidth ? "px-0" : "px-4 sm:px-6"}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        {isMobile && isScrollable && (
+        {/* Desktop: fade edge gradients */}
+        {!isMobile && (
           <>
-            <button
-              onClick={scrollLeft}
-              disabled={scrollPosition <= 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg bg-black/40 backdrop-blur-md border border-white/20 text-white hover:border-white/40 hover:bg-black/50"
-              aria-label="Scroll left"
-            >
-              <div className="p-1.5">
-                <CaretLeft weight="thin" size={20} />
-              </div>
-            </button>
-            <button
-              onClick={scrollRight}
-              disabled={scrollPosition >= contentWidth - containerWidth}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 focus:outline-none disabled:opacity-30 disabled:cursor-not-allowed shadow-lg bg-black/40 backdrop-blur-md border border-white/20 text-white hover:border-white/40 hover:bg-black/50"
-              aria-label="Scroll right"
-            >
-              <div className="p-1.5">
-                <CaretRight weight="thin" size={20} />
-              </div>
-            </button>
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black/60 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black/60 to-transparent z-10 pointer-events-none" />
           </>
         )}
 
+        {/* Desktop hover arrows */}
         {!isMobile && isScrollable && isHovering && (
           <>
             <button
@@ -251,37 +236,32 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
           </>
         )}
 
-        {!isMobile && (
-          <>
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-black/60 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-black/60 to-transparent z-10 pointer-events-none" />
-          </>
-        )}
-
         <div
           ref={containerRef}
-          className={`flex overflow-x-auto scrollbar-hide ${isMobile ? "snap-x snap-mandatory" : ""} ${fullWidth ? "" : isMobile ? "px-4" : ""}`}
+          className="flex overflow-x-auto scrollbar-hide"
           style={{
-            paddingTop: "clamp(0.5rem, 1vh, 0.75rem)",
-            paddingBottom: "clamp(0.5rem, 1vh, 0.75rem)",
+            paddingTop: "clamp(0.375rem, 0.75vh, 0.625rem)",
+            paddingBottom: "clamp(0.375rem, 0.75vh, 0.625rem)",
             scrollbarWidth: "none",
             msOverflowStyle: "none",
-            cursor: isMobile ? "grab" : "default",
+            cursor: "default",
+            paddingLeft: fullWidth ? "clamp(0.75rem, 3vw, 2rem)" : undefined,
+            paddingRight: fullWidth ? "clamp(0.75rem, 3vw, 2rem)" : undefined,
           }}
         >
           <div
             ref={contentRef}
-            className={`flex ${isMobile ? "space-x-4" : "space-x-6"} ${fullWidth ? "px-4 sm:px-6" : isMobile ? "px-4" : "px-8"}`}
+            className="flex space-x-4 sm:space-x-6"
           >
-            {Array.from({ length: isMobile ? 1 : NUM_LOOP_SETS }).map((_, setIndex) =>
+            {Array.from({ length: NUM_LOOP_SETS }).map((_, setIndex) =>
               keyCustomers.map((customer, index) => (
                 <motion.div
                   key={`set-${setIndex}-${customer.name}-${index}`}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: (setIndex * keyCustomers.length + index) * 0.02 }}
-                  whileHover={{ y: -5 }}
-                  className={`flex-shrink-0 ${isMobile ? "snap-center" : ""}`}
+                  whileHover={!isMobile ? { y: -3 } : {}}
+                  className="flex-shrink-0"
                 >
                   <a
                     href={customer.url ?? CUSTOMER_WEBSITES[customer.name] ?? "#"}
@@ -289,9 +269,9 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
                     rel="noopener noreferrer"
                     className="flex items-center justify-center rounded-lg bg-transparent transition-all duration-300"
                     style={{
-                      width: isMobile ? "clamp(80px, 16vw, 100px)" : "clamp(100px, 20vw, 120px)",
-                      height: isMobile ? "clamp(40px, 8vw, 50px)" : "clamp(50px, 10vw, 60px)",
-                      padding: "clamp(0.5rem, 1vh, 0.75rem)",
+                      width: isMobile ? "clamp(64px, 14vw, 88px)" : "clamp(88px, 16vw, 120px)",
+                      height: isMobile ? "clamp(28px, 6vw, 40px)" : "clamp(36px, 7vw, 52px)",
+                      padding: isMobile ? "0.25rem 0.375rem" : "clamp(0.375rem, 0.75vh, 0.625rem)",
                     }}
                     aria-label={`Visit ${customer.name} website`}
                   >
@@ -300,8 +280,11 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
                       alt={customer.name}
                       loading="lazy"
                       referrerPolicy="no-referrer"
-                      className="max-w-full max-h-full w-full h-full object-contain transition-all duration-300 hover:opacity-90"
-                      style={{ minHeight: 0, filter: "brightness(0) invert(1) opacity(0.6)" }}
+                      className="max-w-full max-h-full w-full h-full object-contain transition-all duration-300"
+                      style={{
+                        minHeight: 0,
+                        filter: "brightness(0) invert(1) opacity(0.65)",
+                      }}
                     />
                   </a>
                 </motion.div>
@@ -310,22 +293,6 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
           </div>
         </div>
 
-        {isMobile && isScrollable && (
-          <div className="flex justify-center mt-4 space-x-3">
-            {Array.from({ length: Math.ceil(keyCustomers.length / 2.5) }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => scroll(index * containerWidth * 0.7)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 border ${
-                  Math.floor(scrollPosition / (containerWidth * 0.7)) === index
-                    ? "bg-white/90 border-white/90 scale-110"
-                    : "bg-white/20 border-white/30 hover:bg-white/40"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

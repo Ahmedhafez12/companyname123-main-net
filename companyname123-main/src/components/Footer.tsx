@@ -1,6 +1,6 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Envelope, Phone, MapPin, ArrowRight, ArrowUpRight } from "phosphor-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Envelope, Phone, MapPin, ArrowRight, ArrowUpRight, CaretDown } from "phosphor-react";
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import Logo from "./Logo";
@@ -22,16 +22,67 @@ const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, 
   </li>
 );
 
-// ── Column heading ────────────────────────────────────────────────────────────
+// ── Column heading (static, used inside FooterCol) ───────────────────────────
 const ColHeading: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h3 className="text-[#ECF0F1] text-xs font-semibold uppercase tracking-[0.12em] mb-4">
+  <h3 className="text-[#ECF0F1] text-xs font-semibold uppercase tracking-[0.12em]">
     {children}
   </h3>
 );
 
+// ── Accordion column — collapses on mobile, always open on sm+ ───────────────
+const FooterCol: React.FC<{
+  id: string;
+  heading: string;
+  openId: string | null;
+  toggle: (id: string) => void;
+  children: React.ReactNode;
+}> = ({ id, heading, openId, toggle, children }) => {
+  const isOpen = openId === id;
+  return (
+    <div>
+      {/* Heading row — clickable on mobile, static on sm+ */}
+      <button
+        type="button"
+        onClick={() => toggle(id)}
+        className="w-full flex items-center justify-between mb-0 sm:mb-4 sm:cursor-default sm:pointer-events-none py-3 sm:py-0 border-b border-white/10 sm:border-0"
+        aria-expanded={isOpen}
+      >
+        <ColHeading>{heading}</ColHeading>
+        <CaretDown
+          weight="bold"
+          size={14}
+          className={`text-[#ECF0F1]/40 flex-shrink-0 sm:hidden transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          aria-hidden
+        />
+      </button>
+
+      {/* Content — always visible on sm+, animated on mobile */}
+      <div className="hidden sm:block">
+        {children}
+      </div>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden sm:hidden"
+          >
+            <div className="pt-3 pb-1">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 // ── Footer ────────────────────────────────────────────────────────────────────
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const [openColId, setOpenColId] = useState<string | null>(null);
+  const toggleCol = (id: string) => setOpenColId((prev) => (prev === id ? null : id));
 
   const quickLinks = [
     { name: "Home", href: "/" },
@@ -69,16 +120,16 @@ const Footer: React.FC = () => {
   ];
 
   const contactInfo = [
-    { icon: Envelope, text: "contact@example.com", href: "mailto:contact@example.com" },
-    { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
-    { icon: MapPin, text: "123 Tech Street, Innovation City", href: null },
+    { icon: Envelope, text: "info@hajztelecom.com", href: "mailto:info@hajztelecom.com" },
+    { icon: Phone, text: "+966 11 000 0000", href: "tel:+966110000000" },
+    { icon: MapPin, text: "Riyadh, Saudi Arabia", href: null },
   ];
 
   const socialLinks = [
-    { icon: FaFacebookF, href: "https://www.facebook.com/yourprofile", label: "Facebook" },
-    { icon: FaTwitter, href: "https://www.twitter.com/yourprofile", label: "Twitter" },
-    { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/yourprofile", label: "LinkedIn" },
-    { icon: FaInstagram, href: "https://www.instagram.com/yourprofile", label: "Instagram" },
+    { icon: FaFacebookF, href: "#", label: "Facebook (coming soon)" },
+    { icon: FaTwitter, href: "#", label: "Twitter (coming soon)" },
+    { icon: FaLinkedinIn, href: "#", label: "LinkedIn (coming soon)" },
+    { icon: FaInstagram, href: "#", label: "Instagram (coming soon)" },
   ];
 
   const fadeUp = (delay: number) => ({
@@ -115,7 +166,7 @@ const Footer: React.FC = () => {
               />
             </Link>
 
-            <p className="text-[#ECF0F1]/60 text-xs leading-relaxed max-w-[220px]">
+            <p className="text-[#ECF0F1]/60 text-xs leading-relaxed max-w-[280px] sm:max-w-[220px]">
               Leading the telecommunications revolution with innovative solutions and
               unparalleled expertise in global connectivity.
             </p>
@@ -138,43 +189,46 @@ const Footer: React.FC = () => {
           </motion.div>
 
           {/* ── Link columns ── */}
-          <div className="lg:col-span-9 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-8">
-
+          {/*
+            Mobile  : single column, each section collapses/expands via accordion tap.
+            sm+     : 3-col grid (Telecom & C&C share a column).
+            lg+     : 5-col grid within the 9-col right span.
+          */}
+          <motion.div
+            {...fadeUp(0.08)}
+            className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-x-6"
+          >
             {/* Quick Links */}
-            <motion.div {...fadeUp(0.08)}>
-              <ColHeading>Quick Links</ColHeading>
+            <FooterCol id="quick" heading="Quick Links" openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
                 {quickLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
               </ul>
-            </motion.div>
+            </FooterCol>
 
             {/* About Us */}
-            <motion.div {...fadeUp(0.14)}>
-              <ColHeading>About Us</ColHeading>
+            <FooterCol id="about" heading="About Us" openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
                 {aboutUsAnchors.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
               </ul>
-            </motion.div>
+            </FooterCol>
 
-            {/* Telecommunications */}
-            <motion.div {...fadeUp(0.2)}>
-              <ColHeading>Telecom</ColHeading>
+            {/* Telecom + Command & Control share one column on sm/lg */}
+            <FooterCol id="telecom" heading="Telecom" openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
                 {telecomLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
               </ul>
-
-              {/* Command & Control nested below Telecom on this column */}
-              <div className="mt-6">
-                <ColHeading>Command & Control</ColHeading>
+              <div className="mt-5">
+                <h3 className="text-[#ECF0F1] text-xs font-semibold uppercase tracking-[0.12em] mb-3">
+                  Command &amp; Control
+                </h3>
                 <ul className="space-y-2.5">
                   {commandLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
                 </ul>
               </div>
-            </motion.div>
+            </FooterCol>
 
             {/* Contact */}
-            <motion.div {...fadeUp(0.26)}>
-              <ColHeading>Contact</ColHeading>
+            <FooterCol id="contact" heading="Contact" openId={openColId} toggle={toggleCol}>
               <ul className="space-y-3">
                 {contactInfo.map((item) => (
                   <li key={item.text} className="flex items-start gap-2 text-[#ECF0F1]/60 text-xs">
@@ -189,17 +243,16 @@ const Footer: React.FC = () => {
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </FooterCol>
 
             {/* Legal */}
-            <motion.div {...fadeUp(0.32)}>
-              <ColHeading>Legal</ColHeading>
+            <FooterCol id="legal" heading="Legal" openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
                 {legalLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
               </ul>
-            </motion.div>
+            </FooterCol>
 
-          </div>
+          </motion.div>
         </div>
 
         {/* ── Divider ────────────────────────────────────────────────────── */}

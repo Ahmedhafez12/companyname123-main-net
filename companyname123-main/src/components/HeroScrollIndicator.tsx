@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 
+const prefersReducedMotion =
+  typeof window !== "undefined"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
 const BRAND_COLORS = {
   primary: "#005E96",
   secondary: "#44C8F5",
@@ -113,9 +118,9 @@ const HeroScrollIndicator: React.FC<HeroScrollIndicatorProps> = ({ sectionIds })
 
   return (
     <div
-      className="fixed flex flex-col items-center gap-8"
+      className="hero-scroll-indicator fixed flex flex-col items-center gap-8"
       style={{
-        right: "2rem",
+        right: "clamp(0.75rem, 2vw, 2rem)",
         top: "100px",
         bottom: "100px",
         zIndex: 50,
@@ -162,16 +167,16 @@ const HeroScrollIndicator: React.FC<HeroScrollIndicatorProps> = ({ sectionIds })
           <motion.div
             className="rounded-full bg-white/70"
             style={{ width: 4, height: 4 }}
-            animate={{ y: [0, 10, 0] }}
-            transition={{
-              duration: 1.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            animate={prefersReducedMotion ? {} : { y: [0, 10, 0] }}
+            transition={
+              prefersReducedMotion
+                ? {}
+                : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+            }
           />
         </motion.div>
         <span
-          className="text-[10px] uppercase tracking-wider text-white/50"
+          className="text-[11px] uppercase tracking-wider text-white/50"
           style={{ fontFamily: "system-ui, sans-serif" }}
         >
           Scroll

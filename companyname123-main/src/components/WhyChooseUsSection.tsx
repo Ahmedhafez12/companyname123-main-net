@@ -52,6 +52,11 @@ const ValuePropContainer = styled.div`
   @media (min-width: 1024px) {
     grid-template-columns: 1fr 1fr;
   }
+
+  /* On mobile/tablet: image first (fixed height), accordion second (auto) */
+  @media (max-width: 1023px) {
+    grid-template-rows: 220px auto;
+  }
 `;
 
 const ValuePropTitle = styled(motion.h2)`
@@ -139,7 +144,7 @@ const ValuePropLeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 4vw, 3rem);
+  padding: clamp(1rem, 2.5vh, 2.5rem) clamp(1rem, 4vw, 3rem);
   max-width: 42rem;
 `;
 
@@ -165,7 +170,7 @@ const AccordionText = styled.p`
 const ValuePropRight = styled(motion.div)`
   width: 100%;
   height: 100%;
-  min-height: 280px;
+  min-height: 220px;
   display: flex;
   align-items: stretch;
   justify-content: stretch;
@@ -174,21 +179,23 @@ const ValuePropRight = styled(motion.div)`
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: none;
-  border-right: 1px solid ${BRAND_COLORS.primaryOpacity["20"]};
+  order: 1;
 
   @media (min-width: 1024px) {
     min-height: 100%;
+    order: 1;
+    border-right: 1px solid ${BRAND_COLORS.primaryOpacity["20"]};
   }
 `;
 
 const ValuePropImagePlaceholder = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 280px;
+  min-height: 220px;
   background-image: url("/assets/abstracts/Digital_stream_of_information_abstract_flowing_fib_delpmaspu.png");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
   position: relative;
   overflow: hidden;
 
@@ -235,10 +242,7 @@ export default function WhyChooseUsSection() {
   return (
     <ValuePropSection>
       <ValuePropContainer>
-        <ValuePropRight>
-          <ValuePropImagePlaceholder />
-        </ValuePropRight>
-        <div className="h-full flex justify-center items-center">
+        <div className="h-full flex justify-center items-center" style={{ order: 2 }}>
           <ScrollReveal direction="up" delay={0}>
             <ValuePropLeftWrapper>
               <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
@@ -296,6 +300,9 @@ export default function WhyChooseUsSection() {
             </ValuePropLeftWrapper>
           </ScrollReveal>
         </div>
+        <ValuePropRight>
+          <ValuePropImagePlaceholder />
+        </ValuePropRight>
       </ValuePropContainer>
     </ValuePropSection>
   );

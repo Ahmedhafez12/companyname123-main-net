@@ -72,8 +72,8 @@ function PrivacyPage() {
                   If you have any questions about this Privacy Policy, please contact us at:
                 </p>
                 <p className="text-white/80 mt-2">
-                  Email: privacy@example.com<br />
-                  Phone: +1 (555) 123-4567
+                  Email: privacy@hajztelecom.com<br />
+                  Phone: +966 11 000 0000
                 </p>
               </section>
             </div>

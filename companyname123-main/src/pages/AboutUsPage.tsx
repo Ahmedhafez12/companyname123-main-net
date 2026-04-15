@@ -130,13 +130,13 @@ const StrengthCard = ({ icon, title, description, className = '' }: {
 }) => {
   return (
     <div
-      className={`p-5 lg:p-6 h-full flex flex-col rounded-xl bg-primary/20 border border-primary/30 backdrop-blur-sm shadow-lg ${className}`.trim()}
+      className={`p-3 sm:p-4 lg:p-6 h-full flex flex-col rounded-xl bg-primary/20 border border-primary/30 backdrop-blur-sm shadow-lg ${className}`.trim()}
     >
-      <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 flex items-center gap-2">
-        <span className="text-cta flex-shrink-0">{React.cloneElement(icon as React.ReactElement, { className: 'w-5 h-5' })}</span>
+      <h3 className="text-xs sm:text-sm lg:text-lg font-semibold text-white mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2 leading-snug">
+        <span className="text-cta flex-shrink-0">{React.cloneElement(icon as React.ReactElement, { className: 'w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5' })}</span>
         {title}
       </h3>
-      <p className="text-base sm:text-lg text-white/70 leading-relaxed flex-grow">{description}</p>
+      <p className="text-xs sm:text-xs lg:text-sm text-white/70 leading-relaxed flex-grow">{description}</p>
     </div>
   );
 };
@@ -250,7 +250,7 @@ function AboutUsPage() {
     <Trophy key="t" weight="bold" size={20} />,
   ];
 
-  const sectionClass = 'h-screen min-h-[600px] flex flex-col justify-center snap-start relative overflow-hidden shrink-0';
+  const sectionClass = 'min-h-screen lg:h-screen lg:min-h-[600px] flex flex-col justify-center snap-start relative overflow-hidden shrink-0';
   // Decorative blob component for visual anchors
   const DecorativeBlob = ({ className = '' }: { className?: string }) => (
     <div
@@ -286,29 +286,30 @@ function AboutUsPage() {
         ref={scrollContainerRef}
         className="scroll-snap-page h-screen overflow-y-scroll overflow-x-hidden"
       >
-      {/* Hero: 50/50 grid, image side 100% height */}
+      {/* Hero: text top 40% / image bottom 60% on mobile; text left 40% / image right 60% on desktop */}
       <section id="what-we-do" className={sectionClass}>
         <DecorativeBlob className="-top-24 -right-24 lg:right-[25%]" />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full flex-1 min-h-0">
-          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pl-16 xl:pl-24 pt-8 sm:pt-12 pb-12 order-2 lg:order-1">
+        <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-none lg:grid-cols-2 gap-0 w-full h-screen lg:h-full flex-1 min-h-0">
+          {/* Text — top 50% on mobile, left 50% on desktop */}
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-4 lg:py-12 overflow-hidden">
             <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
-              <div className="inline-flex items-center bg-primary/20 backdrop-blur-[2px] border border-primary/30 py-2 px-5 rounded-full mb-6">
-                <span className="text-lg text-white/90">{ABOUT_CONSTANTS.hero.badge}</span>
+              <div className="inline-flex items-center bg-primary/20 backdrop-blur-[2px] border border-primary/30 py-1.5 px-4 rounded-full mb-3 lg:mb-6">
+                <span className="text-sm sm:text-base text-white/90">{ABOUT_CONSTANTS.hero.badge}</span>
               </div>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 font-sans leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-2 lg:mb-6 font-sans leading-tight">
                 Who <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">We Are</span>
               </h1>
-              <p className="text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
+              <p className="text-sm sm:text-base lg:text-xl text-white/80 leading-relaxed max-w-2xl">
                 {ABOUT_CONSTANTS.hero.summary}
               </p>
             </div>
           </div>
-          <div className="relative w-full h-[50vh] lg:h-full min-h-[280px] order-1 lg:order-2 overflow-hidden">
+          {/* Image — bottom 60% on mobile, right 60% on desktop */}
+          <div className="relative w-full overflow-hidden">
             <img
               src={ABOUT_CONSTANTS.hero.heroImageSrc}
               alt={ABOUT_CONSTANTS.hero.heroImageAlt}
-              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-center"
-              style={{ width: '100%', height: '100%' }}
+              className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
             <div className="absolute inset-0 bg-primary/20 pointer-events-none" />
@@ -320,7 +321,7 @@ function AboutUsPage() {
       <section id="company-identity" className={sectionClass}>
         <DecorativeBlob className="top-1/2 -translate-y-1/2 -right-32 opacity-25" />
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-0 w-full flex-1 min-h-0">
-          <div className="relative w-full min-h-[50vh] lg:min-h-0 lg:h-full order-1 lg:order-1 flex-1 min-h-0 flex flex-col">
+          <div className="relative w-full min-h-[45vh] sm:min-h-[52vh] lg:min-h-0 lg:h-full order-1 lg:order-1 lg:flex-1 flex flex-col">
             <CompanyIdentityCarousel
               blocks={ABOUT_CONSTANTS.companyIdentity.blocks}
               images={[
@@ -331,15 +332,15 @@ function AboutUsPage() {
               imagePositions={["right center", "left center", "right center"]}
             />
           </div>
-          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pr-16 xl:pr-24 py-12 order-2 lg:order-2 min-h-0">
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pr-16 xl:pr-24 2xl:pr-32 py-7 lg:py-12 order-2 lg:order-2 min-h-0">
             <div className="max-w-xl">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans mb-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans mb-2 lg:mb-4">
                 Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Identity</span>
               </h2>
-              <p className="text-lg sm:text-xl text-white/80 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed">
                 {ABOUT_CONSTANTS.companyIdentity.sectionSubtitle}
               </p>
-              <div className="mt-6 text-2xl sm:text-3xl font-bold text-cta font-sans">
+              <div className="mt-4 lg:mt-6 text-xl sm:text-2xl lg:text-3xl font-bold text-cta font-sans">
                 {ABOUT_CONSTANTS.companyIdentity.blocks.length} Pillars
               </div>
             </div>
@@ -351,17 +352,17 @@ function AboutUsPage() {
       <section id="our-journey" className={sectionClass}>
         <DecorativeBlob className="top-0 right-0 translate-x-1/3 -translate-y-1/3 opacity-20" />
         <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center min-h-0">
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl w-full flex flex-col justify-center py-8 lg:py-0">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-6">
             <div className="max-w-2xl">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
                 Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Journey</span>
               </h2>
-              <p className="text-lg text-white/80 mt-2">{ABOUT_CONSTANTS.journey.intro}</p>
+              <p className="text-sm sm:text-base lg:text-lg text-white/80 mt-2">{ABOUT_CONSTANTS.journey.intro}</p>
             </div>
-            <div className="text-right">
-              <div className="text-4xl sm:text-5xl font-bold text-accent font-sans">32+</div>
-              <div className="text-lg text-white/70 font-medium">Years of Excellence</div>
+            <div className="text-right shrink-0">
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-accent font-sans">32+</div>
+              <div className="text-sm sm:text-base text-white/70 font-medium">Years of Excellence</div>
             </div>
           </div>
           <HorizontalTimeline events={ABOUT_CONSTANTS.journey.events} />
@@ -375,37 +376,21 @@ function AboutUsPage() {
         <div className="flex-1 min-h-0 w-full h-full flex flex-col">
         <ScrollReveal direction="up" delay={0} className="h-full flex-1 min-h-0 flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full h-full min-h-0 flex-1">
-          <div className="flex flex-col justify-center px-6 sm:px-10 lg:pl-16 xl:pl-24 py-12 order-2 lg:order-1">
-            <div className="max-w-2xl mx-auto lg:mx-0 space-y-8">
-              <div className="card p-6 lg:p-8 relative">
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-8 lg:py-12 order-2 lg:order-1">
+            <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 lg:space-y-8">
+              <div className="card p-4 sm:p-6 lg:p-8 relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
-                <h2 className="relative z-10 text-2xl font-semibold text-white mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Mission</span></h2>
-                <p className="relative z-10 text-lg sm:text-xl text-white/80 leading-relaxed mb-4">
+                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Mission</span></h2>
+                <p className="relative z-10 text-xs sm:text-sm lg:text-base text-white/80 leading-relaxed">
                   {ABOUT_CONSTANTS.identity.mission}
                 </p>
-                {/* <ul className="relative z-10 text-base sm:text-lg text-white/70 flex flex-col gap-2">
-                  {ABOUT_CONSTANTS.identity.missionBullets.map((bullet, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="rounded-full w-2 h-2 flex-shrink-0 bg-cta" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul> */}
               </div>
-              <div className="card p-6 lg:p-8 relative">
+              <div className="card p-4 sm:p-6 lg:p-8 relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
-                <h2 className="relative z-10 text-2xl font-semibold text-white mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Vision</span></h2>
-                <p className="relative z-10 text-lg sm:text-xl text-white/80 leading-relaxed mb-4">
+                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Vision</span></h2>
+                <p className="relative z-10 text-xs sm:text-sm lg:text-base text-white/80 leading-relaxed">
                   {ABOUT_CONSTANTS.identity.vision}
                 </p>
-                {/* <ul className="relative z-10 text-base sm:text-lg text-white/70 flex flex-col gap-2">
-                  {ABOUT_CONSTANTS.identity.visionBullets.map((bullet, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="rounded-full w-2 h-2 flex-shrink-0 bg-cta" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul> */}
               </div>
             </div>
           </div>
@@ -426,29 +411,29 @@ function AboutUsPage() {
       {/* Core Strengths: Bento grid with col/row span */}
       <section id="core-strengths" className={sectionClass}>
         <DecorativeBlob className="-bottom-24 right-1/4 opacity-25" />
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex-1 flex flex-col justify-center py-8 min-h-0">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl w-full flex-1 flex flex-col justify-center py-8 min-h-0">
           <ScrollReveal direction="up" delay={0}>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-5">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
                 Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Strengths</span>
               </h2>
-              <p className="text-lg text-white/80 max-w-2xl mt-2">{ABOUT_CONSTANTS.coreStrengths.intro}</p>
+              <p className="text-sm sm:text-base text-white/80 max-w-2xl mt-2">{ABOUT_CONSTANTS.coreStrengths.intro}</p>
             </div>
-            <div className="text-right">
-              <div className="text-4xl sm:text-5xl font-bold text-secondary font-sans">6</div>
-              <div className="text-lg text-white/70 font-medium">Core Capabilities</div>
+            <div className="text-right shrink-0">
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary font-sans">6</div>
+              <div className="text-sm sm:text-base text-white/70 font-medium">Core Capabilities</div>
             </div>
           </div>
           </ScrollReveal>
           <div
-            className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-3 gap-4 w-full min-h-[50vh]"
-            style={{ gridAutoRows: 'minmax(140px, 1fr)' }}
+            className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 w-full"
+            style={{ gridAutoRows: 'minmax(100px, 1fr)' }}
           >
             {ABOUT_CONSTANTS.coreStrengths.items.map((strength, index) => (
-              <ScrollReveal key={strength.title} direction="up" delay={index * 0.1}>
+              <ScrollReveal key={strength.title} direction="up" delay={index * 0.08}>
               <div
-                className={`h-full min-h-[140px] ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
+                className={`h-full ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
               >
                 <StrengthCard
                   icon={strengthIcons[index]}
@@ -472,7 +457,7 @@ function AboutUsPage() {
       {/* Why Us: Bento grid with varying card sizes */}
       {/* <section id="why-us" className={sectionClass}>
         <DecorativeBlob className="-top-24 left-1/2 -translate-x-1/2 opacity-20" />
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center py-8">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl w-full flex flex-col justify-center py-8">
           <ScrollReveal direction="up" delay={0}>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
             <div>
@@ -507,50 +492,59 @@ function AboutUsPage() {
         </div>
       </section> */}
 
-      {/* Competitive Edge: decorative blob + stat */}
+      {/* Competitive Edge: image top 40% / text bottom 60% on mobile; image left 40% / text right 60% on desktop */}
       <section id="competitive-edge" className={sectionClass}>
         <DecorativeBlob className="bottom-0 left-0 -translate-x-1/4 translate-y-1/4 opacity-25" />
-        <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center min-h-0">
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center py-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans">
-                Competitive <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Edge</span>
-              </h2>
-              <p className="text-lg text-white/80 max-w-2xl mt-2">
-                {ABOUT_CONSTANTS.competitiveEdge.sectionSubtitle}
-              </p>
-            </div>
-            <div className="text-right">
-              <div className="text-4xl sm:text-5xl font-bold text-cta font-sans">5</div>
-              <div className="text-lg text-white/70 font-medium">Key Advantages</div>
-            </div>
+        <div className="grid grid-rows-[2fr_3fr] grid-cols-1 lg:grid-rows-none lg:grid-cols-[2fr_3fr] gap-0 w-full h-screen lg:h-full flex-1 min-h-0">
+          {/* Image — top 40% on mobile, left 40% on desktop */}
+          <div className="relative w-full overflow-hidden">
+            <img
+              src="/assets/abstracts/Abstract_web_background_minimalist_neural_network__delpmaspu.png"
+              alt="Advanced telecommunications network"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-primary/20 to-secondary/20 pointer-events-none" />
           </div>
-          <div className="card p-6 lg:p-8 max-w-4xl relative">
-            <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none z-0" aria-hidden />
-            <ul className="relative z-10 text-base sm:text-lg text-white/80 flex flex-col gap-4">
-              {ABOUT_CONSTANTS.competitiveEdge.items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="rounded-full w-2 h-2 flex-shrink-0 mt-2 bg-cta" />
-                  <span className="leading-relaxed">{item}</span>
-                </li>
-              ))}
-            </ul>
+          {/* Text — bottom 60% on mobile, right 60% on desktop */}
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-5 lg:py-12 overflow-y-auto">
+            <ScrollReveal direction="up" delay={0}>
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-6">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
+                    Competitive <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Edge</span>
+                  </h2>
+                  <p className="text-sm sm:text-base text-white/80 max-w-md mt-2">
+                    {ABOUT_CONSTANTS.competitiveEdge.sectionSubtitle}
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-cta font-sans">5</div>
+                  <div className="text-sm sm:text-base text-white/70 font-medium">Key Advantages</div>
+                </div>
+              </div>
+              <ul className="text-xs sm:text-sm lg:text-base text-white/80 flex flex-col gap-3">
+                {ABOUT_CONSTANTS.competitiveEdge.items.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="rounded-full w-1.5 h-1.5 sm:w-2 sm:h-2 flex-shrink-0 mt-1.5 sm:mt-2 bg-cta" />
+                    <span className="leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </ScrollReveal>
           </div>
         </div>
-        </ScrollReveal>
       </section>
 
       {/* CTA: decorative blob + stat */}
       <section id="cta" className={sectionClass}>
         <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
         <ScrollReveal direction="up" delay={0} className="w-full flex-1 flex flex-col justify-center items-center min-h-0">
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl w-full flex flex-col justify-center items-center text-center py-12">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl w-full flex flex-col justify-center items-center text-center py-12">
           <div className="max-w-2xl">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md mb-4 font-sans">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-md mb-3 lg:mb-4 font-sans">
               Ready to Learn More?
             </h2>
-            <p className="text-lg sm:text-xl text-white/95 drop-shadow-sm mb-8">
+            <p className="text-sm sm:text-base lg:text-lg text-white/95 drop-shadow-sm mb-5 lg:mb-8">
               {ABOUT_CONSTANTS.cta.body}
             </p>
             <Link

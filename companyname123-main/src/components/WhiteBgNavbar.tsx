@@ -61,12 +61,14 @@ const NavBar = styled.nav<{ $scrolled: boolean }>`
   left: 0;
   right: 0;
   z-index: 50;
-  background: ${props => props.$scrolled ? BRAND_COLORS.white : "transparent"};
-  backdrop-filter: ${props => props.$scrolled ? "blur(0px)" : "none"};
-  -webkit-backdrop-filter: ${props => props.$scrolled ? "blur(0px)" : "none"};
+  background: ${(props) =>
+    props.$scrolled ? BRAND_COLORS.white : "transparent"};
+  backdrop-filter: ${(props) => (props.$scrolled ? "blur(0px)" : "none")};
+  -webkit-backdrop-filter: ${(props) =>
+    props.$scrolled ? "blur(0px)" : "none"};
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: ${props => props.$scrolled ? "0.9375rem 0" : "0.5625rem 0"};
-  box-shadow: ${props => props.$scrolled ? "none" : "none"};
+  padding: ${(props) => (props.$scrolled ? "0.9375rem 0" : "0.5625rem 0")};
+  box-shadow: ${(props) => (props.$scrolled ? "none" : "none")};
 `;
 
 const NavContainer = styled.div`
@@ -88,21 +90,29 @@ const GlowLine = styled.div<{ $scrolled: boolean }>`
   width: 100%;
   height: 2px;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 200%;
     height: 100%;
-    background: linear-gradient(to right, transparent, #A6CE39, #7CCCBF, #44C8F5, transparent);
-    opacity: ${props => props.$scrolled ? 0 : 0.8};
+    background: linear-gradient(
+      to right,
+      transparent,
+      #a6ce39,
+      #7cccbf,
+      #44c8f5,
+      transparent
+    );
+    opacity: ${(props) => (props.$scrolled ? 0 : 0.8)};
     transition: opacity 0.5s ease;
-    animation: ${props => props.$scrolled ? 'none' : 'glowLine 5s linear infinite'};
+    animation: ${(props) =>
+      props.$scrolled ? "none" : "glowLine 5s linear infinite"};
     transform-origin: center;
   }
-  
+
   @keyframes glowLine {
     0% {
       transform: translateX(-50%);
@@ -117,10 +127,16 @@ const VerticalSeparator = styled.div<{ $scrolled: boolean }>`
   display: none;
   height: 1.5rem;
   width: 1px;
-  background: linear-gradient(to bottom, transparent, ${props => props.$scrolled ? BRAND_COLORS.primary : `${BRAND_COLORS.white}80`}, transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    ${(props) =>
+      props.$scrolled ? BRAND_COLORS.primary : `${BRAND_COLORS.white}80`},
+    transparent
+  );
   margin: 0 1.5rem;
-  
-  @media (min-width: 768px) {
+
+  @media (min-width: 1024px) {
     display: block;
   }
 `;
@@ -132,7 +148,7 @@ const NavLinks = styled.div`
   flex: 1;
   justify-content: center;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     display: none;
   }
 `;
@@ -152,7 +168,8 @@ const SupportLink = styled.p<{ $scrolled: boolean }>`
   display: flex;
   align-items: center;
   padding: 0.375rem 0.75rem;
-  color: ${props => props.$scrolled ? `${BRAND_COLORS.primary}CC` : BRAND_COLORS.white};
+  color: ${(props) =>
+    props.$scrolled ? `${BRAND_COLORS.primary}CC` : BRAND_COLORS.white};
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
   font-weight: 500;
@@ -177,7 +194,8 @@ const PhoneLink = styled.a<{ $scrolled: boolean }>`
   display: flex;
   align-items: center;
   padding: 0.375rem 0.75rem;
-  color: ${props => props.$scrolled ? `${BRAND_COLORS.primary}CC` : BRAND_COLORS.white};
+  color: ${(props) =>
+    props.$scrolled ? `${BRAND_COLORS.primary}CC` : BRAND_COLORS.white};
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
   font-weight: 500;
@@ -199,17 +217,21 @@ const PhoneLink = styled.a<{ $scrolled: boolean }>`
 `;
 
 const NavLink = styled(Link).withConfig({
-  shouldForwardProp: (prop) => !['isActive', 'hovered', '$scrolled'].includes(prop),
+  shouldForwardProp: (prop) =>
+    !["isActive", "hovered", "$scrolled"].includes(prop),
 })<{ isActive?: boolean; hovered?: boolean; $scrolled: boolean }>`
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
-  color: ${props => {
-    if (!props.$scrolled) return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
-    return props.isActive ? BRAND_COLORS.secondary : `${BRAND_COLORS.primary}CC`;
+  color: ${(props) => {
+    if (!props.$scrolled)
+      return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
+    return props.isActive
+      ? BRAND_COLORS.secondary
+      : `${BRAND_COLORS.primary}CC`;
   }};
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: ${props => props.isActive ? "600" : "500"};
+  font-weight: ${(props) => (props.isActive ? "600" : "500")};
   position: relative;
   padding: 0.46875rem 0.75rem;
   text-transform: uppercase;
@@ -222,14 +244,19 @@ const NavLink = styled(Link).withConfig({
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0.25rem;
     left: 50%;
-    transform: translateX(-50%) scaleX(${props => (props.isActive || props.hovered) ? 1 : 0});
+    transform: translateX(-50%)
+      scaleX(${(props) => (props.isActive || props.hovered ? 1 : 0)});
     width: calc(100% - 1rem);
     height: 2px;
-    background: linear-gradient(to right, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      to right,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     transform-origin: center;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 2px;
@@ -241,19 +268,23 @@ const NavItem = styled.div`
 `;
 
 const NavItemButton = styled.button.withConfig({
-  shouldForwardProp: (prop) => !['isActive', 'hovered', '$scrolled'].includes(prop),
+  shouldForwardProp: (prop) =>
+    !["isActive", "hovered", "$scrolled"].includes(prop),
 })<{ isActive?: boolean; hovered?: boolean; $scrolled: boolean }>`
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
-  color: ${props => {
-    if (!props.$scrolled) return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
-    return props.isActive ? BRAND_COLORS.secondary : `${BRAND_COLORS.primary}CC`;
+  color: ${(props) => {
+    if (!props.$scrolled)
+      return props.isActive ? BRAND_COLORS.secondary : BRAND_COLORS.white;
+    return props.isActive
+      ? BRAND_COLORS.secondary
+      : `${BRAND_COLORS.primary}CC`;
   }};
   background: transparent;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-weight: ${props => props.isActive ? "600" : "500"};
+  font-weight: ${(props) => (props.isActive ? "600" : "500")};
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -269,14 +300,19 @@ const NavItemButton = styled.button.withConfig({
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0.25rem;
     left: 50%;
-    transform: translateX(-50%) scaleX(${props => (props.isActive || props.hovered) ? 1 : 0});
+    transform: translateX(-50%)
+      scaleX(${(props) => (props.isActive || props.hovered ? 1 : 0)});
     width: calc(100% - 1rem);
     height: 2px;
-    background: linear-gradient(to right, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      to right,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     transform-origin: center;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 2px;
@@ -298,22 +334,28 @@ const DropdownMenu = styled(motion.div)`
   margin-top: 0.75rem;
   background: ${BRAND_COLORS.white};
   border-radius: 0.75rem;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.08);
   border: 1px solid ${BRAND_COLORS.whiteOpacity["20"]};
   min-width: 240px;
   z-index: 20;
   overflow: hidden;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(to right, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      to right,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
   }
 `;
 
@@ -336,15 +378,19 @@ const DropdownItem = styled(Link)`
   &:hover {
     color: ${BRAND_COLORS.secondary};
     padding-left: 1.5rem;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       top: 0;
       bottom: 0;
       width: 3px;
-      background: linear-gradient(to bottom, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+      background: linear-gradient(
+        to bottom,
+        ${BRAND_COLORS.secondary},
+        ${BRAND_COLORS.cta}
+      );
     }
   }
 `;
@@ -388,9 +434,34 @@ const DropdownSectionTitle = styled.div`
   margin-bottom: 0.1875rem;
 `;
 
+const DropdownSectionTitleLink = styled(Link)`
+  display: block;
+  padding: 0.375rem 0.75rem;
+  font-family: ${TYPOGRAPHY.heading};
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: ${BRAND_COLORS.primary};
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  opacity: 0.6;
+  border-bottom: 1px solid ${BRAND_COLORS.whiteOpacity["10"]};
+  margin-bottom: 0.1875rem;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    color: ${BRAND_COLORS.secondary};
+  }
+`;
+
 const NavButton = styled(Link)`
   padding: 0.46875rem 1.125rem;
-  background: linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+  background: linear-gradient(
+    135deg,
+    ${BRAND_COLORS.secondary},
+    ${BRAND_COLORS.cta}
+  );
   color: ${BRAND_COLORS.white};
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
@@ -411,20 +482,29 @@ const NavButton = styled(Link)`
   white-space: nowrap;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, ${BRAND_COLORS.cta}, ${BRAND_COLORS.secondary});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.cta},
+      ${BRAND_COLORS.secondary}
+    );
     opacity: 0;
     transition: opacity 0.3s ease;
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     height: 100%;
     width: 33.333%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
     transform: skewX(-12deg) translateX(-200%);
     transition: transform 0.8s ease-in-out;
   }
@@ -432,11 +512,11 @@ const NavButton = styled(Link)`
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px ${BRAND_COLORS.secondaryOpacity["20"]};
-    
+
     &::before {
       opacity: 1;
     }
-    
+
     &::after {
       transform: skewX(-12deg) translateX(400%);
     }
@@ -451,7 +531,7 @@ const NavButton = styled(Link)`
     position: relative;
     z-index: 1;
   }
-  
+
   span {
     position: relative;
     z-index: 1;
@@ -462,17 +542,19 @@ const MobileMenuButton = styled.button<{ $scrolled: boolean }>`
   display: none;
   background: ${BRAND_COLORS.whiteOpacity["10"]};
   border: 1px solid ${BRAND_COLORS.whiteOpacity["20"]};
-  color: ${props => props.$scrolled ? BRAND_COLORS.primary : BRAND_COLORS.white};
+  color: ${(props) =>
+    props.$scrolled ? BRAND_COLORS.primary : BRAND_COLORS.white};
   cursor: pointer;
   padding: 0.375rem;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 
   &:hover {
     color: ${BRAND_COLORS.secondary};
@@ -484,7 +566,7 @@ const MobileMenuButton = styled.button<{ $scrolled: boolean }>`
     transform: scale(0.95);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     display: flex;
   }
 `;
@@ -497,29 +579,41 @@ const MobileMenu = styled(motion.div)`
   right: 0;
   bottom: 0;
   width: 100%;
-  max-width: 22rem;
+  /* Full-width on phones, capped drawer on tablets */
+  max-width: 100vw;
   background: ${BRAND_COLORS.white};
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15), -8px 0 48px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    -4px 0 24px rgba(0, 0, 0, 0.15),
+    -8px 0 48px rgba(0, 0, 0, 0.1);
   z-index: 40;
   overflow-y: auto;
-  padding: 4.5rem 1.5rem 1.5rem;
+  -webkit-overflow-scrolling: touch;
+  padding: 5rem 1.5rem 2rem;
   gap: 0;
   border-left: 1px solid ${BRAND_COLORS.whiteOpacity["20"]};
 
-  @media (max-width: 767px) {
+  @media (min-width: 480px) {
+    max-width: 24rem;
+  }
+
+  @media (max-width: 1023px) {
     display: flex;
   }
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(to right, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      to right,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
   }
 `;
 
@@ -537,15 +631,16 @@ const MobileNavItem = styled.div`
 `;
 
 const MobileNavLink = styled(Link).withConfig({
-  shouldForwardProp: (prop) => prop !== 'isActive',
+  shouldForwardProp: (prop) => prop !== "isActive",
 })<{ isActive?: boolean }>`
   display: block;
   padding: 0.65625rem 0.9375rem;
   font-family: ${TYPOGRAPHY.body};
   font-size: 1rem;
-  color: ${props => props.isActive ? BRAND_COLORS.primary : `${BRAND_COLORS.primary}E6`};
+  color: ${(props) =>
+    props.isActive ? BRAND_COLORS.primary : `${BRAND_COLORS.primary}E6`};
   text-decoration: none;
-  font-weight: ${props => props.isActive ? "600" : "500"};
+  font-weight: ${(props) => (props.isActive ? "600" : "500")};
   text-transform: uppercase;
   letter-spacing: 0.05em;
   position: relative;
@@ -558,7 +653,9 @@ const MobileNavLink = styled(Link).withConfig({
     padding-left: 1.5rem;
   }
 
-  ${props => props.isActive && `
+  ${(props) =>
+    props.isActive &&
+    `
     background: ${BRAND_COLORS.secondaryOpacity["10"]};
     &::before {
       content: '';
@@ -647,8 +744,10 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
   // Check if we're on the homepage
-  const isHomePage = location.pathname === `${currentBasePath}/` || location.pathname === currentBasePath;
-  
+  const isHomePage =
+    location.pathname === `${currentBasePath}/` ||
+    location.pathname === currentBasePath;
+
   // Initialize scrolled state: false for homepage, true for all other pages
   const [scrolled, setScrolled] = useState(!isHomePage);
 
@@ -716,19 +815,36 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
             animate={{ opacity: 1, x: 0 }}
             style={{ display: "flex", alignItems: "center" }}
           >
-            <Link to={`${currentBasePath}/`} style={{ padding: "0.1875rem 0", display: "flex", alignItems: "center", justifyContent: "center", width: "14rem", transition: "opacity 0.3s ease" }} onMouseEnter={(e) => e.currentTarget.style.opacity = "0.8"} onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}>
+            <Link
+              to={`${currentBasePath}/`}
+              style={{
+                padding: "0.1875rem 0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "clamp(8rem, 30vw, 14rem)",
+                transition: "opacity 0.3s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            >
               <Logo
                 className="w-full h-full"
                 scrolled={scrolled}
-                textColorOverride={scrolled ? BRAND_COLORS.primary : BRAND_COLORS.white}
+                textColorOverride={
+                  scrolled ? BRAND_COLORS.primary : BRAND_COLORS.white
+                }
               />
             </Link>
           </motion.div>
           <VerticalSeparator $scrolled={scrolled} />
           <NavLinks>
-            <NavLink 
+            <NavLink
               to={`${currentBasePath}/`}
-              isActive={location.pathname === `${currentBasePath}/` || location.pathname === currentBasePath}
+              isActive={
+                location.pathname === `${currentBasePath}/` ||
+                location.pathname === currentBasePath
+              }
               hovered={hoverIndex === 0}
               $scrolled={scrolled}
               onMouseEnter={() => setHoverIndex(0)}
@@ -736,40 +852,45 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
             >
               Home
             </NavLink>
-          {/* About Us Dropdown */}
-          <NavItem
-            onMouseEnter={() => {
-              setOpenDropdown("about");
-              setHoverIndex(1);
-            }}
-            onMouseLeave={() => {
-              setOpenDropdown(null);
-              setHoverIndex(null);
-            }}
-          >
-            <NavItemButton
-              aria-expanded={openDropdown === "about"}
-              onClick={() => setOpenDropdown(openDropdown === "about" ? null : "about")}
-              isActive={location.pathname.startsWith(`${currentBasePath}/about`)}
-              hovered={hoverIndex === 1}
-              $scrolled={scrolled}
+            {/* About Us Dropdown */}
+            <NavItem
+              onMouseEnter={() => {
+                setOpenDropdown("about");
+                setHoverIndex(1);
+              }}
+              onMouseLeave={() => {
+                setOpenDropdown(null);
+                setHoverIndex(null);
+              }}
             >
-              About Us
-              <ChevronDown size={16} />
-            </NavItemButton>
-            <AnimatePresence>
-              {openDropdown === "about" && (
-                <DropdownMenu
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <DropdownItem to={`${currentBasePath}/about/overview`}>Overview</DropdownItem>
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#what-we-do`}>
-                    Company Identity
-                  </DropdownSubItem>
-                  {/* <DropdownSubItem to={`${currentBasePath}/about/overview#company-identity`}>
+              <NavItemButton
+                aria-expanded={openDropdown === "about"}
+                onClick={() =>
+                  setOpenDropdown(openDropdown === "about" ? null : "about")
+                }
+                isActive={location.pathname.startsWith(
+                  `${currentBasePath}/about/overview`,
+                )}
+                hovered={hoverIndex === 2}
+                $scrolled={scrolled}
+              >
+                About Us
+                <ChevronDown size={16} />
+              </NavItemButton>
+              <AnimatePresence>
+                {openDropdown === "about" && (
+                  <DropdownMenu
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <DropdownSubItem
+                      to={`${currentBasePath}/about/overview#what-we-do`}
+                    >
+                      Company Identity
+                    </DropdownSubItem>
+                    {/* <DropdownSubItem to={`${currentBasePath}/about/overview#company-identity`}>
                     - Company Identity
                   </DropdownSubItem>
                   <DropdownSubItem to={`${currentBasePath}/about/overview#value-proposition`}>
@@ -778,113 +899,151 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                   <DropdownSubItem to={`${currentBasePath}/about/overview#competitive-edge`}>
                     - Competitive Edge
                   </DropdownSubItem> */}
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#our-journey`}>
-                    Our Journey
-                  </DropdownSubItem>
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#vision-mission`}>
-                    Vision and Mission
-                  </DropdownSubItem>
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#core-strengths`}>
-                    Core Strengths
-                  </DropdownSubItem>
-                </DropdownMenu>
-              )}
-            </AnimatePresence>
-          </NavItem>
+                    <DropdownSubItem
+                      to={`${currentBasePath}/about/overview#our-journey`}
+                    >
+                      Our Journey
+                    </DropdownSubItem>
+                    <DropdownSubItem
+                      to={`${currentBasePath}/about/overview#vision-mission`}
+                    >
+                      Vision and Mission
+                    </DropdownSubItem>
+                    <DropdownSubItem
+                      to={`${currentBasePath}/about/overview#core-strengths`}
+                    >
+                      Core Strengths
+                    </DropdownSubItem>
+                  </DropdownMenu>
+                )}
+              </AnimatePresence>
+            </NavItem>
 
-          {/* What We Do Dropdown */}
-          <NavItem
-            onMouseEnter={() => {
-              setOpenDropdown("what-we-do");
-              setHoverIndex(2);
-            }}
-            onMouseLeave={() => {
-              setOpenDropdown(null);
-              setHoverIndex(null);
-            }}
-          >
-            <NavItemButton
-              aria-expanded={openDropdown === "what-we-do"}
-              onClick={() => setOpenDropdown(openDropdown === "what-we-do" ? null : "what-we-do")}
-              isActive={location.pathname.startsWith(`${currentBasePath}/what-we-do`)}
-              hovered={hoverIndex === 2}
-              $scrolled={scrolled}
+            {/* What We Do Dropdown */}
+            <NavItem
+              onMouseEnter={() => {
+                setOpenDropdown("what-we-do");
+                setHoverIndex(2);
+              }}
+              onMouseLeave={() => {
+                setOpenDropdown(null);
+                setHoverIndex(null);
+              }}
             >
-              Solutions
-              <ChevronDown size={16} />
-            </NavItemButton>
-            <AnimatePresence>
-              {openDropdown === "what-we-do" && (
-                <DropdownMenu
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ minWidth: "280px" }}
-                >
-                  <DropdownSection>
-                    <DropdownSectionTitle>Telecommunications</DropdownSectionTitle>
-                    <DropdownItem to={`${currentBasePath}/what-we-do/telecommunications`}>Overview</DropdownItem>
-                    <DropdownSubItem to={`${currentBasePath}/what-we-do/telecommunications#business-unit`}>
-                      Our Core Solutions
-                    </DropdownSubItem>
-                    <DropdownSubItem to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}>
-                      Service Standards
-                    </DropdownSubItem>
-                  </DropdownSection>
-                  <DropdownSection>
-                    <DropdownSectionTitle>Command & Control</DropdownSectionTitle>
-                    <DropdownItem to={`${currentBasePath}/what-we-do/command-control`}>Overview</DropdownItem>
-                    <DropdownSubItem to={`${currentBasePath}/what-we-do/command-control#core-solutions`}>
-                      Our Core Solutions
-                    </DropdownSubItem>
-                    <DropdownSubItem to={`${currentBasePath}/what-we-do/command-control#tech-stack`}>
-                      Technology Stack
-                    </DropdownSubItem>
-                    <DropdownSubItem to={`${currentBasePath}/what-we-do/command-control#industries-served`}>
-                      Industries We Serve
-                    </DropdownSubItem>
-                  </DropdownSection>
-                </DropdownMenu>
-              )}
-            </AnimatePresence>
-          </NavItem>
+              <NavItemButton
+                aria-expanded={openDropdown === "what-we-do"}
+                onClick={() =>
+                  setOpenDropdown(
+                    openDropdown === "what-we-do" ? null : "what-we-do",
+                  )
+                }
+                isActive={location.pathname.startsWith(
+                  `${currentBasePath}/what-we-do`,
+                )}
+                hovered={hoverIndex === 2}
+                $scrolled={scrolled}
+              >
+                Solutions
+                <ChevronDown size={16} />
+              </NavItemButton>
+              <AnimatePresence>
+                {openDropdown === "what-we-do" && (
+                  <DropdownMenu
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ minWidth: "280px" }}
+                  >
+                    <DropdownSection>
+                      <DropdownSectionTitleLink
+                        to={`${currentBasePath}/what-we-do/telecommunications`}
+                      >
+                        Telecommunications
+                      </DropdownSectionTitleLink>
+                      <DropdownSubItem
+                        to={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
+                      >
+                        Our Core Solutions
+                      </DropdownSubItem>
+                      <DropdownSubItem
+                        to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
+                      >
+                        Service Standards
+                      </DropdownSubItem>
+                    </DropdownSection>
+                    <DropdownSection>
+                      <DropdownSectionTitleLink
+                        to={`${currentBasePath}/what-we-do/command-control`}
+                      >
+                        Command & Control
+                      </DropdownSectionTitleLink>
+                      <DropdownSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#core-solutions`}
+                      >
+                        Our Core Solutions
+                      </DropdownSubItem>
+                      <DropdownSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#tech-stack`}
+                      >
+                        Technology Stack
+                      </DropdownSubItem>
+                      <DropdownSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#industries-served`}
+                      >
+                        Industries We Serve
+                      </DropdownSubItem>
+                    </DropdownSection>
+                  </DropdownMenu>
+                )}
+              </AnimatePresence>
+            </NavItem>
 
-          {/* Our Impact Dropdown */}
-          <NavItem
-            onMouseEnter={() => {
-              setOpenDropdown("our-impact");
-              setHoverIndex(3);
-            }}
-            onMouseLeave={() => {
-              setOpenDropdown(null);
-              setHoverIndex(null);
-            }}
-          >
-            <NavItemButton
-              aria-expanded={openDropdown === "our-impact"}
-              onClick={() => setOpenDropdown(openDropdown === "our-impact" ? null : "our-impact")}
-              isActive={location.pathname.startsWith(`${currentBasePath}/our-impact`)}
-              hovered={hoverIndex === 3}
-              $scrolled={scrolled}
+            {/* Our Impact Dropdown */}
+            <NavItem
+              onMouseEnter={() => {
+                setOpenDropdown("our-impact");
+                setHoverIndex(3);
+              }}
+              onMouseLeave={() => {
+                setOpenDropdown(null);
+                setHoverIndex(null);
+              }}
             >
-              Our Impact
-              <ChevronDown size={16} />
-            </NavItemButton>
-            <AnimatePresence>
-              {openDropdown === "our-impact" && (
-                <DropdownMenu
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <DropdownItem to={`${currentBasePath}/customers`}>Our Customers</DropdownItem>
-                  <DropdownItem to={`${currentBasePath}/partners`}>Our Partners</DropdownItem>
-                </DropdownMenu>
-              )}
-            </AnimatePresence>
-          </NavItem>
+              <NavItemButton
+                aria-expanded={openDropdown === "our-impact"}
+                onClick={() =>
+                  setOpenDropdown(
+                    openDropdown === "our-impact" ? null : "our-impact",
+                  )
+                }
+                isActive={location.pathname.startsWith(
+                  `${currentBasePath}/our-impact`,
+                )}
+                hovered={hoverIndex === 3}
+                $scrolled={scrolled}
+              >
+                Our Impact
+                <ChevronDown size={16} />
+              </NavItemButton>
+              <AnimatePresence>
+                {openDropdown === "our-impact" && (
+                  <DropdownMenu
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <DropdownItem to={`${currentBasePath}/customers`}>
+                      Our Customers
+                    </DropdownItem>
+                    <DropdownItem to={`${currentBasePath}/partners`}>
+                      Our Partners
+                    </DropdownItem>
+                  </DropdownMenu>
+                )}
+              </AnimatePresence>
+            </NavItem>
           </NavLinks>
           <RightNavSection>
             {/* SupportLink commented out for future use */}
@@ -901,32 +1060,35 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
               <span>Contact Us</span>
             </NavButton>
           </RightNavSection>
-        <MobileMenuButton $scrolled={scrolled} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          <AnimatePresence mode="wait">
-            {isMobileMenuOpen ? (
-              <motion.div
-                key="close"
-                initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
-                transition={{ duration: 0.2 }}
-              >
-                <X size={24} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="menu"
-                initial={{ opacity: 0, scale: 0.8, rotate: 90 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotate: -90 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Menu size={24} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </MobileMenuButton>
-      </NavContainer>
+          <MobileMenuButton
+            $scrolled={scrolled}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <AnimatePresence mode="wait">
+              {isMobileMenuOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <X size={24} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="menu"
+                  initial={{ opacity: 0, scale: 0.8, rotate: 90 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, rotate: -90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Menu size={24} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </MobileMenuButton>
+        </NavContainer>
       </NavBar>
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -946,163 +1108,303 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
               variants={menuVariants}
             >
               <MobileNavItem>
-                <MobileNavLink 
-                  to={`${currentBasePath}/`} 
+                <MobileNavLink
+                  to={`${currentBasePath}/`}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  isActive={location.pathname === `${currentBasePath}/` || location.pathname === currentBasePath}
+                  isActive={
+                    location.pathname === `${currentBasePath}/` ||
+                    location.pathname === currentBasePath
+                  }
                 >
                   Home
                 </MobileNavLink>
               </MobileNavItem>
 
-            {/* About Us Mobile */}
-            <MobileNavItem>
-              <MobileNavButton onClick={() => setOpenMobileMenu(openMobileMenu === "about" ? null : "about")}>
-                About Us
-                <ChevronDown size={16} style={{ transform: openMobileMenu === "about" ? "rotate(180deg)" : "rotate(0deg)" }} />
-              </MobileNavButton>
-              <AnimatePresence>
-                {openMobileMenu === "about" && (
-                  <MobileSubMenu
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
+              {/* About Us Mobile */}
+              <MobileNavItem>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <MobileNavLink
+                    to={`${currentBasePath}/about/overview`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    isActive={location.pathname.startsWith(
+                      `${currentBasePath}/about/overview`,
+                    )}
+                    style={{ flex: 1 }}
                   >
-                    <MobileSubItem to={`${currentBasePath}/about/overview`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Overview
-                    </MobileSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#what-we-do`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Company Identity
-                    </MobileSubSubItem>
-                    {/* <MobileSubSubItem to={`${currentBasePath}/about/overview#company-identity`} onClick={() => setIsMobileMenuOpen(false)}>
-                      - Company Identity
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#value-proposition`} onClick={() => setIsMobileMenuOpen(false)}>
-                      - Value Proposition
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#competitive-edge`} onClick={() => setIsMobileMenuOpen(false)}>
-                      - Competitive Edge
-                    </MobileSubSubItem> */}
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#our-journey`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Our Journey
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#vision-mission`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Vision and Mission
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/about/overview#core-strengths`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Core Strengths
-                    </MobileSubSubItem>
-                  </MobileSubMenu>
-                )}
-              </AnimatePresence>
-            </MobileNavItem>
+                    About Us
+                  </MobileNavLink>
+                  <button
+                    onClick={() =>
+                      setOpenMobileMenu(
+                        openMobileMenu === "about" ? null : "about",
+                      )
+                    }
+                    style={{
+                      padding: "0.65625rem 0.9375rem",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      color: `${BRAND_COLORS.primary}E6`,
+                      flexShrink: 0,
+                    }}
+                    aria-label="Toggle About Us submenu"
+                  >
+                    <ChevronDown
+                      size={16}
+                      style={{
+                        transform:
+                          openMobileMenu === "about"
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        transition: "transform 0.2s ease",
+                      }}
+                    />
+                  </button>
+                </div>
+                <AnimatePresence>
+                  {openMobileMenu === "about" && (
+                    <MobileSubMenu
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                    >
+                      <MobileSubItem
+                        to={`${currentBasePath}/about/overview#what-we-do`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Company Identity
+                      </MobileSubItem>
+                      <MobileSubItem
+                        to={`${currentBasePath}/about/overview#our-journey`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Our Journey
+                      </MobileSubItem>
+                      <MobileSubItem
+                        to={`${currentBasePath}/about/overview#vision-mission`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Vision and Mission
+                      </MobileSubItem>
+                      <MobileSubItem
+                        to={`${currentBasePath}/about/overview#core-strengths`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Core Strengths
+                      </MobileSubItem>
+                    </MobileSubMenu>
+                  )}
+                </AnimatePresence>
+              </MobileNavItem>
 
-            {/* What We Do Mobile */}
-            <MobileNavItem>
-              <MobileNavButton onClick={() => setOpenMobileMenu(openMobileMenu === "what-we-do" ? null : "what-we-do")}>
-                Solutions
-                <ChevronDown size={16} style={{ transform: openMobileMenu === "what-we-do" ? "rotate(180deg)" : "rotate(0deg)" }} />
-              </MobileNavButton>
-              <AnimatePresence>
-                {openMobileMenu === "what-we-do" && (
-                  <MobileSubMenu
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                  >
-                    <MobileSubItem to={`${currentBasePath}/what-we-do/telecommunications`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Telecommunications
-                    </MobileSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/what-we-do/telecommunications#business-unit`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Our Core Solutions
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Service Standards
-                    </MobileSubSubItem>
-                    <MobileSubItem to={`${currentBasePath}/what-we-do/command-control`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Command & Control
-                    </MobileSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/what-we-do/command-control#core-solutions`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Our Core Solutions
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/what-we-do/command-control#tech-stack`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Technology Stack
-                    </MobileSubSubItem>
-                    <MobileSubSubItem to={`${currentBasePath}/what-we-do/command-control#industries-served`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Industries We Serve
-                    </MobileSubSubItem>
-                  </MobileSubMenu>
-                )}
-              </AnimatePresence>
-            </MobileNavItem>
+              {/* What We Do Mobile */}
+              <MobileNavItem>
+                <MobileNavButton
+                  onClick={() =>
+                    setOpenMobileMenu(
+                      openMobileMenu === "what-we-do" ? null : "what-we-do",
+                    )
+                  }
+                >
+                  Solutions
+                  <ChevronDown
+                    size={16}
+                    style={{
+                      transform:
+                        openMobileMenu === "what-we-do"
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                    }}
+                  />
+                </MobileNavButton>
+                <AnimatePresence>
+                  {openMobileMenu === "what-we-do" && (
+                    <MobileSubMenu
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                    >
+                      <MobileSubItem
+                        to={`${currentBasePath}/what-we-do/telecommunications`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Telecommunications
+                      </MobileSubItem>
+                      <MobileSubSubItem
+                        to={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Our Core Solutions
+                      </MobileSubSubItem>
+                      <MobileSubSubItem
+                        to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Service Standards
+                      </MobileSubSubItem>
+                      <MobileSubItem
+                        to={`${currentBasePath}/what-we-do/command-control`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Command & Control
+                      </MobileSubItem>
+                      <MobileSubSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#core-solutions`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Our Core Solutions
+                      </MobileSubSubItem>
+                      <MobileSubSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#tech-stack`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Technology Stack
+                      </MobileSubSubItem>
+                      <MobileSubSubItem
+                        to={`${currentBasePath}/what-we-do/command-control#industries-served`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Industries We Serve
+                      </MobileSubSubItem>
+                    </MobileSubMenu>
+                  )}
+                </AnimatePresence>
+              </MobileNavItem>
 
-            {/* Our Impact Mobile */}
-            <MobileNavItem>
-              <MobileNavButton onClick={() => setOpenMobileMenu(openMobileMenu === "our-impact" ? null : "our-impact")}>
-                Our Impact
-                <ChevronDown size={16} style={{ transform: openMobileMenu === "our-impact" ? "rotate(180deg)" : "rotate(0deg)" }} />
-              </MobileNavButton>
-              <AnimatePresence>
-                {openMobileMenu === "our-impact" && (
-                  <MobileSubMenu
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                  >
-                    <MobileSubItem to={`${currentBasePath}/customers`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Our Customers
-                    </MobileSubItem>
-                    <MobileSubItem to={`${currentBasePath}/partners`} onClick={() => setIsMobileMenuOpen(false)}>
-                      Our Partners
-                    </MobileSubItem>
-                  </MobileSubMenu>
-                )}
-              </AnimatePresence>
-            </MobileNavItem>
-            <MobileNavItem style={{ marginTop: "1.125rem", paddingTop: "1.125rem", borderTop: `1px solid ${BRAND_COLORS.whiteOpacity["10"]}` }}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: 0.4 }}
+              {/* Our Impact Mobile */}
+              <MobileNavItem>
+                <MobileNavButton
+                  onClick={() =>
+                    setOpenMobileMenu(
+                      openMobileMenu === "our-impact" ? null : "our-impact",
+                    )
+                  }
+                >
+                  Our Impact
+                  <ChevronDown
+                    size={16}
+                    style={{
+                      transform:
+                        openMobileMenu === "our-impact"
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                    }}
+                  />
+                </MobileNavButton>
+                <AnimatePresence>
+                  {openMobileMenu === "our-impact" && (
+                    <MobileSubMenu
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                    >
+                      <MobileSubItem
+                        to={`${currentBasePath}/customers`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Our Customers
+                      </MobileSubItem>
+                      <MobileSubItem
+                        to={`${currentBasePath}/partners`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Our Partners
+                      </MobileSubItem>
+                    </MobileSubMenu>
+                  )}
+                </AnimatePresence>
+              </MobileNavItem>
+              <MobileNavItem
+                style={{
+                  marginTop: "1.25rem",
+                  paddingTop: "1.25rem",
+                  borderTop: `1px solid ${BRAND_COLORS.blackOpacity["10"]}`,
+                }}
               >
-                <Link
-                  to={`${currentBasePath}/contact`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ delay: 0.35 }}
                   style={{
-                    width: "100%",
-                    padding: "0.5625rem 0.75rem",
-                    backgroundColor: BRAND_COLORS.secondary,
-                    color: BRAND_COLORS.white,
-                    borderRadius: "0.5rem",
-                    fontFamily: TYPOGRAPHY.body,
-                    fontSize: "1rem",
-                    fontWeight: 500,
-                    textDecoration: "none",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    transition: "all 0.3s ease",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.025em",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
+                    flexDirection: "column",
+                    gap: "0.75rem",
                   }}
                 >
-                  <Mail size={18} style={{ marginRight: "0.5rem" }} />
-                  Contact Us
-                </Link>
-              </motion.div>
-            </MobileNavItem>
-            <div style={{ marginTop: "2rem", textAlign: "center" }}>
-              <Logo className="h-12 w-24 mx-auto opacity-70" />
-            </div>
-          </MobileMenu>
-        </>
+                  {/* Phone */}
+                  <a
+                    href="tel:+1234567890"
+                    style={{
+                      width: "100%",
+                      padding: "0.625rem 0.75rem",
+                      backgroundColor: `${BRAND_COLORS.primary}0D`,
+                      border: `1px solid ${BRAND_COLORS.primary}1A`,
+                      color: BRAND_COLORS.primary,
+                      borderRadius: "0.5rem",
+                      fontFamily: TYPOGRAPHY.body,
+                      fontSize: "0.9375rem",
+                      fontWeight: 500,
+                      textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.5rem",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    <Phone size={16} />
+                    +1 (234) 567-890
+                  </a>
+
+                  {/* Contact CTA */}
+                  <Link
+                    to={`${currentBasePath}/contact`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      width: "100%",
+                      padding: "0.625rem 0.75rem",
+                      background: `linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta})`,
+                      color: BRAND_COLORS.white,
+                      borderRadius: "0.5rem",
+                      fontFamily: TYPOGRAPHY.body,
+                      fontSize: "0.9375rem",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.5rem",
+                      transition: "all 0.3s ease",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                    }}
+                  >
+                    <Mail size={16} />
+                    Contact Us
+                  </Link>
+                </motion.div>
+              </MobileNavItem>
+
+              {/* Logo watermark at bottom */}
+              <div
+                style={{
+                  marginTop: "2rem",
+                  paddingTop: "1.5rem",
+                  borderTop: `1px solid ${BRAND_COLORS.blackOpacity["10"]}`,
+                  textAlign: "center",
+                }}
+              >
+                <Logo className="h-10 w-auto mx-auto opacity-40" />
+              </div>
+            </MobileMenu>
+          </>
         )}
       </AnimatePresence>
     </>

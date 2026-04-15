@@ -69,14 +69,14 @@ const ContactFooter: React.FC = () => {
               
               {/* Phone */}
               <motion.a
-                href="tel:+15551234567"
+                href="tel:+966110000000"
                 whileHover={{ y: -3, transition: { duration: 0.2 } }}
                 className="bg-transparent border border-white/10 rounded-lg p-4 flex items-center justify-center space-x-3 hover:border-white/30 transition-colors duration-300"
               >
                 <div className="w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center">
                   <Phone className="h-4 w-4 text-cta" />
                 </div>
-                <span className="text-white text-sm">+1 (555) 123-4567</span>
+                <span className="text-white text-sm">+966 11 000 0000</span>
               </motion.a>
               
               {/* Location */}
@@ -88,7 +88,7 @@ const ContactFooter: React.FC = () => {
                 <div className="w-8 h-8 rounded-full bg-transparent border border-white/20 flex items-center justify-center">
                   <MapPin className="h-4 w-4 text-cta" />
                 </div>
-                <span className="text-white text-sm">123 Tech Street, Innovation City</span>
+                <span className="text-white text-sm">Riyadh, Saudi Arabia</span>
               </motion.a>
             </div>
             

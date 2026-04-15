@@ -71,14 +71,21 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
       isHoveringRef.current = false;
     };
 
+    const handleTouchStart = () => { isHoveringRef.current = true; };
+    const handleTouchEnd = () => { isHoveringRef.current = false; };
+
     container.addEventListener('mouseenter', handleMouseEnter);
     container.addEventListener('mouseleave', handleMouseLeave);
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     frameId = window.requestAnimationFrame(step);
 
     return () => {
       container.removeEventListener('mouseenter', handleMouseEnter);
       container.removeEventListener('mouseleave', handleMouseLeave);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
       window.cancelAnimationFrame(frameId);
     };
   }, [events.length]);
@@ -121,6 +128,10 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
         }
       `}</style>
       <div className={`w-full ${className}`}>
+      {/* Swipe hint — mobile only */}
+      <p className="flex sm:hidden items-center justify-center gap-1.5 text-xs text-white/40 mb-2 select-none" aria-hidden>
+        <span>←</span> swipe to explore <span>→</span>
+      </p>
       {/* Timeline Container with horizontal scroll on mobile */}
       <div
         ref={scrollContainerRef}
@@ -161,7 +172,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="relative flex-shrink-0 group"
-                  style={{ width: 'clamp(200px, 20vw, 280px)' }}
+                  style={{ width: 'clamp(160px, 48vw, 280px)' }}
                 >
                   {/* Content Card - Alternating positions on desktop */}
                   <div

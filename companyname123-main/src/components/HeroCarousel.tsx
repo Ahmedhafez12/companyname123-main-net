@@ -91,24 +91,6 @@ const slides: Slide[] = [
   },
 ];
 
-// Styled Components
-const HeroSection = styled.section`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: clamp(5rem, 10vh, 6rem);
-
-  /* Fix for iOS Safari 100vh issue */
-  @supports (-webkit-touch-callout: none) {
-    min-height: -webkit-fill-available;
-  }
-`;
-
 /* Extend background to cover padding and any viewport gap so no section background shows at top/bottom */
 const SlideContainer = styled.div`
   position: absolute;
@@ -201,23 +183,31 @@ const GlassCard = styled(motion.div)`
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid ${BRAND_COLORS.primaryOpacity["40"]};
   border-radius: 1.5rem;
-  padding: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1.25rem, 4vw, 3.5rem);
   max-width: 42rem;
   width: 100%;
   box-shadow: 0 8px 32px 0 ${BRAND_COLORS.primaryOpacity["40"]};
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(0.875rem, 2vw, 1.5rem);
   overflow: hidden;
   word-wrap: break-word;
   hyphens: none;
   -webkit-hyphens: none;
   position: relative;
+
+  @media (max-width: 639px) {
+    border-radius: 0.875rem;
+    max-width: 100%;
+    margin: 0 0.75rem;
+    /* Slightly transparent so background shows atmosphere */
+    background: rgba(0, 50, 90, 0.72);
+  }
 `;
 
 const SlideTitle = styled(motion.h1)`
   font-family: ${TYPOGRAPHY.heading};
-  font-size: clamp(2rem, 4vw + 0.75rem, 3.5rem);
+  font-size: clamp(1.375rem, 4vw + 0.5rem, 3.5rem);
   font-weight: 700;
   color: ${BRAND_COLORS.white};
   margin: 0;
@@ -263,7 +253,7 @@ const SlideDepartment = styled(motion.div)<{ $color: string }>`
 
 const SlideSubline = styled(motion.p)`
   font-family: ${TYPOGRAPHY.body};
-  font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.25rem);
   color: ${BRAND_COLORS.whiteOpacity["80"]};
   margin: 0;
   line-height: 1.6;
@@ -271,6 +261,14 @@ const SlideSubline = styled(motion.p)`
   overflow-wrap: break-word;
   hyphens: none;
   -webkit-hyphens: none;
+
+  @media (max-width: 639px) {
+    /* Clamp to 2 lines on very small screens */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 `;
 
 const CTAButtonWrapper = styled(motion.div)`
@@ -325,16 +323,40 @@ const ProgressContainer = styled.div`
   }
 `;
 
+/* Outer element is the 44px tap/keyboard target; inner track holds the visual 3px bar */
 const ProgressBar = styled.div<{ $isActive: boolean }>`
   width: 60px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+  }
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.75);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 640px) {
+    width: 40px;
+  }
+`;
+
+const ProgressBarTrack = styled.div<{ $isActive: boolean }>`
+  width: 100%;
   height: 3px;
   background: ${props => props.$isActive ? BRAND_COLORS.whiteOpacity["30"] : BRAND_COLORS.whiteOpacity["10"]};
   border-radius: 2px;
   overflow: hidden;
   position: relative;
+  pointer-events: none;
 
   @media (max-width: 640px) {
-    width: 40px;
     height: 2px;
   }
 `;
@@ -359,7 +381,31 @@ const BannerWrapper = styled.div`
   padding: 0;
 
   @media (max-width: 640px) {
-    bottom: 3rem;
+    bottom: 2.75rem;
+  }
+`;
+
+const HeroSection = styled.section`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: clamp(4rem, 10vh, 6rem);
+  padding-bottom: clamp(5rem, 12vh, 7rem); /* reserve space for banner + progress */
+
+  /* Fix for iOS Safari 100vh issue */
+  @supports (-webkit-touch-callout: none) {
+    min-height: -webkit-fill-available;
+  }
+
+  @media (max-width: 639px) {
+    align-items: flex-start;
+    padding-top: clamp(4.5rem, 14vw, 5.5rem);
+    padding-bottom: 6.5rem;
   }
 `;
 
@@ -549,20 +595,21 @@ const HeroCarousel = () => {
             aria-selected={index === currentSlide}
             aria-label={`Go to slide ${index + 1}: ${slide.title}`}
             tabIndex={0}
-            style={{ cursor: "pointer" }}
           >
-            {index === currentSlide && (
-              <ProgressFill
-                key={`progress-${index}-${key}`}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{
-                  duration: slideDuration / 1000,
-                  ease: "linear",
-                }}
-                aria-hidden="true"
-              />
-            )}
+            <ProgressBarTrack $isActive={index === currentSlide}>
+              {index === currentSlide && (
+                <ProgressFill
+                  key={`progress-${index}-${key}`}
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{
+                    duration: slideDuration / 1000,
+                    ease: "linear",
+                  }}
+                  aria-hidden="true"
+                />
+              )}
+            </ProgressBarTrack>
           </ProgressBar>
         ))}
       </ProgressContainer>
@@ -571,4 +618,3 @@ const HeroCarousel = () => {
 };
 
 export default HeroCarousel;
-

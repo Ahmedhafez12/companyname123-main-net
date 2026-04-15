@@ -291,29 +291,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem 0;
+    /* No bottom padding — sections snap cleanly; content manages its own spacing */
     scroll-snap-align: start;
     scroll-snap-stop: always;
     padding-top: max(4rem, env(safe-area-inset-top));
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 767px) {
     .snap-section {
-      padding: 5rem 1rem;
-      min-height: auto;
-      padding-top: max(5rem, env(safe-area-inset-top));
-    }
-
-    /* Improve tap targets */
-    .btn-primary,
-    .btn-secondary {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-    }
-
-    /* Adjust card padding */
-    .card {
-      padding: 1rem;
+      height: auto;
+      /* Let content drive height on mobile — no forced viewport minimum */
+      min-height: 0;
+      padding: 0;
+      padding-top: max(4.5rem, env(safe-area-inset-top));
+      /* No bottom padding — sections should butt up against each other */
+      align-items: flex-start;
+      /* Start content at top so centering doesn't create empty space below short content */
+      justify-content: flex-start;
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
     }
   }
 
@@ -362,6 +358,127 @@
     @apply w-full px-3 sm:px-4 py-2.5 rounded-lg bg-transparent border-white/20 border text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-[#44C8F5] focus:border-transparent transition-all duration-300 font-body;
   }
 }
+
+/* ─────────────────────────────────────────────
+   MOBILE-FIRST RESPONSIVE OVERRIDES
+   ───────────────────────────────────────────── */
+
+/* On mobile/tablet: disable mandatory snap so sections can scroll naturally */
+@media (max-width: 767px) {
+  .scroll-snap-page {
+    scroll-snap-type: none !important;
+    overflow-y: auto;
+    height: auto !important;
+  }
+  /* Each snap section becomes auto height on mobile — content drives height, no forced min */
+  .snap-section {
+    height: auto !important;
+    min-height: 0 !important;
+    justify-content: flex-start !important;
+    padding-top: max(4.5rem, env(safe-area-inset-top)) !important;
+    padding-bottom: 0 !important;
+  }
+  /* Allow sections to stack normally */
+  .scroll-snap-page section {
+    scroll-snap-align: none;
+  }
+  /* Collapse the 400vh GSAP pin spacer to one viewport height on mobile
+     so users don't scroll through an empty black canvas zone */
+  .network-hero-canvas-section {
+    height: 100svh !important;
+  }
+}
+
+/* Hero carousel and company teaser are full-bleed on every breakpoint.
+   Their inner components manage navbar clearance themselves, so the outer
+   snap-section padding-top would only create a transparent strip (gap) above
+   them when snapped-to or stacked. Remove it on all devices. */
+section#hero.snap-section,
+section#about-cta.snap-section {
+  padding-top: 0 !important;
+}
+
+/* Tablet (768–1023): re-enable proximity snapping */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scroll-snap-page {
+    scroll-snap-type: y proximity;
+  }
+  .snap-section {
+    min-height: 100svh;
+  }
+}
+
+/* Hide scroll indicator on mobile — it sits on top of content */
+@media (max-width: 767px) {
+  .hero-scroll-indicator {
+    display: none !important;
+  }
+}
+
+/* Orbital contact grid: stack form on top of contact nodes on mobile/tablet */
+@media (max-width: 767px) {
+  .orbital-contact-grid {
+    grid-template-columns: 1fr !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  /* Watermark is too large on mobile */
+  .orbital-watermark {
+    font-size: clamp(3rem, 20vw, 6rem) !important;
+  }
+}
+
+/* Service cards: 1 col mobile, 2 col tablet, grid on desktop */
+@media (max-width: 639px) {
+  .services-card-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .services-card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Hero Carousel glass card: full-width on mobile, contained on desktop */
+@media (max-width: 639px) {
+  .hero-glass-card {
+    max-width: 100% !important;
+    border-radius: 0.75rem !important;
+    padding: 1.5rem !important;
+  }
+}
+
+/* Company teaser: stack vertically on mobile, equal split on tablet */
+@media (max-width: 767px) {
+  .teaser-image-col {
+    min-height: 50vw !important;
+    max-height: 260px !important;
+  }
+}
+
+/* Explore More button: hidden on mobile */
+@media (max-width: 767px) {
+  .explore-more-btn {
+    display: none !important;
+  }
+}
+
+@keyframes orbital-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Animate orbital float only when not reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-orbital-float {
+    animation: orbital-float 5s ease-in-out infinite;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   END MOBILE-FIRST OVERRIDES
+   ───────────────────────────────────────────── */
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-hide::-webkit-scrollbar {

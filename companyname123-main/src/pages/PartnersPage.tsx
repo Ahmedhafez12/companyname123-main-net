@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Handshake, Users, Globe, Trophy, ArrowRight, Shield, Lightning, Target } from 'phosphor-react';
+import { Link } from 'react-router-dom';
 import KeyCustomersBanner from '../components/KeyCustomersBanner';
 import Footer from '../components/Footer';
 
@@ -100,7 +101,7 @@ function PartnersPage() {
           paddingBottom: 'clamp(2rem, 4vh, 4rem)',
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 w-full max-w-6xl">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
 
           {/* Eyebrow */}
           <motion.div
@@ -139,12 +140,12 @@ function PartnersPage() {
             variants={fadeUp} initial="hidden" animate="show" custom={3}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8"
           >
-            <button className="btn-primary inline-flex items-center gap-2 group">
-              <span><a href="/contact">Become a Partner</a></span>
+            <Link to="/contact" className="btn-primary inline-flex items-center gap-2 group">
+              <span>Become a Partner</span>
               <div className="transform group-hover:translate-x-1 transition-transform duration-300">
                 <ArrowRight weight="thin" size={20} />
               </div>
-            </button>
+            </Link>
             <a
               href="#partner-types"
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold text-white border border-white/20 hover:border-white/40 transition-colors duration-300"
@@ -174,7 +175,7 @@ function PartnersPage() {
 
       {/* ═══════════════ KEY PARTNERS BANNER ═══════════════ */}
       <section className="relative py-10 border-t border-white/10">
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
           <p className="text-center text-xs tracking-[0.15em] uppercase text-white/30 mb-8">
             Our global partner network
           </p>
@@ -183,8 +184,8 @@ function PartnersPage() {
       </section>
 
       {/* ═══════════════ PARTNERSHIP TYPES ═══════════════ */}
-      <section id="partner-types" className="relative py-24 px-4 sm:px-6">
-        <div className="container mx-auto max-w-6xl">
+      <section id="partner-types" className="relative py-24 px-4 sm:px-6 xl:px-8">
+        <div className="container mx-auto max-w-7xl">
 
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -236,8 +237,8 @@ function PartnersPage() {
       </section>
 
       {/* ═══════════════ HOW IT WORKS ═══════════════ */}
-      <section className="relative py-20 px-4 sm:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-6xl">
+      <section className="relative py-20 px-4 sm:px-6 xl:px-8 border-t border-white/10">
+        <div className="container mx-auto max-w-7xl">
 
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -270,7 +271,7 @@ function PartnersPage() {
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="relative py-24 px-4 sm:px-6">
+      <section className="relative py-24 px-4 sm:px-6 xl:px-8">
         <div className="container mx-auto max-w-3xl">
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -288,12 +289,12 @@ function PartnersPage() {
             <p className="text-white/60 max-w-md mx-auto mb-8 leading-relaxed">
               Join 200+ active partners across 50+ countries and unlock new opportunities in telecommunications.
             </p>
-            <button className="btn-primary inline-flex items-center gap-2 group">
-              <span><a href="/contact">Apply Now</a></span>
+            <Link to="/contact" className="btn-primary inline-flex items-center gap-2 group">
+              <span>Apply Now</span>
               <div className="transform group-hover:translate-x-1 transition-transform duration-300">
                 <ArrowRight weight="thin" size={20} />
               </div>
-            </button>
+            </Link>
           </motion.div>
         </div>
       </section>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   Buildings,
   GlobeHemisphereWest,
@@ -129,7 +130,7 @@ function CustomersPage() {
           paddingBottom: 'clamp(2rem, 4vh, 4rem)',
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 w-full max-w-6xl">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
 
           {/* Eyebrow */}
           <motion.div
@@ -184,7 +185,7 @@ function CustomersPage() {
 
       {/* ═══════════════ KEY CUSTOMERS BANNER ═══════════════ */}
       <section className="relative py-10 border-t border-white/10">
-        <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
           <p className="text-center text-xs tracking-[0.15em] uppercase text-white/30 mb-8">
             Trusted by industry leaders worldwide
           </p>
@@ -193,8 +194,8 @@ function CustomersPage() {
       </section>
 
       {/* ═══════════════ CASE STUDY CARDS ═══════════════ */}
-      <section className="relative py-24 px-4 sm:px-6">
-        <div className="container mx-auto max-w-6xl">
+      <section className="relative py-24 px-4 sm:px-6 xl:px-8">
+        <div className="container mx-auto max-w-7xl">
 
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -227,7 +228,7 @@ function CustomersPage() {
                       className="w-14 h-14 rounded-xl object-cover flex-shrink-0 border border-white/10"
                     />
                     <div className="flex-1 min-w-0">
-                      <span className="inline-block text-[10px] font-semibold tracking-widest uppercase text-[#44C8F5] bg-[#44C8F5]/10 rounded-full px-3 py-1 mb-2">
+                      <span className="inline-block text-xs font-semibold tracking-widest uppercase text-[#44C8F5] bg-[#44C8F5]/10 rounded-full px-3 py-1 mb-2">
                         {c.tag}
                       </span>
                       <h3 className="text-white font-bold text-lg leading-tight">{c.name}</h3>
@@ -258,8 +259,8 @@ function CustomersPage() {
       </section>
 
       {/* ═══════════════ SUCCESS METRICS ═══════════════ */}
-      <section className="relative py-20 px-4 sm:px-6 border-t border-white/10">
-        <div className="container mx-auto max-w-6xl">
+      <section className="relative py-20 px-4 sm:px-6 xl:px-8 border-t border-white/10">
+        <div className="container mx-auto max-w-7xl">
 
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -294,7 +295,7 @@ function CustomersPage() {
       </section>
 
       {/* ═══════════════ CTA ═══════════════ */}
-      <section className="relative py-24 px-4 sm:px-6">
+      <section className="relative py-24 px-4 sm:px-6 xl:px-8">
         <div className="container mx-auto max-w-3xl">
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -312,12 +313,12 @@ function CustomersPage() {
             <p className="text-white/60 max-w-md mx-auto mb-8 leading-relaxed">
               Join over 500 enterprises who have already partnered with Hajz to accelerate their digital future.
             </p>
-            <button className="btn-primary inline-flex items-center gap-2 group">
-              <span><a href="/contact">Get Started</a></span>
+            <Link to="/contact" className="btn-primary inline-flex items-center gap-2 group">
+              <span>Get Started</span>
               <div className="transform group-hover:translate-x-1 transition-transform duration-300">
                 <ArrowRight weight="thin" size={20} />
               </div>
-            </button>
+            </Link>
           </motion.div>
         </div>
       </section>

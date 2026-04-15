@@ -81,7 +81,7 @@ function ContactPage() {
           paddingBottom: 'clamp(2rem, 4vh, 4rem)'
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 w-full">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

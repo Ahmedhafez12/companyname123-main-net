@@ -1,6 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Lightning, WifiHigh, Cloud, ShareNetwork, Shield, Database, HardDrives, Cpu, Globe, Rocket, Monitor, Code, GridFour, Brain, Envelope, Phone, MapPin, TwitterLogo, LinkedinLogo, InstagramLogo } from "phosphor-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Lightning,
+  WifiHigh,
+  Cloud,
+  ShareNetwork,
+  Shield,
+  Database,
+  HardDrives,
+  Cpu,
+  Globe,
+  Rocket,
+  Monitor,
+  Code,
+  GridFour,
+  Brain,
+  Envelope,
+  Phone,
+  MapPin,
+  TwitterLogo,
+  LinkedinLogo,
+  InstagramLogo,
+} from "phosphor-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ContactSection from "../components/ContactSection";
@@ -97,12 +120,52 @@ export type ServiceItem = {
 };
 
 export const SERVICES: ServiceItem[] = [
-  { id: "system-integration", title: "System Integration", description: "Solutions that fit your network and support digital transformation.", iconName: "WifiHigh", href: "/solutions" },
-  { id: "connectivity-transmission", title: "Connectivity and Transmission", description: "Intelligent gateways that transform infrastructure into competitive advantage.", iconName: "Cloud", href: "/solutions" },
-  { id: "unified-communication", title: "Unified Communication", description: "Bridge legacy and cloud for seamless collaboration.", iconName: "ShareNetwork", href: "/solutions" },
-  { id: "access-lan-osp", title: "Access LAN and OSP", description: "Complete connectivity from fiber to Wi-Fi.", iconName: "Shield", href: "/solutions" },
-  { id: "control-room-software", title: "Control Room & Software", description: "Ergonomic operations and custom software with intuitive interfaces.", iconName: "Monitor", href: "/what-we-do/command-control" },
-  { id: "video-walls-infrastructure", title: "Video Walls & Infrastructure", description: "High-resolution video walls and flexible server infrastructure for scale.", iconName: "GridFour", href: "/what-we-do/command-control" },
+  {
+    id: "system-integration",
+    title: "System Integration",
+    description:
+      "Solutions that fit your network and support digital transformation.",
+    iconName: "WifiHigh",
+    href: "/solutions",
+  },
+  {
+    id: "connectivity-transmission",
+    title: "Connectivity and Transmission",
+    description:
+      "Intelligent gateways that transform infrastructure into competitive advantage.",
+    iconName: "Cloud",
+    href: "/solutions",
+  },
+  {
+    id: "unified-communication",
+    title: "Unified Communication",
+    description: "Bridge legacy and cloud for seamless collaboration.",
+    iconName: "ShareNetwork",
+    href: "/solutions",
+  },
+  {
+    id: "access-lan-osp",
+    title: "Access LAN and OSP",
+    description: "Complete connectivity from fiber to Wi-Fi.",
+    iconName: "Shield",
+    href: "/solutions",
+  },
+  {
+    id: "control-room-software",
+    title: "Control Room & Software",
+    description:
+      "Ergonomic operations and custom software with intuitive interfaces.",
+    iconName: "Monitor",
+    href: "/what-we-do/command-control",
+  },
+  {
+    id: "video-walls-infrastructure",
+    title: "Video Walls & Infrastructure",
+    description:
+      "High-resolution video walls and flexible server infrastructure for scale.",
+    iconName: "GridFour",
+    href: "/what-we-do/command-control",
+  },
 ];
 
 // --- Customers (id, name, logoUrl, industry, slug) ---
@@ -115,28 +178,99 @@ export type CustomerItem = {
 };
 
 export const CUSTOMERS: CustomerItem[] = [
-  { id: "stc", name: "STC", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg", industry: "Telecommunications", slug: "stc" },
-  { id: "bt", name: "BT", logoUrl: "https://static.cdnlogo.com/logos/b/58/bt-3.svg", industry: "Telecommunications", slug: "bt" },
-  { id: "ericsson", name: "Ericsson", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png", industry: "Technology", slug: "ericsson" },
-  { id: "hp", name: "HP", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png", industry: "Technology", slug: "hp" },
-  { id: "microsoft", name: "Microsoft", logoUrl: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png", industry: "Technology", slug: "microsoft" },
-  { id: "nokia", name: "Nokia", logoUrl: "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg", industry: "Telecommunications", slug: "nokia" },
-  { id: "citibank", name: "Citibank", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Citi.svg", industry: "Financial Services", slug: "citibank" },
-  { id: "ibm", name: "IBM", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg", industry: "Technology", slug: "ibm" },
-  { id: "oracle", name: "Oracle", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg", industry: "Technology", slug: "oracle" },
-  { id: "xerox", name: "Xerox", logoUrl: "https://upload.wikimedia.org/wikipedia/commons/6/68/Xerox_logo.svg", industry: "Technology", slug: "xerox" },
+  {
+    id: "stc",
+    name: "STC",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg",
+    industry: "Telecommunications",
+    slug: "stc",
+  },
+  {
+    id: "bt",
+    name: "BT",
+    logoUrl: "https://static.cdnlogo.com/logos/b/58/bt-3.svg",
+    industry: "Telecommunications",
+    slug: "bt",
+  },
+  {
+    id: "ericsson",
+    name: "Ericsson",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png",
+    industry: "Technology",
+    slug: "ericsson",
+  },
+  {
+    id: "hp",
+    name: "HP",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png",
+    industry: "Technology",
+    slug: "hp",
+  },
+  {
+    id: "microsoft",
+    name: "Microsoft",
+    logoUrl: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png",
+    industry: "Technology",
+    slug: "microsoft",
+  },
+  {
+    id: "nokia",
+    name: "Nokia",
+    logoUrl: "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg",
+    industry: "Telecommunications",
+    slug: "nokia",
+  },
+  {
+    id: "citibank",
+    name: "Citibank",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Citi.svg",
+    industry: "Financial Services",
+    slug: "citibank",
+  },
+  {
+    id: "ibm",
+    name: "IBM",
+    logoUrl: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg",
+    industry: "Technology",
+    slug: "ibm",
+  },
+  {
+    id: "oracle",
+    name: "Oracle",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg",
+    industry: "Technology",
+    slug: "oracle",
+  },
+  {
+    id: "xerox",
+    name: "Xerox",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/6/68/Xerox_logo.svg",
+    industry: "Technology",
+    slug: "xerox",
+  },
 ];
 
 // --- Featured Customer (for pull-quote card below logo grid) ---
 const FEATURED_CUSTOMER = {
-  quote: "Our mission is simple: to provide the reliable, high-performance infrastructure you need to stay ahead. As the industry evolves, we remain committed to your growth and to delivering the precision your operations demand.",
+  quote:
+    "Our mission is simple: to provide the reliable, high-performance infrastructure you need to stay ahead. As the industry evolves, we remain committed to your growth and to delivering the precision your operations demand.",
   name: "Company's CEO",
   title: "Chief Executive Officer",
   company: "HTC",
 };
 
 // --- ServiceCard functional component (props: id, title, description, iconName, href) ---
-export function ServiceCard({ id, title, description, iconName, href }: ServiceItem) {
+export function ServiceCard({
+  id,
+  title,
+  description,
+  iconName,
+  href,
+}: ServiceItem) {
   const IconComponent = PHOSPHOR_ICON_MAP[iconName] ?? Shield;
   return (
     <ServiceCardGlassWrapper
@@ -151,8 +285,12 @@ export function ServiceCard({ id, title, description, iconName, href }: ServiceI
         <div className="text-cta group-hover:text-secondary transition-all duration-300 ease-in-out mb-3 flex items-center justify-center flex-shrink-0 [&_svg]:w-8 [&_svg]:h-8">
           <IconComponent weight="bold" size={32} />
         </div>
-        <ServiceTitle id={`${id}-title`} className="mb-2">{title}</ServiceTitle>
-        <p className="font-body text-sm sm:text-base text-white/80 leading-snug m-0 line-clamp-2 flex-1">{description}</p>
+        <ServiceTitle id={`${id}-title`} className="mb-2">
+          {title}
+        </ServiceTitle>
+        <p className="font-body text-sm sm:text-base text-white/80 leading-snug m-0 line-clamp-2 flex-1">
+          {description}
+        </p>
         <span className="inline-flex items-center gap-1.5 mt-4 text-cta font-sans text-sm font-medium">
           Learn More
           <span className="inline-flex transition-transform duration-300 ease-in-out group-hover:translate-x-1">
@@ -196,9 +334,13 @@ const ServicesTitle = styled(motion.h2)`
   text-align: center;
   color: ${BRAND_COLORS.white};
   margin-bottom: clamp(0.75rem, 1.5vh, 1rem);
-  
+
   span {
-    background: linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -235,21 +377,30 @@ const CategoryHeader = styled(motion.h3)`
   text-align: center;
   position: relative;
   padding-bottom: clamp(0.5rem, 1.5vh, 1rem);
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: clamp(48px, 8vw, 72px);
     height: 2px;
-    background: linear-gradient(90deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta}, ${BRAND_COLORS.secondary});
+    background: linear-gradient(
+      90deg,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta},
+      ${BRAND_COLORS.secondary}
+    );
     border-radius: 2px;
   }
-  
+
   span {
-    background: linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -322,17 +473,22 @@ const ServiceCardGlassWrapper = styled(Link)`
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding: clamp(1.25rem, 2.5vh, 1.75rem);
+  padding: clamp(1rem, 2.5vw, 1.75rem);
   background: ${BRAND_COLORS.primaryOpacity["20"]};
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid ${BRAND_COLORS.primaryOpacity["20"]};
-  border-radius: clamp(0.5rem, 1.25vh, 1rem);
+  border-radius: clamp(0.5rem, 1.25vw, 1rem);
   box-shadow: 0 4px 24px ${BRAND_COLORS.primaryOpacity["20"]};
   text-decoration: none;
   color: inherit;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
+
+  @media (max-width: 639px) {
+    padding: 1rem 0.875rem;
+    border-radius: 0.625rem;
+  }
 
   &:hover {
     border-color: ${BRAND_COLORS.primaryOpacity["20"]};
@@ -347,7 +503,7 @@ const ServiceIcon = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  
+
   svg {
     width: clamp(2rem, 4.5vh, 2.75rem);
     height: clamp(2rem, 4.5vh, 2.75rem);
@@ -356,19 +512,23 @@ const ServiceIcon = styled.div`
 
 const ServiceTitle = styled.h3`
   font-family: ${TYPOGRAPHY.heading};
-  font-size: clamp(1rem, 2vh, 1.375rem);
+  font-size: clamp(0.875rem, 1.75vw, 1.375rem);
   font-weight: 700;
   color: ${BRAND_COLORS.white};
-  margin-bottom: clamp(0.375rem, 1vh, 0.625rem);
+  margin-bottom: clamp(0.25rem, 0.75vh, 0.5rem);
   margin-top: 0;
   line-height: 1.25;
   word-wrap: break-word;
   overflow-wrap: break-word;
+
+  @media (max-width: 639px) {
+    font-size: 0.9375rem;
+  }
 `;
 
 const ServiceDescription = styled.p`
   font-family: ${TYPOGRAPHY.body};
-  font-size: clamp(0.875rem, 1.5vh, 1.0625rem);
+  font-size: clamp(0.75rem, 1.25vw, 1.0625rem);
   line-height: 1.45;
   color: ${BRAND_COLORS.whiteOpacity["80"]};
   margin-bottom: 0;
@@ -379,84 +539,234 @@ const ServiceDescription = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+
+  @media (max-width: 639px) {
+    font-size: 0.75rem;
+  }
 `;
 
+type ServicesCategory = "telecommunications" | "command-control";
 
-type ServicesCategory = 'telecommunications' | 'command-control';
-
-const ServicesGridComponent = ({ category }: { category: ServicesCategory }) => {
+const ServicesGridComponent = ({
+  category,
+}: {
+  category: ServicesCategory;
+}) => {
   // Category 1: Telecommunications (max 3 short sentences / one line per card for above-the-fold)
   const solutionsPageServices = [
-    { icon: <div className="p-2"><WifiHigh weight="bold" size={20} /></div>, title: "System Integration", description: "Solutions that fit your network and support digital transformation.", link: "/solutions" },
-    { icon: <div className="p-2"><Cloud weight="bold" size={20} /></div>, title: "Connectivity and Transmission", description: "Intelligent gateways that transform infrastructure into competitive advantage.", link: "/solutions" },
-    { icon: <div className="p-2"><ShareNetwork weight="bold" size={20} /></div>, title: "Unified Communication", description: "Bridge legacy and cloud for seamless collaboration.", link: "/solutions" },
-    { icon: <div className="p-2"><Shield weight="bold" size={20} /></div>, title: "Access LAN and OSP", description: "Complete connectivity from fiber to Wi-Fi.", link: "/solutions" },
-    { icon: <div className="p-2"><Shield weight="bold" size={20} /></div>, title: "Military and Critical Communication", description: "Encrypted, secured voice and data for critical operations.", link: "/solutions" },
+    {
+      icon: (
+        <div className="p-2">
+          <WifiHigh weight="bold" size={20} />
+        </div>
+      ),
+      title: "System Integration",
+      description:
+        "Solutions that fit your network and support digital transformation.",
+      link: "/solutions",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <Cloud weight="bold" size={20} />
+        </div>
+      ),
+      title: "Connectivity and Transmission",
+      description:
+        "Intelligent gateways that transform infrastructure into competitive advantage.",
+      link: "/solutions",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <ShareNetwork weight="bold" size={20} />
+        </div>
+      ),
+      title: "Unified Communication",
+      description: "Bridge legacy and cloud for seamless collaboration.",
+      link: "/solutions",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <Shield weight="bold" size={20} />
+        </div>
+      ),
+      title: "Access LAN and OSP",
+      description: "Complete connectivity from fiber to Wi-Fi.",
+      link: "/solutions",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <Shield weight="bold" size={20} />
+        </div>
+      ),
+      title: "Military and Critical Communication",
+      description: "Encrypted, secured voice and data for critical operations.",
+      link: "/solutions",
+    },
   ];
 
   // Category 2: Command & Control
   const commandControlServices = [
-    { icon: <div className="p-2"><Monitor weight="bold" size={20} /></div>, title: "Control Room Furniture", description: "Ergonomic furniture for 24/7 operations.", link: "/what-we-do/command-control" },
-    { icon: <div className="p-2"><Code weight="bold" size={20} /></div>, title: "Software", description: "Custom software with intuitive interfaces and analytics.", link: "/what-we-do/command-control" },
-    { icon: <div className="p-2"><GridFour weight="bold" size={20} /></div>, title: "Video Walls", description: "High-resolution video walls for real-time monitoring.", link: "/what-we-do/command-control" },
-    { icon: <div className="p-2"><HardDrives weight="bold" size={20} /></div>, title: "Servers (On-prem/Cloud/Hybrid)", description: "Flexible server infrastructure for security and scale.", link: "/what-we-do/command-control" },
-    { icon: <div className="p-2"><Brain weight="bold" size={20} /></div>, title: "AI/Custom Software", description: "AI-powered automation and predictive insights.", link: "/what-we-do/command-control" },
+    {
+      icon: (
+        <div className="p-2">
+          <Monitor weight="bold" size={20} />
+        </div>
+      ),
+      title: "Control Room Solutions",
+      description:
+        "Integrated command center environments providing 24/7 mission-critical visualization and ergonomic infrastructure.",
+      link: "/what-we-do/command-control",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <Code weight="bold" size={20} />
+        </div>
+      ),
+      title: "Software",
+      description: "Custom software with intuitive interfaces and analytics.",
+      link: "/what-we-do/command-control",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <GridFour weight="bold" size={20} />
+        </div>
+      ),
+      title: "Video Walls",
+      description: "High-resolution video walls for real-time monitoring.",
+      link: "/what-we-do/command-control",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <HardDrives weight="bold" size={20} />
+        </div>
+      ),
+      title: "Servers (On-prem/Cloud/Hybrid)",
+      description: "Flexible server infrastructure for security and scale.",
+      link: "/what-we-do/command-control",
+    },
+    {
+      icon: (
+        <div className="p-2">
+          <Brain weight="bold" size={20} />
+        </div>
+      ),
+      title: "AI/Custom Software",
+      description: "AI-powered automation and predictive insights.",
+      link: "/what-we-do/command-control",
+    },
   ];
 
-  const showTelecom = category === 'telecommunications';
+  const showTelecom = category === "telecommunications";
 
   const headerConfig = showTelecom
-    ? { title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Telecommunications</span> Services</>, subtitle: "Enterprise solutions that transform your operations." }
-    : { title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Command & Control </span>Services</>, subtitle: "Control room, software, and infrastructure solutions." };
+    ? {
+        title: (
+          <>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">
+              Telecommunications
+            </span>{" "}
+            Services
+          </>
+        ),
+        subtitle: "Enterprise solutions that transform your operations.",
+      }
+    : {
+        title: (
+          <>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">
+              Command & Control{" "}
+            </span>
+            Services
+          </>
+        ),
+        subtitle: "Control room, software, and infrastructure solutions.",
+      };
 
   const services = showTelecom ? solutionsPageServices : commandControlServices;
-  const exploreHref = showTelecom ? "/what-we-do/telecommunications" : "/what-we-do/command-control";
-  const exploreLabel = showTelecom ? "Explore Telecommunications" : "Explore Command & Control";
+  const exploreHref = showTelecom
+    ? "/what-we-do/telecommunications"
+    : "/what-we-do/command-control";
+  const exploreLabel = showTelecom
+    ? "Explore Telecommunications"
+    : "Explore Command & Control";
 
   return (
     <>
-      <header className="text-center mb-10 md:mb-12">
-        <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans mb-3">
+      <header className="text-center mb-6 sm:mb-8 md:mb-10">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-sans mb-2 sm:mb-3 leading-tight">
           {headerConfig.title}
         </h2>
-        <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto font-body">
+        <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto font-body px-2">
           {headerConfig.subtitle}
         </p>
       </header>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
+
+      {/* Mobile (< 640px): Single column stack.
+          Tablet (640–1023px): 2-column grid — featured card spans full width on its own row.
+          Desktop (≥ 1024px): 4-column Bento grid with featured card spanning 2×2. */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-auto lg:auto-rows-fr">
         {services.map((service, index) => (
           <ServiceCardGlassWrapper
             key={service.title}
             to={service.link}
-            className={`group transition-all duration-300 ease-in-out hover:-translate-y-2 ${index === 0 ? "sm:col-span-2 lg:col-span-2 lg:row-span-2 !bg-transparent" : ""}`}
+            className={`group transition-all duration-300 ease-in-out hover:-translate-y-1 sm:hover:-translate-y-2 ${
+              index === 0
+                ? "sm:col-span-2 lg:col-span-2 lg:row-span-2 !bg-transparent min-h-[200px] sm:min-h-[260px] lg:min-h-0"
+                : "min-h-[120px] sm:min-h-[140px]"
+            }`}
           >
             {index === 0 && (
               <>
                 <div
                   className="absolute inset-0 z-0 rounded-[inherit] bg-cover bg-center"
                   style={{
-                    backgroundImage: `url(${showTelecom
-                      ? "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg"
-                      : "/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
+                    backgroundImage: `url(${
+                      showTelecom
+                        ? "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg"
+                        : "/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
                     })`,
                   }}
                   aria-hidden
                 />
-                <div className="absolute inset-0 z-0 rounded-[inherit] bg-primary/50" aria-hidden />
+                <div
+                  className="absolute inset-0 z-0 rounded-[inherit] bg-primary/50"
+                  aria-hidden
+                />
               </>
             )}
             <span className="absolute inset-0 z-0" aria-hidden />
-            <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full text-center min-h-0">
+            <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full text-center min-h-0 gap-1 sm:gap-2">
               <div
-                className={`text-cta group-hover:text-secondary transition-all duration-300 ease-in-out mb-3 flex items-center justify-center flex-shrink-0 ${index === 0 ? "[&_svg]:w-32 [&_svg]:h-32" : "[&_svg]:w-8 [&_svg]:h-8"}`}
+                className={`text-cta group-hover:text-secondary transition-all duration-300 ease-in-out flex items-center justify-center flex-shrink-0 ${
+                  index === 0
+                    ? "mb-2 sm:mb-3 [&_svg]:w-10 [&_svg]:h-10 sm:[&_svg]:w-16 sm:[&_svg]:h-16 lg:[&_svg]:w-24 lg:[&_svg]:h-24"
+                    : "mb-2 [&_svg]:w-7 [&_svg]:h-7 sm:[&_svg]:w-8 sm:[&_svg]:h-8"
+                }`}
               >
                 {service.icon}
               </div>
-              <ServiceTitle className={index === 0 ? "mb-2 !text-4xl sm:!text-5xl" : "mb-2"}>
+              <ServiceTitle
+                className={
+                  index === 0
+                    ? "mb-1 sm:mb-2 !text-xl sm:!text-3xl lg:!text-4xl"
+                    : "mb-1"
+                }
+              >
                 {service.title}
               </ServiceTitle>
               <p
-                className={`font-body text-white/80 leading-snug m-0 line-clamp-2 ${index === 0 ? "text-xl sm:text-2xl md:text-3xl" : "text-sm sm:text-base"}`}
+                className={`font-body text-white/80 leading-snug m-0 ${
+                  index === 0
+                    ? "text-sm sm:text-base md:text-xl lg:text-2xl line-clamp-3"
+                    : "text-xs sm:text-sm line-clamp-2"
+                }`}
               >
                 {service.description}
               </p>
@@ -464,10 +774,16 @@ const ServicesGridComponent = ({ category }: { category: ServicesCategory }) => 
           </ServiceCardGlassWrapper>
         ))}
       </div>
-      <div className="flex justify-center w-full mt-10 md:mt-12">
-        <Link to={exploreHref} className="btn-primary inline-flex items-center gap-2 group text-base sm:text-lg px-6 py-3">
+
+      <div className="flex justify-center w-full mt-6 sm:mt-8 md:mt-10">
+        <Link
+          to={exploreHref}
+          className="btn-primary inline-flex items-center gap-2 group text-sm sm:text-base px-5 sm:px-6 py-2.5 sm:py-3"
+        >
           <span>{exploreLabel}</span>
-          <span className="p-0.5"><ArrowRight weight="bold" size={22} /></span>
+          <span className="p-0.5">
+            <ArrowRight weight="bold" size={20} />
+          </span>
         </Link>
       </div>
     </>
@@ -494,9 +810,13 @@ const DemandsTitle = styled(motion.h2)`
   text-align: center;
   color: ${BRAND_COLORS.white};
   margin-bottom: 1rem;
-  
+
   span {
-    background: linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -518,12 +838,12 @@ const DemandsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
-  
+
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
-  
+
   @media (min-width: 1024px) {
     gap: 3rem;
   }
@@ -583,7 +903,7 @@ const LiquidButton = styled.button`
   overflow: hidden;
   transition: all 0.3s ease-out;
   z-index: 1;
-  
+
   &::before {
     content: "";
     position: absolute;
@@ -591,20 +911,24 @@ const LiquidButton = styled.button`
     top: 0;
     height: 100%;
     width: 0%;
-    background: linear-gradient(135deg, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.secondary},
+      ${BRAND_COLORS.cta}
+    );
     z-index: -1;
     transition: width 0.4s ease;
   }
-  
+
   &:hover {
     color: ${BRAND_COLORS.white};
     border-color: ${BRAND_COLORS.cta};
-    
+
     &::before {
       width: 100%;
     }
   }
-  
+
   &:active {
     transform: scale(0.98);
   }
@@ -614,17 +938,20 @@ const DigitalDemandsComponent = () => {
   const demands = [
     {
       title: "Reach",
-      description: "Extend your network coverage to every corner of your operation with seamless connectivity solutions.",
+      description:
+        "Extend your network coverage to every corner of your operation with seamless connectivity solutions.",
       // icon: Globe,
     },
     {
       title: "Scale",
-      description: "Grow your infrastructure effortlessly with flexible solutions that adapt to your business needs.",
+      description:
+        "Grow your infrastructure effortlessly with flexible solutions that adapt to your business needs.",
       // icon: TrendUp,
     },
     {
       title: "Speed",
-      description: "Accelerate your operations with high-performance networks designed for maximum efficiency.",
+      description:
+        "Accelerate your operations with high-performance networks designed for maximum efficiency.",
       // icon: Rocket,
     },
   ];
@@ -668,7 +995,10 @@ const DigitalDemandsComponent = () => {
 function HomePage() {
   const scrollSnapRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLElement>(null); // Ref for the Contact Section (last section)
-  const isLastSectionInView = useInView(contactRef, { once: false, amount: 0.2 });
+  const isLastSectionInView = useInView(contactRef, {
+    once: false,
+    amount: 0.2,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0); // Ensure page starts at the top
@@ -721,13 +1051,19 @@ function HomePage() {
   //   };
   // }, [sectionRefs]); // Dependency array includes sectionRefs, though it's static here.
 
+  // On mobile: sections are auto-height and scroll naturally (CSS disables mandatory snap).
+  // On tablet+: snap-start with min-height enforced via CSS.
   const sectionClass =
-  'snap-section h-screen min-h-[600px] flex flex-col justify-center snap-start relative overflow-hidden shrink-0';
+    "snap-section min-h-screen flex flex-col justify-center snap-start relative overflow-hidden";
 
-  const DecorativeBlob = ({ className = '' }: { className?: string }) => (
+  const DecorativeBlob = ({ className = "" }: { className?: string }) => (
     <div
       className={`absolute rounded-full blur-3xl opacity-25 pointer-events-none z-0 ${className}`}
-      style={{ background: 'var(--color-primary)', width: 'min(28rem, 80vw)', height: 'min(28rem, 80vw)' }}
+      style={{
+        background: "var(--color-primary)",
+        width: "min(20rem, 70vw)",
+        height: "min(20rem, 70vw)",
+      }}
       aria-hidden
     />
   );
@@ -735,14 +1071,19 @@ function HomePage() {
   return (
     <div className="relative overflow-x-hidden">
       <Helmet>
-        <title>Homepage - Hajz Telecommunication Co Ltd. | Real Transformation</title>
+        <title>
+          Homepage - Hajz Telecommunication Co Ltd. | Real Transformation
+        </title>
         <meta
           name="description"
           content="Hajz Telecommunication Co Ltd.: innovative telecommunications solutions, global connectivity, and transformative technology."
         />
       </Helmet>
 
-      <div className="fixed inset-0 bg-primary opacity-20 pointer-events-none -z-10" style={{ transform: 'translateZ(0)' }} />
+      <div
+        className="fixed inset-0 bg-primary opacity-20 pointer-events-none -z-10"
+        style={{ transform: "translateZ(0)" }}
+      />
 
       <HeroScrollIndicator
         sectionIds={[
@@ -757,7 +1098,7 @@ function HomePage() {
 
       <div
         ref={scrollSnapRef}
-        className="scroll-snap-page h-screen overflow-y-scroll overflow-x-hidden"
+        className="scroll-snap-page md:h-screen md:overflow-y-scroll overflow-x-hidden"
       >
         <NetworkHeroCanvas scrollScrollerRef={scrollSnapRef} />
 
@@ -774,8 +1115,8 @@ function HomePage() {
         {/* What We Do - Telecommunications */}
         <section id="telecommunications" className={sectionClass}>
           <DecorativeBlob className="top-1/2 -translate-y-1/2 -right-32 opacity-20" />
-          <ScrollReveal direction="up" delay={0}>
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center min-h-0 flex-1 py-12 md:py-16">
+          <ScrollReveal direction="up" delay={0} className="w-full">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-16 sm:py-12 md:py-16">
               <ServicesGridComponent category="telecommunications" />
             </div>
           </ScrollReveal>
@@ -784,8 +1125,8 @@ function HomePage() {
         {/* What We Do - Command & Control */}
         <section id="command-control" className={sectionClass}>
           <DecorativeBlob className="bottom-0 left-0 -translate-x-1/4 translate-y-1/4 opacity-20" />
-          <ScrollReveal direction="up" delay={0}>
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center min-h-0 flex-1 py-12 md:py-16">
+          <ScrollReveal direction="up" delay={0} className="w-full">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-16 sm:py-12 md:py-16">
               <ServicesGridComponent category="command-control" />
             </div>
           </ScrollReveal>
@@ -873,14 +1214,10 @@ function HomePage() {
         */}
 
         {/* Contact (last section) — Orbital snap-scroll layout */}
-        <section
-          id="contact"
-          ref={contactRef}
-          className={sectionClass}
-        >
+        <section id="contact" ref={contactRef} className={sectionClass}>
           <motion.button
             type="button"
-            className="absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-3 text-white tracking-widest uppercase font-sans text-lg cursor-pointer hover:text-white/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
+            className="explore-more-btn absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-2 sm:gap-3 text-white tracking-widest uppercase font-sans text-sm sm:text-base md:text-lg cursor-pointer hover:text-white/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
             initial={{ x: 0, y: 0 }}
             animate={
               isLastSectionInView
@@ -897,12 +1234,12 @@ function HomePage() {
             aria-label="Open menu"
           >
             <span>Explore More</span>
-            <ArrowUpRight weight="bold" size={20} />
+            <ArrowUpRight weight="bold" size={18} />
           </motion.button>
           <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
-          <div className="w-full h-full min-h-0 flex flex-col justify-center bg-transparent px-0">
-              <ContactSection size="extraLarge" layout="orbital" />
-            </div>
+          <div className="w-full flex flex-col justify-center bg-transparent px-0 py-16 sm:py-10 md:py-0 md:h-full">
+            <ContactSection size="extraLarge" layout="orbital" />
+          </div>
         </section>
       </div>
     </div>

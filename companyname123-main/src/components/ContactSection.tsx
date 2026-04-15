@@ -173,19 +173,19 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
     return (
       <div
         ref={sectionRef}
-        className="w-full max-w-7xl mx-auto h-full min-h-0 grid grid-cols-1 md:grid-cols-[4fr_6fr] relative overflow-hidden bg-transparent scroll-mt-20 gap-x-4 gap-y-4 md:gap-x-6 md:gap-y-5 px-4 sm:px-6"
+        className="orbital-contact-grid w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[4fr_6fr] relative overflow-hidden bg-transparent scroll-mt-20 gap-x-4 gap-y-3 md:gap-x-6 md:gap-y-5 px-3 sm:px-5 md:px-6"
         style={{ scrollMarginTop: '5rem' }}
       >
-        {/* 1. Background: large typography watermark (bottom-left, bleeds off) */}
+        {/* 1. Background watermark — scaled down on mobile */}
         <div
           className="absolute bottom-0 left-0 pointer-events-none select-none z-0"
           style={{
             fontFamily: 'var(--font-primary)',
-            fontSize: 'clamp(6rem, 18vw, 14rem)',
+            fontSize: 'clamp(3rem, 14vw, 14rem)',
             fontWeight: 700,
             lineHeight: 0.85,
             color: 'transparent',
-            WebkitTextStroke: '2px rgba(255,255,255,0.12)',
+            WebkitTextStroke: '1.5px rgba(255,255,255,0.08)',
             transform: 'translate(-8%, 12%)',
           }}
           aria-hidden
@@ -193,7 +193,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
           CONTACT
         </div>
 
-        {/* 2. Radial glows (Highlight 5%) to bridge form and nodes */}
+        {/* 2. Radial glows */}
         <div
           className="absolute inset-0 pointer-events-none z-0"
           style={{
@@ -205,23 +205,22 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
           aria-hidden
         />
 
-        {/* 3. SVG circuit-style connecting lines (1px Highlight, 90° bends, slow pulse) */}
+        {/* 3. SVG circuit lines — desktop only */}
         <svg
           className="absolute inset-0 w-full h-full pointer-events-none z-[1] animate-pulse-slow hidden md:block"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
           aria-hidden
         >
-          {/* Circuit-style 90° lines (4:6 ratio: form left 40%, contact right 60%) form → spine at 40% → nodes */}
           <path d="M 28 50 H 40 V 20 H 46" fill="none" stroke={accentColor} strokeWidth="0.2" strokeOpacity="0.7" />
           <path d="M 28 50 H 40 V 50 H 46" fill="none" stroke={accentColor} strokeWidth="0.2" strokeOpacity="0.7" />
           <path d="M 28 50 H 40 V 80 H 46" fill="none" stroke={accentColor} strokeWidth="0.2" strokeOpacity="0.7" />
         </svg>
 
-        {/* 4. Anchor: form (4 parts) */}
-        <div className="flex items-center justify-center md:justify-end pr-0 md:pr-2 py-6 md:py-8 z-10">
+        {/* 4. Form — full width on mobile, left column on md+ */}
+        <div className="flex items-center justify-center md:justify-end pr-0 md:pr-2 py-4 sm:py-5 md:py-8 z-10">
           <div
-            className="w-full max-w-xl rounded-2xl p-6 md:p-8 border backdrop-blur-md"
+            className="w-full rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border backdrop-blur-md"
             style={{
               background: secondary20,
               borderWidth: '1px',
@@ -230,8 +229,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
             }}
           >
             <h2
-              className="text-[var(--color-accent)] font-semibold mb-5"
-              style={{ fontFamily: 'var(--font-primary)', fontSize: 'clamp(1.25rem, 2.5vh, 1.5rem)' }}
+              className="text-[var(--color-accent)] font-semibold mb-3 sm:mb-5"
+              style={{ fontFamily: 'var(--font-primary)', fontSize: 'clamp(1.125rem, 2.5vw, 1.5rem)' }}
             >
               Get in Touch
             </h2>
@@ -244,16 +243,19 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                 <p className="text-red-400" style={{ fontFamily: 'var(--font-secondary)' }}>Something went wrong. Please try again.</p>
               </div>
             ) : (
-              <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-3">
-                <div>
-                  <label htmlFor="orbital-name" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Name</label>
-                  <input type="text" id="orbital-name" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '0.9375rem' }} />
-                  {errors.name && <p className="mt-1 text-red-400 text-sm">{errors.name}</p>}
-                </div>
-                <div>
-                  <label htmlFor="orbital-email" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Email</label>
-                  <input type="email" id="orbital-email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '0.9375rem' }} />
-                  {errors.email && <p className="mt-1 text-red-400 text-sm">{errors.email}</p>}
+              <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-2.5 sm:gap-3">
+                {/* Name + Email side by side on tablet+ to save vertical space */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                  <div>
+                    <label htmlFor="orbital-name" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Name</label>
+                    <input type="text" id="orbital-name" name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '1rem' }} />
+                    {errors.name && <p className="mt-1 text-red-400 text-xs">{errors.name}</p>}
+                  </div>
+                  <div>
+                    <label htmlFor="orbital-email" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Email</label>
+                    <input type="email" id="orbital-email" name="email" placeholder="Your Email" value={formData.email} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '1rem' }} />
+                    {errors.email && <p className="mt-1 text-red-400 text-xs">{errors.email}</p>}
+                  </div>
                 </div>
                 <div>
                   <label htmlFor="orbital-subject" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Subject</label>
@@ -278,7 +280,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                       onChange={handleChange}
                       disabled={isSubmitting}
                       className={[
-                        "w-full cursor-pointer rounded-xl bg-transparent text-[0.9375rem] outline-none transition-colors",
+                        "w-full cursor-pointer rounded-xl bg-transparent text-[1rem] outline-none transition-colors",
                         "border-0 py-2.5 pl-3 pr-12",
                         "focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
                         formData.subject ? "text-white" : "text-white/45",
@@ -301,17 +303,17 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                       ))}
                     </select>
                   </div>
-                  {errors.subject && <p className="mt-1 text-red-400 text-sm">{errors.subject}</p>}
+                  {errors.subject && <p className="mt-1 text-red-400 text-xs">{errors.subject}</p>}
                 </div>
                 <div>
                   <label htmlFor="orbital-message" className="block mb-1 text-white/90" style={{ fontFamily: 'var(--font-primary)', fontSize: '0.8125rem' }}>Message</label>
-                  <textarea id="orbital-message" name="message" placeholder="Your Message" rows={3} value={formData.message} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '0.9375rem', minHeight: '4rem' }} />
-                  {errors.message && <p className="mt-1 text-red-400 text-sm">{errors.message}</p>}
+                  <textarea id="orbital-message" name="message" placeholder="Your Message" rows={3} value={formData.message} onChange={handleChange} className={formInputClass} disabled={isSubmitting} style={{ fontFamily: 'var(--font-secondary)', padding: '0.5rem 0.75rem', fontSize: '1rem', minHeight: '3.5rem' }} />
+                  {errors.message && <p className="mt-1 text-red-400 text-xs">{errors.message}</p>}
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-3 w-full py-4 rounded-xl font-bold text-lg text-white shadow-lg ring-2 ring-[var(--color-cta)]/40 hover:ring-[var(--color-cta)]/60 hover:shadow-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-cta)] disabled:text-white/60"
+                  className="mt-2 w-full py-3 sm:py-4 rounded-xl font-bold text-base sm:text-lg text-white shadow-lg ring-2 ring-[var(--color-cta)]/40 hover:ring-[var(--color-cta)]/60 hover:shadow-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-cta)] disabled:text-white/60"
                   style={{ backgroundColor: 'var(--color-cta)', fontFamily: 'var(--font-primary)' }}
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
@@ -321,55 +323,55 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
           </div>
         </div>
 
-        {/* 5. Satellites / Contact info (6 parts) */}
-        <div className="flex flex-col justify-center gap-3 md:gap-4 py-4 md:py-8 pl-4 md:pl-0 pr-4 md:pr-6 lg:pr-10 z-10">
-          {/* Node A: 01 // VOICE — Communication (Phone + Email) */}
+        {/* 5. Contact info nodes — horizontal row on mobile, vertical column on md+ */}
+        <div className="flex flex-col sm:flex-row md:flex-col justify-start sm:justify-center md:justify-center gap-2.5 sm:gap-3 md:gap-4 py-0 sm:py-4 md:py-8 pb-4 sm:pb-5 md:pb-8 px-0 md:pl-0 md:pr-6 lg:pr-10 z-10">
+          {/* Node A: 01 // VOICE */}
           <div
-            className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
+            className="animate-orbital-float rounded-xl border flex-1 md:flex-none backdrop-blur-md p-3 sm:p-4 md:p-5"
             style={{ animationDelay: '0s', background: secondary20, borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>01 // VOICE</span>
-            <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Communication Hub</h3>
-            <a href="tel:+15551234567" className="flex items-center gap-2 text-white/95 text-sm hover:text-[var(--color-accent)] transition-colors mb-2" style={{ fontFamily: 'var(--font-secondary)' }}>
-              <Phone weight="regular" size={20} />
-              +1 (555) 123-4567
+            <span className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3" style={{ fontFamily: 'var(--font-primary)' }}>01 // VOICE</span>
+            <h3 className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base" style={{ fontFamily: 'var(--font-primary)' }}>Communication Hub</h3>
+            <a href="tel:+966110000000" className="flex items-center gap-1.5 sm:gap-2 text-white/95 text-xs sm:text-sm hover:text-[var(--color-accent)] transition-colors mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-secondary)' }}>
+              <Phone weight="regular" size={16} />
+              +966 11 000 0000
             </a>
-            <a href="mailto:contact@example.com" className="flex items-center gap-2 text-white/95 text-sm hover:text-[var(--color-accent)] transition-colors" style={{ fontFamily: 'var(--font-secondary)' }}>
-              <Envelope weight="regular" size={20} />
-              contact@example.com
+            <a href="mailto:info@hajztelecom.com" className="flex items-center gap-1.5 sm:gap-2 text-white/95 text-xs sm:text-sm hover:text-[var(--color-accent)] transition-colors" style={{ fontFamily: 'var(--font-secondary)' }}>
+              <Envelope weight="regular" size={16} />
+              <span className="truncate">info@hajztelecom.com</span>
             </a>
           </div>
 
-          {/* Node B: 02 // PLACE — Physical Presence */}
+          {/* Node B: 02 // PLACE */}
           <div
-            className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
+            className="animate-orbital-float rounded-xl border flex-1 md:flex-none backdrop-blur-md p-3 sm:p-4 md:p-5"
             style={{ animationDelay: '1.5s', background: 'rgba(255,255,255,0.06)', borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>02 // PLACE</span>
-            <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Physical Presence</h3>
-            <div className="flex items-start gap-3">
-              <MapPin weight="regular" size={22} className="flex-shrink-0 mt-0.5 text-[var(--color-accent)]" />
-              <span className="text-white/95 text-sm leading-snug" style={{ fontFamily: 'var(--font-secondary)' }}>123 Tech Street, Innovation City</span>
+            <span className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3" style={{ fontFamily: 'var(--font-primary)' }}>02 // PLACE</span>
+            <h3 className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base" style={{ fontFamily: 'var(--font-primary)' }}>Physical Presence</h3>
+            <div className="flex items-start gap-2 sm:gap-3">
+              <MapPin weight="regular" size={18} className="flex-shrink-0 mt-0.5 text-[var(--color-accent)]" />
+              <span className="text-white/95 text-xs sm:text-sm leading-snug" style={{ fontFamily: 'var(--font-secondary)' }}>Riyadh, Saudi Arabia</span>
             </div>
           </div>
 
-          {/* Node C: 03 // DIGITAL — Social */}
+          {/* Node C: 03 // DIGITAL */}
           <div
-            className="animate-orbital-float rounded-xl border p-5 backdrop-blur-md"
+            className="animate-orbital-float rounded-xl border flex-1 md:flex-none backdrop-blur-md p-3 sm:p-4 md:p-5"
             style={{ animationDelay: '3s', background: 'rgba(255,255,255,0.06)', borderWidth: '1px', borderColor: accentColor }}
           >
-            <span className="text-primary text-xs tracking-wider block mb-3" style={{ fontFamily: 'var(--font-primary)' }}>03 // DIGITAL</span>
-            <h3 className="text-[var(--color-accent)] font-semibold mb-3" style={{ fontFamily: 'var(--font-primary)', fontSize: '1rem' }}>Digital Footprint</h3>
-            <ul className="flex flex-col gap-2" role="list">
+            <span className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3" style={{ fontFamily: 'var(--font-primary)' }}>03 // DIGITAL</span>
+            <h3 className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base" style={{ fontFamily: 'var(--font-primary)' }}>Digital Footprint</h3>
+            <ul className="flex sm:flex-col gap-1.5 sm:gap-2" role="list">
               {[
                 { Icon: TwitterLogo, label: 'Twitter', href: 'https://twitter.com' },
                 { Icon: LinkedinLogo, label: 'LinkedIn', href: 'https://linkedin.com' },
                 { Icon: InstagramLogo, label: 'Instagram', href: 'https://instagram.com' },
               ].map(({ Icon, label, href }) => (
                 <li key={label}>
-                  <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex items-center gap-2 py-2 px-3 rounded-lg text-white/90 hover:text-[var(--color-cta)] hover:bg-[var(--color-cta)]/10 transition-all text-sm" style={{ fontFamily: 'var(--font-secondary)' }}>
-                    <Icon weight="regular" size={20} />
-                    {label}
+                  <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label} className="flex items-center gap-1.5 sm:gap-2 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg text-white/90 hover:text-[var(--color-cta)] hover:bg-[var(--color-cta)]/10 transition-all text-xs sm:text-sm" style={{ fontFamily: 'var(--font-secondary)' }}>
+                    <Icon weight="regular" size={16} />
+                    <span className="hidden sm:inline">{label}</span>
                   </a>
                 </li>
               ))}
@@ -415,7 +417,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">Email</span>
-                    <a href="mailto:contact@example.com" className="text-white text-lg hover:text-cta transition-colors duration-200">contact@example.com</a>
+                    <a href="mailto:info@hajztelecom.com" className="text-white text-lg hover:text-cta transition-colors duration-200">info@hajztelecom.com</a>
                   </div>
                 </li>
                 <li className="flex flex-row items-start gap-5">
@@ -424,7 +426,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">Phone</span>
-                    <a href="tel:+15551234567" className="text-white text-lg hover:text-cta transition-colors duration-200">+1 (555) 123-4567</a>
+                    <a href="tel:+966110000000" className="text-white text-lg hover:text-cta transition-colors duration-200">+966 11 000 0000</a>
                   </div>
                 </li>
                 <li className="flex flex-row items-start gap-5">
@@ -433,7 +435,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">Location</span>
-                    <span className="text-white text-lg leading-snug">123 Tech Street, Innovation City</span>
+                    <span className="text-white text-lg leading-snug">Riyadh, Saudi Arabia</span>
                   </div>
                 </li>
               </ul>
@@ -474,7 +476,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">Email</span>
-                    <a href="mailto:contact@example.com" className="text-white hover:text-cta transition-colors duration-200" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>contact@example.com</a>
+                    <a href="mailto:info@hajztelecom.com" className="text-white hover:text-cta transition-colors duration-200" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>info@hajztelecom.com</a>
                   </div>
                 </li>
                 <li className="flex flex-row items-start gap-4">
@@ -483,7 +485,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">Phone</span>
-                    <a href="tel:+15551234567" className="text-white hover:text-cta transition-colors duration-200" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>+1 (555) 123-4567</a>
+                    <a href="tel:+966110000000" className="text-white hover:text-cta transition-colors duration-200" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>+966 11 000 0000</a>
                   </div>
                 </li>
                 <li className="flex flex-row items-start gap-4">
@@ -492,7 +494,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ size = 'normal', layout
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">Location</span>
-                    <span className="text-white" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>123 Tech Street, Innovation City</span>
+                    <span className="text-white" style={{ fontSize: size === 'large' ? 'clamp(0.8125rem, 1.25vh, 0.9375rem)' : 'clamp(0.8125rem, 1.25vh, 0.9375rem)' }}>Riyadh, Saudi Arabia</span>
                   </div>
                 </li>
               </ul>

@@ -38,6 +38,10 @@ const Section = styled.section`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+
+  @media (max-width: 1023px) {
+    overflow-y: auto;
+  }
 `;
 
 const BackgroundImage = styled.div<{ $imageUrl?: string; $position?: string }>`
@@ -61,42 +65,54 @@ const SlideContainer = styled.div<{ $active: boolean }>`
   align-items: center;
   justify-content: center;
   padding: clamp(1rem, 4vw, 3rem);
+  padding-bottom: clamp(3rem, 6vh, 4rem);
   opacity: ${(p) => (p.$active ? 1 : 0)};
   pointer-events: ${(p) => (p.$active ? "auto" : "none")};
   z-index: ${(p) => (p.$active ? 1 : 0)};
   transition: opacity 0.5s ease-in-out;
+
+  @media (max-width: 1023px) {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+  }
 `;
 
 const Card = styled(motion.div)`
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 36rem;
-  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.25rem, 3vw, 2rem);
-  min-height: 18rem;
+  max-width: min(36rem, 92vw);
+  padding: clamp(1.25rem, 3vw, 2.75rem) clamp(1rem, 3vw, 2rem);
+  min-height: auto;
   background: ${BRAND_COLORS.primaryOpacity["40"]};
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid ${BRAND_COLORS.primaryOpacity["30"]};
   border-radius: clamp(0.5rem, 1.25vh, 1rem);
   box-shadow: 0 8px 32px ${BRAND_COLORS.primaryOpacity["30"]};
+
+  @media (min-width: 1024px) {
+    min-height: 18rem;
+  }
 `;
 
 const CardTitle = styled.h3`
   font-family: ${TYPOGRAPHY.heading};
-  font-size: clamp(1.25rem, 2.25vw, 1.6rem);
+  font-size: clamp(1rem, 2.25vw, 1.6rem);
   font-weight: 700;
   color: ${BRAND_COLORS.white};
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.625rem 0;
   line-height: 1.3;
 `;
 
 const CardParagraph = styled.p`
   font-family: ${TYPOGRAPHY.body};
-  font-size: clamp(0.9375rem, 1.25vw, 1.0625rem);
-  line-height: 1.6;
+  font-size: clamp(0.8125rem, 1.25vw, 1.0625rem);
+  line-height: 1.55;
   color: ${BRAND_COLORS.whiteOpacity["80"]};
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
 
   &:last-child {
     margin-bottom: 0;
@@ -108,8 +124,8 @@ const CursorButton = styled.button`
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  width: clamp(2.5rem, 5vw, 3.5rem);
-  height: clamp(2.5rem, 5vw, 3.5rem);
+  width: clamp(2rem, 5vw, 3.5rem);
+  height: clamp(2rem, 5vw, 3.5rem);
   border-radius: 50%;
   border: 1px solid ${BRAND_COLORS.primaryOpacity["30"]};
   background: ${BRAND_COLORS.primaryOpacity["40"]};
@@ -134,14 +150,29 @@ const CursorButton = styled.button`
     cursor: not-allowed;
     pointer-events: none;
   }
+
+  @media (max-width: 1023px) {
+    top: auto;
+    bottom: 3.5rem;
+    transform: none;
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
 `;
 
 const CursorLeft = styled(CursorButton)`
-  left: clamp(0.75rem, 2vw, 1.5rem);
+  left: clamp(0.5rem, 2vw, 1.5rem);
+
+  @media (max-width: 1023px) {
+    left: auto;
+    right: calc(clamp(0.5rem, 2vw, 1.5rem) + 3rem);
+  }
 `;
 
 const CursorRight = styled(CursorButton)`
-  right: clamp(0.75rem, 2vw, 1.5rem);
+  right: clamp(0.5rem, 2vw, 1.5rem);
 `;
 
 const ProgressContainer = styled.div`
@@ -241,23 +272,6 @@ export default function CompanyIdentityCarousel({
         $position={imagePositions?.[currentSlide]}
         aria-hidden
       />
-
-      <CursorLeft
-        type="button"
-        onClick={goPrev}
-        aria-label="Previous slide"
-        title="Previous"
-      >
-        <CaretLeft size={24} weight="bold" />
-      </CursorLeft>
-      <CursorRight
-        type="button"
-        onClick={goNext}
-        aria-label="Next slide"
-        title="Next"
-      >
-        <CaretRight size={24} weight="bold" />
-      </CursorRight>
 
       <SlideContainer $active>
         <Card
