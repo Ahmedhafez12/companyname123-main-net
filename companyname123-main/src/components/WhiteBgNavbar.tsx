@@ -395,7 +395,7 @@ const DropdownItem = styled(Link)`
   }
 `;
 
-const DropdownSubItem = styled(Link)`
+const DropdownSubItem = styled.a`
   display: block;
   padding: 0.375rem 0.75rem 0.375rem 1.5rem;
   font-family: ${TYPOGRAPHY.body};
@@ -434,7 +434,7 @@ const DropdownSectionTitle = styled.div`
   margin-bottom: 0.1875rem;
 `;
 
-const DropdownSectionTitleLink = styled(Link)`
+const DropdownSectionTitleLink = styled.a`
   display: block;
   padding: 0.375rem 0.75rem;
   font-family: ${TYPOGRAPHY.heading};
@@ -716,7 +716,7 @@ const MobileSubItem = styled(Link)`
   }
 `;
 
-const MobileSubSubItem = styled(Link)`
+const MobileSubSubItem = styled.a`
   display: block;
   padding: 0.375rem 0.75rem 0.375rem 1.5rem;
   font-family: ${TYPOGRAPHY.body};
@@ -728,6 +728,21 @@ const MobileSubSubItem = styled(Link)`
   &:hover {
     color: ${BRAND_COLORS.secondary};
     padding-left: 2.5rem;
+  }
+`;
+
+const MobileSubItemAnchor = styled.a`
+  display: block;
+  padding: 0.5625rem 0.75rem;
+  font-family: ${TYPOGRAPHY.body};
+  font-size: 0.875rem;
+  color: ${BRAND_COLORS.primary}CC;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: ${BRAND_COLORS.secondary};
+    padding-left: 1.5rem;
   }
 `;
 
@@ -871,7 +886,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                 isActive={location.pathname.startsWith(
                   `${currentBasePath}/about/overview`,
                 )}
-                hovered={hoverIndex === 2}
+                hovered={hoverIndex === 1}
                 $scrolled={scrolled}
               >
                 About Us
@@ -886,33 +901,39 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     transition={{ duration: 0.2 }}
                   >
                     <DropdownSubItem
-                      to={`${currentBasePath}/about/overview#what-we-do`}
+                      href={`${currentBasePath}/about/overview#what-we-do`}
+                    >
+                      Who We Are
+                    </DropdownSubItem>
+                    <DropdownSubItem
+                      href={`${currentBasePath}/about/overview#company-identity`}
                     >
                       Company Identity
                     </DropdownSubItem>
-                    {/* <DropdownSubItem to={`${currentBasePath}/about/overview#company-identity`}>
-                    - Company Identity
-                  </DropdownSubItem>
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#value-proposition`}>
-                    - Value Proposition
-                  </DropdownSubItem>
-                  <DropdownSubItem to={`${currentBasePath}/about/overview#competitive-edge`}>
-                    - Competitive Edge
-                  </DropdownSubItem> */}
                     <DropdownSubItem
-                      to={`${currentBasePath}/about/overview#our-journey`}
+                      href={`${currentBasePath}/about/overview#our-journey`}
                     >
                       Our Journey
                     </DropdownSubItem>
                     <DropdownSubItem
-                      to={`${currentBasePath}/about/overview#vision-mission`}
+                      href={`${currentBasePath}/about/overview#vision-mission`}
                     >
-                      Vision and Mission
+                      Vision &amp; Mission
                     </DropdownSubItem>
                     <DropdownSubItem
-                      to={`${currentBasePath}/about/overview#core-strengths`}
+                      href={`${currentBasePath}/about/overview#core-strengths`}
                     >
                       Core Strengths
+                    </DropdownSubItem>
+                    <DropdownSubItem
+                      href={`${currentBasePath}/about/overview#why-choose-us`}
+                    >
+                      Why Choose Us
+                    </DropdownSubItem>
+                    <DropdownSubItem
+                      href={`${currentBasePath}/about/overview#competitive-edge`}
+                    >
+                      Competitive Edge
                     </DropdownSubItem>
                   </DropdownMenu>
                 )}
@@ -957,39 +978,39 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                   >
                     <DropdownSection>
                       <DropdownSectionTitleLink
-                        to={`${currentBasePath}/what-we-do/telecommunications`}
+                        href={`${currentBasePath}/what-we-do/telecommunications`}
                       >
                         Telecommunications
                       </DropdownSectionTitleLink>
                       <DropdownSubItem
-                        to={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
+                        href={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
                       >
                         Our Core Solutions
                       </DropdownSubItem>
                       <DropdownSubItem
-                        to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
+                        href={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
                       >
                         Service Standards
                       </DropdownSubItem>
                     </DropdownSection>
                     <DropdownSection>
                       <DropdownSectionTitleLink
-                        to={`${currentBasePath}/what-we-do/command-control`}
+                        href={`${currentBasePath}/what-we-do/command-control`}
                       >
-                        Command & Control
+                        Command &amp; Control
                       </DropdownSectionTitleLink>
                       <DropdownSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#core-solutions`}
+                        href={`${currentBasePath}/what-we-do/command-control#core-solutions`}
                       >
                         Our Core Solutions
                       </DropdownSubItem>
                       <DropdownSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#tech-stack`}
+                        href={`${currentBasePath}/what-we-do/command-control#tech-stack`}
                       >
                         Technology Stack
                       </DropdownSubItem>
                       <DropdownSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#industries-served`}
+                        href={`${currentBasePath}/what-we-do/command-control#industries-served`}
                       >
                         Industries We Serve
                       </DropdownSubItem>
@@ -1124,10 +1145,10 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
               <MobileNavItem>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <MobileNavLink
-                    to={`${currentBasePath}/about/overview`}
+                    to={`${currentBasePath}/about`}
                     onClick={() => setIsMobileMenuOpen(false)}
                     isActive={location.pathname.startsWith(
-                      `${currentBasePath}/about/overview`,
+                      `${currentBasePath}/about`,
                     )}
                     style={{ flex: 1 }}
                   >
@@ -1168,30 +1189,48 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                     >
-                      <MobileSubItem
-                        to={`${currentBasePath}/about/overview#what-we-do`}
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#what-we-do`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Who We Are
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#company-identity`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Company Identity
-                      </MobileSubItem>
-                      <MobileSubItem
-                        to={`${currentBasePath}/about/overview#our-journey`}
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#our-journey`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Our Journey
-                      </MobileSubItem>
-                      <MobileSubItem
-                        to={`${currentBasePath}/about/overview#vision-mission`}
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#vision-mission`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Vision and Mission
-                      </MobileSubItem>
-                      <MobileSubItem
-                        to={`${currentBasePath}/about/overview#core-strengths`}
+                        Vision &amp; Mission
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#core-strengths`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Core Strengths
-                      </MobileSubItem>
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#why-choose-us`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Why Choose Us
+                      </MobileSubItemAnchor>
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/about/overview#competitive-edge`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Competitive Edge
+                      </MobileSubItemAnchor>
                     </MobileSubMenu>
                   )}
                 </AnimatePresence>
@@ -1224,44 +1263,45 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                     >
-                      <MobileSubItem
-                        to={`${currentBasePath}/what-we-do/telecommunications`}
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/what-we-do/telecommunications`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Telecommunications
-                      </MobileSubItem>
+                      </MobileSubItemAnchor>
+
                       <MobileSubSubItem
-                        to={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
+                        href={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Our Core Solutions
                       </MobileSubSubItem>
                       <MobileSubSubItem
-                        to={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
+                        href={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Service Standards
                       </MobileSubSubItem>
-                      <MobileSubItem
-                        to={`${currentBasePath}/what-we-do/command-control`}
+                      <MobileSubItemAnchor
+                        href={`${currentBasePath}/what-we-do/command-control`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
-                        Command & Control
-                      </MobileSubItem>
+                        Command &amp; Control
+                      </MobileSubItemAnchor>
                       <MobileSubSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#core-solutions`}
+                        href={`${currentBasePath}/what-we-do/command-control#core-solutions`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Our Core Solutions
                       </MobileSubSubItem>
                       <MobileSubSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#tech-stack`}
+                        href={`${currentBasePath}/what-we-do/command-control#tech-stack`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Technology Stack
                       </MobileSubSubItem>
                       <MobileSubSubItem
-                        to={`${currentBasePath}/what-we-do/command-control#industries-served`}
+                        href={`${currentBasePath}/what-we-do/command-control#industries-served`}
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Industries We Serve

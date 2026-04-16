@@ -293,13 +293,14 @@ function TelecommunicationsPage() {
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative overflow-x-hidden scroll-mt-20"
+        id="overview"
+        className="relative scroll-mt-20"
         style={{
           minHeight: '100dvh',
           display: 'flex',
           alignItems: 'center',
-          paddingTop: 'clamp(5rem, 10vh, 6rem)',
-          paddingBottom: 'clamp(2.5rem, 5vh, 4rem)',
+          paddingTop: 'clamp(7rem, 14vh, 9rem)',
+          paddingBottom: 'clamp(3rem, 6vh, 5rem)',
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
@@ -308,8 +309,8 @@ function TelecommunicationsPage() {
             Desktop : two columns side by side.
           */}
           <div
-            className="flex flex-col lg:grid lg:grid-cols-2 lg:items-center"
-            style={{ gap: 'clamp(1.5rem, 3vh, 2.5rem)' }}
+            className="grid grid-cols-1 lg:grid-cols-2 items-center"
+            style={{ gap: 'clamp(2rem, 4vh, 3rem)' }}
           >
             {/* Text */}
             <motion.div
@@ -337,7 +338,7 @@ function TelecommunicationsPage() {
               <h1
                 className="font-bold text-white"
                 style={{
-                  fontSize: 'clamp(1.125rem, 5vw, 3.75rem)',
+                  fontSize: 'clamp(1.25rem, 3vw, 2.5rem)',
                   marginBottom: 'clamp(0.75rem, 1.75vh, 1.5rem)',
                   lineHeight: '1.2',
                 }}
@@ -362,27 +363,25 @@ function TelecommunicationsPage() {
               </p>
             </motion.div>
 
-            {/* Hero Image — aspect-video on mobile, fixed height on desktop */}
+            {/* Hero Image */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
               transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full"
+              className="relative w-full min-w-0"
             >
               <div
                 className="relative w-full overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10"
-                style={{
-                  aspectRatio: '16/9',
-                  borderRadius: 'clamp(0.75rem, 1.5vh, 1.5rem)',
-                }}
+                style={{ borderRadius: 'clamp(0.75rem, 1.5vh, 1.5rem)' }}
               >
                 <img
                   src="/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_fb8c7d724c.jpeg"
                   alt="Telecommunications Network Infrastructure"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
+                  className="block w-full object-cover object-center"
+                  style={{ aspectRatio: '16/9' }}
                   loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/40 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/40 via-transparent to-transparent pointer-events-none" />
               </div>
             </motion.div>
           </div>

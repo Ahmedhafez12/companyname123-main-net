@@ -31,11 +31,12 @@ const NAV_ITEMS: NavItem[] = [
     path: "/about/overview",
     category: "about",
     children: [
+      { label: "Who We Are",        path: "/about/overview#what-we-do" },
       { label: "Company Identity",  path: "/about/overview#company-identity" },
       { label: "Our Journey",       path: "/about/overview#our-journey" },
       { label: "Vision & Mission",  path: "/about/overview#vision-mission" },
       { label: "Core Strengths",    path: "/about/overview#core-strengths" },
-      { label: "Value Proposition", path: "/about/overview#value-proposition" },
+      { label: "Why Choose Us",     path: "/about/overview#why-choose-us" },
       { label: "Competitive Edge",  path: "/about/overview#competitive-edge" },
     ],
   },
@@ -48,6 +49,7 @@ const NAV_ITEMS: NavItem[] = [
         label: "Telecommunications",
         path: "/what-we-do/telecommunications",
         anchors: [
+          { label: "Overview",           path: "/what-we-do/telecommunications#overview" },
           { label: "Our Core Solutions", path: "/what-we-do/telecommunications#business-unit" },
           { label: "Service Standards",  path: "/what-we-do/telecommunications#service-Standards" },
         ],
@@ -56,6 +58,7 @@ const NAV_ITEMS: NavItem[] = [
         label: "Command & Control",
         path: "/what-we-do/command-control",
         anchors: [
+          { label: "Overview",            path: "/what-we-do/command-control#overview" },
           { label: "Our Core Solutions",  path: "/what-we-do/command-control#core-solutions" },
           { label: "Technology Stack",    path: "/what-we-do/command-control#tech-stack" },
           { label: "Industries We Serve", path: "/what-we-do/command-control#industries-served" },

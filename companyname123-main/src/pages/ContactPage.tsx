@@ -1,216 +1,839 @@
-import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
-import { motion } from 'framer-motion';
-import { Envelope, Phone, MapPin, Globe, Clock, ChatCircle } from 'phosphor-react';
-import ContactSection from '../components/ContactSection';
-import Footer from '../components/Footer';
+import React, { useEffect, useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
+import {
+  Envelope,
+  Phone,
+  MapPin,
+  PaperPlaneTilt,
+  Shield,
+  Clock,
+  Headset,
+  LinkedinLogo,
+  TwitterLogo,
+  InstagramLogo,
+  CheckCircle,
+  ArrowRight,
+} from "phosphor-react";
+import { z } from "zod";
+import emailjs from "@emailjs/browser";
+import Footer from "../components/Footer";
 
+/* ─── design tokens (mirrors global) ─── */
+const C = {
+  primary: "#005E96",
+  secondary: "#44C8F5",
+  accent: "#7CCCBF",
+  cta: "#A6CE39",
+  bg: "#002C3D",
+} as const;
+
+const FONT = {
+  heading: '"Montserrat", system-ui, sans-serif',
+  body: '"Rubik", system-ui, sans-serif',
+  display: '"Playfair Display", serif',
+} as const;
+
+/* ─── form schema ─── */
+const SUBJECT_OPTIONS = [
+  { value: "", label: "Select a subject" },
+  { value: "general", label: "General Inquiry" },
+  { value: "sales", label: "Sales & Partnerships" },
+  { value: "support", label: "Technical Support" },
+  { value: "partnership", label: "Strategic Partnership" },
+  { value: "other", label: "Other" },
+];
+
+const formSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Please enter a valid email"),
+  subject: z.string().min(1, "Please select a subject"),
+  message: z.string().min(1, "Message is required"),
+});
+type FormData = z.infer<typeof formSchema>;
+
+/* ─── animations ─── */
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+  }),
+};
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
+
+/* ─── component ─── */
 function ContactPage() {
-  const contactInfo = [
-    {
-      icon: <div className="p-1"><Phone weight="thin" size={20} /></div>,
-      title: "Call Us",
-      details: [
-        "+1 (555) 123-4567",
-        "+1 (555) 987-6543"
-      ]
-    },
-    {
-      icon: <div className="p-1"><Envelope weight="thin" size={20} /></div>,
-      title: "Email Us",
-      details: [
-        "contact@hajztelecom.com",
-        "support@hajztelecom.com"
-      ]
-    },
-    {
-      icon: <div className="p-1"><MapPin weight="thin" size={20} /></div>,
-      title: "Visit Us",
-      details: [
-        "123 Tech Street",
-        "Innovation City, ST 12345"
-      ]
-    }
-  ];
-
-  const officeLocations = [
-    {
-      city: "New York",
-      country: "United States",
-      address: "123 Tech Street, NY 10001",
-      phone: "+1 (555) 123-4567"
-    },
-    {
-      city: "London",
-      country: "United Kingdom",
-      address: "456 Innovation Ave, EC1A 1BB",
-      phone: "+44 20 7123 4567"
-    },
-    {
-      city: "Singapore",
-      country: "Singapore",
-      address: "789 Digital Road, 018956",
-      phone: "+65 6789 0123"
-    }
-  ];
-
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [/* dependencies that indicate a route change */]);
+    window.scrollTo(0, 0);
+  }, []);
 
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [submitCount, setSubmitCount] = useState(0);
+  const lastSubmitTime = useRef<number>(0);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name as keyof FormData]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrors({});
+
+    const now = Date.now();
+    if (now - lastSubmitTime.current < 3600000 && submitCount >= 5) {
+      setErrors({ message: "Too many submissions. Please try again later." });
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      formSchema.parse(formData);
+
+      if (formRef.current) {
+        await emailjs.sendForm(
+          "service_cq0isqs",
+          "template_tzg1evt",
+          formRef.current,
+          "9DWNVO3rsaMB7nIaq"
+        );
+      }
+
+      setSubmitCount((prev) => prev + 1);
+      lastSubmitTime.current = Date.now();
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setSubmitStatus("success");
+      setTimeout(() => setSubmitStatus("idle"), 6000);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Partial<FormData> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0])
+            fieldErrors[err.path[0] as keyof FormData] = err.message;
+        });
+        setErrors(fieldErrors);
+      } else {
+        setSubmitStatus("error");
+        setTimeout(() => setSubmitStatus("idle"), 6000);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  /* ─── shared input classes ─── */
+  const inputBase = [
+    "w-full rounded-xl bg-white/[0.04] border border-white/[0.12]",
+    "text-white placeholder-white/30 outline-none",
+    "transition-all duration-300",
+    "focus:border-[#7CCCBF]/60 focus:bg-white/[0.06]",
+    "focus:shadow-[0_0_0_3px_rgba(124,204,191,0.12),0_8px_32px_rgba(0,94,150,0.15)]",
+    "hover:border-white/20 hover:bg-white/[0.05]",
+  ].join(" ");
+
+  const contactCards = [
+    {
+      icon: <Phone weight="duotone" size={24} />,
+      label: "Phone",
+      value: "+966 11 000 0000",
+      href: "tel:+966110000000",
+      accent: C.secondary,
+    },
+    {
+      icon: <Envelope weight="duotone" size={24} />,
+      label: "Email",
+      value: "info@hajztelecom.com",
+      href: "mailto:info@hajztelecom.com",
+      accent: C.accent,
+    },
+    {
+      icon: <MapPin weight="duotone" size={24} />,
+      label: "Headquarters",
+      value: "Riyadh, Saudi Arabia",
+      href: undefined,
+      accent: C.cta,
+    },
+  ];
+
+  const promiseBadges = [
+    { icon: <Clock weight="duotone" size={20} />, text: "Response within 24 hours" },
+    { icon: <Headset weight="duotone" size={20} />, text: "Dedicated account manager" },
+    { icon: <Shield weight="duotone" size={20} />, text: "Confidential & secure" },
+  ];
 
   return (
     <div className="relative">
       <Helmet>
-        <title>Contact Us - Hajz Telecommunication Co Ltd. | Get in Touch</title>
-        <meta name="description" content="Contact Hajz Telecommunication Co Ltd. for innovative telecommunications solutions. Our expert team is ready to help transform your infrastructure." />
+        <title>Contact Us – Hajz Telecommunication Co Ltd.</title>
+        <meta
+          name="description"
+          content="Get in touch with Hajz Telecommunication Co Ltd. We'd love to hear from you."
+        />
       </Helmet>
 
-      {/* Background gradient */}
-      <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
-      
-      {/* Hero Section */}
-      <section 
-        className="relative overflow-hidden scroll-mt-20"
+      {/* ━━━ Background layer (scoped to page content, not footer) ━━━ */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              linear-gradient(180deg, #001a28 0%, ${C.bg} 30%, ${C.primary}18 100%),
+              radial-gradient(ellipse 80% 60% at 20% 30%, ${C.primary}30 0%, transparent 60%),
+              radial-gradient(ellipse 60% 50% at 80% 70%, ${C.secondary}12 0%, transparent 55%),
+              radial-gradient(ellipse 40% 40% at 50% 50%, ${C.accent}08 0%, transparent 50%)
+            `,
+          }}
+        />
+      </div>
+
+      {/* ━━━━━━━━━━━━━━━ HERO ━━━━━━━━━━━━━━━ */}
+      <section
+        className="relative"
         style={{
-          minHeight: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingTop: 'clamp(5rem, 10vh, 6rem)',
-          paddingBottom: 'clamp(2rem, 4vh, 4rem)'
+          paddingTop: "clamp(8rem, 16vh, 12rem)",
+          paddingBottom: "clamp(3rem, 6vh, 5rem)",
         }}
       >
-        <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
+          {/* Eyebrow */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)' }}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={0}
+            className="flex items-center justify-center gap-3 mb-6"
           >
-            {/* <h1 className="font-bold text-white" style={{ 
-              fontSize: 'clamp(1.5rem, 3vh, 2.25rem)',
-              marginBottom: 'clamp(0.375rem, 0.75vh, 0.5rem)',
-              lineHeight: '1.2'
-            }}>
-              Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">Touch</span>
-            </h1>
-            <p className="text-white/80" style={{ 
-              fontSize: 'clamp(0.75rem, 1.25vh, 0.9375rem)',
-              marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
-              lineHeight: '1.4'
-            }}>
-              Let's discuss how we can help transform your telecommunications infrastructure.
-            </p> */}
+            <span
+              className="h-px w-10"
+              style={{
+                background: `linear-gradient(90deg, transparent, ${C.accent})`,
+              }}
+            />
+            <span
+              className="text-xs font-semibold tracking-[0.25em] uppercase"
+              style={{ color: C.accent, fontFamily: FONT.heading }}
+            >
+              Contact Us
+            </span>
+            <span
+              className="h-px w-10"
+              style={{
+                background: `linear-gradient(90deg, ${C.accent}, transparent)`,
+              }}
+            />
           </motion.div>
-          
-          {/* Contact Section */}
-          <div className="w-full">
-            <ContactSection size="large" />
-          </div>
 
+          {/* Headline */}
+          <motion.h1
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={1}
+            className="text-center text-white font-bold"
+            style={{
+              fontFamily: FONT.heading,
+              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Let's Start a{" "}
+            <span
+              className="text-transparent bg-clip-text"
+              style={{
+                backgroundImage: `linear-gradient(135deg, ${C.cta}, ${C.accent}, ${C.secondary})`,
+              }}
+            >
+              Conversation
+            </span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={2}
+            className="text-center max-w-lg mx-auto mt-5"
+            style={{
+              color: "rgba(255,255,255,0.6)",
+              fontFamily: FONT.body,
+              fontSize: "clamp(0.95rem, 1.5vw, 1.125rem)",
+              lineHeight: 1.7,
+            }}
+          >
+            Whether you have a question, a project in mind, or simply want to
+            explore possibilities — we're here.
+          </motion.p>
+
+          {/* Promise badges */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            custom={3}
+            className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 mt-8"
+          >
+            {promiseBadges.map((b) => (
+              <div
+                key={b.text}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm"
+              >
+                <span style={{ color: C.accent }}>{b.icon}</span>
+                <span
+                  className="text-white/50 text-xs font-medium"
+                  style={{ fontFamily: FONT.body }}
+                >
+                  {b.text}
+                </span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Global Offices */}
-      {/* <section className="py-16 md:py-24 relative bg-white/5 backdrop-blur-sm">
-        <div className="container mx-auto px-4 sm:px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Global Offices</h2>
-            <p className="text-white/80 text-lg max-w-2xl mx-auto">
-              Find us in major technology hubs around the world.
-            </p>
-          </motion.div>
+      {/* ━━━━━━━━━━━━━━━ MAIN CONTACT AREA ━━━━━━━━━━━━━━━ */}
+      <section
+        className="relative"
+        style={{
+          paddingTop: "clamp(1rem, 2vh, 2rem)",
+          paddingBottom: "clamp(5rem, 10vh, 8rem)",
+        }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12 items-start">
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {officeLocations.map((office, index) => (
+            {/* ─── LEFT: Contact Info ─── */}
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              className="flex flex-col gap-5"
+            >
+              {/* Info heading */}
+              <motion.div variants={fadeUp} className="mb-2">
+                <h2
+                  className="text-white font-semibold mb-2"
+                  style={{
+                    fontFamily: FONT.heading,
+                    fontSize: "clamp(1.25rem, 2.5vw, 1.625rem)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Get in Touch
+                </h2>
+                <p
+                  className="text-white/40 leading-relaxed"
+                  style={{
+                    fontFamily: FONT.body,
+                    fontSize: "clamp(0.85rem, 1.25vw, 0.9375rem)",
+                  }}
+                >
+                  Reach out through any of the channels below and our team will
+                  be happy to assist you.
+                </p>
+              </motion.div>
+
+              {/* Contact cards */}
+              {contactCards.map((card) => (
+                <motion.div key={card.label} variants={fadeUp}>
+                  {card.href ? (
+                    <a
+                      href={card.href}
+                      className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 sm:p-6 transition-all duration-400 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,94,150,0.2)]"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div
+                          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                          style={{
+                            background: `${card.accent}15`,
+                            color: card.accent,
+                          }}
+                        >
+                          {card.icon}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span
+                            className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1.5"
+                            style={{ fontFamily: FONT.heading }}
+                          >
+                            {card.label}
+                          </span>
+                          <span
+                            className="text-white font-medium transition-colors duration-300 group-hover:text-[#7CCCBF]"
+                            style={{
+                              fontFamily: FONT.body,
+                              fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
+                            }}
+                          >
+                            {card.value}
+                          </span>
+                        </div>
+                        <ArrowRight
+                          weight="bold"
+                          size={16}
+                          className="text-white/20 mt-1 transition-all duration-300 group-hover:text-white/50 group-hover:translate-x-1"
+                        />
+                      </div>
+                    </a>
+                  ) : (
+                    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 sm:p-6">
+                      <div className="flex items-start gap-4">
+                        <div
+                          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            background: `${card.accent}15`,
+                            color: card.accent,
+                          }}
+                        >
+                          {card.icon}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <span
+                            className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1.5"
+                            style={{ fontFamily: FONT.heading }}
+                          >
+                            {card.label}
+                          </span>
+                          <span
+                            className="text-white font-medium"
+                            style={{
+                              fontFamily: FONT.body,
+                              fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
+                            }}
+                          >
+                            {card.value}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+
+              {/* Social links */}
               <motion.div
-                key={office.city}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300"
+                variants={fadeUp}
+                className="mt-2 pt-6 border-t border-white/[0.06]"
               >
-                <h3 className="text-xl font-bold text-white mb-2">{office.city}</h3>
-                <p className="text-cta mb-4">{office.country}</p>
-                <div className="space-y-3 text-white/70">
-                  <p className="flex items-center">
-                    <div className="p-0.5 mr-2"><MapPin weight="thin" size={20} className="text-cta" /></div>
-                    {office.address}
-                  </p>
-                  <p className="flex items-center">
-                    <div className="p-0.5 mr-2"><Phone weight="thin" size={20} className="text-cta" /></div>
-                    {office.phone}
-                  </p>
+                <span
+                  className="block text-white/30 text-xs font-medium uppercase tracking-[0.2em] mb-4"
+                  style={{ fontFamily: FONT.heading }}
+                >
+                  Follow Us
+                </span>
+                <div className="flex gap-3">
+                  {[
+                    {
+                      Icon: LinkedinLogo,
+                      label: "LinkedIn",
+                      href: "https://linkedin.com",
+                    },
+                    {
+                      Icon: TwitterLogo,
+                      label: "Twitter",
+                      href: "https://twitter.com",
+                    },
+                    {
+                      Icon: InstagramLogo,
+                      label: "Instagram",
+                      href: "https://instagram.com",
+                    },
+                  ].map(({ Icon, label, href }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="group inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/[0.08] bg-white/[0.03] text-white/40 transition-all duration-300 hover:border-[#7CCCBF]/30 hover:bg-[#7CCCBF]/10 hover:text-[#7CCCBF] hover:scale-105"
+                    >
+                      <Icon weight="regular" size={20} />
+                    </a>
+                  ))}
                 </div>
               </motion.div>
-            ))}
+            </motion.div>
+
+            {/* ─── RIGHT: Form ─── */}
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.7,
+                delay: 0.15,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <div
+                className="relative rounded-3xl overflow-hidden"
+                style={{
+                  background: `linear-gradient(145deg, rgba(0,94,150,0.18) 0%, rgba(0,44,61,0.35) 50%, rgba(124,204,191,0.06) 100%)`,
+                  boxShadow: `
+                    0 1px 0 0 rgba(255,255,255,0.05) inset,
+                    0 32px 64px -16px rgba(0,0,0,0.35),
+                    0 0 80px -20px ${C.primary}25
+                  `,
+                }}
+              >
+                {/* Top accent line */}
+                <div
+                  className="h-[2px] w-full"
+                  style={{
+                    background: `linear-gradient(90deg, transparent 5%, ${C.cta} 30%, ${C.accent} 50%, ${C.secondary} 70%, transparent 95%)`,
+                  }}
+                />
+
+                {/* Glass border */}
+                <div
+                  className="absolute inset-0 rounded-3xl pointer-events-none"
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.07)",
+                  }}
+                />
+
+                <div className="relative p-6 sm:p-8 lg:p-10">
+                  {/* Form header */}
+                  <div className="mb-8">
+                    <h3
+                      className="text-white font-semibold mb-1.5"
+                      style={{
+                        fontFamily: FONT.heading,
+                        fontSize: "clamp(1.125rem, 2vw, 1.375rem)",
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      Send a Message
+                    </h3>
+                    <p
+                      className="text-white/35"
+                      style={{
+                        fontFamily: FONT.body,
+                        fontSize: "0.8125rem",
+                      }}
+                    >
+                      Fill out the form and we'll get back to you promptly.
+                    </p>
+                  </div>
+
+                  {/* ─ Success state ─ */}
+                  {submitStatus === "success" ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="text-center py-12"
+                    >
+                      <div
+                        className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center"
+                        style={{
+                          background: `${C.cta}18`,
+                          border: `1px solid ${C.cta}30`,
+                        }}
+                      >
+                        <CheckCircle
+                          weight="duotone"
+                          size={32}
+                          style={{ color: C.cta }}
+                        />
+                      </div>
+                      <h4
+                        className="text-white font-semibold text-lg mb-2"
+                        style={{ fontFamily: FONT.heading }}
+                      >
+                        Message Sent
+                      </h4>
+                      <p
+                        className="text-white/50 text-sm"
+                        style={{ fontFamily: FONT.body }}
+                      >
+                        Thank you for reaching out. We'll respond within 24
+                        hours.
+                      </p>
+                    </motion.div>
+                  ) : submitStatus === "error" ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="text-center py-12"
+                    >
+                      <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 mx-auto mb-5 flex items-center justify-center">
+                        <Shield
+                          weight="duotone"
+                          size={32}
+                          className="text-red-400"
+                        />
+                      </div>
+                      <h4
+                        className="text-white font-semibold text-lg mb-2"
+                        style={{ fontFamily: FONT.heading }}
+                      >
+                        Something went wrong
+                      </h4>
+                      <p
+                        className="text-white/50 text-sm"
+                        style={{ fontFamily: FONT.body }}
+                      >
+                        Please try again or reach out via phone or email.
+                      </p>
+                    </motion.div>
+                  ) : (
+                    /* ─ Form ─ */
+                    <form
+                      ref={formRef}
+                      onSubmit={handleSubmit}
+                      className="flex flex-col gap-5"
+                    >
+                      {/* Name + Email row */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div>
+                          <label
+                            htmlFor="cp-name"
+                            className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
+                            style={{ fontFamily: FONT.heading }}
+                          >
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            id="cp-name"
+                            name="name"
+                            placeholder="John Doe"
+                            value={formData.name}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            className={`${inputBase} ${errors.name ? "!border-red-400/60" : ""}`}
+                            style={{
+                              fontFamily: FONT.body,
+                              padding: "0.75rem 1rem",
+                              fontSize: "0.9375rem",
+                            }}
+                          />
+                          {errors.name && (
+                            <p
+                              className="mt-1.5 text-red-400 text-xs"
+                              style={{ fontFamily: FONT.body }}
+                            >
+                              {errors.name}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="cp-email"
+                            className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
+                            style={{ fontFamily: FONT.heading }}
+                          >
+                            Email Address
+                          </label>
+                          <input
+                            type="email"
+                            id="cp-email"
+                            name="email"
+                            placeholder="john@company.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            className={`${inputBase} ${errors.email ? "!border-red-400/60" : ""}`}
+                            style={{
+                              fontFamily: FONT.body,
+                              padding: "0.75rem 1rem",
+                              fontSize: "0.9375rem",
+                            }}
+                          />
+                          {errors.email && (
+                            <p
+                              className="mt-1.5 text-red-400 text-xs"
+                              style={{ fontFamily: FONT.body }}
+                            >
+                              {errors.email}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Subject */}
+                      <div>
+                        <label
+                          htmlFor="cp-subject"
+                          className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
+                          style={{ fontFamily: FONT.heading }}
+                        >
+                          Subject
+                        </label>
+                        <div className="relative">
+                          <select
+                            id="cp-subject"
+                            name="subject"
+                            value={formData.subject}
+                            onChange={handleChange}
+                            disabled={isSubmitting}
+                            className={`${inputBase} cursor-pointer ${
+                              formData.subject
+                                ? "text-white"
+                                : "text-white/30"
+                            } ${errors.subject ? "!border-red-400/60" : ""}`}
+                            style={{
+                              fontFamily: FONT.body,
+                              padding: "0.75rem 3rem 0.75rem 1rem",
+                              fontSize: "0.9375rem",
+                              appearance: "none",
+                              WebkitAppearance: "none",
+                              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%237CCCBF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+                              backgroundRepeat: "no-repeat",
+                              backgroundPosition: "right 1rem center",
+                              backgroundSize: "1.125rem",
+                              colorScheme: "dark",
+                            }}
+                          >
+                            {SUBJECT_OPTIONS.map(({ value, label }) => (
+                              <option
+                                key={value || "ph"}
+                                value={value}
+                                className="bg-[#0a2f3d] text-white"
+                              >
+                                {label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        {errors.subject && (
+                          <p
+                            className="mt-1.5 text-red-400 text-xs"
+                            style={{ fontFamily: FONT.body }}
+                          >
+                            {errors.subject}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Message */}
+                      <div>
+                        <label
+                          htmlFor="cp-message"
+                          className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
+                          style={{ fontFamily: FONT.heading }}
+                        >
+                          Message
+                        </label>
+                        <textarea
+                          id="cp-message"
+                          name="message"
+                          placeholder="Tell us about your project or inquiry..."
+                          rows={5}
+                          value={formData.message}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                          className={`${inputBase} resize-none ${errors.message ? "!border-red-400/60" : ""}`}
+                          style={{
+                            fontFamily: FONT.body,
+                            padding: "0.75rem 1rem",
+                            fontSize: "0.9375rem",
+                            lineHeight: 1.6,
+                          }}
+                        />
+                        {errors.message && (
+                          <p
+                            className="mt-1.5 text-red-400 text-xs"
+                            style={{ fontFamily: FONT.body }}
+                          >
+                            {errors.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Submit */}
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="group relative mt-2 w-full py-3.5 rounded-xl font-semibold text-white overflow-hidden transition-all duration-300 hover:shadow-[0_8px_32px_rgba(166,206,57,0.25)] disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{
+                          background: `linear-gradient(135deg, ${C.cta}, ${C.accent})`,
+                          fontFamily: FONT.heading,
+                          fontSize: "0.9375rem",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        <span className="relative z-10 flex items-center justify-center gap-2.5">
+                          {isSubmitting ? (
+                            "Sending..."
+                          ) : (
+                            <>
+                              Send Message
+                              <PaperPlaneTilt
+                                weight="bold"
+                                size={18}
+                                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                              />
+                            </>
+                          )}
+                        </span>
+                        {/* Hover shine effect */}
+                        <div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            background:
+                              "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%)",
+                          }}
+                        />
+                      </button>
+
+                      {/* Privacy note */}
+                      <p
+                        className="text-white/25 text-center mt-1"
+                        style={{
+                          fontFamily: FONT.body,
+                          fontSize: "0.6875rem",
+                        }}
+                      >
+                        Your information is encrypted and will never be shared
+                        with third parties.
+                      </p>
+                    </form>
+                  )}
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </section> */}
+      </section>
 
-      {/* Additional Contact Info */}
-      {/* <section className="py-16 md:py-24 relative">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
-            >
-              <div className="p-1 mb-4"><Globe weight="thin" size={20} className="text-cta" /></div>
-              <h3 className="text-lg font-semibold text-white mb-2">Global Support</h3>
-              <p className="text-white/70">
-                24/7 technical support available worldwide in multiple languages.
-              </p>
-            </motion.div>
+      {/* Divider between page content and footer */}
+      <div
+        className="relative w-full h-px"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${C.accent}40, ${C.secondary}50, ${C.accent}40, transparent)`,
+        }}
+      />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
-            >
-              <div className="p-1 mb-4"><Clock weight="thin" size={20} className="text-cta" /></div>
-              <h3 className="text-lg font-semibold text-white mb-2">Business Hours</h3>
-              <p className="text-white/70">
-                Monday - Friday: 9:00 AM - 6:00 PM (Local Time)
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6"
-            >
-              <div className="p-1 mb-4"><ChatCircle weight="thin" size={20} className="text-cta" /></div>
-              <h3 className="text-lg font-semibold text-white mb-2">Live Chat</h3>
-              <p className="text-white/70">
-                Connect with our team instantly through our live chat support.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Footer */}
       <Footer />
     </div>
   );
 }
 
 export default ContactPage;
-
