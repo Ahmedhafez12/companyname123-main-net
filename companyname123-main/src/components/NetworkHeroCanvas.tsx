@@ -13,35 +13,50 @@ gsap.registerPlugin(ScrollTrigger);
 // ─── Design Tokens ────────────────────────────────────────────────────────────
 
 const COLOR_ACCENT = "#A6CE39";
-const COLOR_TEAL   = "#7CCCBF";
-const COLOR_SKY    = "#44C8F5";
-const COLOR_NAVY   = "#005E96";
+const COLOR_TEAL = "#7CCCBF";
+const COLOR_SKY = "#44C8F5";
+const COLOR_NAVY = "#005E96";
 
 // ─── Sequence config ─────────────────────────────────────────────────────────
 
-const FRAME_COUNT       = 190;
-const MIN_LOADED_COUNT  = Math.ceil(FRAME_COUNT * 0.2);
-const SEQUENCE_BASE     = "/images/hero-sequence";
+const FRAME_COUNT = 100;
+const MIN_LOADED_COUNT = Math.ceil(FRAME_COUNT * 0.2);
+const SEQUENCE_BASE = "/images/hero-sequence";
 const SOURCE_CROP_BOTTOM_PX = 50;
 
 // ─── Scroll-animation config ─────────────────────────────────────────────────
 
 const HERO_TITLE_MOTION_END = 0.28;
-const HERO_TITLE_SCALE_MAX  = 1.1;
-const HERO_COPY_Y_MAX       = 90;
-const NAV_CLEARANCE         = "pt-16 sm:pt-20";
+const HERO_TITLE_SCALE_MAX = 1.1;
+const HERO_COPY_Y_MAX = 90;
+const NAV_CLEARANCE = "pt-16 sm:pt-20";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type Partner = { name: string; src: string };
 
 const PARTNERS: Partner[] = [
-  { name: "Saudi Ministry of Defense", src: "https://upload.wikimedia.org/wikipedia/ar/d/d7/Saudi_Ministry_of_Defense_Logo.svg" },
-  { name: "STC",       src: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg" },
-  { name: "HP",        src: "https://upload.wikimedia.org/wikipedia/commons/a/ad/HP_logo_2012.svg" },
-  { name: "Microsoft", src: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png" },
-  { name: "IBM",       src: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" },
-  { name: "Oracle",    src: "/assets/oracle-logo.svg" },
+  {
+    name: "Saudi Ministry of Defense",
+    src: "https://upload.wikimedia.org/wikipedia/ar/d/d7/Saudi_Ministry_of_Defense_Logo.svg",
+  },
+  {
+    name: "STC",
+    src: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg",
+  },
+  {
+    name: "HP",
+    src: "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963",
+  },
+  {
+    name: "Microsoft",
+    src: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png",
+  },
+  {
+    name: "IBM",
+    src: "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg",
+  },
+  { name: "Oracle", src: "/assets/oracle-logo.svg" },
 ];
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -54,7 +69,7 @@ function drawImageCover(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   cw: number,
-  ch: number
+  ch: number,
 ): void {
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
@@ -70,7 +85,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.decoding = "async";
-    img.onload  = () => resolve(img);
+    img.onload = () => resolve(img);
     img.onerror = () => reject(new Error(`Failed to load ${src}`));
     img.src = src;
   });
@@ -114,30 +129,36 @@ export type NetworkHeroCanvasProps = {
   scrollScrollerRef?: RefObject<HTMLElement | null>;
 };
 
-export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanvasProps) {
+export default function NetworkHeroCanvas({
+  scrollScrollerRef,
+}: NetworkHeroCanvasProps) {
   // ── Refs ──────────────────────────────────────────────────────────────────
-  const trackRef          = useRef<HTMLElement>(null);
-  const stickyRef         = useRef<HTMLDivElement>(null);
-  const canvasShellRef    = useRef<HTMLDivElement>(null);
-  const canvasRef         = useRef<HTMLCanvasElement>(null);
-  const heroHeadlinesRef  = useRef<HTMLDivElement>(null);
-  const trustedBannerRef  = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const canvasShellRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroHeadlinesRef = useRef<HTMLDivElement>(null);
+  const trustedBannerRef = useRef<HTMLDivElement>(null);
 
-  const imagesRef     = useRef<(HTMLImageElement | undefined)[]>(
-    new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined)
+  const imagesRef = useRef<(HTMLImageElement | undefined)[]>(
+    new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined),
   );
-  const loadCountRef  = useRef(0);
-  const lastFrameRef  = useRef(-1);
-  const canPaintRef   = useRef(false);
+  const loadCountRef = useRef(0);
+  const lastFrameRef = useRef(-1);
+  const canPaintRef = useRef(false);
 
   // ── State ─────────────────────────────────────────────────────────────────
-  const [loadPhase, setLoadPhase] = useState<"boot" | "interactive" | "error">("boot");
+  const [loadPhase, setLoadPhase] = useState<"boot" | "interactive" | "error">(
+    "boot",
+  );
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
   const clearHeroCopyTransforms = useCallback(() => {
-    if (heroHeadlinesRef.current) gsap.set(heroHeadlinesRef.current, { clearProps: "transform" });
-    if (trustedBannerRef.current) gsap.set(trustedBannerRef.current, { clearProps: "transform" });
+    if (heroHeadlinesRef.current)
+      gsap.set(heroHeadlinesRef.current, { clearProps: "transform" });
+    if (trustedBannerRef.current)
+      gsap.set(trustedBannerRef.current, { clearProps: "transform" });
   }, []);
 
   const measureViewport = useCallback(() => {
@@ -147,12 +168,16 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
         return { w: Math.round(r.width), h: Math.round(r.height) };
     }
     return {
-      w: typeof window !== "undefined" ? window.innerWidth  : 0,
+      w: typeof window !== "undefined" ? window.innerWidth : 0,
       h: typeof window !== "undefined" ? window.innerHeight : 0,
     };
   }, []);
 
-  const prepareCanvas = useCallback((): { ctx: CanvasRenderingContext2D; w: number; h: number } | null => {
+  const prepareCanvas = useCallback((): {
+    ctx: CanvasRenderingContext2D;
+    w: number;
+    h: number;
+  } | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const ctx = canvas.getContext("2d");
@@ -166,9 +191,9 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
     const nh = Math.round(h * dpr);
 
     if (canvas.width !== nw || canvas.height !== nh) {
-      canvas.width  = nw;
+      canvas.width = nw;
       canvas.height = nh;
-      canvas.style.width  = `${w}px`;
+      canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
     }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -176,11 +201,12 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
   }, [measureViewport]);
 
   const findDrawableFrame = useCallback((idx: number) => {
-    const arr    = imagesRef.current;
-    const ready  = (im?: HTMLImageElement) => im?.complete && im.naturalWidth;
+    const arr = imagesRef.current;
+    const ready = (im?: HTMLImageElement) => im?.complete && im.naturalWidth;
     if (ready(arr[idx])) return arr[idx]!;
-    for (let j = idx; j >= 0; j--)          if (ready(arr[j])) return arr[j]!;
-    for (let j = idx + 1; j < FRAME_COUNT; j++) if (ready(arr[j])) return arr[j]!;
+    for (let j = idx; j >= 0; j--) if (ready(arr[j])) return arr[j]!;
+    for (let j = idx + 1; j < FRAME_COUNT; j++)
+      if (ready(arr[j])) return arr[j]!;
     return null;
   }, []);
 
@@ -195,7 +221,7 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
       ctx.fillRect(0, 0, w, h);
       if (img) drawImageCover(ctx, img, w, h);
     },
-    [prepareCanvas, findDrawableFrame]
+    [prepareCanvas, findDrawableFrame],
   );
 
   const resizeAndRedraw = useCallback(() => {
@@ -203,22 +229,26 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
   }, [paintFrame]);
 
   const applyHeroCopyScroll = useCallback((scrollProgress: number) => {
-    const p    = Math.min(1, Math.max(0, scrollProgress));
-    const t    = Math.min(1, Math.max(0, p / HERO_TITLE_MOTION_END));
+    const p = Math.min(1, Math.max(0, scrollProgress));
+    const t = Math.min(1, Math.max(0, p / HERO_TITLE_MOTION_END));
     const ease = 1 - (1 - t) * (1 - t);
     const scale = gsap.utils.interpolate(1, HERO_TITLE_SCALE_MAX, ease);
-    const y     = -gsap.utils.interpolate(0, HERO_COPY_Y_MAX, ease);
+    const y = -gsap.utils.interpolate(0, HERO_COPY_Y_MAX, ease);
 
     if (heroHeadlinesRef.current) {
       gsap.set(heroHeadlinesRef.current, {
-        opacity: 1, scale, y,
+        opacity: 1,
+        scale,
+        y,
         transformOrigin: "50% 100%",
         force3D: true,
       });
     }
     if (trustedBannerRef.current) {
       gsap.set(trustedBannerRef.current, {
-        opacity: 1, visibility: "visible", y,
+        opacity: 1,
+        visibility: "visible",
+        y,
         force3D: true,
       });
     }
@@ -226,25 +256,30 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
 
   const drawFrame = useCallback(
     (progress: number) => {
-      const p      = Math.min(1, Math.max(0, progress));
-      const index0 = Math.min(FRAME_COUNT - 1, Math.round(p * (FRAME_COUNT - 1)));
+      const p = Math.min(1, Math.max(0, progress));
+      const index0 = Math.min(
+        FRAME_COUNT - 1,
+        Math.round(p * (FRAME_COUNT - 1)),
+      );
       applyHeroCopyScroll(p);
       if (index0 !== lastFrameRef.current) {
         lastFrameRef.current = index0;
         paintFrame(index0);
       }
     },
-    [paintFrame, applyHeroCopyScroll]
+    [paintFrame, applyHeroCopyScroll],
   );
 
   // ── Load frames ───────────────────────────────────────────────────────────
 
   useLayoutEffect(() => {
     let cancelled = false;
-    const slots   = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
-    imagesRef.current    = slots;
+    const slots = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(
+      undefined,
+    );
+    imagesRef.current = slots;
     loadCountRef.current = 0;
-    canPaintRef.current  = false;
+    canPaintRef.current = false;
     setLoadPhase("boot");
 
     const onOneLoaded = () => {
@@ -261,21 +296,34 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
     const bumpSettled = () => {
       settled += 1;
       if (cancelled) return;
-      if (settled >= FRAME_COUNT && loadCountRef.current < MIN_LOADED_COUNT) setLoadPhase("error");
-      if (settled === FRAME_COUNT) requestAnimationFrame(() => ScrollTrigger.refresh());
+      if (settled >= FRAME_COUNT && loadCountRef.current < MIN_LOADED_COUNT)
+        setLoadPhase("error");
+      if (settled === FRAME_COUNT)
+        requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 
-    Array.from({ length: FRAME_COUNT }, (_, i) => frameUrl(i + 1)).forEach((src, i) => {
-      loadImage(src)
-        .then((img) => { if (!cancelled) { slots[i] = img; onOneLoaded(); } })
-        .catch(() => {})
-        .finally(bumpSettled);
-    });
+    Array.from({ length: FRAME_COUNT }, (_, i) => frameUrl(i + 1)).forEach(
+      (src, i) => {
+        loadImage(src)
+          .then((img) => {
+            if (!cancelled) {
+              slots[i] = img;
+              onOneLoaded();
+            }
+          })
+          .catch(() => {
+            /* Image frame failed to load — slot remains empty */
+          })
+          .finally(bumpSettled);
+      },
+    );
 
     return () => {
-      cancelled           = true;
+      cancelled = true;
       canPaintRef.current = false;
-      imagesRef.current   = new Array<HTMLImageElement | undefined>(FRAME_COUNT).fill(undefined);
+      imagesRef.current = new Array<HTMLImageElement | undefined>(
+        FRAME_COUNT,
+      ).fill(undefined);
     };
   }, []);
 
@@ -283,7 +331,7 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
 
   useLayoutEffect(() => {
     if (loadPhase !== "interactive") return;
-    const track    = trackRef.current;
+    const track = trackRef.current;
     if (!track) return;
     const scroller = scrollScrollerRef?.current ?? undefined;
 
@@ -294,14 +342,14 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
     };
 
     const stConfig: ScrollTrigger.Vars = {
-      id:                  "network-hero-canvas-st",
-      trigger:             track,
-      start:               "top top",
-      end:                 "bottom bottom",
-      scrub:               1,
+      id: "network-hero-canvas-st",
+      trigger: track,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1,
       invalidateOnRefresh: true,
-      onUpdate:  (self) => drawFrame(self.progress),
-      onToggle:  (self) => toggleSnap(self.isActive),
+      onUpdate: (self) => drawFrame(self.progress),
+      onToggle: (self) => toggleSnap(self.isActive),
       onRefresh: () => {
         clearHeroCopyTransforms();
         requestAnimationFrame(() => {
@@ -323,7 +371,10 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
       drawFrame(st.progress);
     };
     window.addEventListener("resize", onResize);
-    requestAnimationFrame(() => { ScrollTrigger.refresh(); drawFrame(st.progress); });
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+      drawFrame(st.progress);
+    });
 
     return () => {
       window.removeEventListener("resize", onResize);
@@ -331,7 +382,13 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
       scroller?.classList.remove("network-hero-snap-off");
       clearHeroCopyTransforms();
     };
-  }, [loadPhase, scrollScrollerRef, drawFrame, resizeAndRedraw, clearHeroCopyTransforms]);
+  }, [
+    loadPhase,
+    scrollScrollerRef,
+    drawFrame,
+    resizeAndRedraw,
+    clearHeroCopyTransforms,
+  ]);
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -419,7 +476,9 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
               <div className="mb-6 flex items-center gap-3">
                 <span
                   className="h-px w-8"
-                  style={{ background: `linear-gradient(to right, transparent, ${COLOR_ACCENT})` }}
+                  style={{
+                    background: `linear-gradient(to right, transparent, ${COLOR_ACCENT})`,
+                  }}
                 />
                 <p
                   className="font-mono text-[0.65rem] font-semibold uppercase tracking-[0.28em] sm:text-[0.7rem]"
@@ -432,7 +491,9 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
                 </p>
                 <span
                   className="h-px w-8"
-                  style={{ background: `linear-gradient(to left, transparent, ${COLOR_ACCENT})` }}
+                  style={{
+                    background: `linear-gradient(to left, transparent, ${COLOR_ACCENT})`,
+                  }}
                 />
               </div>
 
@@ -445,8 +506,7 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
                   textShadow: "0 2px 32px rgba(0,13,20,0.6)",
                 }}
               >
-                Simple.{" "}
-                <span style={{ color: COLOR_ACCENT }}>Fast.</span>{" "}
+                Simple. <span style={{ color: COLOR_ACCENT }}>Fast.</span>{" "}
                 Secure.
               </h1>
 
@@ -471,9 +531,8 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
                   textShadow: "0 1px 18px rgba(0,18,28,0.55)",
                 }}
               >
-                Powering mission-critical infrastructure for the world's most
-                demanding organisations — with zero compromise on performance or
-                security.
+                We provide high-performance, ultra-secure infrastructure for the
+                world’s most important companies.
               </p>
 
               {/* CTA row */}
@@ -497,7 +556,13 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
                   }}
                 >
                   Get Started
-                  <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden>
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    aria-hidden
+                  >
                     <path
                       d="M3 7h8M7.5 3.5L11 7l-3.5 3.5"
                       stroke="currentColor"
@@ -539,7 +604,10 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
               <div className="flex w-full max-w-xs items-center gap-3">
                 <div
                   className="h-px flex-1"
-                  style={{ background: "linear-gradient(to right, transparent, rgba(255,255,255,0.14))" }}
+                  style={{
+                    background:
+                      "linear-gradient(to right, transparent, rgba(255,255,255,0.14))",
+                  }}
                 />
                 <p
                   className="whitespace-nowrap font-mono text-[0.6rem] font-semibold uppercase tracking-[0.24em] sm:text-[0.65rem]"
@@ -552,7 +620,10 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
                 </p>
                 <div
                   className="h-px flex-1"
-                  style={{ background: "linear-gradient(to left, transparent, rgba(255,255,255,0.14))" }}
+                  style={{
+                    background:
+                      "linear-gradient(to left, transparent, rgba(255,255,255,0.14))",
+                  }}
                 />
               </div>
 
@@ -637,9 +708,18 @@ export default function NetworkHeroCanvas({ scrollScrollerRef }: NetworkHeroCanv
               {/* Icon */}
               <div
                 className="flex h-12 w-12 items-center justify-center rounded-full border"
-                style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)" }}
+                style={{
+                  borderColor: "rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.04)",
+                }}
               >
-                <svg width="20" height="20" viewBox="0 0 32 32" fill="none" aria-hidden>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  aria-hidden
+                >
                   <path
                     d="M16 10v7M16 21v1"
                     stroke={COLOR_TEAL}
