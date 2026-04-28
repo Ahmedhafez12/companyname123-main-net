@@ -116,6 +116,23 @@
     padding-top: var(--safe-area-inset-top);
   }
 
+  /* Dynamic Island / notch: paint the safe-area strip with brand primary.
+     Only visible on devices with a notch or Dynamic Island (iPhone 14 Pro+)
+     when viewport-fit=cover is active. */
+  @supports (padding-top: env(safe-area-inset-top)) {
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: env(safe-area-inset-top);
+      background: var(--color-primary);
+      z-index: 99999;
+      pointer-events: none;
+    }
+  }
+
   /* Fix for iOS Safari 100vh issue */
   @supports (-webkit-touch-callout: none) {
     .min-h-screen {
@@ -481,6 +498,13 @@ html[dir="rtl"] p {
 section#hero.snap-section,
 section#about-cta.snap-section {
   padding-top: 0 !important;
+}
+
+/* The hero section must keep viewport height on mobile so the carousel
+   (which uses only absolutely-positioned children) does not collapse. */
+section#hero.snap-section {
+  min-height: 100svh !important;
+  height: 100svh !important;
 }
 
 /* Tablet (768–1023): re-enable proximity snapping */

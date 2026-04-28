@@ -388,7 +388,8 @@ const BannerWrapper = styled.div`
 const HeroSection = styled.section`
   position: relative;
   width: 100%;
-  height: 100%;
+  /* Use explicit height so absolutely-positioned children can reference it */
+  height: 100svh;
   min-height: 100svh;
   overflow: hidden;
   display: flex;
@@ -399,10 +400,13 @@ const HeroSection = styled.section`
 
   /* Fix for iOS Safari 100vh issue */
   @supports (-webkit-touch-callout: none) {
+    height: -webkit-fill-available;
     min-height: -webkit-fill-available;
   }
 
   @media (max-width: 639px) {
+    height: 100svh;
+    min-height: 100svh;
     align-items: flex-start;
     padding-top: clamp(4.5rem, 14vw, 5.5rem);
     padding-bottom: 6.5rem;
