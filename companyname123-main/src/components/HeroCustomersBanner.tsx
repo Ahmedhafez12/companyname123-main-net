@@ -269,22 +269,24 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
                     rel="noopener noreferrer"
                     className="flex items-center justify-center rounded-lg bg-transparent transition-all duration-300"
                     style={{
-                      width: isMobile ? "clamp(64px, 14vw, 88px)" : "clamp(88px, 16vw, 120px)",
-                      height: isMobile ? "clamp(28px, 6vw, 40px)" : "clamp(36px, 7vw, 52px)",
-                      padding: isMobile ? "0.25rem 0.375rem" : "clamp(0.375rem, 0.75vh, 0.625rem)",
+                      width: isMobile ? "clamp(72px, 18vw, 100px)" : "clamp(88px, 16vw, 120px)",
+                      height: isMobile ? "clamp(32px, 8vw, 44px)" : "clamp(36px, 7vw, 52px)",
+                      padding: isMobile ? "0.25rem 0.5rem" : "clamp(0.375rem, 0.75vh, 0.625rem)",
                     }}
                     aria-label={`Visit ${customer.name} website`}
                   >
                     <img
                       src={customer.logo}
                       alt={customer.name}
-                      loading="lazy"
+                      loading="eager"
+                      decoding="async"
                       referrerPolicy="no-referrer"
                       className="max-w-full max-h-full w-full h-full object-contain transition-all duration-300"
                       style={{
                         minHeight: 0,
                         filter: "brightness(0) invert(1) opacity(0.65)",
                       }}
+                      onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                     />
                   </a>
                 </motion.div>
