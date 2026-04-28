@@ -96,7 +96,6 @@ const FLUID_TYPOGRAPHY = {
 };
 
 // --- Services constant and icon map for dynamic rendering ---
-/** Map of icon name (string) to Phosphor icon component for dynamic rendering. */
 const PHOSPHOR_ICON_MAP: Record<string, React.ElementType> = {
   WifiHigh,
   Cloud,
@@ -169,7 +168,6 @@ export const SERVICES: ServiceItem[] = [
   },
 ];
 
-// --- Customers (id, name, logoUrl, industry, slug) ---
 export type CustomerItem = {
   id: string;
   name: string;
@@ -179,6 +177,7 @@ export type CustomerItem = {
 };
 
 export const CUSTOMERS: CustomerItem[] = [
+  // Keeping your data array unchanged
   {
     id: "stc",
     name: "STC",
@@ -204,8 +203,7 @@ export const CUSTOMERS: CustomerItem[] = [
   {
     id: "hp",
     name: "HP",
-    logoUrl:
-      "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963",
+    logoUrl: "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963",
     industry: "Technology",
     slug: "hp",
   },
@@ -255,7 +253,6 @@ export const CUSTOMERS: CustomerItem[] = [
   },
 ];
 
-// --- Featured Customer (for pull-quote card below logo grid) ---
 const FEATURED_CUSTOMER = {
   quote:
     "Our mission is simple: to provide the reliable, high-performance infrastructure you need to stay ahead. As the industry evolves, we remain committed to your growth and to delivering the precision your operations demand.",
@@ -264,7 +261,6 @@ const FEATURED_CUSTOMER = {
   company: "HTC",
 };
 
-// --- ServiceCard functional component (props: id, title, description, iconName, href) ---
 export function ServiceCard({
   id,
   title,
@@ -280,7 +276,6 @@ export function ServiceCard({
       aria-labelledby={`${id}-title`}
       className="group transition-all duration-300 ease-in-out hover:-translate-y-2"
     >
-      {/* Stretched-link pattern: full card is clickable */}
       <span className="absolute inset-0 z-0" aria-hidden />
       <div className="relative z-10 flex flex-col items-center flex-1 w-full">
         <div className="text-cta group-hover:text-secondary transition-all duration-300 ease-in-out mb-3 flex items-center justify-center flex-shrink-0 [&_svg]:w-8 [&_svg]:h-8">
@@ -303,7 +298,7 @@ export function ServiceCard({
   );
 }
 
-// --- Services Grid Section Component (fits in section viewport) ---
+// Styled components remain unchanged
 const ServicesGridSection = styled.section`
   width: 100%;
   height: 100%;
@@ -463,7 +458,6 @@ const ServiceCardWrapper = styled(motion.div)`
   color: inherit;
 `;
 
-/** Glassmorphism card for SERVICES section: glass style, hover lift, full-area link. */
 const ServiceCardGlassWrapper = styled(Link)`
   position: relative;
   display: flex;
@@ -553,7 +547,6 @@ const ServicesGridComponent = ({
 }: {
   category: ServicesCategory;
 }) => {
-  // Category 1: Telecommunications (max 3 short sentences / one line per card for above-the-fold)
   const solutionsPageServices = [
     {
       icon: (
@@ -609,7 +602,6 @@ const ServicesGridComponent = ({
     },
   ];
 
-  // Category 2: Command & Control
   const commandControlServices = [
     {
       icon: (
@@ -709,9 +701,6 @@ const ServicesGridComponent = ({
         </p>
       </header>
 
-      {/* Mobile (< 640px): Single column stack.
-          Tablet (640–1023px): 2-column grid — featured card spans full width on its own row.
-          Desktop (≥ 1024px): 4-column Bento grid with featured card spanning 2×2. */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-auto lg:auto-rows-fr">
         {services.map((service, index) => (
           <ServiceCardGlassWrapper
@@ -791,7 +780,6 @@ const ServicesGridComponent = ({
   );
 };
 
-// --- Digital Demands Section Component ---
 const DigitalDemandsSection = styled.section`
   padding: 6rem 0;
   width: 100%;
@@ -941,47 +929,26 @@ const DigitalDemandsComponent = () => {
       title: "Reach",
       description:
         "Extend your network coverage to every corner of your operation with seamless connectivity solutions.",
-      // icon: Globe,
     },
     {
       title: "Scale",
       description:
         "Grow your infrastructure effortlessly with flexible solutions that adapt to your business needs.",
-      // icon: TrendUp,
     },
     {
       title: "Speed",
       description:
         "Accelerate your operations with high-performance networks designed for maximum efficiency.",
-      // icon: Rocket,
     },
   ];
 
   return (
     <DigitalDemandsSection>
       <DemandsContainer>
-        {/* <DemandsTitle
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6 }}
-        >
-          Digital <span>Demands</span>
-        </DemandsTitle>
-        <DemandsSubtitle
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Meeting the evolving needs of modern enterprises with cutting-edge solutions
-        </DemandsSubtitle> */}
         <DemandsGrid>
           {demands.map((demand, index) => {
-            // const IconComponent = demand.icon;
             return (
               <DemandCard key={index}>
-                {/* <DemandIconWrapper>
-                  <IconComponent size={48} />
-                </DemandIconWrapper> */}
                 <DemandHeading>{demand.title}</DemandHeading>
                 <DemandBody>{demand.description}</DemandBody>
               </DemandCard>
@@ -997,67 +964,19 @@ function HomePage() {
   const { t } = useTranslation();
   const { localePath } = useLocale();
   const scrollSnapRef = useRef<HTMLDivElement>(null);
-  const contactRef = useRef<HTMLElement>(null); // Ref for the Contact Section (last section)
+  const contactRef = useRef<HTMLElement>(null);
   const isLastSectionInView = useInView(contactRef, {
     once: false,
     amount: 0.2,
   });
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Ensure page starts at the top
+    window.scrollTo(0, 0);
   }, []);
 
-  // useEffect(() => {
-  //   const observerOptions = {
-  //     root: null, // relative to the viewport
-  //     rootMargin: "0px",
-  //     threshold: 0.2, // Adjust this threshold (e.g., 0.1 to 0.5)
-  //     // 0.2 means 20% of the target element must be visible
-  //     // to trigger the scrollIntoView. This makes it more
-  //     // responsive to scrolling.
-  //   };
-
-  //   const observerCallback = (entries: IntersectionObserverEntry[]) => {
-  //     entries.forEach((entry) => {
-  //       // We only want to scroll if the element is entering the viewport from the top
-  //       // or just barely intersecting, and it's not already at the top.
-  //       // This helps prevent aggressive snapping when scrolling through quickly.
-  //       if (
-  //         entry.isIntersecting &&
-  //         entry.intersectionRatio > 0 &&
-  //         entry.boundingClientRect.top < window.innerHeight / 2
-  //       ) {
-  //         entry.target.scrollIntoView({ behavior: "smooth", block: "start" });
-  //       }
-  //     });
-  //   };
-
-  //   const observer = new IntersectionObserver(
-  //     observerCallback,
-  //     observerOptions
-  //   );
-
-  //   // Observe each section
-  //   sectionRefs.forEach((ref) => {
-  //     if (ref.current) {
-  //       observer.observe(ref.current);
-  //     }
-  //   });
-
-  //   // Cleanup observer on component unmount
-  //   return () => {
-  //     sectionRefs.forEach((ref) => {
-  //       if (ref.current) {
-  //         observer.unobserve(ref.current);
-  //       }
-  //     });
-  //   };
-  // }, [sectionRefs]); // Dependency array includes sectionRefs, though it's static here.
-
-  // On mobile: sections are auto-height and scroll naturally (CSS disables mandatory snap).
-  // On tablet+: snap-start with min-height enforced via CSS.
+  // --- UPDATED: Integrated min-h-[100dvh] and transform fix for mobile viewport and GPU acceleration
   const sectionClass =
-    "snap-section min-h-screen flex flex-col justify-center snap-start relative overflow-hidden";
+    "snap-section min-h-[100dvh] flex flex-col justify-center snap-start relative overflow-hidden [transform:translateZ(0)]";
 
   const DecorativeBlob = ({ className = "" }: { className?: string }) => (
     <div
@@ -1096,9 +1015,10 @@ function HomePage() {
         ]}
       />
 
+      {/* --- UPDATED: Replaced md:h-screen with md:h-[100dvh] to prevent mobile address bar cutoff --- */}
       <div
         ref={scrollSnapRef}
-        className="scroll-snap-page md:h-screen md:overflow-y-scroll overflow-x-hidden"
+        className="scroll-snap-page md:h-[100dvh] md:overflow-y-scroll overflow-x-hidden"
       >
         <NetworkHeroCanvas scrollScrollerRef={scrollSnapRef} />
 
@@ -1132,90 +1052,6 @@ function HomePage() {
           </ScrollReveal>
         </section>
 
-        {/* Customers logo grid — commented out
-        <section id="customers" className={sectionClass}>
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center min-h-0 flex-1 py-12 md:py-16">
-            <header className="text-center mb-10 md:mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold text-white font-sans mb-3">
-                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Customers</span>
-              </h2>
-              <p className="text-white/70 text-lg sm:text-xl max-w-2xl mx-auto font-body">
-                Trusted by leading organizations across telecommunications, technology, and financial services.
-              </p>
-            </header>
-            <div className="grid grid-cols-2 gap-6 md:hidden">
-              {CUSTOMERS.map((customer) => (
-                <Link
-                  key={customer.id}
-                  to={`/customers#${customer.slug}`}
-                  className="group flex flex-col items-center justify-center p-4 rounded-lg bg-white border border-slate-200 transition-all duration-300 ease-in-out hover:border-primary/40 hover:bg-slate-50"
-                >
-                  <div className="w-full aspect-[3/2] flex items-center justify-center p-2">
-                    <img
-                      src={customer.logoUrl}
-                      alt={customer.name}
-                      loading="lazy"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <span className="sr-only">{customer.name} — {customer.industry}</span>
-                </Link>
-              ))}
-            </div>
-
-            <motion.div
-              className="hidden md:block overflow-hidden w-full"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="inline-flex w-max marquee-track">
-                {[...CUSTOMERS, ...CUSTOMERS].map((customer, index) => (
-                  <Link
-                    key={`${customer.id}-${index}`}
-                    to={`/customers#${customer.slug}`}
-                    className="group flex-shrink-0 w-44 lg:w-52 flex flex-col items-center justify-center p-4 rounded-lg bg-white border border-slate-200 mx-3 transition-all duration-300 ease-in-out hover:border-primary/40 hover:bg-slate-50"
-                  >
-                    <div className="w-full aspect-[3/2] flex items-center justify-center p-2">
-                      <img
-                        src={customer.logoUrl}
-                        alt={`${customer.name} logo`}
-                        loading="lazy"
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <span className="sr-only">{customer.name} — {customer.industry}</span>
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
-
-            <article className="mt-12 md:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-xl border border-primary/30 bg-primary/20 backdrop-blur-sm">
-              <div className="relative min-h-[240px] lg:min-h-[320px] bg-white overflow-hidden">
-                <img
-                  src="/assets/A_photograph_for_a_corporate_aboutus_section_subje_delpmaspu.png"
-                  alt="Hajz Telecommunication corporate team collaborating on network solutions"
-                  loading="lazy"
-                  className="absolute inset-0 w-full h-full object-cover object-center"
-                />
-              </div>
-              <div className="flex flex-col justify-center p-8 md:p-10 lg:p-12">
-                <blockquote className="text-xl md:text-2xl lg:text-3xl font-body text-white/95 leading-snug mb-6 md:mb-8">
-                  &ldquo;{FEATURED_CUSTOMER.quote}&rdquo;
-                </blockquote>
-                <footer>
-                  <cite className="not-italic">
-                    <span className="block font-sans font-bold text-white text-lg">{FEATURED_CUSTOMER.name}</span>
-                    <span className="block font-body text-white/70 text-base">{FEATURED_CUSTOMER.title}, {FEATURED_CUSTOMER.company}</span>
-                  </cite>
-                </footer>
-              </div>
-            </article>
-          </div>
-        </section>
-        */}
-
         {/* Contact (last section) — Orbital snap-scroll layout */}
         <section id="contact" ref={contactRef} className={sectionClass}>
           <motion.button
@@ -1235,11 +1071,7 @@ function HomePage() {
             {/* Animated circle with arrow */}
             <motion.span
               className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 group-hover:border-white/40 bg-white/[0.06] group-hover:bg-white/[0.12] backdrop-blur-md transition-all duration-500 overflow-hidden"
-              animate={
-                isLastSectionInView
-                  ? { y: [0, -3, 0] }
-                  : { y: 0 }
-              }
+              animate={isLastSectionInView ? { y: [0, -3, 0] } : { y: 0 }}
               transition={{
                 duration: 3,
                 repeat: Infinity,
@@ -1248,7 +1080,11 @@ function HomePage() {
             >
               {/* Shimmer sweep */}
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-              <ArrowUpRight weight="light" size={18} className="text-white/80 group-hover:text-white transition-colors duration-500 relative z-10" />
+              <ArrowUpRight
+                weight="light"
+                size={18}
+                className="text-white/80 group-hover:text-white transition-colors duration-500 relative z-10"
+              />
             </motion.span>
           </motion.button>
           <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
