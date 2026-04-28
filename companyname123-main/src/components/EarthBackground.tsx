@@ -10,7 +10,8 @@ const FallbackEarth: React.FC = () => {
         <div className="relative w-[90%] md:w-[70%] lg:w-[60%] max-w-3xl aspect-square">
           <img
             src="https://eoimages.gsfc.nasa.gov/images/imagerecords/57000/57735/globe_east_540.jpg"
-            alt="Earth"
+            alt="Earth globe representing global telecommunications connectivity"
+            loading="lazy"
             className="absolute inset-0 w-full h-full object-contain opacity-20 rounded-full"
             style={{ 
               filter: 'drop-shadow(0 0 15px rgba(79, 195, 225, 0.3))',

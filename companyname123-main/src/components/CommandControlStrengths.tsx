@@ -17,7 +17,7 @@ type Pillar = {
   key: PillarKey;
   title: string;
   copy: string;
-  Icon: React.ComponentType<any>;
+  Icon: React.ComponentType<{ size?: number; weight?: string; className?: string }>;
 };
 
 const PILLARS: Record<PillarKey, Pillar> = {

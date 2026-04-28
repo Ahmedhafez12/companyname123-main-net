@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import PageSEO from "../utils/PageSEO";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -14,7 +14,10 @@ import {
 import HorizontalTimeline from "../components/HorizontalTimeline";
 import VennDiagram2 from "../components/VennDiagram2";
 import EnhancedDimensions from "../components/EnhancedDimensions";
+import { useTranslation, useLocale } from "../i18n";
 function AboutPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   // Timeline events data
   const timelineEvents = [
     {
@@ -113,15 +116,15 @@ function AboutPage() {
   return (
     <div className="relative">
            
-      <Helmet>
-                <title>About Us - Hajz Telecommunication Co Ltd. | Real Transformation</title>   
-           
-        <meta
-          name="description"
-          content="Learn about Hajz Telecommunication Co Ltd.'s journey, values, and mission in revolutionizing global connectivity through innovative telecommunications solutions."
-        />
-             
-      </Helmet>
+      <PageSEO
+        title={t.aboutUsPage.seoTitle}
+        description={t.aboutUsPage.seoDescription}
+        path={localePath("/about")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: t.nav.items[1].label, path: localePath("/about") },
+        ]}
+      />
       {/* Background gradient */}      
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
                   {/* Hero div */}     

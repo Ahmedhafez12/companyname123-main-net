@@ -40,7 +40,16 @@ export default function EnhancedDimensions() {
                   ? 'ring-4 ring-white/20 scale-110'
                   : 'hover:scale-105'
               }`}
+              role="button"
+              tabIndex={0}
               onClick={() => setSelectedDimension(index === selectedDimension ? null : index)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedDimension(index === selectedDimension ? null : index);
+                }
+              }}
+              aria-pressed={selectedDimension === index}
             >
               {dim.icon}
             </div>

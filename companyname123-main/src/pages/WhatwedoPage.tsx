@@ -1,11 +1,30 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
+import FAQSection from '../components/FAQSection';
 import { motion } from 'framer-motion';
-import { WifiHighHigh, Cloud, ShareShareNetwork, Shield, ArrowRight, Lightning, Globe, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
+import { WifiHigh, Cloud, Shield, ArrowRight, Lightning, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
 import SolutionsCarousel from '../components/SolutionsCarousel';
 import Footer from '../components/Footer';
+import { useTranslation, useLocale } from '../i18n';
+
+const WHATWEDO_FAQ = [
+  {
+    question: 'What services does Hajz Telecommunication Co Ltd. offer?',
+    answer: 'We provide telecommunications infrastructure, command & control systems, managed WiFi, cloud networking, cybersecurity, network cabling, VoIP, and end-to-end managed services for enterprise and government clients.',
+  },
+  {
+    question: 'Does Hajz Telecom work with specific technology vendors?',
+    answer: 'We are vendor-agnostic and partner with leading technology providers including Ericsson, Avaya, 3CX, Cambium Networks, Patton, and others to recommend the best-fit solution for each project.',
+  },
+  {
+    question: 'Can Hajz Telecom handle large-scale government or military projects?',
+    answer: 'Yes. We have 32+ years of experience delivering mission-critical telecommunications and command & control systems for government, defence, and enterprise clients across the Middle East.',
+  },
+];
 
 function WhatwedoPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   const solutions = [
     {
       icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
@@ -145,10 +164,16 @@ function WhatwedoPage() {
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>What we do - Hajz Telecommunication Co Ltd. | Advanced Telecommunications Infrastructure</title>
-        <meta name="description" content="Explore Hajz Telecommunication Co Ltd.'s comprehensive suite of telecommunications solutions, including 5G infrastructure, cloud services, IoT networks, and security solutions." />
-      </Helmet>
+      <PageSEO
+        title="What We Do | Telecom & Network Infrastructure"
+        description="Explore Hajz Telecom's service areas: telecommunications, command & control systems, network infrastructure, and managed services for enterprise and government clients."
+        path={localePath("/what-we-do")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: "What We Do", path: localePath("/what-we-do") },
+        ]}
+        faq={WHATWEDO_FAQ}
+      />
 
       {/* Background gradient */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
@@ -187,9 +212,10 @@ function WhatwedoPage() {
                 className="group relative overflow-hidden rounded-2xl"
               >
                 <div className="absolute inset-0">
-                  <img 
-                    src={solution.image} 
+                  <img
+                    src={solution.image}
                     alt={solution.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#005E96]/90 to-transparent" />
@@ -291,7 +317,7 @@ function WhatwedoPage() {
         </motion.div>
         <SolutionsCarousel />
       </section> */}
-      <div style={{ height: '100px' }}></div>
+      <FAQSection items={WHATWEDO_FAQ} subtitle="Common questions about Hajz Telecom's service capabilities." />
 
       {/* Footer */}
       <Footer />

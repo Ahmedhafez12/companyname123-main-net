@@ -1,35 +1,32 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Envelope, Phone, MapPin, ArrowRight, ArrowUpRight, CaretDown } from "phosphor-react";
+import { Envelope, Phone, MapPin, ArrowUpRight, CaretDown } from "phosphor-react";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from "react-icons/fa";
 import Logo from "./Logo";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation, useLocale } from "../i18n";
 
 // ── Reusable NavLink ──────────────────────────────────────────────────────────
-const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
+const NavLink: React.FC<{ href: string; children: React.ReactNode; isRTL?: boolean }> = ({ href, children }) => (
   <li>
     <Link
       to={href}
-      className="group flex items-center gap-1.5 text-[#ECF0F1]/60 hover:text-[#44C8F5] text-xs transition-colors duration-200"
+      className="group relative text-white/50 hover:text-white text-[13px] transition-colors duration-300 inline-block py-0.5"
     >
-      <ArrowRight
-        weight="bold"
-        size={10}
-        className="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 flex-shrink-0"
-      />
-      {children}
+      <span className="relative z-10">{children}</span>
+      <span className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-[#44C8F5] to-[#7CCCBF] group-hover:w-full transition-all duration-300" />
     </Link>
   </li>
 );
 
-// ── Column heading (static, used inside FooterCol) ───────────────────────────
+// ── Column heading ───────────────────────────
 const ColHeading: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h3 className="text-[#ECF0F1] text-xs font-semibold uppercase tracking-[0.12em]">
+  <h3 className="text-white/90 text-[11px] font-semibold uppercase tracking-[0.2em] mb-5">
     {children}
   </h3>
 );
 
-// ── Accordion column — collapses on mobile, always open on sm+ ───────────────
+// ── Accordion column (mobile) ───────────────
 const FooterCol: React.FC<{
   id: string;
   heading: string;
@@ -40,23 +37,21 @@ const FooterCol: React.FC<{
   const isOpen = openId === id;
   return (
     <div>
-      {/* Heading row — clickable on mobile, static on sm+ */}
       <button
         type="button"
         onClick={() => toggle(id)}
-        className="w-full flex items-center justify-between mb-0 sm:mb-4 sm:cursor-default sm:pointer-events-none py-3 sm:py-0 border-b border-white/10 sm:border-0"
+        className="w-full flex items-center justify-between sm:cursor-default sm:pointer-events-none py-3.5 sm:py-0 border-b border-white/[0.06] sm:border-0"
         aria-expanded={isOpen}
       >
         <ColHeading>{heading}</ColHeading>
         <CaretDown
           weight="bold"
           size={14}
-          className={`text-[#ECF0F1]/40 flex-shrink-0 sm:hidden transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`text-white/30 flex-shrink-0 sm:hidden transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
           aria-hidden
         />
       </button>
 
-      {/* Content — always visible on sm+, animated on mobile */}
       <div className="hidden sm:block">
         {children}
       </div>
@@ -83,202 +78,160 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [openColId, setOpenColId] = useState<string | null>(null);
   const toggleCol = (id: string) => setOpenColId((prev) => (prev === id ? null : id));
+  const { t } = useTranslation();
+  const { isRTL, localePath } = useLocale();
 
-  const quickLinks = [
-    { name: "Home", href: "/" },
-    { name: "About Us", href: "/about/overview" },
-    { name: "Our Customers", href: "/customers" },
-    { name: "Our Partners", href: "/partners" },
-    { name: "Contact Us", href: "/contact" },
-  ];
-
-  const aboutUsAnchors = [
-    { name: "What We Do", href: "/about/overview#what-we-do" },
-    { name: "Company Identity", href: "/about/overview#company-identity" },
-    { name: "Competitive Edge", href: "/about/overview#competitive-edge" },
-    { name: "Our Journey", href: "/about/overview#our-journey" },
-    { name: "Vision & Mission", href: "/about/overview#vision-mission" },
-    { name: "Core Strengths", href: "/about/overview#core-strengths" },
-  ];
-
-  const telecomLinks = [
-    { name: "Service Portfolio", href: "/what-we-do/telecommunications#service-portfolio" },
-    { name: "Business Unit", href: "/what-we-do/telecommunications#business-unit" },
-    { name: "Service Standards", href: "/what-we-do/telecommunications#service-Standards" },
-  ];
-
-  const commandLinks = [
-    { name: "Core Solutions", href: "/what-we-do/command-control#core-solutions" },
-    { name: "Technology Stack", href: "/what-we-do/command-control#tech-stack" },
-    { name: "Industries We Serve", href: "/what-we-do/command-control#industries-served" },
-  ];
-
-  const legalLinks = [
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Use", href: "/terms" },
-    { name: "Sitemap", href: "/sitemap" },
-  ];
-
-  const contactInfo = [
-    { icon: Envelope, text: "info@hajztelecom.com", href: "mailto:info@hajztelecom.com" },
-    { icon: Phone, text: "+966 11 000 0000", href: "tel:+966110000000" },
-    { icon: MapPin, text: "Riyadh, Saudi Arabia", href: null },
-  ];
-
-  const socialLinks = [
-    { icon: FaFacebookF, href: "#", label: "Facebook (coming soon)" },
-    { icon: FaTwitter, href: "#", label: "Twitter (coming soon)" },
-    { icon: FaLinkedinIn, href: "#", label: "LinkedIn (coming soon)" },
-    { icon: FaInstagram, href: "#", label: "Instagram (coming soon)" },
-  ];
+  const contactIcons = [Envelope, Phone, MapPin];
 
   const fadeUp = (delay: number) => ({
-    initial: { opacity: 0, y: 16 },
+    initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
-    transition: { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
   });
 
   return (
-    <footer className="relative w-full bg-[#002C3D] border-t border-white/10 overflow-hidden">
+    <footer className="relative w-full overflow-hidden" style={{ background: "linear-gradient(180deg, #001a28 0%, #002C3D 100%)" }}>
 
-      {/* Subtle ambient glow — top-left */}
+      {/* ── Top accent line ── */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#44C8F5]/30 to-transparent" />
+
+      {/* ── Ambient glow orbs ── */}
       <div
-        className="pointer-events-none absolute -top-32 -left-32 w-80 h-80 rounded-full opacity-[0.07]"
+        className="pointer-events-none absolute -top-40 left-1/4 w-[500px] h-[500px] rounded-full opacity-[0.04]"
         style={{ background: "radial-gradient(circle, #44C8F5, transparent 70%)" }}
       />
-      {/* Subtle ambient glow — bottom-right */}
       <div
-        className="pointer-events-none absolute -bottom-24 -right-24 w-72 h-72 rounded-full opacity-[0.06]"
+        className="pointer-events-none absolute -bottom-32 right-1/4 w-[400px] h-[400px] rounded-full opacity-[0.03]"
         style={{ background: "radial-gradient(circle, #A6CE39, transparent 70%)" }}
       />
 
-      {/* ── Main grid ─────────────────────────────────────────────────────── */}
-      <div className="relative container mx-auto px-6 sm:px-8 pt-14 pb-10 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-10 gap-y-10">
+      {/* ── Subtle grid texture ── */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
 
-          {/* ── Brand column ── */}
-          <motion.div {...fadeUp(0)} className="lg:col-span-3 flex flex-col gap-5">
-            <Link to="/" className="inline-block self-start" aria-label="Hajz Telecommunication home">
+      <div className="relative container mx-auto px-6 sm:px-8 lg:px-12 pt-16 sm:pt-20 pb-10 max-w-7xl">
+
+        {/* ── Top row: Brand + CTA ── */}
+        <motion.div
+          {...fadeUp(0)}
+          className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 sm:gap-10 mb-14 sm:mb-16"
+        >
+          <div className="flex flex-col gap-4 max-w-sm">
+            <Link to={localePath("/")} className="inline-block self-start" aria-label="Hajz Telecommunication home">
               <Logo
-                className="h-14 sm:h-16 w-auto max-w-[min(100%,260px)]"
+                className="h-12 sm:h-14 w-auto max-w-[min(100%,240px)]"
                 textColorOverride="#ECF0F1"
               />
             </Link>
-
-            <p className="text-[#ECF0F1]/60 text-xs leading-relaxed max-w-[280px] sm:max-w-[220px]">
-              Leading the telecommunications revolution with innovative solutions and
-              unparalleled expertise in global connectivity.
+            <p className="text-white/40 text-[13px] leading-relaxed">
+              {t.footer.description}
             </p>
+          </div>
 
-            {/* Social icons */}
-            <div className="flex items-center gap-2 pt-1">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="w-8 h-8 rounded-lg border border-white/10 flex items-center justify-center text-[#ECF0F1]/50 hover:text-[#44C8F5] hover:border-[#44C8F5]/40 transition-all duration-200"
-                >
-                  <s.icon className="w-3 h-3" />
-                </a>
-              ))}
-            </div>
+          <Link
+            to={localePath("/contact")}
+            className="group inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full border border-white/[0.1] bg-white/[0.03] backdrop-blur-sm text-white/70 hover:text-white hover:border-white/20 hover:bg-white/[0.06] transition-all duration-400"
+          >
+            <span className="text-[13px] font-medium tracking-wide">{t.footer.getInTouch}</span>
+            <ArrowUpRight
+              weight="bold"
+              size={14}
+              className={`opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 ${isRTL ? "rtl-flip" : ""}`}
+            />
+          </Link>
+        </motion.div>
+
+        {/* ── Divider ── */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.08] to-transparent mb-12 sm:mb-14" />
+
+        {/* ── Link columns grid ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-2 sm:gap-y-10">
+
+          <motion.div {...fadeUp(0.05)}>
+            <FooterCol id="quick" heading={t.footer.quickLinks} openId={openColId} toggle={toggleCol}>
+              <ul className="space-y-2.5">
+                {t.footer.quickLinksItems.map((l) => <NavLink key={l.name} href={l.href} isRTL={isRTL}>{l.name}</NavLink>)}
+              </ul>
+            </FooterCol>
           </motion.div>
 
-          {/* ── Link columns ── */}
-          {/*
-            Mobile  : single column, each section collapses/expands via accordion tap.
-            sm+     : 3-col grid (Telecom & C&C share a column).
-            lg+     : 5-col grid within the 9-col right span.
-          */}
-          <motion.div
-            {...fadeUp(0.08)}
-            className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-x-6"
-          >
-            {/* Quick Links */}
-            <FooterCol id="quick" heading="Quick Links" openId={openColId} toggle={toggleCol}>
+          <motion.div {...fadeUp(0.1)}>
+            <FooterCol id="about" heading={t.footer.aboutUs} openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
-                {quickLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
+                {t.footer.aboutUsItems.map((l) => <NavLink key={l.name} href={l.href} isRTL={isRTL}>{l.name}</NavLink>)}
               </ul>
             </FooterCol>
+          </motion.div>
 
-            {/* About Us */}
-            <FooterCol id="about" heading="About Us" openId={openColId} toggle={toggleCol}>
+          <motion.div {...fadeUp(0.15)}>
+            <FooterCol id="telecom" heading={t.footer.telecom} openId={openColId} toggle={toggleCol}>
               <ul className="space-y-2.5">
-                {aboutUsAnchors.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
+                {t.footer.telecomItems.map((l) => <NavLink key={l.name} href={l.href} isRTL={isRTL}>{l.name}</NavLink>)}
               </ul>
-            </FooterCol>
-
-            {/* Telecom + Command & Control share one column on sm/lg */}
-            <FooterCol id="telecom" heading="Telecom" openId={openColId} toggle={toggleCol}>
-              <ul className="space-y-2.5">
-                {telecomLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
-              </ul>
-              <div className="mt-5">
-                <h3 className="text-[#ECF0F1] text-xs font-semibold uppercase tracking-[0.12em] mb-3">
-                  Command &amp; Control
+              <div className="mt-6">
+                <h3 className="text-white/90 text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">
+                  {t.footer.commandControl}
                 </h3>
                 <ul className="space-y-2.5">
-                  {commandLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
+                  {t.footer.commandItems.map((l) => <NavLink key={l.name} href={l.href} isRTL={isRTL}>{l.name}</NavLink>)}
                 </ul>
               </div>
             </FooterCol>
-
-            {/* Contact */}
-            <FooterCol id="contact" heading="Contact" openId={openColId} toggle={toggleCol}>
-              <ul className="space-y-3">
-                {contactInfo.map((item) => (
-                  <li key={item.text} className="flex items-start gap-2 text-[#ECF0F1]/60 text-xs">
-                    <item.icon weight="thin" size={14} className="flex-shrink-0 mt-0.5 text-[#44C8F5]/60" />
-                    {item.href ? (
-                      <a href={item.href} className="hover:text-[#44C8F5] transition-colors duration-200 leading-relaxed">
-                        {item.text}
-                      </a>
-                    ) : (
-                      <span className="leading-relaxed">{item.text}</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </FooterCol>
-
-            {/* Legal */}
-            <FooterCol id="legal" heading="Legal" openId={openColId} toggle={toggleCol}>
-              <ul className="space-y-2.5">
-                {legalLinks.map((l) => <NavLink key={l.name} href={l.href}>{l.name}</NavLink>)}
-              </ul>
-            </FooterCol>
-
           </motion.div>
+
+          <motion.div {...fadeUp(0.2)}>
+            <FooterCol id="contact" heading={t.footer.contact} openId={openColId} toggle={toggleCol}>
+              <ul className="space-y-3.5">
+                {t.footer.contactInfo.map((item, i) => {
+                  const Icon = contactIcons[i];
+                  return (
+                    <li key={item.text} className="group flex items-start gap-2.5 text-white/50 text-[13px]">
+                      <span className="flex-shrink-0 mt-0.5 w-7 h-7 rounded-lg border border-white/[0.06] bg-white/[0.02] flex items-center justify-center">
+                        <Icon weight="regular" size={13} className="text-[#44C8F5]/50 group-hover:text-[#44C8F5] transition-colors duration-300" />
+                      </span>
+                      {item.href ? (
+                        <a href={item.href} className="hover:text-white transition-colors duration-300 leading-relaxed pt-0.5">
+                          {item.text}
+                        </a>
+                      ) : (
+                        <span className="leading-relaxed pt-0.5">{item.text}</span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </FooterCol>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.25)}>
+            <FooterCol id="legal" heading={t.footer.legal} openId={openColId} toggle={toggleCol}>
+              <ul className="space-y-2.5">
+                {t.footer.legalItems.map((l) => <NavLink key={l.name} href={l.href} isRTL={isRTL}>{l.name}</NavLink>)}
+              </ul>
+            </FooterCol>
+          </motion.div>
+
         </div>
 
-        {/* ── Divider ────────────────────────────────────────────────────── */}
-        <div className="mt-10 mb-6 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-        {/* ── Bottom bar ─────────────────────────────────────────────────── */}
-        <motion.div
-          {...fadeUp(0.38)}
-          className="flex flex-col sm:flex-row items-center justify-between gap-3"
-        >
-          <p className="text-[#ECF0F1]/40 text-xs">
-            &copy; {currentYear} Hajz Telecommunication Co Ltd. All rights reserved.
-          </p>
-
-          <a
-            href="/contact"
-            className="inline-flex items-center gap-1.5 text-xs text-[#44C8F5]/70 hover:text-[#44C8F5] transition-colors duration-200 group"
+        {/* ── Bottom bar ── */}
+        <div className="mt-14 sm:mt-16 pt-6 border-t border-white/[0.06]">
+          <motion.div
+            {...fadeUp(0.35)}
+            className="flex flex-col sm:flex-row items-center justify-between gap-4"
           >
-            Get in touch
-            <ArrowUpRight
-              weight="bold"
-              size={12}
-              className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200"
-            />
-          </a>
-        </motion.div>
+            <p className="text-white/25 text-xs tracking-wide">
+              &copy; {currentYear} {t.footer.copyright}
+            </p>
+
+            <LanguageSwitcher className="text-white/30 hover:text-white/60 text-xs transition-colors duration-300" />
+          </motion.div>
+        </div>
       </div>
     </footer>
   );

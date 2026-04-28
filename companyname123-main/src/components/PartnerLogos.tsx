@@ -86,7 +86,7 @@ const PartnerLogos = () => {
   const autoplayOptions = {
     delay: 3000, // 3 seconds
     stopOnInteraction: true, // Stop autoplay on user interaction for better mobile experience
-    rootNode: (emblaRoot: { parentElement: any }) => emblaRoot.parentElement,
+    rootNode: (emblaRoot: { parentElement: HTMLElement | null }) => emblaRoot.parentElement,
   };
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -152,23 +152,23 @@ const PartnerLogos = () => {
   }, [emblaApi]);
 
   useEffect(() => {
-    if (emblaApi) {
-      emblaApi.on("select", onSelect);
-      setScrollSnaps(emblaApi.scrollSnapList());
-      setCanScrollPrev(emblaApi.canScrollPrev());
-      setCanScrollNext(emblaApi.canScrollNext());
+    if (!emblaApi) return;
 
-      // Recalculate on resize
-      window.addEventListener("resize", () => {
-        emblaApi.reInit();
-        setScrollSnaps(emblaApi.scrollSnapList());
-      });
-    }
+    emblaApi.on("select", onSelect);
+    setScrollSnaps(emblaApi.scrollSnapList());
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+
+    // Recalculate on resize
+    const handleResize = () => {
+      emblaApi.reInit();
+      setScrollSnaps(emblaApi.scrollSnapList());
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      if (emblaApi) {
-        emblaApi.off("select", onSelect);
-      }
+      emblaApi.off("select", onSelect);
+      window.removeEventListener("resize", handleResize);
     };
   }, [emblaApi, onSelect]);
 
@@ -235,6 +235,7 @@ const PartnerLogos = () => {
                       <img
                         src={partner.logo}
                         alt={`${partner.name} logo`}
+                        loading="lazy"
                         className="max-w-full max-h-full object-contain opacity-70 group-hover:opacity-100 transition-opacity duration-300"
                       />
                     </a>

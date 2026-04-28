@@ -66,7 +66,7 @@ export default function ContactForm() {
         success: false,
         message: "An unexpected error occurred. Please try again later.",
       });
-      console.error("Error sending email:", error);
+      // Email send error handled by UI state
     } finally {
       setIsSubmitting(false);
     }

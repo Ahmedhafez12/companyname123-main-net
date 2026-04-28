@@ -56,6 +56,9 @@ export default {
         sans: ['Montserrat', 'system-ui', 'sans-serif'],
         body: ['Rubik', 'system-ui', 'sans-serif'],
         quote: ['Playfair Display', 'serif'],
+        arabic: ['IBM Plex Sans Arabic', 'Frutiger LT Arabic', 'system-ui', 'sans-serif'],
+        'arabic-heading': ['IBM Plex Sans Arabic', 'system-ui', 'sans-serif'],
+        'arabic-body': ['Frutiger LT Arabic', 'IBM Plex Sans Arabic', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         // Display typography

@@ -26,13 +26,14 @@ import {
 } from "phosphor-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import ContactSection from "../components/ContactSection";
+import ContactContent from "../components/ContactContent";
 import ScrollReveal from "../components/ScrollReveal";
-import { Helmet } from "react-helmet-async";
+import PageSEO from "../utils/PageSEO";
 import HeroCarousel from "../components/HeroCarousel";
 import HeroScrollIndicator from "../components/HeroScrollIndicator";
 import NetworkHeroCanvas from "../components/NetworkHeroCanvas";
 import CompanyTeaserSection from "../components/CompanyTeaserSection";
+import { useTranslation, useLocale } from "../i18n";
 
 // --- Brand Color Variables ---
 const BRAND_COLORS = {
@@ -196,7 +197,7 @@ export const CUSTOMERS: CustomerItem[] = [
     id: "ericsson",
     name: "Ericsson",
     logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png",
+      "https://companieslogo.com/img/orig/ERIC_BIG-6f963a82.png?t=1720244491",
     industry: "Technology",
     slug: "ericsson",
   },
@@ -204,7 +205,7 @@ export const CUSTOMERS: CustomerItem[] = [
     id: "hp",
     name: "HP",
     logoUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png",
+      "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963",
     industry: "Technology",
     slug: "hp",
   },
@@ -563,7 +564,7 @@ const ServicesGridComponent = ({
       title: "System Integration",
       description:
         "Solutions that fit your network and support digital transformation.",
-      link: "/solutions",
+      link: "/what-we-do/telecommunications#system-integration",
     },
     {
       icon: (
@@ -574,7 +575,7 @@ const ServicesGridComponent = ({
       title: "Connectivity and Transmission",
       description:
         "Intelligent gateways that transform infrastructure into competitive advantage.",
-      link: "/solutions",
+      link: "/what-we-do/telecommunications#connectivity-transmission",
     },
     {
       icon: (
@@ -584,7 +585,7 @@ const ServicesGridComponent = ({
       ),
       title: "Unified Communication",
       description: "Bridge legacy and cloud for seamless collaboration.",
-      link: "/solutions",
+      link: "/what-we-do/telecommunications#unified-communication",
     },
     {
       icon: (
@@ -594,7 +595,7 @@ const ServicesGridComponent = ({
       ),
       title: "Access LAN and OSP",
       description: "Complete connectivity from fiber to Wi-Fi.",
-      link: "/solutions",
+      link: "/what-we-do/telecommunications#access-lan-osp",
     },
     {
       icon: (
@@ -604,7 +605,7 @@ const ServicesGridComponent = ({
       ),
       title: "Military and Critical Communication",
       description: "Encrypted, secured voice and data for critical operations.",
-      link: "/solutions",
+      link: "/what-we-do/telecommunications#military-critical-communication",
     },
   ];
 
@@ -619,7 +620,7 @@ const ServicesGridComponent = ({
       title: "Control Room Solutions",
       description:
         "Integrated command center environments providing 24/7 mission-critical visualization and ergonomic infrastructure.",
-      link: "/what-we-do/command-control",
+      link: "/what-we-do/command-control#tech-stack",
     },
     {
       icon: (
@@ -629,7 +630,7 @@ const ServicesGridComponent = ({
       ),
       title: "Software",
       description: "Custom software with intuitive interfaces and analytics.",
-      link: "/what-we-do/command-control",
+      link: "/what-we-do/command-control#tech-stack",
     },
     {
       icon: (
@@ -639,7 +640,7 @@ const ServicesGridComponent = ({
       ),
       title: "Video Walls",
       description: "High-resolution video walls for real-time monitoring.",
-      link: "/what-we-do/command-control",
+      link: "/what-we-do/command-control#tech-stack",
     },
     {
       icon: (
@@ -649,7 +650,7 @@ const ServicesGridComponent = ({
       ),
       title: "Servers (On-prem/Cloud/Hybrid)",
       description: "Flexible server infrastructure for security and scale.",
-      link: "/what-we-do/command-control",
+      link: "/what-we-do/command-control#tech-stack",
     },
     {
       icon: (
@@ -659,7 +660,7 @@ const ServicesGridComponent = ({
       ),
       title: "AI/Custom Software",
       description: "AI-powered automation and predictive insights.",
-      link: "/what-we-do/command-control",
+      link: "/what-we-do/command-control#tech-stack",
     },
   ];
 
@@ -993,6 +994,8 @@ const DigitalDemandsComponent = () => {
 };
 
 function HomePage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   const scrollSnapRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLElement>(null); // Ref for the Contact Section (last section)
   const isLastSectionInView = useInView(contactRef, {
@@ -1070,15 +1073,12 @@ function HomePage() {
 
   return (
     <div className="relative overflow-x-hidden">
-      <Helmet>
-        <title>
-          Homepage - Hajz Telecommunication Co Ltd. | Real Transformation
-        </title>
-        <meta
-          name="description"
-          content="Hajz Telecommunication Co Ltd.: innovative telecommunications solutions, global connectivity, and transformative technology."
-        />
-      </Helmet>
+      <PageSEO
+        title="Hajz Telecom | Telecommunications Solutions & Connectivity"
+        description="Hajz Telecommunication Co Ltd. delivers innovative telecom solutions, enterprise connectivity, and transformative network infrastructure across the globe."
+        path={localePath("/")}
+        breadcrumbs={[{ name: t.common.home, path: localePath("/") }]}
+      />
 
       <div
         className="fixed inset-0 bg-primary opacity-20 pointer-events-none -z-10"
@@ -1154,6 +1154,7 @@ function HomePage() {
                     <img
                       src={customer.logoUrl}
                       alt={customer.name}
+                      loading="lazy"
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -1179,7 +1180,8 @@ function HomePage() {
                     <div className="w-full aspect-[3/2] flex items-center justify-center p-2">
                       <img
                         src={customer.logoUrl}
-                        alt={customer.name}
+                        alt={`${customer.name} logo`}
+                        loading="lazy"
                         className="w-full h-full object-contain"
                       />
                     </div>
@@ -1193,7 +1195,8 @@ function HomePage() {
               <div className="relative min-h-[240px] lg:min-h-[320px] bg-white overflow-hidden">
                 <img
                   src="/assets/A_photograph_for_a_corporate_aboutus_section_subje_delpmaspu.png"
-                  alt="Corporate about us"
+                  alt="Hajz Telecommunication corporate team collaborating on network solutions"
+                  loading="lazy"
                   className="absolute inset-0 w-full h-full object-cover object-center"
                 />
               </div>
@@ -1217,28 +1220,40 @@ function HomePage() {
         <section id="contact" ref={contactRef} className={sectionClass}>
           <motion.button
             type="button"
-            className="explore-more-btn absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-2 sm:gap-3 text-white tracking-widest uppercase font-sans text-sm sm:text-base md:text-lg cursor-pointer hover:text-white/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
-            initial={{ x: 0, y: 0 }}
-            animate={
-              isLastSectionInView
-                ? { x: [0, 6, 0], y: [0, -10, 0] }
-                : { x: 0, y: 0 }
-            }
-            transition={{
-              duration: 0.4,
-              repeat: isLastSectionInView ? Infinity : 0,
-              repeatDelay: 0.4,
-              ease: "easeInOut",
-            }}
+            className="explore-more-btn group absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-3 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+            initial={{ opacity: 0 }}
+            animate={isLastSectionInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             onClick={() => window.dispatchEvent(new CustomEvent("open-menu"))}
             aria-label="Open menu"
           >
-            <span>Explore More</span>
-            <ArrowUpRight weight="bold" size={18} />
+            {/* Label */}
+            <span className="text-white/70 group-hover:text-white text-[11px] sm:text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-500">
+              Explore More
+            </span>
+
+            {/* Animated circle with arrow */}
+            <motion.span
+              className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 group-hover:border-white/40 bg-white/[0.06] group-hover:bg-white/[0.12] backdrop-blur-md transition-all duration-500 overflow-hidden"
+              animate={
+                isLastSectionInView
+                  ? { y: [0, -3, 0] }
+                  : { y: 0 }
+              }
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              {/* Shimmer sweep */}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+              <ArrowUpRight weight="light" size={18} className="text-white/80 group-hover:text-white transition-colors duration-500 relative z-10" />
+            </motion.span>
           </motion.button>
           <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
           <div className="w-full flex flex-col justify-center bg-transparent px-0 py-16 sm:py-10 md:py-0 md:h-full">
-            <ContactSection size="extraLarge" layout="orbital" />
+            <ContactContent compact />
           </div>
         </section>
       </div>

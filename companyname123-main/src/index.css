@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Frutiger LT Arabic — place .woff2/.woff files in /public/fonts/ */
+@font-face {
+  font-family: "Frutiger LT Arabic";
+  src: url("/fonts/FrutigerLTArabic-Regular.woff2") format("woff2"),
+       url("/fonts/FrutigerLTArabic-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Frutiger LT Arabic";
+  src: url("/fonts/FrutigerLTArabic-Bold.woff2") format("woff2"),
+       url("/fonts/FrutigerLTArabic-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --color-primary: #005e96;
@@ -105,6 +123,73 @@
     }
   }
 }
+
+/* ─────────────────────────────────────────────
+   RTL (Arabic) OVERRIDES
+   ───────────────────────────────────────────── */
+html[dir="rtl"] {
+  font-family: "Frutiger LT Arabic", "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+html[dir="rtl"] body {
+  direction: rtl;
+  line-height: 1.8;
+  font-family: "Frutiger LT Arabic", "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3,
+html[dir="rtl"] h4,
+html[dir="rtl"] h5,
+html[dir="rtl"] h6 {
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+html[dir="rtl"] p,
+html[dir="rtl"] span,
+html[dir="rtl"] li,
+html[dir="rtl"] a,
+html[dir="rtl"] label,
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] select,
+html[dir="rtl"] button {
+  font-family: "Frutiger LT Arabic", "IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+
+/* Flip directional icons */
+.rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Reverse marquee for RTL */
+html[dir="rtl"] .marquee-track {
+  animation-direction: reverse;
+}
+
+/* Nav link underline on right side for RTL */
+html[dir="rtl"] .nav-link::after {
+  left: auto;
+  right: 0;
+}
+
+/* Form inputs: inherit text direction */
+html[dir="rtl"] .form-input {
+  text-align: right;
+}
+
+/* Arabic paragraph tweaks */
+html[dir="rtl"] p {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.8;
+}
+
+/* Sticky contact form RTL positioning is handled via component */
+
+/* ─────────────────────────────────────────────
+   END RTL OVERRIDES
+   ──────────────��────────────────────────────── */
 
 /* Infinite marquee (customer logos) — keyframes in global CSS so animation always runs */
 @keyframes marquee-scroll {

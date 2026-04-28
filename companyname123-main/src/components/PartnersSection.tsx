@@ -101,9 +101,10 @@ const PartnersSection: React.FC = () => {
                 <div className="relative p-4 sm:p-6">
                   {/* Logo Container */}
                   <div className="aspect-square rounded-lg overflow-hidden mb-4 bg-black/20 backdrop-blur-sm">
-                    <img 
-                      src={partner.logo} 
-                      alt={partner.name}
+                    <img
+                      src={partner.logo}
+                      alt={`${partner.name} logo`}
+                      loading="lazy"
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                   </div>

@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
+import Breadcrumbs from '../components/Breadcrumbs';
+import FAQSection from '../components/FAQSection';
 import { motion, useInView } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { ArrowRight } from 'phosphor-react';
 import Footer from '../components/Footer';
+import { useTranslation, useLocale } from '../i18n';
 
 // ─── Animation Variants ────────────────────────────────────────────────────────
 const fadeInUp = {
@@ -178,6 +181,8 @@ const HallmarkCard = ({
 
 // ─── Page Component ────────────────────────────────────────────────────────────
 function TelecommunicationsPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   const location = useLocation();
 
   const scrollToHash = (hash: string) => {
@@ -185,8 +190,12 @@ function TelecommunicationsPage() {
     const element = document.querySelector(hash);
     if (element) {
       requestAnimationFrame(() => {
-        const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({ top: elementTop - 80, behavior: 'smooth' });
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + window.pageYOffset;
+        const elementHeight = rect.height;
+        const viewportHeight = window.innerHeight;
+        const targetTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
       });
     }
   };
@@ -274,18 +283,41 @@ function TelecommunicationsPage() {
     },
   ];
 
+  const TELECOM_FAQ = [
+    {
+      question: 'What telecommunications services does Hajz Telecom provide?',
+      answer: 'We provide end-to-end telecom services including system integration, enterprise connectivity, unified communications, VoIP solutions, and critical infrastructure deployment for both commercial and military applications.',
+    },
+    {
+      question: 'Which industries does Hajz Telecom serve?',
+      answer: 'We serve a wide range of industries including banking and finance, government and defence, oil and gas, healthcare, hospitality, and education across the Middle East and globally.',
+    },
+    {
+      question: 'Does Hajz Telecom offer managed telecom services?',
+      answer: 'Yes. We provide fully managed services with proactive monitoring, security, maintenance, and 24/7 support to ensure your telecommunications infrastructure remains stable and available.',
+    },
+    {
+      question: 'What makes Hajz Telecom different from other providers?',
+      answer: 'With 32+ years of experience, vendor-agnostic solutions, senior-led project teams, and partnerships with global leaders like Ericsson, Avaya, and Cambium Networks, we deliver tailored solutions that integrate seamlessly with existing infrastructure.',
+    },
+  ];
+
   const heroRef = useRef(null);
   const heroInView = useInView(heroRef, { once: true, margin: '-100px' });
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>Telecommunications - Hajz Telecommunication Co Ltd. | Advanced Telecommunications Solutions</title>
-        <meta
-          name="description"
-          content="Comprehensive telecommunications solutions including system integration, connectivity, unified communication, and critical infrastructure for enterprise and military applications."
-        />
-      </Helmet>
+      <PageSEO
+        title="Telecommunications Services | Integration & Connectivity"
+        description="Comprehensive telecom services: system integration, enterprise connectivity, unified communications, and critical infrastructure for commercial and military applications."
+        path={localePath("/what-we-do/telecommunications")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: "What We Do", path: localePath("/what-we-do") },
+          { name: "Telecommunications", path: localePath("/what-we-do/telecommunications") },
+        ]}
+        faq={TELECOM_FAQ}
+      />
 
       {/* Background gradient */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
@@ -304,6 +336,13 @@ function TelecommunicationsPage() {
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
+          <div className="mb-6">
+            <Breadcrumbs items={[
+              { name: "Home", path: "/" },
+              { name: "What We Do", path: "/what-we-do" },
+              { name: "Telecommunications", path: "/what-we-do/telecommunications" },
+            ]} />
+          </div>
           {/*
             Mobile  : single column — text first, image below.
             Desktop : two columns side by side.
@@ -526,6 +565,8 @@ function TelecommunicationsPage() {
           </motion.div>
         </div>
       </section>
+
+      <FAQSection items={TELECOM_FAQ} subtitle="Common questions about our telecommunications services and capabilities." />
 
       <Footer />
     </div>

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone, Globe, Mail } from "lucide-react";
 import styled from "styled-components";
 import Logo from "./Logo";
+import { useTranslation, useLocale } from "../i18n";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 // Brand Color Variables
 const BRAND_COLORS = {
@@ -159,6 +161,11 @@ const RightNavSection = styled.div`
   gap: 0.75rem;
   margin-left: auto;
 
+  html[dir="rtl"] & {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
   @media (min-width: 1024px) {
     display: flex;
   }
@@ -213,6 +220,11 @@ const PhoneLink = styled.a<{ $scrolled: boolean }>`
     margin-right: 0.5rem;
     width: 1rem;
     height: 1rem;
+  }
+
+  html[dir="rtl"] & svg {
+    margin-right: 0;
+    margin-left: 0.5rem;
   }
 `;
 
@@ -344,6 +356,11 @@ const DropdownMenu = styled(motion.div)`
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 
+  html[dir="rtl"] & {
+    left: auto;
+    right: 0;
+  }
+
   &::before {
     content: "";
     position: absolute;
@@ -393,6 +410,16 @@ const DropdownItem = styled(Link)`
       );
     }
   }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.9375rem;
+    padding-right: 1.5rem;
+
+    &::before {
+      left: auto;
+      right: 0;
+    }
+  }
 `;
 
 const DropdownSubItem = styled.a`
@@ -414,6 +441,15 @@ const DropdownSubItem = styled.a`
     color: ${BRAND_COLORS.secondary};
     opacity: 1;
     padding-left: 2.25rem;
+  }
+
+  html[dir="rtl"] & {
+    padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+  }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.75rem;
+    padding-right: 2.25rem;
   }
 `;
 
@@ -594,6 +630,16 @@ const MobileMenu = styled(motion.div)`
   gap: 0;
   border-left: 1px solid ${BRAND_COLORS.whiteOpacity["20"]};
 
+  html[dir="rtl"] & {
+    right: auto;
+    left: 0;
+    border-left: none;
+    border-right: 1px solid ${BRAND_COLORS.whiteOpacity["20"]};
+    box-shadow:
+      4px 0 24px rgba(0, 0, 0, 0.15),
+      8px 0 48px rgba(0, 0, 0, 0.1);
+  }
+
   @media (min-width: 480px) {
     max-width: 24rem;
   }
@@ -653,6 +699,11 @@ const MobileNavLink = styled(Link).withConfig({
     padding-left: 1.5rem;
   }
 
+  html[dir="rtl"] &:hover {
+    padding-left: 0.9375rem;
+    padding-right: 1.5rem;
+  }
+
   ${(props) =>
     props.isActive &&
     `
@@ -666,6 +717,12 @@ const MobileNavLink = styled(Link).withConfig({
       width: 4px;
       background: linear-gradient(to bottom, ${BRAND_COLORS.secondary}, ${BRAND_COLORS.cta});
       border-radius: 0 4px 4px 0;
+    }
+
+    html[dir="rtl"] &::before {
+      left: auto;
+      right: 0;
+      border-radius: 4px 0 0 4px;
     }
   `}
 `;
@@ -690,15 +747,29 @@ const MobileNavButton = styled.button`
   border-radius: 0.5rem;
   margin: 0.25rem 0;
 
+  html[dir="rtl"] & {
+    text-align: right;
+  }
+
   &:hover {
     color: ${BRAND_COLORS.secondary};
     padding-left: 1.5rem;
+  }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.9375rem;
+    padding-right: 1.5rem;
   }
 `;
 
 const MobileSubMenu = styled(motion.div)`
   padding-left: 1rem;
   border-bottom: 1px solid ${BRAND_COLORS.whiteOpacity["10"]};
+
+  html[dir="rtl"] & {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
 `;
 
 const MobileSubItem = styled(Link)`
@@ -713,6 +784,11 @@ const MobileSubItem = styled(Link)`
   &:hover {
     color: ${BRAND_COLORS.secondary};
     padding-left: 1.5rem;
+  }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.75rem;
+    padding-right: 1.5rem;
   }
 `;
 
@@ -729,6 +805,15 @@ const MobileSubSubItem = styled.a`
     color: ${BRAND_COLORS.secondary};
     padding-left: 2.5rem;
   }
+
+  html[dir="rtl"] & {
+    padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+  }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.75rem;
+    padding-right: 2.5rem;
+  }
 `;
 
 const MobileSubItemAnchor = styled.a`
@@ -744,19 +829,34 @@ const MobileSubItemAnchor = styled.a`
     color: ${BRAND_COLORS.secondary};
     padding-left: 1.5rem;
   }
+
+  html[dir="rtl"] &:hover {
+    padding-left: 0.75rem;
+    padding-right: 1.5rem;
+  }
 `;
 
-interface WhitBgNavbarProps {
+interface WhiteBgNavbarProps {
   basePath?: string;
 }
 
-const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
+const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
   const location = useLocation();
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
   const currentBasePath = basePath || "";
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+
+  // Derive nav items from translations
+  const navItems = t.nav.items;
+  const homeItem = navItems[0];
+  const aboutItem = navItems[1];
+  const solutionsItem = navItems[2];
+  const impactItem = navItems[3];
+  const contactItem = navItems[4];
 
   // Check if we're on the homepage
   const isHomePage =
@@ -804,7 +904,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
 
   const menuVariants = {
     closed: {
-      x: "100%",
+      x: isRTL ? "-100%" : "100%",
       transition: {
         type: "spring",
         stiffness: 300,
@@ -831,7 +931,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
             style={{ display: "flex", alignItems: "center" }}
           >
             <Link
-              to={`${currentBasePath}/`}
+              to={localePath("/")}
               style={{
                 padding: "0.1875rem 0",
                 display: "flex",
@@ -855,7 +955,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
           <VerticalSeparator $scrolled={scrolled} />
           <NavLinks>
             <NavLink
-              to={`${currentBasePath}/`}
+              to={localePath("/")}
               isActive={
                 location.pathname === `${currentBasePath}/` ||
                 location.pathname === currentBasePath
@@ -865,7 +965,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
               onMouseEnter={() => setHoverIndex(0)}
               onMouseLeave={() => setHoverIndex(null)}
             >
-              Home
+              {homeItem.label}
             </NavLink>
             {/* About Us Dropdown */}
             <NavItem
@@ -889,7 +989,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                 hovered={hoverIndex === 1}
                 $scrolled={scrolled}
               >
-                About Us
+                {aboutItem.label}
                 <ChevronDown size={16} />
               </NavItemButton>
               <AnimatePresence>
@@ -900,41 +1000,14 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#what-we-do`}
-                    >
-                      Who We Are
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#company-identity`}
-                    >
-                      Company Identity
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#our-journey`}
-                    >
-                      Our Journey
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#vision-mission`}
-                    >
-                      Vision &amp; Mission
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#core-strengths`}
-                    >
-                      Core Strengths
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#why-choose-us`}
-                    >
-                      Why Choose Us
-                    </DropdownSubItem>
-                    <DropdownSubItem
-                      href={`${currentBasePath}/about/overview#competitive-edge`}
-                    >
-                      Competitive Edge
-                    </DropdownSubItem>
+                    {aboutItem.children?.map((child) => (
+                      <DropdownSubItem
+                        key={child.path}
+                        href={localePath(child.path)}
+                      >
+                        {child.label}
+                      </DropdownSubItem>
+                    ))}
                   </DropdownMenu>
                 )}
               </AnimatePresence>
@@ -964,7 +1037,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                 hovered={hoverIndex === 2}
                 $scrolled={scrolled}
               >
-                Solutions
+                {solutionsItem.label}
                 <ChevronDown size={16} />
               </NavItemButton>
               <AnimatePresence>
@@ -976,45 +1049,23 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     transition={{ duration: 0.2 }}
                     style={{ minWidth: "280px" }}
                   >
-                    <DropdownSection>
-                      <DropdownSectionTitleLink
-                        href={`${currentBasePath}/what-we-do/telecommunications`}
-                      >
-                        Telecommunications
-                      </DropdownSectionTitleLink>
-                      <DropdownSubItem
-                        href={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
-                      >
-                        Our Core Solutions
-                      </DropdownSubItem>
-                      <DropdownSubItem
-                        href={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
-                      >
-                        Service Standards
-                      </DropdownSubItem>
-                    </DropdownSection>
-                    <DropdownSection>
-                      <DropdownSectionTitleLink
-                        href={`${currentBasePath}/what-we-do/command-control`}
-                      >
-                        Command &amp; Control
-                      </DropdownSectionTitleLink>
-                      <DropdownSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#core-solutions`}
-                      >
-                        Our Core Solutions
-                      </DropdownSubItem>
-                      <DropdownSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#tech-stack`}
-                      >
-                        Technology Stack
-                      </DropdownSubItem>
-                      <DropdownSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#industries-served`}
-                      >
-                        Industries We Serve
-                      </DropdownSubItem>
-                    </DropdownSection>
+                    {solutionsItem.children?.map((child) => (
+                      <DropdownSection key={child.path}>
+                        <DropdownSectionTitleLink
+                          href={localePath(child.path)}
+                        >
+                          {child.label}
+                        </DropdownSectionTitleLink>
+                        {child.anchors?.map((anchor) => (
+                          <DropdownSubItem
+                            key={anchor.path}
+                            href={localePath(anchor.path)}
+                          >
+                            {anchor.label}
+                          </DropdownSubItem>
+                        ))}
+                      </DropdownSection>
+                    ))}
                   </DropdownMenu>
                 )}
               </AnimatePresence>
@@ -1044,7 +1095,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                 hovered={hoverIndex === 3}
                 $scrolled={scrolled}
               >
-                Our Impact
+                {impactItem.label}
                 <ChevronDown size={16} />
               </NavItemButton>
               <AnimatePresence>
@@ -1055,35 +1106,32 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <DropdownItem to={`${currentBasePath}/customers`}>
-                      Our Customers
-                    </DropdownItem>
-                    <DropdownItem to={`${currentBasePath}/partners`}>
-                      Our Partners
-                    </DropdownItem>
+                    {impactItem.children?.map((child) => (
+                      <DropdownItem key={child.path} to={localePath(child.path)}>
+                        {child.label}
+                      </DropdownItem>
+                    ))}
                   </DropdownMenu>
                 )}
               </AnimatePresence>
             </NavItem>
           </NavLinks>
           <RightNavSection>
-            {/* SupportLink commented out for future use */}
-            {/* <SupportLink $scrolled={scrolled}>
-              <Globe size={16} />
-              Support
-            </SupportLink> */}
-            <PhoneLink href="tel:+1234567890" $scrolled={scrolled}>
+            <LanguageSwitcher className={`text-sm font-medium ${scrolled ? 'text-[#005E96]' : 'text-white'} hover:text-[#44C8F5] transition-colors`} />
+            <PhoneLink href="tel:+966114059419" $scrolled={scrolled}>
               <Phone size={16} />
-              +1 (234) 567-890
+              {t.footer.contactInfo[1].text}
             </PhoneLink>
-            <NavButton to={`${currentBasePath}/contact`}>
+            <NavButton to={localePath("/contact")}>
               <Mail size={16} />
-              <span>Contact Us</span>
+              <span>{contactItem.label}</span>
             </NavButton>
           </RightNavSection>
           <MobileMenuButton
             $scrolled={scrolled}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
           >
             <AnimatePresence mode="wait">
               {isMobileMenuOpen ? (
@@ -1130,14 +1178,14 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
             >
               <MobileNavItem>
                 <MobileNavLink
-                  to={`${currentBasePath}/`}
+                  to={localePath("/")}
                   onClick={() => setIsMobileMenuOpen(false)}
                   isActive={
                     location.pathname === `${currentBasePath}/` ||
                     location.pathname === currentBasePath
                   }
                 >
-                  Home
+                  {homeItem.label}
                 </MobileNavLink>
               </MobileNavItem>
 
@@ -1145,14 +1193,14 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
               <MobileNavItem>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <MobileNavLink
-                    to={`${currentBasePath}/about`}
+                    to={localePath("/about")}
                     onClick={() => setIsMobileMenuOpen(false)}
                     isActive={location.pathname.startsWith(
                       `${currentBasePath}/about`,
                     )}
                     style={{ flex: 1 }}
                   >
-                    About Us
+                    {aboutItem.label}
                   </MobileNavLink>
                   <button
                     onClick={() =>
@@ -1189,48 +1237,15 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                     >
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#what-we-do`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Who We Are
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#company-identity`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Company Identity
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#our-journey`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Our Journey
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#vision-mission`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Vision &amp; Mission
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#core-strengths`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Core Strengths
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#why-choose-us`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Why Choose Us
-                      </MobileSubItemAnchor>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/about/overview#competitive-edge`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Competitive Edge
-                      </MobileSubItemAnchor>
+                      {aboutItem.children?.map((child) => (
+                        <MobileSubItemAnchor
+                          key={child.path}
+                          href={localePath(child.path)}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {child.label}
+                        </MobileSubItemAnchor>
+                      ))}
                     </MobileSubMenu>
                   )}
                 </AnimatePresence>
@@ -1245,7 +1260,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     )
                   }
                 >
-                  Solutions
+                  {solutionsItem.label}
                   <ChevronDown
                     size={16}
                     style={{
@@ -1263,49 +1278,25 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                     >
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/what-we-do/telecommunications`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Telecommunications
-                      </MobileSubItemAnchor>
-
-                      <MobileSubSubItem
-                        href={`${currentBasePath}/what-we-do/telecommunications#business-unit`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Our Core Solutions
-                      </MobileSubSubItem>
-                      <MobileSubSubItem
-                        href={`${currentBasePath}/what-we-do/telecommunications#service-Standards`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Service Standards
-                      </MobileSubSubItem>
-                      <MobileSubItemAnchor
-                        href={`${currentBasePath}/what-we-do/command-control`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Command &amp; Control
-                      </MobileSubItemAnchor>
-                      <MobileSubSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#core-solutions`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Our Core Solutions
-                      </MobileSubSubItem>
-                      <MobileSubSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#tech-stack`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Technology Stack
-                      </MobileSubSubItem>
-                      <MobileSubSubItem
-                        href={`${currentBasePath}/what-we-do/command-control#industries-served`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Industries We Serve
-                      </MobileSubSubItem>
+                      {solutionsItem.children?.map((child) => (
+                        <React.Fragment key={child.path}>
+                          <MobileSubItemAnchor
+                            href={localePath(child.path)}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {child.label}
+                          </MobileSubItemAnchor>
+                          {child.anchors?.map((anchor) => (
+                            <MobileSubSubItem
+                              key={anchor.path}
+                              href={localePath(anchor.path)}
+                              onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                              {anchor.label}
+                            </MobileSubSubItem>
+                          ))}
+                        </React.Fragment>
+                      ))}
                     </MobileSubMenu>
                   )}
                 </AnimatePresence>
@@ -1320,7 +1311,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     )
                   }
                 >
-                  Our Impact
+                  {impactItem.label}
                   <ChevronDown
                     size={16}
                     style={{
@@ -1338,18 +1329,15 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                     >
-                      <MobileSubItem
-                        to={`${currentBasePath}/customers`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Our Customers
-                      </MobileSubItem>
-                      <MobileSubItem
-                        to={`${currentBasePath}/partners`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        Our Partners
-                      </MobileSubItem>
+                      {impactItem.children?.map((child) => (
+                        <MobileSubItem
+                          key={child.path}
+                          to={localePath(child.path)}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {child.label}
+                        </MobileSubItem>
+                      ))}
                     </MobileSubMenu>
                   )}
                 </AnimatePresence>
@@ -1372,9 +1360,12 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     gap: "0.75rem",
                   }}
                 >
+                  {/* Language Switcher */}
+                  <LanguageSwitcher className="w-full py-2.5 px-3 text-center text-sm font-medium text-[#005E96] bg-[#005E960D] border border-[#005E961A] rounded-lg" />
+
                   {/* Phone */}
                   <a
-                    href="tel:+1234567890"
+                    href="tel:+966114059419"
                     style={{
                       width: "100%",
                       padding: "0.625rem 0.75rem",
@@ -1394,12 +1385,12 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     }}
                   >
                     <Phone size={16} />
-                    +1 (234) 567-890
+                    {t.footer.contactInfo[1].text}
                   </a>
 
                   {/* Contact CTA */}
                   <Link
-                    to={`${currentBasePath}/contact`}
+                    to={localePath("/contact")}
                     onClick={() => setIsMobileMenuOpen(false)}
                     style={{
                       width: "100%",
@@ -1427,7 +1418,7 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
                     }}
                   >
                     <Mail size={16} />
-                    Contact Us
+                    {contactItem.label}
                   </Link>
                 </motion.div>
               </MobileNavItem>
@@ -1451,4 +1442,4 @@ const WhitBgNavbar: React.FC<WhitBgNavbarProps> = ({ basePath }) => {
   );
 };
 
-export default WhitBgNavbar;
+export default WhiteBgNavbar;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Helmet } from "react-helmet-async";
+import PageSEO from "../utils/PageSEO";
 import { motion } from "framer-motion";
 import {
   Envelope,
@@ -9,15 +9,13 @@ import {
   Shield,
   Clock,
   Headset,
-  LinkedinLogo,
-  TwitterLogo,
-  InstagramLogo,
   CheckCircle,
   ArrowRight,
 } from "phosphor-react";
 import { z } from "zod";
 import emailjs from "@emailjs/browser";
 import Footer from "../components/Footer";
+import { useTranslation, useLocale } from "../i18n";
 
 /* ─── design tokens (mirrors global) ─── */
 const C = {
@@ -35,14 +33,7 @@ const FONT = {
 } as const;
 
 /* ─── form schema ─── */
-const SUBJECT_OPTIONS = [
-  { value: "", label: "Select a subject" },
-  { value: "general", label: "General Inquiry" },
-  { value: "sales", label: "Sales & Partnerships" },
-  { value: "support", label: "Technical Support" },
-  { value: "partnership", label: "Strategic Partnership" },
-  { value: "other", label: "Other" },
-];
+// SUBJECT_OPTIONS moved into component to use translations
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -69,6 +60,9 @@ const stagger = {
 
 /* ─── component ─── */
 function ContactPage() {
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -87,11 +81,18 @@ function ContactPage() {
   >("idle");
   const [submitCount, setSubmitCount] = useState(0);
   const lastSubmitTime = useRef<number>(0);
+  const statusTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => {
+    return () => {
+      if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
+    };
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -117,10 +118,10 @@ function ContactPage() {
 
       if (formRef.current) {
         await emailjs.sendForm(
-          "service_cq0isqs",
-          "template_tzg1evt",
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
           formRef.current,
-          "9DWNVO3rsaMB7nIaq"
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
         );
       }
 
@@ -128,7 +129,10 @@ function ContactPage() {
       lastSubmitTime.current = Date.now();
       setFormData({ name: "", email: "", subject: "", message: "" });
       setSubmitStatus("success");
-      setTimeout(() => setSubmitStatus("idle"), 6000);
+      statusTimeoutRef.current = setTimeout(
+        () => setSubmitStatus("idle"),
+        6000,
+      );
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<FormData> = {};
@@ -139,7 +143,10 @@ function ContactPage() {
         setErrors(fieldErrors);
       } else {
         setSubmitStatus("error");
-        setTimeout(() => setSubmitStatus("idle"), 6000);
+        statusTimeoutRef.current = setTimeout(
+          () => setSubmitStatus("idle"),
+          6000,
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -160,15 +167,15 @@ function ContactPage() {
     {
       icon: <Phone weight="duotone" size={24} />,
       label: "Phone",
-      value: "+966 11 000 0000",
-      href: "tel:+966110000000",
+      value: "+966 11 405 9419",
+      href: "tel:+966114059419",
       accent: C.secondary,
     },
     {
       icon: <Envelope weight="duotone" size={24} />,
       label: "Email",
-      value: "info@hajztelecom.com",
-      href: "mailto:info@hajztelecom.com",
+      value: "htc@hajztel.com.sa",
+      href: "mailto:htc@hajztel.com.sa",
       accent: C.accent,
     },
     {
@@ -181,23 +188,37 @@ function ContactPage() {
   ];
 
   const promiseBadges = [
-    { icon: <Clock weight="duotone" size={20} />, text: "Response within 24 hours" },
-    { icon: <Headset weight="duotone" size={20} />, text: "Dedicated account manager" },
-    { icon: <Shield weight="duotone" size={20} />, text: "Confidential & secure" },
+    {
+      icon: <Clock weight="duotone" size={20} />,
+      text: "Response within 24 hours",
+    },
+    {
+      icon: <Headset weight="duotone" size={20} />,
+      text: "Dedicated account manager",
+    },
+    {
+      icon: <Shield weight="duotone" size={20} />,
+      text: "Confidential & secure",
+    },
   ];
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>Contact Us – Hajz Telecommunication Co Ltd.</title>
-        <meta
-          name="description"
-          content="Get in touch with Hajz Telecommunication Co Ltd. We'd love to hear from you."
-        />
-      </Helmet>
+      <PageSEO
+        title={t.contactPage.seoTitle}
+        description={t.contactPage.seoDescription}
+        path={localePath("/contact")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: t.contactPage.eyebrow, path: localePath("/contact") },
+        ]}
+      />
 
       {/* ━━━ Background layer (scoped to page content, not footer) ━━━ */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+      <div
+        className="absolute inset-0 pointer-events-none overflow-hidden"
+        aria-hidden
+      >
         <div
           className="absolute inset-0"
           style={{
@@ -238,7 +259,7 @@ function ContactPage() {
               className="text-xs font-semibold tracking-[0.25em] uppercase"
               style={{ color: C.accent, fontFamily: FONT.heading }}
             >
-              Contact Us
+              {t.contactPage.eyebrow}
             </span>
             <span
               className="h-px w-10"
@@ -262,14 +283,14 @@ function ContactPage() {
               letterSpacing: "-0.02em",
             }}
           >
-            Let's Start a{" "}
+            {t.contactPage.headline}
             <span
               className="text-transparent bg-clip-text"
               style={{
                 backgroundImage: `linear-gradient(135deg, ${C.cta}, ${C.accent}, ${C.secondary})`,
               }}
             >
-              Conversation
+              {t.contactPage.headlineHighlight}
             </span>
           </motion.h1>
 
@@ -286,8 +307,7 @@ function ContactPage() {
               lineHeight: 1.7,
             }}
           >
-            Whether you have a question, a project in mind, or simply want to
-            explore possibilities — we're here.
+            {t.contactPage.subtitle}
           </motion.p>
 
           {/* Promise badges */}
@@ -326,7 +346,6 @@ function ContactPage() {
       >
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-8 lg:gap-12 items-start">
-
             {/* ─── LEFT: Contact Info ─── */}
             <motion.div
               variants={stagger}
@@ -345,7 +364,7 @@ function ContactPage() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Get in Touch
+                  {t.common.getInTouch}
                 </h2>
                 <p
                   className="text-white/40 leading-relaxed"
@@ -354,8 +373,7 @@ function ContactPage() {
                     fontSize: "clamp(0.85rem, 1.25vw, 0.9375rem)",
                   }}
                 >
-                  Reach out through any of the channels below and our team will
-                  be happy to assist you.
+                  {t.contactPage.subtitle}
                 </p>
               </motion.div>
 
@@ -436,48 +454,6 @@ function ContactPage() {
                 </motion.div>
               ))}
 
-              {/* Social links */}
-              <motion.div
-                variants={fadeUp}
-                className="mt-2 pt-6 border-t border-white/[0.06]"
-              >
-                <span
-                  className="block text-white/30 text-xs font-medium uppercase tracking-[0.2em] mb-4"
-                  style={{ fontFamily: FONT.heading }}
-                >
-                  Follow Us
-                </span>
-                <div className="flex gap-3">
-                  {[
-                    {
-                      Icon: LinkedinLogo,
-                      label: "LinkedIn",
-                      href: "https://linkedin.com",
-                    },
-                    {
-                      Icon: TwitterLogo,
-                      label: "Twitter",
-                      href: "https://twitter.com",
-                    },
-                    {
-                      Icon: InstagramLogo,
-                      label: "Instagram",
-                      href: "https://instagram.com",
-                    },
-                  ].map(({ Icon, label, href }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="group inline-flex items-center justify-center w-11 h-11 rounded-xl border border-white/[0.08] bg-white/[0.03] text-white/40 transition-all duration-300 hover:border-[#7CCCBF]/30 hover:bg-[#7CCCBF]/10 hover:text-[#7CCCBF] hover:scale-105"
-                    >
-                      <Icon weight="regular" size={20} />
-                    </a>
-                  ))}
-                </div>
-              </motion.div>
             </motion.div>
 
             {/* ─── RIGHT: Form ─── */}
@@ -529,7 +505,7 @@ function ContactPage() {
                         letterSpacing: "-0.01em",
                       }}
                     >
-                      Send a Message
+                      {t.contactPage.formTitle}
                     </h3>
                     <p
                       className="text-white/35"
@@ -538,7 +514,7 @@ function ContactPage() {
                         fontSize: "0.8125rem",
                       }}
                     >
-                      Fill out the form and we'll get back to you promptly.
+                      {t.contactPage.subtitle}
                     </p>
                   </div>
 
@@ -566,14 +542,13 @@ function ContactPage() {
                         className="text-white font-semibold text-lg mb-2"
                         style={{ fontFamily: FONT.heading }}
                       >
-                        Message Sent
+                        {t.contactPage.successTitle}
                       </h4>
                       <p
                         className="text-white/50 text-sm"
                         style={{ fontFamily: FONT.body }}
                       >
-                        Thank you for reaching out. We'll respond within 24
-                        hours.
+                        {t.contactPage.successMessage}
                       </p>
                     </motion.div>
                   ) : submitStatus === "error" ? (
@@ -593,13 +568,13 @@ function ContactPage() {
                         className="text-white font-semibold text-lg mb-2"
                         style={{ fontFamily: FONT.heading }}
                       >
-                        Something went wrong
+                        {t.common.errorTitle}
                       </h4>
                       <p
                         className="text-white/50 text-sm"
                         style={{ fontFamily: FONT.body }}
                       >
-                        Please try again or reach out via phone or email.
+                        {t.common.errorMessage}
                       </p>
                     </motion.div>
                   ) : (
@@ -617,13 +592,13 @@ function ContactPage() {
                             className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
                             style={{ fontFamily: FONT.heading }}
                           >
-                            Full Name
+                            {t.contactPage.namePlaceholder}
                           </label>
                           <input
                             type="text"
                             id="cp-name"
                             name="name"
-                            placeholder="John Doe"
+                            placeholder=""
                             value={formData.name}
                             onChange={handleChange}
                             disabled={isSubmitting}
@@ -649,13 +624,13 @@ function ContactPage() {
                             className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
                             style={{ fontFamily: FONT.heading }}
                           >
-                            Email Address
+                            {t.contactPage.emailPlaceholder}
                           </label>
                           <input
                             type="email"
                             id="cp-email"
                             name="email"
-                            placeholder="john@company.com"
+                            placeholder=""
                             value={formData.email}
                             onChange={handleChange}
                             disabled={isSubmitting}
@@ -694,9 +669,7 @@ function ContactPage() {
                             onChange={handleChange}
                             disabled={isSubmitting}
                             className={`${inputBase} cursor-pointer ${
-                              formData.subject
-                                ? "text-white"
-                                : "text-white/30"
+                              formData.subject ? "text-white" : "text-white/30"
                             } ${errors.subject ? "!border-red-400/60" : ""}`}
                             style={{
                               fontFamily: FONT.body,
@@ -711,15 +684,17 @@ function ContactPage() {
                               colorScheme: "dark",
                             }}
                           >
-                            {SUBJECT_OPTIONS.map(({ value, label }) => (
-                              <option
-                                key={value || "ph"}
-                                value={value}
-                                className="bg-[#0a2f3d] text-white"
-                              >
-                                {label}
-                              </option>
-                            ))}
+                            {t.contactPage.subjectOptions.map(
+                              ({ value, label }) => (
+                                <option
+                                  key={value || "ph"}
+                                  value={value}
+                                  className="bg-[#0a2f3d] text-white"
+                                >
+                                  {label}
+                                </option>
+                              ),
+                            )}
                           </select>
                         </div>
                         {errors.subject && (
@@ -781,10 +756,10 @@ function ContactPage() {
                       >
                         <span className="relative z-10 flex items-center justify-center gap-2.5">
                           {isSubmitting ? (
-                            "Sending..."
+                            t.contactPage.sending
                           ) : (
                             <>
-                              Send Message
+                              {t.contactPage.submit}
                               <PaperPlaneTilt
                                 weight="bold"
                                 size={18}

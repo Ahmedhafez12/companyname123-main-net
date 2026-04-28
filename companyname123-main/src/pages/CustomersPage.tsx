@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'phosphor-react';
 import Footer from '../components/Footer';
 import KeyCustomersBanner from '../components/KeyCustomersBanner';
+import { useTranslation, useLocale } from '../i18n';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -16,6 +17,9 @@ const fadeUp = {
 };
 
 function CustomersPage() {
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -23,8 +27,8 @@ function CustomersPage() {
   const keyCustomers = [
     { name: 'STC', logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg' },
     { name: 'BT', logo: 'https://static.cdnlogo.com/logos/b/58/bt-3.svg' },
-    { name: 'Ericsson', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png' },
-    { name: 'HP', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png' },
+    { name: 'Ericsson', logo: 'https://companieslogo.com/img/orig/ERIC_BIG-6f963a82.png?t=1720244491' },
+    { name: 'HP', logo: 'https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963' },
     { name: 'Microsoft', logo: 'https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png' },
     { name: 'Nokia', logo: 'https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg' },
     { name: 'Citibank', logo: 'https://upload.wikimedia.org/wikipedia/commons/1/1b/Citi.svg' },
@@ -37,15 +41,19 @@ function CustomersPage() {
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>Our Customers – Hajz Telecommunication Co Ltd.</title>
-        <meta name="description" content="Discover the global enterprises that trust Hajz Telecommunication Co Ltd. for their telecommunications and technology needs." />
-      </Helmet>
+      <PageSEO
+        title={t.customersPage.seoTitle}
+        description={t.customersPage.seoDescription}
+        path={localePath('/customers')}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath('/') },
+          { name: t.customersPage.eyebrow, path: localePath('/customers') },
+        ]}
+      />
 
-      {/* Background */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
 
-      {/* ═══════════════ HERO ═══════════════ */}
+      {/* HERO */}
       <section
         className="relative overflow-hidden"
         style={{
@@ -58,28 +66,25 @@ function CustomersPage() {
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl">
-
-          {/* Eyebrow */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={0}
             className="flex items-center justify-center gap-3 mb-6"
           >
             <span className="h-px w-8 bg-[#44C8F5]/50" />
             <span className="text-xs font-semibold tracking-[0.2em] uppercase text-[#44C8F5]">
-              Our Customers
+              {t.customersPage.eyebrow}
             </span>
             <span className="h-px w-8 bg-[#44C8F5]/50" />
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             variants={fadeUp} initial="hidden" animate="show" custom={1}
             className="font-bold text-white text-center"
             style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1.1 }}
           >
-            Trusted by{' '}
+            {t.customersPage.headline}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-              Global Leaders
+              {t.customersPage.headlineHighlight}
             </span>
           </motion.h1>
 
@@ -88,22 +93,22 @@ function CustomersPage() {
             className="text-white/80 text-center max-w-xl mx-auto mt-4"
             style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.125rem)', lineHeight: 1.6 }}
           >
-            We are proud to serve some of the world's most recognised organisations across telecommunications, finance, and technology.
+            {t.customersPage.subtitle}
           </motion.p>
         </div>
       </section>
 
-      {/* ═══════════════ KEY CUSTOMERS BANNER ═══════════════ */}
+      {/* KEY CUSTOMERS BANNER */}
       <section className="relative py-16 border-t border-white/10">
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
           <p className="text-center text-xs tracking-[0.15em] uppercase text-white/30 mb-8">
-            Trusted by industry leaders worldwide
+            {t.customersPage.bannerLabel}
           </p>
           <KeyCustomersBanner keyCustomers={keyCustomers} />
         </div>
       </section>
 
-      {/* ═══════════════ CTA ═══════════════ */}
+      {/* CTA */}
       <section className="relative py-24 px-4 sm:px-6 xl:px-8">
         <div className="container mx-auto max-w-3xl">
           <motion.div
@@ -111,20 +116,20 @@ function CustomersPage() {
             className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm text-center p-12"
           >
             <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#44C8F5] mb-4">
-              Get in Touch
+              {t.customersPage.ctaEyebrow}
             </p>
             <h2
               className="font-bold text-white mb-4"
               style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.2 }}
             >
-              Interested in working with us?
+              {t.customersPage.ctaTitle}
             </h2>
             <p className="text-white/60 max-w-md mx-auto mb-8 leading-relaxed">
-              Get in touch to learn how Hajz can support your organisation's telecommunications needs.
+              {t.customersPage.ctaText}
             </p>
-            <Link to="/contact" className="btn-primary inline-flex items-center gap-2 group">
-              <span>Contact Us</span>
-              <div className="transform group-hover:translate-x-1 transition-transform duration-300">
+            <Link to={localePath('/contact')} className="btn-primary inline-flex items-center gap-2 group">
+              <span>{t.customersPage.ctaButton}</span>
+              <div className={`transform group-hover:translate-x-1 transition-transform duration-300 ${isRTL ? 'rtl-flip' : ''}`}>
                 <ArrowRight weight="thin" size={20} />
               </div>
             </Link>

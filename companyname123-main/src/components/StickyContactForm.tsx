@@ -1,10 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, PaperPlaneTilt, CheckCircle, WarningCircle, CaretUp } from 'phosphor-react';
 import { z } from 'zod';
 import emailjs from '@emailjs/browser';
+import { useTranslation, useLocale } from '../i18n';
 
-// Form validation schema
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email format'),
@@ -15,6 +15,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const StickyContactForm: React.FC = () => {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -28,10 +30,16 @@ const StickyContactForm: React.FC = () => {
   const [submitCount, setSubmitCount] = useState(0);
   const lastSubmitTime = useRef<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
+  const statusTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Rate limiting configuration
-  const RATE_LIMIT_COUNT = 5; // Maximum submissions per time window
-  const RATE_LIMIT_WINDOW = 3600000; // Time window in milliseconds (1 hour)
+  useEffect(() => {
+    return () => {
+      if (statusTimeoutRef.current) clearTimeout(statusTimeoutRef.current);
+    };
+  }, []);
+
+  const RATE_LIMIT_COUNT = 5;
+  const RATE_LIMIT_WINDOW = 3600000;
 
   const checkRateLimit = (): boolean => {
     const now = Date.now();
@@ -40,11 +48,9 @@ const StickyContactForm: React.FC = () => {
       lastSubmitTime.current = now;
       return true;
     }
-    
     if (submitCount >= RATE_LIMIT_COUNT) {
       return false;
     }
-    
     return true;
   };
 
@@ -60,35 +66,26 @@ const StickyContactForm: React.FC = () => {
     }
 
     try {
-      const validatedData = formSchema.parse(formData);
+      formSchema.parse(formData);
 
       if (formRef.current) {
         await emailjs.sendForm(
-          'service_cq0isqs',
-          'template_tzg1evt',
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
           formRef.current,
-          '9DWNVO3rsaMB7nIaq'
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY
         );
       }
 
       setSubmitCount(prev => prev + 1);
       lastSubmitTime.current = Date.now();
-
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-      });
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setSubmitStatus('success');
-
-      setTimeout(() => {
+      statusTimeoutRef.current = setTimeout(() => {
         setSubmitStatus('idle');
         setIsOpen(false);
       }, 3000);
     } catch (error) {
-      console.error('Form submission error:', error);
-      
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<FormData> = {};
         error.errors.forEach((err) => {
@@ -99,7 +96,7 @@ const StickyContactForm: React.FC = () => {
         setErrors(fieldErrors);
       } else {
         setSubmitStatus('error');
-        setTimeout(() => {
+        statusTimeoutRef.current = setTimeout(() => {
           setSubmitStatus('idle');
         }, 3000);
       }
@@ -117,7 +114,7 @@ const StickyContactForm: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-[0.5in] z-50">
+    <div className={`fixed bottom-4 z-50 ${isRTL ? 'left-[0.5in]' : 'right-[0.5in]'}`}>
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -128,7 +125,7 @@ const StickyContactForm: React.FC = () => {
           >
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-medium text-white">Quick Contact</h2>
+                <h2 className="text-lg font-medium text-white">{t.stickyForm.title}</h2>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-white/70 hover:text-white transition-colors"
@@ -148,8 +145,8 @@ const StickyContactForm: React.FC = () => {
                   <div className="p-2 mx-auto mb-4">
                     <CheckCircle weight="thin" size={20} className="text-cta" />
                   </div>
-                  <p className="text-white text-lg mb-2">Message Sent!</p>
-                  <p className="text-white/70">We'll get back to you soon.</p>
+                  <p className="text-white text-lg mb-2">{t.stickyForm.successTitle}</p>
+                  <p className="text-white/70">{t.stickyForm.successMessage}</p>
                 </motion.div>
               ) : submitStatus === 'error' ? (
                 <motion.div
@@ -160,8 +157,8 @@ const StickyContactForm: React.FC = () => {
                   <div className="p-2 mx-auto mb-4">
                     <WarningCircle weight="thin" size={20} className="text-red-500" />
                   </div>
-                  <p className="text-white text-lg mb-2">Something went wrong</p>
-                  <p className="text-white/70">Please try again later.</p>
+                  <p className="text-white text-lg mb-2">{t.stickyForm.errorTitle}</p>
+                  <p className="text-white/70">{t.stickyForm.errorMessage}</p>
                 </motion.div>
               ) : (
                 <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
@@ -171,12 +168,10 @@ const StickyContactForm: React.FC = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="Your Name *"
+                      placeholder={t.stickyForm.namePlaceholder}
                       className={`form-input ${errors.name ? 'border-red-500' : ''}`}
                     />
-                    {errors.name && (
-                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
-                    )}
+                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                   </div>
 
                   <div>
@@ -185,12 +180,10 @@ const StickyContactForm: React.FC = () => {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="Your Email *"
+                      placeholder={t.stickyForm.emailPlaceholder}
                       className={`form-input ${errors.email ? 'border-red-500' : ''}`}
                     />
-                    {errors.email && (
-                      <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-                    )}
+                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                   </div>
 
                   <div>
@@ -199,12 +192,10 @@ const StickyContactForm: React.FC = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      placeholder="Subject *"
+                      placeholder={t.stickyForm.subjectPlaceholder}
                       className={`form-input ${errors.subject ? 'border-red-500' : ''}`}
                     />
-                    {errors.subject && (
-                      <p className="mt-1 text-sm text-red-500">{errors.subject}</p>
-                    )}
+                    {errors.subject && <p className="mt-1 text-sm text-red-500">{errors.subject}</p>}
                   </div>
 
                   <div>
@@ -212,13 +203,11 @@ const StickyContactForm: React.FC = () => {
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      placeholder="Your Message *"
+                      placeholder={t.stickyForm.messagePlaceholder}
                       rows={4}
                       className={`form-input ${errors.message ? 'border-red-500' : ''}`}
                     />
-                    {errors.message && (
-                      <p className="mt-1 text-sm text-red-500">{errors.message}</p>
-                    )}
+                    {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
                   </div>
 
                   <button
@@ -228,15 +217,15 @@ const StickyContactForm: React.FC = () => {
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                        PaperPlaneTilting...
+                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin me-2" />
+                        {t.stickyForm.sending}
                       </>
                     ) : (
                       <>
-                        <div className="p-0.5 mr-2">
-                          <PaperPlaneTilt weight="thin" size={20} />
+                        <div className="p-0.5 me-2">
+                          <PaperPlaneTilt weight="thin" size={20} className={isRTL ? 'rtl-flip' : ''} />
                         </div>
-                        Send Message
+                        {t.stickyForm.submit}
                       </>
                     )}
                   </button>

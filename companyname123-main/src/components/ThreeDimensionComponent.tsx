@@ -36,7 +36,16 @@ export default function EnhancedThreeDimensionsComponent() {
           >
             <div
               className={`w-16 h-16 mx-auto rounded-full ${dim.color} flex items-center justify-center cursor-pointer shadow-md transform transition-all duration-300 hover:shadow-lg ${selectedDimension === index ? 'ring-4 ring-opacity-50 ring-gray-300' : ''}`}
+              role="button"
+              tabIndex={0}
               onClick={() => setSelectedDimension(index === selectedDimension ? null : index)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setSelectedDimension(index === selectedDimension ? null : index);
+                }
+              }}
+              aria-pressed={selectedDimension === index}
             >
               <span className="text-2xl">{dim.icon}</span>
             </div>

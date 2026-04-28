@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
+import Breadcrumbs from '../components/Breadcrumbs';
+import FAQSection from '../components/FAQSection';
 import { motion, useInView } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import { useTranslation, useLocale } from '../i18n';
 import {
   CaretDown,
   PencilSimple,
@@ -399,7 +402,28 @@ const IndustryAccordion = ({
 };
 
 // ─── Page Component ────────────────────────────────────────────────────────────
+const CC_FAQ = [
+  {
+    question: 'What is a Command & Control system?',
+    answer: 'A Command & Control (C2) system integrates Extra-Low Voltage (ELV) and IT systems into a unified platform for intelligent building automation, security surveillance, access control, and real-time operational monitoring.',
+  },
+  {
+    question: 'What systems can Hajz Telecom integrate into a C2 solution?',
+    answer: 'We integrate CCTV, access control, fire alarm, BMS, HVAC, public address, IP telephony, network infrastructure, and other ELV/IT systems into a single command dashboard.',
+  },
+  {
+    question: 'Which sectors benefit from Command & Control solutions?',
+    answer: 'Government facilities, military installations, commercial buildings, hospitality, healthcare, education campuses, and critical infrastructure all benefit from centralised C2 systems.',
+  },
+  {
+    question: 'Does Hajz Telecom provide ongoing support for C2 systems?',
+    answer: 'Yes. We offer managed services including 24/7 monitoring, preventive maintenance, software updates, and dedicated support teams to keep your command centre running at peak performance.',
+  },
+];
+
 function CommandControlPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   const location = useLocation();
 
   const scrollToHash = (hash: string) => {
@@ -407,8 +431,12 @@ function CommandControlPage() {
     const element = document.querySelector(hash);
     if (element) {
       requestAnimationFrame(() => {
-        const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
-        window.scrollTo({ top: elementTop - 80, behavior: 'smooth' });
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + window.pageYOffset;
+        const elementHeight = rect.height;
+        const viewportHeight = window.innerHeight;
+        const targetTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
       });
     }
   };
@@ -622,13 +650,17 @@ function CommandControlPage() {
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>Command & Control - Hajz Telecommunication Co Ltd. | Advanced Control Solutions</title>
-        <meta
-          name="description"
-          content="Comprehensive Command & Control solutions connecting ELV and IT systems for intelligent automation and improved performance."
-        />
-      </Helmet>
+      <PageSEO
+        title="Command & Control Solutions | Hajz Telecom"
+        description="Advanced command and control solutions connecting ELV and IT systems for intelligent building automation, surveillance, and operational performance monitoring."
+        path={localePath("/what-we-do/command-control")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: "What We Do", path: localePath("/what-we-do") },
+          { name: "Command & Control", path: localePath("/what-we-do/command-control") },
+        ]}
+        faq={CC_FAQ}
+      />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <section
@@ -646,6 +678,13 @@ function CommandControlPage() {
         <div className="absolute inset-0 bg-[#005E96] opacity-20 pointer-events-none" aria-hidden="true" />
 
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl relative z-10">
+          <div className="mb-6">
+            <Breadcrumbs items={[
+              { name: "Home", path: "/" },
+              { name: "What We Do", path: "/what-we-do" },
+              { name: "Command & Control", path: "/what-we-do/command-control" },
+            ]} />
+          </div>
           {/*
             Mobile  : stacked — text then image.
             Desktop : side-by-side two-column grid.
@@ -1053,6 +1092,8 @@ function CommandControlPage() {
           </motion.div>
         </div>
       </section>
+
+      <FAQSection items={CC_FAQ} subtitle="Common questions about our command and control integration services." />
 
       <Footer />
     </div>

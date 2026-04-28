@@ -3,13 +3,13 @@
 import { Resend } from 'resend';
 
 // Initialize Resend with API key
-const resend = new Resend("re_e9SLW4J4_46N5mRcNiKbMs56GiNLs8B4f");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
 // Example Express.js route handler
 export async function sendEmailHandler(req, res) {
   const { to, subject, message } = req.body;
-  console.log('Hello from the server!');
+  // Server request received
 
   // Validate inputs
   if (!to || !subject || !message) {
@@ -28,7 +28,7 @@ export async function sendEmailHandler(req, res) {
     });
 
     if (error) {
-      console.error('Resend API error:', error);
+      // Resend API error
       return res.status(400).json({ 
         success: false, 
         message: error.message 
@@ -40,7 +40,7 @@ export async function sendEmailHandler(req, res) {
       id: data.id 
     });
   } catch (error) {
-    console.error('Server error:', error);
+    // Server error
     return res.status(500).json({ 
       success: false, 
       message: error instanceof Error ? error.message : 'Internal server error' 

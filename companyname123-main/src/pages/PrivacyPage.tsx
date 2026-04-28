@@ -1,22 +1,29 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
 import { motion } from 'framer-motion';
 import Footer from '../components/Footer';
+import { useTranslation, useLocale } from '../i18n';
 
 function PrivacyPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
 
   useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [/* dependencies that indicate a route change */]);
-    
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="relative">
-      <Helmet>
-        <title>Privacy Policy - Hajz Telecommunication Co Ltd.</title>
-        <meta name="description" content="Hajz Telecommunication Co Ltd.'s privacy policy explains how we collect, use, and protect your personal information." />
-      </Helmet>
+      <PageSEO
+        title={t.privacyPage.seoTitle}
+        description={t.privacyPage.seoDescription}
+        path={localePath('/privacy')}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath('/') },
+          { name: t.privacyPage.title, path: localePath('/privacy') },
+        ]}
+      />
 
-      {/* Background gradient */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
 
       <div className="relative pt-20">
@@ -27,55 +34,28 @@ function PrivacyPage() {
             transition={{ duration: 0.8 }}
             className="max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl font-bold text-white mb-8">Privacy Policy</h1>
-            
+            <h1 className="text-4xl font-bold text-white mb-8">{t.privacyPage.title}</h1>
+
             <div className="prose prose-invert prose-lg">
               <p className="text-white/80">
-                Last updated: {new Date().toLocaleDateString()}
+                {t.privacyPage.lastUpdated} {new Date().toLocaleDateString()}
               </p>
 
-              <section className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">1. Information We Collect</h2>
-                <p className="text-white/80 mb-4">
-                  We collect information that you provide directly to us, including:
-                </p>
-                <ul className="list-disc pl-6 text-white/80 space-y-2">
-                  <li>Contact information (name, email, phone number)</li>
-                  <li>Company information</li>
-                  <li>Communication preferences</li>
-                </ul>
-              </section>
-
-              <section className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">2. How We Use Your Information</h2>
-                <p className="text-white/80 mb-4">
-                  We use the information we collect to:
-                </p>
-                <ul className="list-disc pl-6 text-white/80 space-y-2">
-                  <li>Provide and improve our services</li>
-                  <li>Communicate with you</li>
-                  <li>Send important updates and announcements</li>
-                  <li>Respond to your requests and inquiries</li>
-                </ul>
-              </section>
-
-              <section className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">3. Information Security</h2>
-                <p className="text-white/80">
-                  We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, modification, or destruction.
-                </p>
-              </section>
-
-              <section className="mt-8">
-                <h2 className="text-2xl font-bold text-white mb-4">4. Contact Us</h2>
-                <p className="text-white/80">
-                  If you have any questions about this Privacy Policy, please contact us at:
-                </p>
-                <p className="text-white/80 mt-2">
-                  Email: privacy@hajztelecom.com<br />
-                  Phone: +966 11 000 0000
-                </p>
-              </section>
+              {t.privacyPage.sections.map((section, i) => (
+                <section key={i} className="mt-8">
+                  <h2 className="text-2xl font-bold text-white mb-4">{section.heading}</h2>
+                  {section.content.split('\n').map((line, j) => (
+                    <p key={j} className="text-white/80 mb-2">{line}</p>
+                  ))}
+                  {section.items && (
+                    <ul className="list-disc ps-6 text-white/80 space-y-2">
+                      {section.items.map((item, k) => (
+                        <li key={k}>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              ))}
             </div>
           </motion.div>
         </div>

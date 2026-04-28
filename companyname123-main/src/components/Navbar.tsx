@@ -1,82 +1,43 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   List as ListIcon,
   X as XIcon,
-  LinkedinLogo,
-  TwitterLogo,
-  FacebookLogo,
-  YoutubeLogo,
   CaretRight,
   CaretLeft,
 } from "@phosphor-icons/react";
 import Logo from "./Logo";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation, useLocale } from "../i18n";
 
-const SOCIAL_LINKS = [
-  { label: "LinkedIn", href: "https://www.linkedin.com", icon: LinkedinLogo },
-  { label: "Twitter", href: "https://twitter.com", icon: TwitterLogo },
-  { label: "Facebook", href: "https://www.facebook.com", icon: FacebookLogo },
-  { label: "YouTube", href: "https://www.youtube.com", icon: YoutubeLogo },
-];
 
 type NavAnchor = { label: string; path: string };
 type NavChild = { label: string; path: string; anchors?: NavAnchor[] };
 type NavItem  = { label: string; path: string; category?: string; children?: NavChild[] };
 
-const NAV_ITEMS: NavItem[] = [
-  { label: "Home", path: "/" },
-  {
-    label: "About Us",
-    path: "/about/overview",
-    category: "about",
-    children: [
-      { label: "Who We Are",        path: "/about/overview#what-we-do" },
-      { label: "Company Identity",  path: "/about/overview#company-identity" },
-      { label: "Our Journey",       path: "/about/overview#our-journey" },
-      { label: "Vision & Mission",  path: "/about/overview#vision-mission" },
-      { label: "Core Strengths",    path: "/about/overview#core-strengths" },
-      { label: "Why Choose Us",     path: "/about/overview#why-choose-us" },
-      { label: "Competitive Edge",  path: "/about/overview#competitive-edge" },
-    ],
-  },
-  {
-    label: "Solutions",
-    path: "/what-we-do/telecommunications",
-    category: "solutions",
-    children: [
-      {
-        label: "Telecommunications",
-        path: "/what-we-do/telecommunications",
-        anchors: [
-          { label: "Overview",           path: "/what-we-do/telecommunications#overview" },
-          { label: "Our Core Solutions", path: "/what-we-do/telecommunications#business-unit" },
-          { label: "Service Standards",  path: "/what-we-do/telecommunications#service-Standards" },
-        ],
-      },
-      {
-        label: "Command & Control",
-        path: "/what-we-do/command-control",
-        anchors: [
-          { label: "Overview",            path: "/what-we-do/command-control#overview" },
-          { label: "Our Core Solutions",  path: "/what-we-do/command-control#core-solutions" },
-          { label: "Technology Stack",    path: "/what-we-do/command-control#tech-stack" },
-          { label: "Industries We Serve", path: "/what-we-do/command-control#industries-served" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Our Impact",
-    path: "/customers",
-    category: "our-impact",
-    children: [
-      { label: "Our Customers", path: "/customers" },
-      { label: "Our Partners",  path: "/partners" },
-    ],
-  },
-  { label: "Contact Us", path: "/contact" },
-];
+function useNavItems() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
+
+  return useMemo(() => {
+    const prefixPaths = (items: typeof t.nav.items): NavItem[] =>
+      items.map(item => ({
+        ...item,
+        path: localePath(item.path),
+        children: item.children?.map(child => ({
+          ...child,
+          path: localePath(child.path),
+          anchors: child.anchors?.map(a => ({ ...a, path: localePath(a.path) })),
+        })),
+      }));
+
+    const navItems = prefixPaths(t.nav.items);
+    const legalLinks = t.nav.legalLinks.map(l => ({ ...l, path: localePath(l.path) }));
+
+    return { navItems, legalLinks };
+  }, [t, localePath]);
+}
 
 // ─── animation variants ──────────────────────────────────────────────────────
 const menuSlide = {
@@ -110,18 +71,18 @@ const slideFromLeft = {
 // ─── component ───────────────────────────────────────────────────────────────
 function Navbar() {
   const location = useLocation();
+  const { isRTL, localePath } = useLocale();
+  const { t } = useTranslation();
+  const { navItems: NAV_ITEMS, legalLinks: LEGAL_LINKS } = useNavItems();
 
   const [isOpen,                setIsOpen]                = useState(false);
   const [activeCategory,        setActiveCategory]        = useState<string | null>(null);
   const [hoveredCategory,       setHoveredCategory]       = useState<string | null>(null);
   const [hoveredSecondaryPath,  setHoveredSecondaryPath]  = useState<string | null>(null);
   const [activeSecondaryPath,   setActiveSecondaryPath]   = useState<string | null>(null);
-  // mobile-only: which panel is visible ("primary" list or "secondary" drill-down)
   const [mobilePanel, setMobilePanel] = useState<"primary" | "secondary">("primary");
 
-  // ref for the dialog overlay — used for focus management
   const overlayRef = useRef<HTMLDivElement>(null);
-  // ref for the element that had focus before the menu opened — restored on close
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const displayedCategory     = hoveredCategory ?? activeCategory;
@@ -141,7 +102,6 @@ function Navbar() {
     setIsOpen(true);
   }, []);
 
-  // drill into a primary category on mobile
   const handleMobileDrill = (category: string) => {
     setActiveCategory(category);
     setMobilePanel("secondary");
@@ -159,30 +119,25 @@ function Navbar() {
   const toggleSecondary = (path: string) =>
     setActiveSecondaryPath((prev) => (prev === path ? null : path));
 
-  // external trigger
   useEffect(() => {
     const handler = () => openMenu();
     window.addEventListener("open-menu", handler);
     return () => window.removeEventListener("open-menu", handler);
   }, [openMenu]);
 
-  // close on navigation
   useEffect(() => { closeMenu(); }, [location.pathname, closeMenu]);
 
-  // lock body scroll while open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  // Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") closeMenu(); };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [closeMenu]);
 
-  // Move focus into the overlay when it opens; restore when it closes
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
@@ -191,14 +146,13 @@ function Navbar() {
           'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
         );
         focusable?.focus();
-      }, 60); // small delay lets the slide-in animation start first
+      }, 60);
       return () => clearTimeout(timer);
     } else {
       previousFocusRef.current?.focus();
     }
   }, [isOpen]);
 
-  // Trap Tab key inside the overlay while the menu is open
   useEffect(() => {
     if (!isOpen) return;
     const handleTab = (e: KeyboardEvent) => {
@@ -233,6 +187,10 @@ function Navbar() {
   const displayedPrimary    = NAV_ITEMS.find((i) => i.category === displayedCategory);
   const tertiaryChild       = displayedPrimary?.children?.find((c) => c.path === displayedSecondaryPath);
 
+  // RTL-aware slide animations
+  const mobileSlideIn = isRTL ? slideFromRight : slideFromLeft;
+  const mobileSlideOut = isRTL ? slideFromLeft : slideFromRight;
+
   return (
     <>
       {/* ── Header bar ─────────────────────────────────────────────────────── */}
@@ -242,7 +200,7 @@ function Navbar() {
       >
         <div className="flex h-16 sm:h-20 md:h-[6.5rem] lg:h-[7.8rem] w-full items-center justify-between px-4 sm:px-6 md:px-[0.5in]">
           <Link
-            to="/"
+            to={localePath("/")}
             className="flex h-full min-w-0 items-center py-2 opacity-100 transition-opacity duration-300 hover:opacity-80"
             aria-label="Home"
             onClick={closeMenu}
@@ -253,39 +211,42 @@ function Navbar() {
             />
           </Link>
 
-          <button
-            type="button"
-            className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-[3.9rem] md:w-[3.9rem] shrink-0 items-center justify-center rounded-lg text-current transition-colors hover:bg-white/10"
-            aria-label={isOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isOpen}
-            onClick={() => (isOpen ? closeMenu() : openMenu())}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {isOpen ? (
-                <motion.span
-                  key="close"
-                  initial={{ rotate: -45, opacity: 0 }}
-                  animate={{ rotate: 0,   opacity: 1 }}
-                  exit={{    rotate:  45, opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="flex items-center justify-center"
-                >
-                  <XIcon weight="thin" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="open"
-                  initial={{ rotate: 45, opacity: 0 }}
-                  animate={{ rotate: 0,  opacity: 1 }}
-                  exit={{    rotate: -45, opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="flex items-center justify-center"
-                >
-                  <ListIcon weight="thin" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <LanguageSwitcher className="text-white/60 hover:text-white text-xs sm:text-sm font-medium tracking-wide transition-colors duration-300" />
+            <button
+              type="button"
+              className="flex h-9 w-9 sm:h-10 sm:w-10 md:h-[3.9rem] md:w-[3.9rem] shrink-0 items-center justify-center rounded-lg text-current transition-colors hover:bg-white/10"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              onClick={() => (isOpen ? closeMenu() : openMenu())}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isOpen ? (
+                  <motion.span
+                    key="close"
+                    initial={{ rotate: -45, opacity: 0 }}
+                    animate={{ rotate: 0,   opacity: 1 }}
+                    exit={{    rotate:  45, opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="flex items-center justify-center"
+                  >
+                    <XIcon weight="thin" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="open"
+                    initial={{ rotate: 45, opacity: 0 }}
+                    animate={{ rotate: 0,  opacity: 1 }}
+                    exit={{    rotate: -45, opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    className="flex items-center justify-center"
+                  >
+                    <ListIcon weight="thin" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -321,13 +282,12 @@ function Navbar() {
                     {mobilePanel === "primary" && (
                       <motion.div
                         key="mob-primary"
-                        variants={slideFromLeft}
+                        variants={mobileSlideIn}
                         initial="initial"
                         animate="animate"
                         exit="exit"
                         className="absolute inset-0 flex flex-col"
                       >
-                        {/* Scrollable nav items */}
                         <motion.nav
                           className="flex flex-col flex-1 overflow-y-auto px-5 pt-6 pb-2"
                           variants={staggerContainer}
@@ -348,7 +308,6 @@ function Navbar() {
                               </motion.div>
                             ) : (
                               <motion.div key={item.category} variants={staggerItem}>
-                                {/* Split row: label → navigates to parent; caret → drills into submenu */}
                                 <div className="flex items-stretch border-b border-white/10">
                                   <Link
                                     to={item.path}
@@ -363,7 +322,7 @@ function Navbar() {
                                     className="flex w-12 shrink-0 items-center justify-center text-white/50 transition-colors hover:text-white"
                                     aria-label={`Explore ${item.label}`}
                                   >
-                                    <CaretRight weight="thin" className="w-5 h-5" />
+                                    <CaretRight weight="thin" className={`w-5 h-5 ${isRTL ? 'rtl-flip' : ''}`} />
                                   </button>
                                 </div>
                               </motion.div>
@@ -371,20 +330,23 @@ function Navbar() {
                           )}
                         </motion.nav>
 
-                        {/* Social row — always pinned at bottom, never scrolled away */}
-                        <div className="shrink-0 flex items-center justify-center gap-6 border-t border-white/10 px-5 py-5">
-                          {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
-                            <a
-                              key={label}
-                              href={href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-white/60 transition-colors hover:text-white"
-                              aria-label={label}
-                            >
-                              <Icon weight="thin" className="w-6 h-6" />
-                            </a>
-                          ))}
+                        {/* Footer — legal links + language + social icons */}
+                        <div className="shrink-0 border-t border-white/10 px-5 py-5 flex flex-col items-center gap-4">
+                          <div className="flex items-center gap-4">
+                            {LEGAL_LINKS.map(({ label, path }) => (
+                              <Link
+                                key={path}
+                                to={path}
+                                onClick={closeMenu}
+                                className="text-xs text-white/50 transition-colors hover:text-white"
+                              >
+                                {label}
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-6">
+                            <LanguageSwitcher className="text-white/60 hover:text-white" />
+                          </div>
                         </div>
                       </motion.div>
                     )}
@@ -393,21 +355,20 @@ function Navbar() {
                     {mobilePanel === "secondary" && (
                       <motion.div
                         key="mob-secondary"
-                        variants={slideFromRight}
+                        variants={mobileSlideOut}
                         initial="initial"
                         animate="animate"
                         exit="exit"
                         className="absolute inset-0 flex flex-col overflow-y-auto"
                       >
-                        {/* Back bar */}
                         <div className="flex items-center border-b border-white/10 px-4 py-3">
                           <button
                             type="button"
                             onClick={handleMobileBack}
                             className="flex items-center gap-2 text-sm font-medium text-white/60 transition-colors hover:text-white"
                           >
-                            <CaretLeft weight="thin" className="w-4 h-4" />
-                            Back
+                            <CaretLeft weight="thin" className={`w-4 h-4 ${isRTL ? 'rtl-flip' : ''}`} />
+                            {t.common.back}
                           </button>
                         </div>
 
@@ -442,12 +403,11 @@ function Navbar() {
                                       }
                                     >
                                       <span className="text-base leading-none">
-                                        {activeSecondaryPath === child.path ? "−" : "+"}
+                                        {activeSecondaryPath === child.path ? "\u2212" : "+"}
                                       </span>
                                     </button>
                                   )}
                                 </div>
-                                {/* Inline tertiary anchors */}
                                 <AnimatePresence>
                                   {child.anchors &&
                                     child.anchors.length > 0 &&
@@ -459,7 +419,7 @@ function Navbar() {
                                         transition={{ duration: 0.25 }}
                                         className="overflow-hidden"
                                       >
-                                        <div className="mb-2 ml-3 flex flex-col border-l border-white/20 pl-4 pt-1">
+                                        <div className={`mb-2 flex flex-col pt-1 ${isRTL ? 'mr-3 border-r border-white/20 pr-4' : 'ml-3 border-l border-white/20 pl-4'}`}>
                                           {child.anchors.map((a) => (
                                             <Link
                                               key={a.path}
@@ -485,7 +445,6 @@ function Navbar() {
 
                 {/* ════════════════════════════════════════════════════════════
                     TABLET + DESKTOP  (md+)  — column grid
-                    Tablet (md–lg): 2 columns   Desktop (lg+): 3 columns
                     ════════════════════════════════════════════════════════════ */}
                 <div className="hidden md:flex md:h-full md:flex-col md:overflow-y-auto">
                   <div className="grid flex-1 grid-cols-1 gap-10 px-8 py-10 md:grid-cols-2 md:gap-12 md:px-12 md:py-12 lg:grid-cols-3 lg:gap-14 lg:px-16 lg:py-14">
@@ -510,7 +469,6 @@ function Navbar() {
                           </motion.div>
                         ) : (
                           <motion.div key={item.category} variants={staggerItem}>
-                            {/* Split row: label → navigates to parent; +/− → toggles submenu column */}
                             <div
                               className="flex items-stretch border-b border-white/10"
                               onMouseEnter={() => setHoveredCategory(item.category!)}
@@ -534,7 +492,7 @@ function Navbar() {
                                 aria-label={`${activeCategory === item.category ? "Collapse" : "Expand"} ${item.label}`}
                               >
                                 <span className="text-lg leading-none" aria-hidden>
-                                  {activeCategory === item.category ? "−" : "+"}
+                                  {activeCategory === item.category ? "\u2212" : "+"}
                                 </span>
                               </button>
                             </div>
@@ -548,7 +506,7 @@ function Navbar() {
                       {displayedCategory && displayedPrimary?.children ? (
                         <motion.div
                           key={displayedCategory}
-                          initial={{ opacity: 0, x: 12 }}
+                          initial={{ opacity: 0, x: isRTL ? -12 : 12 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.25 }}
                           className="flex flex-col gap-1"
@@ -575,21 +533,15 @@ function Navbar() {
                                   <button
                                     type="button"
                                     className="flex w-12 shrink-0 items-center justify-center rounded-lg text-white/70 transition-colors hover:bg-white/10"
-                                    aria-label={
-                                      displayedSecondaryPath === child.path
-                                        ? `Collapse sections for ${child.label}`
-                                        : `Expand sections for ${child.label}`
-                                    }
                                     aria-expanded={displayedSecondaryPath === child.path}
                                     onClick={() => toggleSecondary(child.path)}
                                   >
                                     <span className="text-lg opacity-60" aria-hidden>
-                                      {displayedSecondaryPath === child.path ? "−" : "+"}
+                                      {displayedSecondaryPath === child.path ? "\u2212" : "+"}
                                     </span>
                                   </button>
                                 )}
                               </div>
-                              {/* Tablet-only inline tertiary (hidden on lg where col 3 handles it) */}
                               <AnimatePresence>
                                 {child.anchors &&
                                   child.anchors.length > 0 &&
@@ -601,7 +553,7 @@ function Navbar() {
                                       transition={{ duration: 0.25 }}
                                       className="overflow-hidden lg:hidden"
                                     >
-                                      <div className="mb-2 ml-2 flex flex-col border-l border-white/20 pl-4">
+                                      <div className={`mb-2 flex flex-col ${isRTL ? 'mr-2 border-r border-white/20 pr-4' : 'ml-2 border-l border-white/20 pl-4'}`}>
                                         {child.anchors.map((a) => (
                                           <Link
                                             key={a.path}
@@ -622,7 +574,7 @@ function Navbar() {
                       ) : (
                         <p className="text-sm text-white/40">
                           {primaryWithChildren.length > 0
-                            ? "Select a section to see links."
+                            ? t.common.selectSection
                             : null}
                         </p>
                       )}
@@ -633,13 +585,13 @@ function Navbar() {
                       {tertiaryChild?.anchors && tertiaryChild.anchors.length > 0 ? (
                         <motion.div
                           key={tertiaryChild.path}
-                          initial={{ opacity: 0, x: 12 }}
+                          initial={{ opacity: 0, x: isRTL ? -12 : 12 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ duration: 0.25 }}
                           className="flex flex-col gap-1"
                         >
                           <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-white/50">
-                            On this page
+                            {t.common.onThisPage}
                           </p>
                           {tertiaryChild.anchors.map((a) => (
                             <Link
@@ -656,26 +608,26 @@ function Navbar() {
                         <p className="text-sm text-white/40">
                           {displayedSecondaryPath
                             ? null
-                            : "Hover a solution area for section links."}
+                            : t.common.hoverSolution}
                         </p>
                       )}
                     </div>
                   </div>
 
-                  {/* Social links — tablet/desktop */}
+                  {/* Legal + language + social links — tablet/desktop */}
                   <div className="flex flex-wrap items-center justify-center gap-6 border-t border-white/10 px-8 py-7 md:px-12 lg:px-16">
-                    {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
-                      <a
-                        key={label}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-white/60 transition-colors hover:text-white"
-                        aria-label={label}
+                    {LEGAL_LINKS.map(({ label, path }) => (
+                      <Link
+                        key={path}
+                        to={path}
+                        onClick={closeMenu}
+                        className="text-sm text-white/50 transition-colors hover:text-white"
                       >
-                        <Icon weight="thin" className="w-6 h-6 md:w-7 md:h-7" />
-                      </a>
+                        {label}
+                      </Link>
                     ))}
+                    <span className="h-4 w-px bg-white/20" aria-hidden />
+                    <LanguageSwitcher className="text-white/60 hover:text-white" />
                   </div>
                 </div>
 

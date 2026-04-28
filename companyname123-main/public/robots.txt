@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hajztelecom.com/sitemap.xml
+
+# Block preview/internal pages
+Disallow: /preview/

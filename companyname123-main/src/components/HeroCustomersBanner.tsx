@@ -16,8 +16,8 @@ interface HeroCustomersBannerProps {
 const DEFAULT_CUSTOMERS: HeroKeyCustomer[] = [
   { name: "STC", logo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/STC-01.svg" },
   { name: "BT", logo: "https://static.cdnlogo.com/logos/b/58/bt-3.svg" },
-  { name: "Ericsson", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ericsson_%282018%29.svg/1200px-Ericsson_%282018%29.svg.png" },
-  { name: "HP", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/2048px-HP_logo_2012.svg.png" },
+  { name: "Ericsson", logo: "https://companieslogo.com/img/orig/ERIC_BIG-6f963a82.png?t=1720244491" },
+  { name: "HP", logo: "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963" },
   { name: "Microsoft", logo: "https://uhf.microsoft.com/images/microsoft/RE1Mu3b.png" },
   { name: "Nokia", logo: "https://www.nokia.com/themes/custom/onenokia_reskin/logo.svg" },
   { name: "Citibank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Citi.svg" },

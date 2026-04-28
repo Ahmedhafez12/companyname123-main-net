@@ -15,8 +15,8 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
   keyCustomers = [
     { name: "STC", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=STC" },
     { name: "BT", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=BT" },
-    { name: "Ericsson", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=Ericsson" },
-    { name: "HP", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=HP" },
+    { name: "Ericsson", logo: "https://companieslogo.com/img/orig/ERIC_BIG-6f963a82.png?t=1720244491" },
+    { name: "HP", logo: "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963" },
     { name: "Microsoft", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=Microsoft" },
     { name: "Nokia", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=Nokia" },
     { name: "Citibank", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=Citibank" },
@@ -137,7 +137,8 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
       >
         <img
           src={customer.logo}
-          alt={customer.name}
+          alt={`${customer.name} logo`}
+          loading="lazy"
           className={`max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 ${
             customer.name === "IBM" ? "brightness-0" : ""
           }`}

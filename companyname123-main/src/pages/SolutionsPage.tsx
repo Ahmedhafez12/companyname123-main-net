@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import PageSEO from '../utils/PageSEO';
 import { motion } from 'framer-motion';
+import { useTranslation, useLocale } from '../i18n';
 import { WifiHighHigh, Cloud, ShareShareNetwork, Shield, ArrowRight, Lightning, Globe, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
 import SolutionsCarousel from '../components/SolutionsCarousel';
 import Footer from '../components/Footer';
 import HeroCarousel from '../components/HeroCarousel';
 
 function SolutionsPage() {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   const solutions = [
     {
       icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
@@ -146,10 +149,15 @@ function SolutionsPage() {
 
   return (
     <div className="relative">
-      <Helmet>
-        <title>Solutions - Hajz Telecommunication Co Ltd. | Advanced Telecommunications Infrastructure</title>
-        <meta name="description" content="Explore Hajz Telecommunication Co Ltd.'s comprehensive suite of telecommunications solutions, including 5G infrastructure, cloud services, IoT networks, and security solutions." />
-      </Helmet>
+      <PageSEO
+        title="Telecom Solutions | 5G, Cloud, IoT & Security"
+        description="Discover Hajz Telecom's end-to-end solutions: 5G infrastructure deployment, cloud services, IoT networks, cybersecurity, and unified communications for enterprises."
+        path={localePath("/solutions")}
+        breadcrumbs={[
+          { name: t.common.home, path: localePath("/") },
+          { name: "Solutions", path: localePath("/solutions") },
+        ]}
+      />
 
       {/* Background gradient */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
@@ -171,9 +179,10 @@ function SolutionsPage() {
                 className="group relative overflow-hidden rounded-2xl"
               >
                 <div className="absolute inset-0">
-                  <img 
-                    src={solution.image} 
+                  <img
+                    src={solution.image}
                     alt={solution.title}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#005E96]/90 to-transparent" />
