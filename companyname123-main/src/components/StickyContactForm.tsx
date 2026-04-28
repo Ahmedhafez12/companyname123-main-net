@@ -114,7 +114,7 @@ const StickyContactForm: React.FC = () => {
   };
 
   return (
-    <div className={`fixed bottom-4 z-50 ${isRTL ? 'left-[0.5in]' : 'right-[0.5in]'}`}>
+    <div className={`hidden md:block fixed bottom-4 z-50 ${isRTL ? 'left-[0.5in]' : 'right-[0.5in]'}`}>
       <AnimatePresence>
         {isOpen ? (
           <motion.div

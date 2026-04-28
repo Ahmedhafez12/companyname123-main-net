@@ -388,9 +388,9 @@ const BannerWrapper = styled.div`
 const HeroSection = styled.section`
   position: relative;
   width: 100%;
-  /* Use explicit height so absolutely-positioned children can reference it */
-  height: 100svh;
-  min-height: 100svh;
+  /* Full-fold height — match NetworkHeroCanvas / CompanyTeaser pattern */
+  height: min(100dvh, 100svh);
+  min-height: 100dvh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -405,8 +405,8 @@ const HeroSection = styled.section`
   }
 
   @media (max-width: 639px) {
-    height: 100svh;
-    min-height: 100svh;
+    height: 100dvh;
+    min-height: 100dvh;
     align-items: flex-start;
     padding-top: clamp(4.5rem, 14vw, 5.5rem);
     padding-bottom: 6.5rem;

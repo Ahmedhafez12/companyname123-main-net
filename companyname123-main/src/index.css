@@ -503,8 +503,8 @@ section#about-cta.snap-section {
 /* The hero section must keep viewport height on mobile so the carousel
    (which uses only absolutely-positioned children) does not collapse. */
 section#hero.snap-section {
-  min-height: 100svh !important;
-  height: 100svh !important;
+  min-height: 100dvh !important;
+  height: min(100dvh, 100svh) !important;
 }
 
 /* Tablet (768–1023): re-enable proximity snapping */
