@@ -16,17 +16,25 @@ const SECTION_COLORS = {
 
 const Section = styled.section`
   width: 100%;
-  height: 100%;
-  min-height: 100svh;
+  /* Full-fold height — match NetworkHeroCanvas / HeroCarousel pattern */
+  height: min(100dvh, 100svh);
+  min-height: 100dvh;
   scroll-snap-align: start;
   display: grid;
   grid-template-columns: 1fr;
   overflow: hidden;
 
+  /* Fix for iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
+  }
+
   /* Mobile: equal 50/50 split — image top half, text bottom half */
   @media (max-width: 639px) {
-    height: 100svh;
-    grid-template-rows: 50svh 50svh;
+    height: 100dvh;
+    min-height: 100dvh;
+    grid-template-rows: 50dvh 50dvh;
   }
 
   /* Tablet: give the image a fixed portion, text below */

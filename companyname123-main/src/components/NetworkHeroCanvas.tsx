@@ -46,7 +46,7 @@ const PARTNERS: Partner[] = [
   },
   {
     name: "HP",
-    src: "https://companieslogo.com/img/orig/HPQ-30e5d607.png?t=1740329963",
+    src: "https://upload.wikimedia.org/wikipedia/commons/4/46/Hewlett_Packard_Enterprise_logo.svg",
   },
   {
     name: "Microsoft",
