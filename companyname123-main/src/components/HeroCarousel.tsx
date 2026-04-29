@@ -69,15 +69,18 @@ const slides: Slide[] = [
     id: 1,
     department: "Telecommunications",
     title: "Telecommunication -Solutions",
-    subline: "Transforming infrastructure chaos into competitive advantage with intelligent connectivity solutions that protect your past while accelerating your future.",
-    image: "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.png",
+    subline:
+      "Transforming infrastructure chaos into competitive advantage with intelligent connectivity solutions that protect your past while accelerating your future.",
+    image:
+      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.png",
     link: "/what-we-do/telecommunications",
   },
   {
     id: 2,
     department: "Command & Control",
     title: "Command & Control -Solutions",
-    subline: "Connecting the dots between your ELV and other systems—ensuring smooth data flow, improved performance, and intelligent automation.",
+    subline:
+      "Connecting the dots between your ELV and other systems—ensuring smooth data flow, improved performance, and intelligent automation.",
     image: "/assets/CommandandControl/Control_room_with_screens_37be293209.png",
     link: "/what-we-do/command-control",
   },
@@ -86,8 +89,9 @@ const slides: Slide[] = [
     department: "Fixed Wireless Access",
     title: "Fixed Wireless Access -Solutions",
     subline: "High-speed enterprise connectivity delivered without the wires.",
-    image: "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.png",
-    link: "/solutions",
+    image:
+      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.png",
+    link: "/",
   },
 ];
 
@@ -111,7 +115,7 @@ const BackgroundImage = styled.div<{
   inset: 0;
   width: 100%;
   height: 100%;
-  background-image: url(${props => props.$imageUrl});
+  background-image: url(${(props) => props.$imageUrl});
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -129,7 +133,7 @@ const BackgroundImage = styled.div<{
     }
   }
 
-  ${props =>
+  ${(props) =>
     props.$zoomActive
       ? css`
           animation-name: hero-carousel-bg-zoom;
@@ -216,9 +220,14 @@ const SlideTitle = styled(motion.h1)`
   overflow-wrap: break-word;
   hyphens: none;
   -webkit-hyphens: none;
-  
+
   .gradient-text {
-    background: linear-gradient(135deg, ${BRAND_COLORS.cta}, ${BRAND_COLORS.highlight}, ${BRAND_COLORS.secondary});
+    background: linear-gradient(
+      135deg,
+      ${BRAND_COLORS.cta},
+      ${BRAND_COLORS.highlight},
+      ${BRAND_COLORS.secondary}
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -231,7 +240,7 @@ const SlideDepartment = styled(motion.div)<{ $color: string }>`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: ${props => props.$color};
+  color: ${(props) => props.$color};
   margin-bottom: 0.5rem;
   display: inline-flex;
   align-items: center;
@@ -241,12 +250,12 @@ const SlideDepartment = styled(motion.div)<{ $color: string }>`
   hyphens: none;
   -webkit-hyphens: none;
   flex-shrink: 0;
-  
+
   &::before {
-    content: '';
+    content: "";
     width: 40px;
     height: 2px;
-    background: linear-gradient(90deg, ${props => props.$color}, transparent);
+    background: linear-gradient(90deg, ${(props) => props.$color}, transparent);
     flex-shrink: 0;
   }
 `;
@@ -291,17 +300,17 @@ const CTAButton = styled(Link)`
   border-radius: 0.5rem;
   text-decoration: none;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: ${BRAND_COLORS.whiteOpacity["10"]};
     border-color: ${BRAND_COLORS.whiteOpacity["40"]};
     transform: translateY(-2px);
   }
-  
+
   svg {
     transition: transform 0.3s ease;
   }
-  
+
   &:hover svg {
     transform: translateX(4px);
   }
@@ -350,7 +359,10 @@ const ProgressBar = styled.div<{ $isActive: boolean }>`
 const ProgressBarTrack = styled.div<{ $isActive: boolean }>`
   width: 100%;
   height: 3px;
-  background: ${props => props.$isActive ? BRAND_COLORS.whiteOpacity["30"] : BRAND_COLORS.whiteOpacity["10"]};
+  background: ${(props) =>
+    props.$isActive
+      ? BRAND_COLORS.whiteOpacity["30"]
+      : BRAND_COLORS.whiteOpacity["10"]};
   border-radius: 2px;
   overflow: hidden;
   position: relative;
@@ -367,7 +379,11 @@ const ProgressFill = styled(motion.div)`
   left: 0;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, ${BRAND_COLORS.cta}, ${BRAND_COLORS.secondary});
+  background: linear-gradient(
+    90deg,
+    ${BRAND_COLORS.cta},
+    ${BRAND_COLORS.secondary}
+  );
   border-radius: 2px;
 `;
 
@@ -396,7 +412,11 @@ const HeroSection = styled.section`
   align-items: center;
   justify-content: flex-start;
   padding-top: clamp(4rem, 10vh, 6rem);
-  padding-bottom: clamp(5rem, 12vh, 7rem); /* reserve space for banner + progress */
+  padding-bottom: clamp(
+    5rem,
+    12vh,
+    7rem
+  ); /* reserve space for banner + progress */
 
   /* Fix for iOS Safari 100vh issue */
   @supports (-webkit-touch-callout: none) {
@@ -442,13 +462,13 @@ const HeroCarousel = () => {
   const goToSlide = (index: number) => {
     // Validate index
     if (index < 0 || index >= slides.length) return;
-    
+
     // Clear existing timeout
     if (intervalRef.current) {
       clearTimeout(intervalRef.current);
       intervalRef.current = null;
     }
-    
+
     // Update slide and restart animations
     setCurrentSlide(index);
     setKey((prev) => prev + 1);
@@ -467,10 +487,12 @@ const HeroCarousel = () => {
     const words = title.split(" -");
     return words.map((word, i) =>
       i === 0 ? (
-        <span key={i} className="gradient-text">{word} </span>
+        <span key={i} className="gradient-text">
+          {word}{" "}
+        </span>
       ) : (
         <span key={i}>{word} </span>
-      )
+      ),
     );
   };
 
@@ -513,9 +535,7 @@ const HeroCarousel = () => {
               <GlassCard
                 initial={false}
                 animate={
-                  isActive
-                    ? { opacity: 1, x: 0 }
-                    : { opacity: 0, x: -50 }
+                  isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }
                 }
                 transition={{ duration: transitionDuration / 1000 }}
                 style={{
@@ -527,9 +547,7 @@ const HeroCarousel = () => {
                   $color={getDepartmentColor(index)}
                   initial={false}
                   animate={
-                    isActive
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: 20 }
+                    isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                   }
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
@@ -538,9 +556,7 @@ const HeroCarousel = () => {
                 <SlideTitle
                   initial={false}
                   animate={
-                    isActive
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: 20 }
+                    isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                   }
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
@@ -549,9 +565,7 @@ const HeroCarousel = () => {
                 <SlideSubline
                   initial={false}
                   animate={
-                    isActive
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: 20 }
+                    isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                   }
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
@@ -560,9 +574,7 @@ const HeroCarousel = () => {
                 <CTAButtonWrapper
                   initial={false}
                   animate={
-                    isActive
-                      ? { opacity: 1, y: 0 }
-                      : { opacity: 0, y: 20 }
+                    isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                   }
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
