@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ErrorBoundary } from 'react-error-boundary';
 import WhiteBgNavbar from './components/WhiteBgNavbar';
 import Navbar from './components/Navbar';
@@ -63,9 +63,15 @@ function ErrorFallback({ error, resetErrorBoundary }: { error: Error; resetError
 
 function PageLoader() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <motion.div
+      className="min-h-screen flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+    >
       <div className="w-8 h-8 border-2 border-white/20 border-t-[#44C8F5] rounded-full animate-spin" />
-    </div>
+    </motion.div>
   );
 }
 
@@ -83,34 +89,49 @@ function App() {
     document.documentElement.style.fontFamily = t.fontFamily;
   }, [locale, dir, t.fontFamily]);
 
+  // Smooth scroll-to-top on route change (only when no hash anchor in URL)
+  useEffect(() => {
+    if (!location.hash) {
+      window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+    }
+  }, [location.pathname, location.hash]);
+
   return (
     <div className="relative">
       {!isNavbar2Preview && (useTransparentNavbar ? <Navbar /> : <WhiteBgNavbar basePath="" />)}
 
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.replace(locale === 'ar' ? '/ar' : '/')}>
         <Suspense fallback={<PageLoader />}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              {/* English routes */}
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/about/overview" element={<AboutUsPage />} />
-              <Route path="/what-we-do" element={<WhatwedoPage />} />
-              <Route path="/what-we-do/command-control" element={<CommandControlPage />} />
-              <Route path="/what-we-do/telecommunications" element={<TelecommunicationsPage />} />
-              <Route path="/solutions" element={<SolutionsPage />} />
-              <Route path="/customers" element={<CustomersPage />} />
-              <Route path="/partners" element={<PartnersPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/terms" element={<TermsPage />} />
-              <Route path="/sitemap" element={<SitemapPage />} />
-              <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Routes location={location}>
+                {/* English routes */}
+                <Route path="/" element={<HomePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/about/overview" element={<AboutUsPage />} />
+                <Route path="/what-we-do" element={<WhatwedoPage />} />
+                <Route path="/what-we-do/command-control" element={<CommandControlPage />} />
+                <Route path="/what-we-do/telecommunications" element={<TelecommunicationsPage />} />
+                <Route path="/solutions" element={<SolutionsPage />} />
+                <Route path="/customers" element={<CustomersPage />} />
+                <Route path="/partners" element={<PartnersPage />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/sitemap" element={<SitemapPage />} />
+                <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
 
-              {/* Arabic routes — under maintenance */}
-              <Route path="/ar/*" element={<ArabicMaintenancePage />} />
-              <Route path="/ar" element={<ArabicMaintenancePage />} />
-            </Routes>
+                {/* Arabic routes — under maintenance */}
+                <Route path="/ar/*" element={<ArabicMaintenancePage />} />
+                <Route path="/ar" element={<ArabicMaintenancePage />} />
+              </Routes>
+            </motion.div>
           </AnimatePresence>
         </Suspense>
       </ErrorBoundary>

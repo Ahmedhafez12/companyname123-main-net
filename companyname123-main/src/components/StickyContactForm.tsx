@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, PaperPlaneTilt, CheckCircle, WarningCircle, CaretUp } from 'phosphor-react';
 import { z } from 'zod';
-import emailjs from '@emailjs/browser';
 import { useTranslation, useLocale } from '../i18n';
 
 const formSchema = z.object({
@@ -68,14 +67,12 @@ const StickyContactForm: React.FC = () => {
     try {
       formSchema.parse(formData);
 
-      if (formRef.current) {
-        await emailjs.sendForm(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          formRef.current,
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-        );
-      }
+      const res = await fetch("/.netlify/functions/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to send");
 
       setSubmitCount(prev => prev + 1);
       lastSubmitTime.current = Date.now();

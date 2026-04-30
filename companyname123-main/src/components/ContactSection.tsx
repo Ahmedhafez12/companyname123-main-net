@@ -13,7 +13,6 @@ import {
   InstagramLogo,
 } from "phosphor-react";
 import { z } from "zod";
-import emailjs from "@emailjs/browser";
 
 /** Accent chevrons for custom-styled subject selects (native `appearance: none`). */
 const SUBJECT_CHEVRON_ORBITAL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%237CCCBF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`;
@@ -114,15 +113,12 @@ const ContactSection: React.FC<ContactSectionProps> = ({
       // Validate form data
       const validatedData = formSchema.parse(formData);
 
-      // Send email using EmailJS
-      if (formRef.current) {
-        await emailjs.sendForm(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          formRef.current,
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-        );
-      }
+      const res = await fetch("/.netlify/functions/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to send");
 
       // Update rate limiting counters
       setSubmitCount((prev) => prev + 1);

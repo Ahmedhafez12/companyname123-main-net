@@ -341,7 +341,7 @@ function AboutUsPage() {
       <section id="company-identity" className={sectionClass}>
         <DecorativeBlob className="top-1/2 -translate-y-1/2 -right-32 opacity-25" />
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-0 w-full flex-1 min-h-0">
-          <div className="relative w-full min-h-[45vh] sm:min-h-[52vh] lg:min-h-0 lg:h-full order-1 lg:order-1 lg:flex-1 flex flex-col">
+          <div className="relative w-full min-h-[45vh] sm:min-h-[52vh] lg:min-h-0 lg:h-full order-2 lg:order-1 lg:flex-1 flex flex-col">
             <CompanyIdentityCarousel
               blocks={t.aboutUsPage.companyIdentity.blocks}
               images={[
@@ -352,7 +352,7 @@ function AboutUsPage() {
               imagePositions={["right center", "left center", "right center"]}
             />
           </div>
-          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pr-16 xl:pr-24 2xl:pr-32 py-7 lg:py-12 order-2 lg:order-2 min-h-0">
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pr-16 xl:pr-24 2xl:pr-32 py-7 lg:py-12 order-1 lg:order-2 min-h-0">
             <div className="max-w-xl">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans mb-2 lg:mb-4">
                 Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Identity</span>
@@ -515,7 +515,7 @@ function AboutUsPage() {
       {/* Competitive Edge: image top 40% / text bottom 60% on mobile; image left 40% / text right 60% on desktop */}
       <section id="competitive-edge" className={sectionClass}>
         <DecorativeBlob className="bottom-0 left-0 -translate-x-1/4 translate-y-1/4 opacity-25" />
-        <div className="grid grid-rows-[2fr_3fr] grid-cols-1 lg:grid-rows-none lg:grid-cols-[2fr_3fr] gap-0 w-full h-screen lg:h-full flex-1 min-h-0">
+        <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-none lg:grid-cols-2 gap-0 w-full h-screen lg:h-full flex-1 min-h-0">
           {/* Image — top 40% on mobile, left 40% on desktop */}
           <div className="relative w-full overflow-hidden">
             <img

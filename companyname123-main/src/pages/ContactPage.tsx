@@ -13,7 +13,6 @@ import {
   ArrowRight,
 } from "phosphor-react";
 import { z } from "zod";
-import emailjs from "@emailjs/browser";
 import Footer from "../components/Footer";
 import { useTranslation, useLocale } from "../i18n";
 
@@ -116,14 +115,12 @@ function ContactPage() {
     try {
       formSchema.parse(formData);
 
-      if (formRef.current) {
-        await emailjs.sendForm(
-          import.meta.env.VITE_EMAILJS_SERVICE_ID,
-          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-          formRef.current,
-          import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-        );
-      }
+      const res = await fetch("/.netlify/functions/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed to send");
 
       setSubmitCount((prev) => prev + 1);
       lastSubmitTime.current = Date.now();

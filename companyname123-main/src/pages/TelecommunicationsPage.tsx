@@ -299,7 +299,7 @@ function TelecommunicationsPage() {
     {
       question: "Which industries does Hajz Telecom serve?",
       answer:
-        "We serve a wide range of industries including banking and finance, government and defence, oil and gas, healthcare, hospitality, and education across the Middle East and globally.",
+        "We serve a wide range of industries including banking and finance, government and defence, oil and gas, healthcare, hospitality, and education across the region",
     },
     {
       question: "Does Hajz Telecom offer managed telecom services?",
@@ -309,7 +309,7 @@ function TelecommunicationsPage() {
     {
       question: "What makes Hajz Telecom different from other providers?",
       answer:
-        "With 32+ years of experience, vendor-agnostic solutions, senior-led project teams, and partnerships with global leaders like Ericsson, Avaya, and Cambium Networks, we deliver tailored solutions that integrate seamlessly with existing infrastructure.",
+        "With 32+ years of experience, vendor-agnostic solutions, senior-led project teams, and expertise and deep-dive knowledge in the technology we use regarding our solutions.",
     },
   ];
 
