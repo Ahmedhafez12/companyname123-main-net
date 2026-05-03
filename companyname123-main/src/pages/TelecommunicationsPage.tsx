@@ -309,7 +309,7 @@ function TelecommunicationsPage() {
     {
       question: "What makes Hajz Telecom different from other providers?",
       answer:
-        "With 32+ years of experience, vendor-agnostic solutions, senior-led project teams, and expertise and deep-dive knowledge in the technology we use regarding our solutions.",
+        "With 32+ years of experience, vendor-agnostic solutions, senior-led project teams, expertise, and deep-dive knowledge in the technology we use regarding our solutions.",
     },
   ];
 

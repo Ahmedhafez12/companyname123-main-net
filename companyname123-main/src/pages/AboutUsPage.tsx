@@ -526,7 +526,7 @@ function AboutUsPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-primary/20 to-secondary/20 pointer-events-none" />
           </div>
           {/* Text — bottom 60% on mobile, right 60% on desktop */}
-          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-5 lg:py-12 overflow-y-auto">
+          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 lg:pr-20 xl:pl-24 xl:pr-24 2xl:pl-32 2xl:pr-32 py-5 lg:py-12 overflow-y-auto">
             <ScrollReveal direction="up" delay={0}>
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-6">
                 <div>
@@ -559,23 +559,22 @@ function AboutUsPage() {
       <section id="cta" ref={ctaRef} className={sectionClass}>
         <motion.button
           type="button"
-          className="explore-more-btn group absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-3 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+          className="explore-more-btn group absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
           initial={{ opacity: 0 }}
           animate={isCtaInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           onClick={() => window.dispatchEvent(new CustomEvent("open-menu"))}
           aria-label="Open menu"
         >
-          <span className="text-white/70 group-hover:text-white text-[11px] sm:text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-500">
+          <span className="text-white/60 group-hover:text-white text-[11px] sm:text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-300">
             Explore More
           </span>
           <motion.span
-            className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/20 group-hover:border-white/40 bg-white/[0.06] group-hover:bg-white/[0.12] backdrop-blur-md transition-all duration-500 overflow-hidden"
-            animate={isCtaInView ? { y: [0, -3, 0] } : { y: 0 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="inline-flex text-white/60 group-hover:text-white transition-colors duration-300"
+            animate={isCtaInView ? { x: [0, 4, 0], y: [0, -4, 0] } : { x: 0, y: 0 }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-            <ArrowUpRight weight="light" size={18} className="text-white/80 group-hover:text-white transition-colors duration-500 relative z-10" />
+            <ArrowUpRight weight="regular" size={16} />
           </motion.span>
         </motion.button>
         <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
