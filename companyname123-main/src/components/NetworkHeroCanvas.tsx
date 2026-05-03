@@ -85,10 +85,38 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.decoding = "async";
-    img.onload = () => resolve(img);
+    img.onload = () => {
+      // Decode off main-thread when supported, then resolve
+      if (typeof img.decode === "function") {
+        img.decode().then(() => resolve(img)).catch(() => resolve(img));
+      } else {
+        resolve(img);
+      }
+    };
     img.onerror = () => reject(new Error(`Failed to load ${src}`));
     img.src = src;
   });
+}
+
+// Run async tasks with a concurrency cap so we don't saturate the network
+async function runConcurrent<T>(
+  tasks: (() => Promise<T>)[],
+  limit: number,
+): Promise<void> {
+  let cursor = 0;
+  const workers = new Array(Math.min(limit, tasks.length))
+    .fill(0)
+    .map(async () => {
+      while (cursor < tasks.length) {
+        const idx = cursor++;
+        try {
+          await tasks[idx]();
+        } catch {
+          /* swallow per-task errors; caller handles via onSettled */
+        }
+      }
+    });
+  await Promise.all(workers);
 }
 
 // ─── Decorative SVG (side fibre lines) ───────────────────────────────────────
@@ -147,6 +175,12 @@ export default function NetworkHeroCanvas({
   const lastFrameRef = useRef(-1);
   const canPaintRef = useRef(false);
 
+  // Cached canvas dimensions — only recomputed on resize, not per paint
+  const canvasDimsRef = useRef<{ w: number; h: number; dpr: number } | null>(null);
+  // Pending frame for RAF coalescing
+  const pendingFrameRef = useRef<number>(-1);
+  const rafScheduledRef = useRef<boolean>(false);
+
   // ── State ─────────────────────────────────────────────────────────────────
   const [loadPhase, setLoadPhase] = useState<"boot" | "interactive" | "error">(
     "boot",
@@ -173,16 +207,10 @@ export default function NetworkHeroCanvas({
     };
   }, []);
 
-  const prepareCanvas = useCallback((): {
-    ctx: CanvasRenderingContext2D;
-    w: number;
-    h: number;
-  } | null => {
+  // Recalculate canvas size (only on resize, NOT per paint)
+  const syncCanvasSize = useCallback((): { w: number; h: number } | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
-
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const { w, h } = measureViewport();
     if (w < 2 || h < 2) return null;
@@ -195,10 +223,28 @@ export default function NetworkHeroCanvas({
       canvas.height = nh;
       canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
+      // setTransform must be reapplied after canvas resize
+      const ctx = canvas.getContext("2d", { alpha: false });
+      if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    return { ctx, w, h };
+    canvasDimsRef.current = { w, h, dpr };
+    return { w, h };
   }, [measureViewport]);
+
+  // Get cached dims + ctx for a paint — no layout reads
+  const getPaintContext = useCallback((): {
+    ctx: CanvasRenderingContext2D;
+    w: number;
+    h: number;
+  } | null => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return null;
+    const dims = canvasDimsRef.current;
+    if (!dims) return null;
+    return { ctx, w: dims.w, h: dims.h };
+  }, []);
 
   const findDrawableFrame = useCallback((idx: number) => {
     const arr = imagesRef.current;
@@ -210,10 +256,10 @@ export default function NetworkHeroCanvas({
     return null;
   }, []);
 
-  const paintFrame = useCallback(
+  const paintFrameNow = useCallback(
     (index0Based: number) => {
       if (!canPaintRef.current) return;
-      const prepared = prepareCanvas();
+      const prepared = getPaintContext();
       if (!prepared) return;
       const { ctx, w, h } = prepared;
       const img = findDrawableFrame(index0Based);
@@ -221,12 +267,28 @@ export default function NetworkHeroCanvas({
       ctx.fillRect(0, 0, w, h);
       if (img) drawImageCover(ctx, img, w, h);
     },
-    [prepareCanvas, findDrawableFrame],
+    [getPaintContext, findDrawableFrame],
+  );
+
+  // RAF-coalesced paint: multiple scroll updates within one frame collapse to a single paint
+  const schedulePaint = useCallback(
+    (index0Based: number) => {
+      pendingFrameRef.current = index0Based;
+      if (rafScheduledRef.current) return;
+      rafScheduledRef.current = true;
+      requestAnimationFrame(() => {
+        rafScheduledRef.current = false;
+        const idx = pendingFrameRef.current;
+        if (idx >= 0) paintFrameNow(idx);
+      });
+    },
+    [paintFrameNow],
   );
 
   const resizeAndRedraw = useCallback(() => {
-    paintFrame(Math.min(Math.max(lastFrameRef.current, 0), FRAME_COUNT - 1));
-  }, [paintFrame]);
+    syncCanvasSize();
+    paintFrameNow(Math.min(Math.max(lastFrameRef.current, 0), FRAME_COUNT - 1));
+  }, [syncCanvasSize, paintFrameNow]);
 
   const applyHeroCopyScroll = useCallback((scrollProgress: number) => {
     const p = Math.min(1, Math.max(0, scrollProgress));
@@ -264,10 +326,10 @@ export default function NetworkHeroCanvas({
       applyHeroCopyScroll(p);
       if (index0 !== lastFrameRef.current) {
         lastFrameRef.current = index0;
-        paintFrame(index0);
+        schedulePaint(index0);
       }
     },
-    [paintFrame, applyHeroCopyScroll],
+    [schedulePaint, applyHeroCopyScroll],
   );
 
   // ── Load frames ───────────────────────────────────────────────────────────
@@ -302,21 +364,19 @@ export default function NetworkHeroCanvas({
         requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 
-    Array.from({ length: FRAME_COUNT }, (_, i) => frameUrl(i + 1)).forEach(
-      (src, i) => {
-        loadImage(src)
-          .then((img) => {
-            if (!cancelled) {
-              slots[i] = img;
-              onOneLoaded();
-            }
-          })
-          .catch(() => {
-            /* Image frame failed to load — slot remains empty */
-          })
-          .finally(bumpSettled);
-      },
-    );
+    // Cap concurrent requests so the browser doesn't queue/throttle
+    const tasks = Array.from({ length: FRAME_COUNT }, (_, i) => async () => {
+      try {
+        const img = await loadImage(frameUrl(i + 1));
+        if (!cancelled) {
+          slots[i] = img;
+          onOneLoaded();
+        }
+      } finally {
+        bumpSettled();
+      }
+    });
+    runConcurrent(tasks, 8);
 
     return () => {
       cancelled = true;
@@ -335,6 +395,9 @@ export default function NetworkHeroCanvas({
     if (!track) return;
     const scroller = scrollScrollerRef?.current ?? undefined;
 
+    // Sync canvas dimensions once at mount so paints have valid cached dims
+    syncCanvasSize();
+
     const toggleSnap = (active: boolean) => {
       if (!scroller) return;
       scroller.classList.toggle("network-hero-snap-off", active);
@@ -352,6 +415,7 @@ export default function NetworkHeroCanvas({
       onToggle: (self) => toggleSnap(self.isActive),
       onRefresh: () => {
         clearHeroCopyTransforms();
+        syncCanvasSize();
         requestAnimationFrame(() => {
           const st = ScrollTrigger.getById("network-hero-canvas-st");
           if (st) drawFrame(st.progress);
@@ -364,11 +428,17 @@ export default function NetworkHeroCanvas({
     if (scroller && st.isActive) toggleSnap(true);
     drawFrame(st.progress);
 
+    // Debounced resize — mobile browsers fire many resize events as the
+    // address bar shows/hides; refreshing ScrollTrigger on each is expensive.
+    let resizeTimer: ReturnType<typeof setTimeout> | null = null;
     const onResize = () => {
-      ScrollTrigger.refresh();
-      clearHeroCopyTransforms();
-      resizeAndRedraw();
-      drawFrame(st.progress);
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+        clearHeroCopyTransforms();
+        resizeAndRedraw();
+        drawFrame(st.progress);
+      }, 120);
     };
     window.addEventListener("resize", onResize);
     requestAnimationFrame(() => {
@@ -377,6 +447,7 @@ export default function NetworkHeroCanvas({
     });
 
     return () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
       window.removeEventListener("resize", onResize);
       st.kill();
       scroller?.classList.remove("network-hero-snap-off");
@@ -388,6 +459,7 @@ export default function NetworkHeroCanvas({
     drawFrame,
     resizeAndRedraw,
     clearHeroCopyTransforms,
+    syncCanvasSize,
   ]);
 
   // ── Render ────────────────────────────────────────────────────────────────

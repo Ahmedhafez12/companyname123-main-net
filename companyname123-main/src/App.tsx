@@ -23,6 +23,7 @@ const CommandControlPage = lazy(() => import('./pages/CommandControlPage'));
 const TelecommunicationsPage = lazy(() => import('./pages/TelecommunicationsPage'));
 const Navbar2PreviewPage = lazy(() => import('./pages/Navbar2PreviewPage'));
 const ArabicMaintenancePage = lazy(() => import('./pages/ArabicMaintenancePage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /** Transparent navbar is only for Home and About Overview. */
 const TRANSPARENT_NAVBAR_PATHS = ['/', '/ar', '/about/overview', '/ar/about/overview'] as const;
@@ -130,6 +131,9 @@ function App() {
                 {/* Arabic routes — under maintenance */}
                 <Route path="/ar/*" element={<ArabicMaintenancePage />} />
                 <Route path="/ar" element={<ArabicMaintenancePage />} />
+
+                {/* 404 catch-all — must come last */}
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </motion.div>
           </AnimatePresence>
