@@ -579,7 +579,11 @@ const HeroCarousel = () => {
                   transition={{ duration: 0.6, delay: 0.4 }}
                 >
                   <CTAButton to={slide.link}>
-                    <span>Explore Department</span>
+                    <span>
+                      {slide.department === "Fixed Wireless Access"
+                        ? "Coming Soon"
+                        : "Explore Department"}
+                    </span>
                     <div className="p-0.5">
                       <ArrowRight weight="thin" size={20} />
                     </div>
