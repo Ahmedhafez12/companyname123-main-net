@@ -344,10 +344,26 @@ export default function NetworkHeroCanvas({
     canPaintRef.current = false;
     setLoadPhase("boot");
 
-    const onOneLoaded = () => {
+    // Tiny offscreen canvas to pre-warm GPU textures as each frame loads.
+    // Drawing to this 1x1 canvas forces the browser to upload the bitmap
+    // as a GPU texture, so the real canvas paint later is instant.
+    const warmCanvas = document.createElement("canvas");
+    warmCanvas.width = 1;
+    warmCanvas.height = 1;
+    const warmCtx = warmCanvas.getContext("2d", { alpha: false });
+
+    const onOneLoaded = (img: HTMLImageElement) => {
       if (cancelled) return;
       loadCountRef.current += 1;
-      if (loadCountRef.current >= MIN_LOADED_COUNT) {
+
+      // Pre-warm the GPU texture by drawing this image to a 1x1 canvas.
+      // The first real paint of this frame becomes near-instant.
+      if (warmCtx) {
+        try { warmCtx.drawImage(img, 0, 0, 1, 1); } catch { /* ignore */ }
+      }
+
+      // Fire ONCE when crossing the threshold — not on every subsequent frame.
+      if (loadCountRef.current === MIN_LOADED_COUNT) {
         canPaintRef.current = true;
         setLoadPhase((prev) => (prev === "error" ? prev : "interactive"));
         requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -370,7 +386,7 @@ export default function NetworkHeroCanvas({
         const img = await loadImage(frameUrl(i + 1));
         if (!cancelled) {
           slots[i] = img;
-          onOneLoaded();
+          onOneLoaded(img);
         }
       } finally {
         bumpSettled();
@@ -409,7 +425,10 @@ export default function NetworkHeroCanvas({
       trigger: track,
       start: "top top",
       end: "bottom bottom",
-      scrub: 1,
+      // scrub: true (instant) keeps the canvas frame perfectly synced with
+      // scroll position. scrub: 1 introduced a 1s smoothing tail that made
+      // the canvas feel laggy on first scroll.
+      scrub: true,
       invalidateOnRefresh: true,
       onUpdate: (self) => drawFrame(self.progress),
       onToggle: (self) => toggleSnap(self.isActive),

@@ -154,10 +154,12 @@ function ContactPage() {
   const inputBase = [
     "w-full rounded-xl bg-white/[0.04] border border-white/[0.12]",
     "text-white placeholder-white/30 outline-none",
+    "px-4 py-3 text-[0.9375rem]",
     "transition-all duration-300",
     "focus:border-[#7CCCBF]/60 focus:bg-white/[0.06]",
     "focus:shadow-[0_0_0_3px_rgba(124,204,191,0.12),0_8px_32px_rgba(0,94,150,0.15)]",
     "hover:border-white/20 hover:bg-white/[0.05]",
+    "disabled:opacity-50 disabled:cursor-not-allowed",
   ].join(" ");
 
   const contactCards = [
@@ -233,8 +235,8 @@ function ContactPage() {
       <section
         className="relative"
         style={{
-          paddingTop: "clamp(8rem, 16vh, 12rem)",
-          paddingBottom: "clamp(3rem, 6vh, 5rem)",
+          paddingTop: "clamp(6rem, 12vh, 9rem)",
+          paddingBottom: "clamp(2.5rem, 5vh, 4rem)",
         }}
       >
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
@@ -309,25 +311,31 @@ function ContactPage() {
 
           {/* Promise badges */}
           <motion.div
-            variants={fadeUp}
+            variants={stagger}
             initial="hidden"
             animate="show"
-            custom={3}
-            className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 mt-8"
+            className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mt-9"
           >
-            {promiseBadges.map((b) => (
-              <div
+            {promiseBadges.map((b, i) => (
+              <motion.div
                 key={b.text}
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm"
+                variants={fadeUp}
+                custom={i}
+                className="group flex items-center gap-2 px-4 py-2 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-all duration-300 hover:border-white/[0.18] hover:bg-white/[0.06]"
               >
-                <span style={{ color: C.accent }}>{b.icon}</span>
                 <span
-                  className="text-white/50 text-xs font-medium"
+                  className="transition-transform duration-300 group-hover:scale-110"
+                  style={{ color: C.accent }}
+                >
+                  {b.icon}
+                </span>
+                <span
+                  className="text-white/70 text-xs font-medium"
                   style={{ fontFamily: FONT.body }}
                 >
                   {b.text}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -361,7 +369,7 @@ function ContactPage() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  {t.common.getInTouch}
+                  Reach us directly
                 </h2>
                 <p
                   className="text-white/40 leading-relaxed"
@@ -370,87 +378,104 @@ function ContactPage() {
                     fontSize: "clamp(0.85rem, 1.25vw, 0.9375rem)",
                   }}
                 >
-                  {t.contactPage.subtitle}
+                  Prefer phone or email? Pick the channel that suits you and
+                  we'll respond the same business day.
                 </p>
               </motion.div>
 
               {/* Contact cards */}
-              {contactCards.map((card) => (
-                <motion.div key={card.label} variants={fadeUp}>
-                  {card.href ? (
-                    <a
-                      href={card.href}
-                      className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 sm:p-6 transition-all duration-400 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,94,150,0.2)]"
+              {contactCards.map((card) => {
+                const cardClass =
+                  "group block rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 sm:p-6 transition-all duration-400";
+                const cardInteractive =
+                  "hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,94,150,0.2)]";
+                const inner = (
+                  <div className="flex items-start gap-4">
+                    <div
+                      className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${card.href ? "transition-transform duration-300 group-hover:scale-110" : ""}`}
+                      style={{
+                        background: `${card.accent}15`,
+                        color: card.accent,
+                      }}
                     >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                          style={{
-                            background: `${card.accent}15`,
-                            color: card.accent,
-                          }}
-                        >
-                          {card.icon}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <span
-                            className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1.5"
-                            style={{ fontFamily: FONT.heading }}
-                          >
-                            {card.label}
-                          </span>
-                          <span
-                            className="text-white font-medium transition-colors duration-300 group-hover:text-[#7CCCBF]"
-                            style={{
-                              fontFamily: FONT.body,
-                              fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
-                            }}
-                          >
-                            {card.value}
-                          </span>
-                        </div>
-                        <ArrowRight
-                          weight="bold"
-                          size={16}
-                          className="text-white/20 mt-1 transition-all duration-300 group-hover:text-white/50 group-hover:translate-x-1"
-                        />
-                      </div>
-                    </a>
-                  ) : (
-                    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-5 sm:p-6">
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center"
-                          style={{
-                            background: `${card.accent}15`,
-                            color: card.accent,
-                          }}
-                        >
-                          {card.icon}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <span
-                            className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1.5"
-                            style={{ fontFamily: FONT.heading }}
-                          >
-                            {card.label}
-                          </span>
-                          <span
-                            className="text-white font-medium"
-                            style={{
-                              fontFamily: FONT.body,
-                              fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
-                            }}
-                          >
-                            {card.value}
-                          </span>
-                        </div>
-                      </div>
+                      {card.icon}
                     </div>
-                  )}
-                </motion.div>
-              ))}
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1.5"
+                        style={{ fontFamily: FONT.heading }}
+                      >
+                        {card.label}
+                      </span>
+                      <span
+                        className={`text-white font-medium ${card.href ? "transition-colors duration-300 group-hover:text-[#7CCCBF]" : ""}`}
+                        style={{
+                          fontFamily: FONT.body,
+                          fontSize: "clamp(0.9rem, 1.3vw, 1.0625rem)",
+                        }}
+                      >
+                        {card.value}
+                      </span>
+                    </div>
+                    {card.href && (
+                      <ArrowRight
+                        weight="bold"
+                        size={16}
+                        className={`text-white/20 mt-1 transition-all duration-300 group-hover:text-white/50 group-hover:translate-x-1 ${isRTL ? "rtl-flip" : ""}`}
+                      />
+                    )}
+                  </div>
+                );
+                return (
+                  <motion.div key={card.label} variants={fadeUp}>
+                    {card.href ? (
+                      <a href={card.href} className={`${cardClass} ${cardInteractive}`}>
+                        {inner}
+                      </a>
+                    ) : (
+                      <div className={cardClass}>{inner}</div>
+                    )}
+                  </motion.div>
+                );
+              })}
 
+              {/* What to expect — trust-builder under the contact cards */}
+              <motion.div
+                variants={fadeUp}
+                className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-white/[0.02] to-transparent p-5 sm:p-6 mt-2"
+              >
+                <span
+                  className="block text-white/35 text-[10px] font-semibold uppercase tracking-[0.22em] mb-4"
+                  style={{ fontFamily: FONT.heading }}
+                >
+                  What to expect
+                </span>
+                <ul className="flex flex-col gap-3">
+                  {[
+                    "We review your enquiry and assign a specialist within hours.",
+                    "You receive a tailored response — not a generic auto-reply.",
+                    "Initial scoping call within 1–2 business days, no pressure.",
+                  ].map((step, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 text-white/65 text-[13px] leading-relaxed"
+                      style={{ fontFamily: FONT.body }}
+                    >
+                      <span
+                        className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-semibold mt-0.5"
+                        style={{
+                          background: `${C.accent}18`,
+                          color: C.accent,
+                          border: `1px solid ${C.accent}30`,
+                        }}
+                      >
+                        {i + 1}
+                      </span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
             </motion.div>
 
             {/* ─── RIGHT: Form ─── */}
@@ -465,7 +490,7 @@ function ContactPage() {
               }}
             >
               <div
-                className="relative rounded-3xl overflow-hidden"
+                className="relative rounded-3xl overflow-hidden border border-white/[0.07]"
                 style={{
                   background: `linear-gradient(145deg, rgba(0,94,150,0.18) 0%, rgba(0,44,61,0.35) 50%, rgba(124,204,191,0.06) 100%)`,
                   boxShadow: `
@@ -483,14 +508,6 @@ function ContactPage() {
                   }}
                 />
 
-                {/* Glass border */}
-                <div
-                  className="absolute inset-0 rounded-3xl pointer-events-none"
-                  style={{
-                    border: "1px solid rgba(255,255,255,0.07)",
-                  }}
-                />
-
                 <div className="relative p-6 sm:p-8 lg:p-10">
                   {/* Form header */}
                   <div className="mb-8">
@@ -505,13 +522,13 @@ function ContactPage() {
                       {t.contactPage.formTitle}
                     </h3>
                     <p
-                      className="text-white/35"
+                      className="text-white/40"
                       style={{
                         fontFamily: FONT.body,
                         fontSize: "0.8125rem",
                       }}
                     >
-                      {t.contactPage.subtitle}
+                      Tell us about your project — fields marked are required.
                     </p>
                   </div>
 
@@ -595,16 +612,11 @@ function ContactPage() {
                             type="text"
                             id="cp-name"
                             name="name"
-                            placeholder=""
                             value={formData.name}
                             onChange={handleChange}
                             disabled={isSubmitting}
                             className={`${inputBase} ${errors.name ? "!border-red-400/60" : ""}`}
-                            style={{
-                              fontFamily: FONT.body,
-                              padding: "0.75rem 1rem",
-                              fontSize: "0.9375rem",
-                            }}
+                            style={{ fontFamily: FONT.body }}
                           />
                           {errors.name && (
                             <p
@@ -627,16 +639,11 @@ function ContactPage() {
                             type="email"
                             id="cp-email"
                             name="email"
-                            placeholder=""
                             value={formData.email}
                             onChange={handleChange}
                             disabled={isSubmitting}
                             className={`${inputBase} ${errors.email ? "!border-red-400/60" : ""}`}
-                            style={{
-                              fontFamily: FONT.body,
-                              padding: "0.75rem 1rem",
-                              fontSize: "0.9375rem",
-                            }}
+                            style={{ fontFamily: FONT.body }}
                           />
                           {errors.email && (
                             <p
@@ -665,13 +672,11 @@ function ContactPage() {
                             value={formData.subject}
                             onChange={handleChange}
                             disabled={isSubmitting}
-                            className={`${inputBase} cursor-pointer ${
+                            className={`${inputBase} pr-12 cursor-pointer ${
                               formData.subject ? "text-white" : "text-white/30"
                             } ${errors.subject ? "!border-red-400/60" : ""}`}
                             style={{
                               fontFamily: FONT.body,
-                              padding: "0.75rem 3rem 0.75rem 1rem",
-                              fontSize: "0.9375rem",
                               appearance: "none",
                               WebkitAppearance: "none",
                               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%237CCCBF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
@@ -721,13 +726,8 @@ function ContactPage() {
                           value={formData.message}
                           onChange={handleChange}
                           disabled={isSubmitting}
-                          className={`${inputBase} resize-none ${errors.message ? "!border-red-400/60" : ""}`}
-                          style={{
-                            fontFamily: FONT.body,
-                            padding: "0.75rem 1rem",
-                            fontSize: "0.9375rem",
-                            lineHeight: 1.6,
-                          }}
+                          className={`${inputBase} resize-none leading-relaxed ${errors.message ? "!border-red-400/60" : ""}`}
+                          style={{ fontFamily: FONT.body }}
                         />
                         {errors.message && (
                           <p
