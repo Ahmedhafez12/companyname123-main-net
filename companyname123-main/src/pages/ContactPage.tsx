@@ -235,7 +235,7 @@ function ContactPage() {
       <section
         className="relative"
         style={{
-          paddingTop: "clamp(6rem, 12vh, 9rem)",
+          paddingTop: "clamp(9rem, 16vh, 12rem)",
           paddingBottom: "clamp(2.5rem, 5vh, 4rem)",
         }}
       >

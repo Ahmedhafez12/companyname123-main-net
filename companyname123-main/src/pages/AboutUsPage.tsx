@@ -385,6 +385,30 @@ function AboutUsPage() {
               <div className="text-sm sm:text-base text-white/70 font-medium">Years of Excellence</div>
             </div>
           </div>
+          {/* Scroll hint — gently animated to telegraph horizontal interaction */}
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center justify-center gap-2 mb-3 text-white/40 text-[11px] sm:text-xs font-medium uppercase tracking-[0.2em]"
+          >
+            <motion.span
+              animate={{ x: [0, -4, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-flex"
+            >
+              <ArrowsLeftRight weight="regular" size={14} className="text-accent/70" />
+            </motion.span>
+            <span>Drag or scroll to explore</span>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-flex"
+            >
+              <ArrowsLeftRight weight="regular" size={14} className="text-accent/70" />
+            </motion.span>
+          </motion.div>
           <HorizontalTimeline events={t.aboutUsPage.journey.events} />
         </div>
         </ScrollReveal>
