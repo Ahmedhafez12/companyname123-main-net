@@ -72,7 +72,7 @@ const slides: Slide[] = [
     subline:
       "Transforming infrastructure chaos into competitive advantage with intelligent connectivity solutions that protect your past while accelerating your future.",
     image:
-      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.png",
+      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.webp",
     link: "/what-we-do/telecommunications",
   },
   {
@@ -81,7 +81,7 @@ const slides: Slide[] = [
     title: "Command & Control -Solutions",
     subline:
       "Connecting the dots between your ELV and other systems—ensuring smooth data flow, improved performance, and intelligent automation.",
-    image: "/assets/CommandandControl/Control_room_with_screens_37be293209.png",
+    image: "/assets/CommandandControl/Control_room_with_screens_37be293209.webp",
     link: "/what-we-do/command-control",
   },
   {
@@ -90,7 +90,7 @@ const slides: Slide[] = [
     title: "Fixed Wireless Access -Solutions",
     subline: "High-speed enterprise connectivity delivered without the wires.",
     image:
-      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.png",
+      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.webp",
     link: "/",
   },
 ];

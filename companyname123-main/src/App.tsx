@@ -2,9 +2,9 @@ import React, { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ErrorBoundary } from 'react-error-boundary';
-import WhiteBgNavbar from './components/WhiteBgNavbar';
-import Navbar from './components/Navbar';
-import StickyContactForm from './components/StickyContactForm';
+const WhiteBgNavbar = lazy(() => import('./components/WhiteBgNavbar'));
+const Navbar = lazy(() => import('./components/Navbar'));
+const StickyContactForm = lazy(() => import('./components/StickyContactForm'));
 import { useLocale, useTranslation } from './i18n';
 
 // Lazy-loaded page components for code splitting

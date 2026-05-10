@@ -69,7 +69,7 @@ export default defineConfig(({ mode }) => ({
       },
     }),
     visualizer({
-      open: true,
+      open: false,
       gzipSize: true,
       brotliSize: true,
       template: 'treemap',
@@ -83,6 +83,7 @@ export default defineConfig(({ mode }) => ({
           'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
           'animation-vendor': ['framer-motion'],
           'gsap-vendor': ['gsap'],
+          'styled-vendor': ['styled-components'],
         },
       },
     },
