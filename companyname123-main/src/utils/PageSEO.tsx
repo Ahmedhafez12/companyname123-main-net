@@ -5,6 +5,7 @@ const SITE_URL = 'https://hajztelecom.com';
 const SITE_NAME = 'Hajz Telecommunication Co Ltd.';
 const SITE_NAME_AR = '\u0634\u0631\u0643\u0629 \u062d\u062c\u0632 \u0644\u0644\u0627\u062a\u0635\u0627\u0644\u0627\u062a \u0627\u0644\u0645\u062d\u062f\u0648\u062f\u0629';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.jpg`;
+const LOGO_URL = `${SITE_URL}/logo.png`;
 
 interface BreadcrumbItem {
   name: string;
@@ -42,6 +43,19 @@ export default function PageSEO({
   const siteName = isArabic ? SITE_NAME_AR : SITE_NAME;
   const ogLocale = isArabic ? 'ar_SA' : 'en_US';
   const fullUrl = `${SITE_URL}${path}`;
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteName,
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: LOGO_URL,
+      width: 512,
+      height: 512,
+    },
+  };
 
   const webPageSchema = {
     '@context': 'https://schema.org',
@@ -95,6 +109,8 @@ export default function PageSEO({
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
       <meta property="og:url" content={fullUrl} />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content={ogLocale} />
@@ -103,6 +119,9 @@ export default function PageSEO({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
 
+      <script type="application/ld+json">
+        {JSON.stringify(organizationSchema)}
+      </script>
       <script type="application/ld+json">
         {JSON.stringify(webPageSchema)}
       </script>
