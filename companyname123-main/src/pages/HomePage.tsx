@@ -714,16 +714,17 @@ const ServicesGridComponent = ({
           >
             {index === 0 && (
               <>
-                <div
-                  className="absolute inset-0 z-0 rounded-[inherit] bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${
-                      showTelecom
-                        ? "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg"
-                        : "/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
-                    })`,
-                  }}
+                <img
+                  src={
+                    showTelecom
+                      ? "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg"
+                      : "/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
+                  }
+                  alt=""
                   aria-hidden
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 z-0 w-full h-full object-cover rounded-[inherit]"
                 />
                 <div
                   className="absolute inset-0 z-0 rounded-[inherit] bg-primary/50"

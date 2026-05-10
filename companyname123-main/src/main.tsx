@@ -7,12 +7,7 @@ import { LocaleProvider } from './i18n';
 import LoadingScreen from './components/LoadingScreen';
 import './index.css';
 
-// Lazy load the main App component with artificial delay
-const App = lazy(async () => {
-  // Delay for 3 seconds exactly
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  return { default: (await import('./App')).default };
-});
+const App = lazy(() => import('./App'));
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

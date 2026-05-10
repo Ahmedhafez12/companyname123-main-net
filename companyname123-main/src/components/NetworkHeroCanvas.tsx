@@ -119,6 +119,19 @@ async function runConcurrent<T>(
   await Promise.all(workers);
 }
 
+// Resolve when the element is within `rootMargin` of the viewport,
+// or immediately if already intersecting.
+function waitForIntersection(el: Element, rootMargin = "200px"): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof IntersectionObserver === "undefined") { resolve(); return; }
+    const io = new IntersectionObserver(
+      (entries) => { if (entries[0].isIntersecting) { io.disconnect(); resolve(); } },
+      { rootMargin },
+    );
+    io.observe(el);
+  });
+}
+
 // ─── Decorative SVG (side fibre lines) ───────────────────────────────────────
 
 export function NetworkFlowDecor({ className }: { className?: string }) {
@@ -344,9 +357,6 @@ export default function NetworkHeroCanvas({
     canPaintRef.current = false;
     setLoadPhase("boot");
 
-    // Tiny offscreen canvas to pre-warm GPU textures as each frame loads.
-    // Drawing to this 1x1 canvas forces the browser to upload the bitmap
-    // as a GPU texture, so the real canvas paint later is instant.
     const warmCanvas = document.createElement("canvas");
     warmCanvas.width = 1;
     warmCanvas.height = 1;
@@ -356,13 +366,10 @@ export default function NetworkHeroCanvas({
       if (cancelled) return;
       loadCountRef.current += 1;
 
-      // Pre-warm the GPU texture by drawing this image to a 1x1 canvas.
-      // The first real paint of this frame becomes near-instant.
       if (warmCtx) {
         try { warmCtx.drawImage(img, 0, 0, 1, 1); } catch { /* ignore */ }
       }
 
-      // Fire ONCE when crossing the threshold — not on every subsequent frame.
       if (loadCountRef.current === MIN_LOADED_COUNT) {
         canPaintRef.current = true;
         setLoadPhase((prev) => (prev === "error" ? prev : "interactive"));
@@ -380,7 +387,6 @@ export default function NetworkHeroCanvas({
         requestAnimationFrame(() => ScrollTrigger.refresh());
     };
 
-    // Cap concurrent requests so the browser doesn't queue/throttle
     const tasks = Array.from({ length: FRAME_COUNT }, (_, i) => async () => {
       try {
         const img = await loadImage(frameUrl(i + 1));
@@ -392,7 +398,16 @@ export default function NetworkHeroCanvas({
         bumpSettled();
       }
     });
-    runConcurrent(tasks, 8);
+
+    // Wait until the section is near the viewport before saturating the
+    // network. This lets the LCP hero image (above the fold) load first.
+    const el = trackRef.current;
+    const startLoading = () => { if (!cancelled) runConcurrent(tasks, 4); };
+    if (el) {
+      waitForIntersection(el, "400px").then(startLoading);
+    } else {
+      startLoading();
+    }
 
     return () => {
       cancelled = true;

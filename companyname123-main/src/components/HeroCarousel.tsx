@@ -204,8 +204,9 @@ const GlassCard = styled(motion.div)`
     border-radius: 0.875rem;
     max-width: 100%;
     margin: 0 0.75rem;
-    /* Slightly transparent so background shows atmosphere */
-    background: rgba(0, 50, 90, 0.72);
+    background: rgba(0, 50, 90, 0.82);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 `;
 
