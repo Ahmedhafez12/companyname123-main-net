@@ -32,7 +32,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       className={className || undefined}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       variants={variants}
     >
       {children}

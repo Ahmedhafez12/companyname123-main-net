@@ -119,18 +119,6 @@ async function runConcurrent<T>(
   await Promise.all(workers);
 }
 
-// Resolve when the element is within `rootMargin` of the viewport,
-// or immediately if already intersecting.
-function waitForIntersection(el: Element, rootMargin = "200px"): Promise<void> {
-  return new Promise((resolve) => {
-    if (typeof IntersectionObserver === "undefined") { resolve(); return; }
-    const io = new IntersectionObserver(
-      (entries) => { if (entries[0].isIntersecting) { io.disconnect(); resolve(); } },
-      { rootMargin },
-    );
-    io.observe(el);
-  });
-}
 
 // ─── Decorative SVG (side fibre lines) ───────────────────────────────────────
 
@@ -399,17 +387,14 @@ export default function NetworkHeroCanvas({
       }
     });
 
-    // Wait until the section is near the viewport before saturating the
-    // network. This lets the LCP hero image (above the fold) load first.
-    const el = trackRef.current;
-    const startLoading = () => { if (!cancelled) runConcurrent(tasks, 4); };
-    if (el) {
-      waitForIntersection(el, "400px").then(startLoading);
-    } else {
-      startLoading();
-    }
+    // Delay frame loading by 2 s so the LCP hero image (above the fold)
+    // gets bandwidth priority during the critical load window.
+    const timer = setTimeout(() => {
+      if (!cancelled) runConcurrent(tasks, 4);
+    }, 2000);
 
     return () => {
+      clearTimeout(timer);
       cancelled = true;
       canPaintRef.current = false;
       imagesRef.current = new Array<HTMLImageElement | undefined>(

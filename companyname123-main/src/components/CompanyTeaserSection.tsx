@@ -74,9 +74,15 @@ const ImageColumn = styled(motion.div)`
 const ImageLayer = styled(motion.div)`
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 `;
 
 const ContentColumn = styled.div`
@@ -186,11 +192,19 @@ export default function CompanyTeaserSection({ backgroundImage = DEFAULT_IMAGE }
     <Section>
       <ImageColumn ref={imageRef}>
         <ImageLayer
-          style={{ backgroundImage: `url(${backgroundImage})` }}
           initial={{ scale: 1 }}
           animate={isInView ? { scale: 1.08 } : { scale: 1 }}
           transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-        />
+        >
+          <img
+            src={backgroundImage}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+          />
+        </ImageLayer>
       </ImageColumn>
       <ContentColumn>
         <ContentInner>
