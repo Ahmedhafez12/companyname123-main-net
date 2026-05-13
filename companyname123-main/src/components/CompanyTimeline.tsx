@@ -27,16 +27,24 @@ const timelineEvents: TimelineEvent[] = [
     description:
       "Offer Worldspan ticketing system as service in the kingdom to travel agenises over STC legacy technology X.25 and connected with the world servers  700+ agenises  ",
     quote: "",
-    icon: <div className="p-1.5"><ShareNetwork weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <ShareNetwork weight="thin" size={20} />
+      </div>
+    ),
     color: "#44C8F5",
   },
   {
     year: "1998",
     title: " First DID/DOD Service",
     description:
-      "STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pregain solution and serve more than 2500+ key customer",
+      "STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pairgain solution and serve more than 2500+ key customer",
     quote: "",
-    icon: <div className="p-1.5"><Lightning weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <Lightning weight="thin" size={20} />
+      </div>
+    ),
     color: "#7CCCBF",
   },
   {
@@ -45,7 +53,11 @@ const timelineEvents: TimelineEvent[] = [
     description:
       "We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches ",
     quote: "",
-    icon: <div className="p-1.5"><Globe weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <Globe weight="thin" size={20} />
+      </div>
+    ),
     color: "#A6CE39",
   },
   {
@@ -54,7 +66,11 @@ const timelineEvents: TimelineEvent[] = [
     description:
       "We provided with  STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer",
     quote: "",
-    icon: <div className="p-1.5"><Trophy weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <Trophy weight="thin" size={20} />
+      </div>
+    ),
     color: "#44C8F5",
   },
   {
@@ -63,7 +79,11 @@ const timelineEvents: TimelineEvent[] = [
     description:
       " Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links",
     quote: "",
-    icon: <div className="p-1.5"><Lightbulb weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <Lightbulb weight="thin" size={20} />
+      </div>
+    ),
     color: "#7CCCBF",
   },
   {
@@ -72,7 +92,11 @@ const timelineEvents: TimelineEvent[] = [
     description:
       " htc have been chosen by STC, MODA and RSADF to provide off hook service to all he remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links ",
     quote: "",
-    icon: <div className="p-1.5"><Users weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <Users weight="thin" size={20} />
+      </div>
+    ),
     color: "#A6CE39",
   },
   {
@@ -82,7 +106,11 @@ const timelineEvents: TimelineEvent[] = [
       "Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer",
     quote:
       "Key customer Active equipment project (exclusive for htc) Customer premises equipment project",
-    icon: <div className="p-1.5"><TrendUp weight="thin" size={20} /></div>,
+    icon: (
+      <div className="p-1.5">
+        <TrendUp weight="thin" size={20} />
+      </div>
+    ),
     color: "#44C8F5",
   },
 ];
