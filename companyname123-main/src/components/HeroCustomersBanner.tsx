@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { CaretLeft, CaretRight } from "phosphor-react";
+import { useTranslation, useLocale } from "../i18n";
 
 export interface HeroKeyCustomer {
   name: string;
@@ -47,6 +48,8 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
   keyCustomers = DEFAULT_CUSTOMERS,
   fullWidth = false,
 }) => {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -213,23 +216,23 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
               onClick={scrollLeft}
               disabled={scrollPosition <= 0}
               className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:text-white transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
-              aria-label="Scroll left"
+              aria-label={t.heroBanner.scrollLeft}
             >
               <div className="p-2">
-                <CaretLeft weight="thin" size={20} className={scrollPosition <= 0 ? "opacity-50" : "opacity-100"} />
+                <CaretLeft weight="thin" size={20} className={`${isRTL ? "rtl-flip" : ""} ${scrollPosition <= 0 ? "opacity-50" : "opacity-100"}`} />
               </div>
             </button>
             <button
               onClick={scrollRight}
               disabled={scrollPosition >= contentWidth - containerWidth}
               className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-white/80 hover:text-white transition-colors duration-300 focus:outline-none opacity-70 hover:opacity-100"
-              aria-label="Scroll right"
+              aria-label={t.heroBanner.scrollRight}
             >
               <div className="p-2">
                 <CaretRight
                   weight="thin"
                   size={20}
-                  className={scrollPosition >= contentWidth - containerWidth ? "opacity-50" : "opacity-100"}
+                  className={`${isRTL ? "rtl-flip" : ""} ${scrollPosition >= contentWidth - containerWidth ? "opacity-50" : "opacity-100"}`}
                 />
               </div>
             </button>
@@ -238,6 +241,7 @@ const HeroCustomersBanner: React.FC<HeroCustomersBannerProps> = ({
 
         <div
           ref={containerRef}
+          dir="ltr"
           className="flex overflow-x-auto scrollbar-hide"
           style={{
             paddingTop: "clamp(0.375rem, 0.75vh, 0.625rem)",

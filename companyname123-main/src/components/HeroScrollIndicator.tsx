@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../i18n";
 
 const prefersReducedMotion =
   typeof window !== "undefined"
@@ -63,6 +64,7 @@ function getActiveSectionFromScroll(sectionIds: string[]): string | null {
 }
 
 const HeroScrollIndicator: React.FC<HeroScrollIndicatorProps> = ({ sectionIds }) => {
+  const { t } = useTranslation();
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const scrollParentRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -179,7 +181,7 @@ const HeroScrollIndicator: React.FC<HeroScrollIndicatorProps> = ({ sectionIds })
           className="text-[11px] uppercase tracking-wider text-white/50"
           style={{ fontFamily: "system-ui, sans-serif" }}
         >
-          Scroll
+          {t.common.scroll}
         </span>
       </div>
     </div>

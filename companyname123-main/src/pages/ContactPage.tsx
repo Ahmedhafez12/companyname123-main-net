@@ -35,10 +35,10 @@ const FONT = {
 // SUBJECT_OPTIONS moved into component to use translations
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Please enter a valid email"),
-  subject: z.string().min(1, "Please select a subject"),
-  message: z.string().min(1, "Message is required"),
+  name: z.string().min(1, "__name__"),
+  email: z.string().email("__email__"),
+  subject: z.string().min(1, "__subject__"),
+  message: z.string().min(1, "__message__"),
 });
 type FormData = z.infer<typeof formSchema>;
 
@@ -107,10 +107,17 @@ function ContactPage() {
 
     const now = Date.now();
     if (now - lastSubmitTime.current < 3600000 && submitCount >= 5) {
-      setErrors({ message: "Too many submissions. Please try again later." });
+      setErrors({ message: t.contactValidation.tooManySubmissions });
       setIsSubmitting(false);
       return;
     }
+
+    const validationMessages: Record<string, string> = {
+      __name__: t.contactValidation.nameRequired,
+      __email__: t.contactValidation.emailInvalid,
+      __subject__: t.contactValidation.subjectRequired,
+      __message__: t.contactValidation.messageRequired,
+    };
 
     try {
       formSchema.parse(formData);
@@ -134,8 +141,10 @@ function ContactPage() {
       if (error instanceof z.ZodError) {
         const fieldErrors: Partial<FormData> = {};
         error.errors.forEach((err) => {
-          if (err.path[0])
-            fieldErrors[err.path[0] as keyof FormData] = err.message;
+          if (err.path[0]) {
+            const key = err.path[0] as keyof FormData;
+            fieldErrors[key] = validationMessages[err.message] ?? err.message;
+          }
         });
         setErrors(fieldErrors);
       } else {
@@ -162,44 +171,37 @@ function ContactPage() {
     "disabled:opacity-50 disabled:cursor-not-allowed",
   ].join(" ");
 
-  const contactCards = [
-    {
-      icon: <Phone weight="duotone" size={24} />,
-      label: "Phone",
-      value: "+966 11 405 9419",
-      href: "tel:+966114059419",
-      accent: C.secondary,
-    },
-    {
-      icon: <Envelope weight="duotone" size={24} />,
-      label: "Email",
-      value: "htc@hajztel.com.sa",
-      href: "mailto:htc@hajztel.com.sa",
-      accent: C.accent,
-    },
-    {
-      icon: <MapPin weight="duotone" size={24} />,
-      label: "Headquarters",
-      value: "Riyadh, Saudi Arabia",
-      href: undefined,
-      accent: C.cta,
-    },
+  const CONTACT_ICONS = [
+    <Envelope weight="duotone" size={24} />,
+    <Phone weight="duotone" size={24} />,
+    <MapPin weight="duotone" size={24} />,
+  ];
+  const CONTACT_HREFS = [
+    "mailto:htc@hajztel.com.sa",
+    "tel:+966114059419",
+    undefined,
+  ] as (string | undefined)[];
+  const CONTACT_ACCENTS = [C.accent, C.secondary, C.cta];
+
+  const contactCards = t.contactPage.infoCards.map((card, i) => ({
+    icon: CONTACT_ICONS[i],
+    label: card.title,
+    value: card.text,
+    href: CONTACT_HREFS[i],
+    accent: CONTACT_ACCENTS[i],
+    valueDir: i === 1 ? ("ltr" as const) : undefined,
+  }));
+
+  const PROMISE_ICONS = [
+    <Clock weight="duotone" size={20} />,
+    <Headset weight="duotone" size={20} />,
+    <Shield weight="duotone" size={20} />,
   ];
 
-  const promiseBadges = [
-    {
-      icon: <Clock weight="duotone" size={20} />,
-      text: "Response within 24 hours",
-    },
-    {
-      icon: <Headset weight="duotone" size={20} />,
-      text: "Dedicated account manager",
-    },
-    {
-      icon: <Shield weight="duotone" size={20} />,
-      text: "Confidential & secure",
-    },
-  ];
+  const promiseBadges = t.contactPage.promises.map((p, i) => ({
+    icon: PROMISE_ICONS[i],
+    text: p.title,
+  }));
 
   return (
     <div className="relative">
@@ -369,7 +371,7 @@ function ContactPage() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Reach us directly
+                  {t.contactPage.reachUsTitle}
                 </h2>
                 <p
                   className="text-white/40 leading-relaxed"
@@ -378,8 +380,7 @@ function ContactPage() {
                     fontSize: "clamp(0.85rem, 1.25vw, 0.9375rem)",
                   }}
                 >
-                  Prefer phone or email? Pick the channel that suits you and
-                  we'll respond the same business day.
+                  {t.contactPage.reachUsBody}
                 </p>
               </motion.div>
 
@@ -408,6 +409,7 @@ function ContactPage() {
                         {card.label}
                       </span>
                       <span
+                        dir={card.valueDir}
                         className={`text-white font-medium ${card.href ? "transition-colors duration-300 group-hover:text-[#7CCCBF]" : ""}`}
                         style={{
                           fontFamily: FONT.body,
@@ -448,14 +450,10 @@ function ContactPage() {
                   className="block text-white/35 text-[10px] font-semibold uppercase tracking-[0.22em] mb-4"
                   style={{ fontFamily: FONT.heading }}
                 >
-                  What to expect
+                  {t.contactPage.whatToExpectLabel}
                 </span>
                 <ul className="flex flex-col gap-3">
-                  {[
-                    "We review your enquiry and assign a specialist within hours.",
-                    "You receive a tailored response — not a generic auto-reply.",
-                    "Initial scoping call within 1–2 business days, no pressure.",
-                  ].map((step, i) => (
+                  {t.contactPage.whatToExpectSteps.map((step, i) => (
                     <li
                       key={i}
                       className="flex items-start gap-3 text-white/65 text-[13px] leading-relaxed"
@@ -528,7 +526,7 @@ function ContactPage() {
                         fontSize: "0.8125rem",
                       }}
                     >
-                      Tell us about your project — fields marked are required.
+                      {t.contactPage.formFieldsNote}
                     </p>
                   </div>
 
@@ -663,7 +661,7 @@ function ContactPage() {
                           className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
                           style={{ fontFamily: FONT.heading }}
                         >
-                          Subject
+                          {t.contactPage.subjectFieldLabel}
                         </label>
                         <div className="relative">
                           <select
@@ -716,12 +714,12 @@ function ContactPage() {
                           className="block mb-2 text-white/50 text-xs font-medium uppercase tracking-[0.12em]"
                           style={{ fontFamily: FONT.heading }}
                         >
-                          Message
+                          {t.contactPage.messageFieldLabel}
                         </label>
                         <textarea
                           id="cp-message"
                           name="message"
-                          placeholder="Tell us about your project or inquiry..."
+                          placeholder={t.contactPage.messagePlaceholder}
                           rows={5}
                           value={formData.message}
                           onChange={handleChange}
@@ -760,7 +758,7 @@ function ContactPage() {
                               <PaperPlaneTilt
                                 weight="bold"
                                 size={18}
-                                className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                                className={`transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${isRTL ? "rtl-flip" : ""}`}
                               />
                             </>
                           )}
@@ -783,8 +781,7 @@ function ContactPage() {
                           fontSize: "0.6875rem",
                         }}
                       >
-                        Your information is encrypted and will never be shared
-                        with third parties.
+                        {t.contactPage.privacyNote}
                       </p>
                     </form>
                   )}

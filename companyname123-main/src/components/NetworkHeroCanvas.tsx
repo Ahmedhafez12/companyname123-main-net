@@ -7,6 +7,7 @@ import {
 } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslation, useLocale } from "../i18n";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -161,6 +162,8 @@ export type NetworkHeroCanvasProps = {
 export default function NetworkHeroCanvas({
   scrollScrollerRef,
 }: NetworkHeroCanvasProps) {
+  const { t } = useTranslation();
+  const { localePath } = useLocale();
   // ── Refs ──────────────────────────────────────────────────────────────────
   const trackRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
@@ -489,7 +492,7 @@ export default function NetworkHeroCanvas({
       ref={trackRef as React.RefObject<HTMLElement>}
       className="network-hero-canvas-section relative h-[400vh] w-full shrink-0"
       style={{ background: "#000d14" }}
-      aria-label="Network hero sequence"
+      aria-label={t.networkHero.ariaLabel}
     >
       {/* ── Sticky viewport ────────────────────────────────────────────────── */}
       <div
@@ -578,7 +581,7 @@ export default function NetworkHeroCanvas({
                     textShadow: "0 1px 14px rgba(0,18,28,0.6)",
                   }}
                 >
-                  Real Transformation
+                  {t.networkHero.eyebrow}
                 </p>
                 <span
                   className="h-px w-8"
@@ -597,8 +600,8 @@ export default function NetworkHeroCanvas({
                   textShadow: "0 2px 32px rgba(0,13,20,0.6)",
                 }}
               >
-                Simple. <span style={{ color: COLOR_ACCENT }}>Fast.</span>{" "}
-                Secure.
+                {t.networkHero.headline} <span style={{ color: COLOR_ACCENT }}>{t.networkHero.headlineAccent}</span>{" "}
+                {t.networkHero.headlineSuffix}
               </h1>
 
               {/* Secondary headline */}
@@ -610,7 +613,7 @@ export default function NetworkHeroCanvas({
                   textShadow: "0 1px 24px rgba(0,20,30,0.65)",
                 }}
               >
-                Networks You Can Trust.
+                {t.networkHero.subheadline}
               </h2>
 
               {/* Body copy */}
@@ -622,15 +625,14 @@ export default function NetworkHeroCanvas({
                   textShadow: "0 1px 18px rgba(0,18,28,0.55)",
                 }}
               >
-                We provide high-performance, ultra-secure infrastructure for the
-                world’s most important companies.
+                {t.networkHero.body}
               </p>
 
               {/* CTA row */}
               <div className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-3">
                 {/* Primary CTA */}
                 <a
-                  href="/contact"
+                  href={localePath("/contact")}
                   className="
                     inline-flex items-center gap-2.5
                     rounded-full px-7 py-3
@@ -646,7 +648,7 @@ export default function NetworkHeroCanvas({
                     outlineColor: COLOR_ACCENT,
                   }}
                 >
-                  Get Started
+                  {t.networkHero.ctaPrimary}
                   <svg
                     width="13"
                     height="13"
@@ -666,7 +668,7 @@ export default function NetworkHeroCanvas({
 
                 {/* Secondary CTA */}
                 <a
-                  href="/what-we-do/telecommunications"
+                  href={localePath("/what-we-do/telecommunications")}
                   className="
                     inline-flex items-center gap-2.5
                     rounded-full px-7 py-3
@@ -681,7 +683,7 @@ export default function NetworkHeroCanvas({
                     WebkitBackdropFilter: "blur(6px)",
                   }}
                 >
-                  View Solutions
+                  {t.networkHero.ctaSecondary}
                 </a>
               </div>
             </div>
@@ -707,7 +709,7 @@ export default function NetworkHeroCanvas({
                     textShadow: "0 1px 10px rgba(0,18,28,0.4)",
                   }}
                 >
-                  Trusted By
+                  {t.networkHero.trustedBy}
                 </p>
                 <div
                   className="h-px flex-1"
@@ -721,7 +723,7 @@ export default function NetworkHeroCanvas({
               {/* Logo row */}
               <ul
                 className="m-0 flex w-full list-none flex-wrap items-center justify-center gap-7 p-0 sm:gap-10 md:gap-12"
-                aria-label="Trusted partner logos"
+                aria-label={t.networkHero.trustedLogosLabel}
               >
                 {PARTNERS.map((partner) => (
                   <li
@@ -783,7 +785,7 @@ export default function NetworkHeroCanvas({
               className="font-mono text-[0.65rem] uppercase tracking-[0.22em]"
               style={{ color: "rgba(255,255,255,0.25)" }}
             >
-              Initialising
+              {t.networkHero.initialising}
             </p>
           </div>
         )}

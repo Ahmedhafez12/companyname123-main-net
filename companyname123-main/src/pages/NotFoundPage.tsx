@@ -40,14 +40,14 @@ function NotFoundPage() {
           className="text-3xl sm:text-4xl font-bold text-white mb-4"
           style={{ fontFamily: t.fontFamilyHeading }}
         >
-          Page not found
+          {t.common.notFoundTitle}
         </h1>
 
         <p
           className="text-white/60 text-base sm:text-lg mb-2 leading-relaxed"
           style={{ fontFamily: t.fontFamilyBody }}
         >
-          The page you're looking for doesn't exist or has been moved.
+          {t.common.notFoundMessage}
         </p>
         <p
           className="text-white/35 text-sm mb-10 font-mono break-all"
@@ -66,14 +66,14 @@ function NotFoundPage() {
             }}
           >
             <House weight="bold" size={16} />
-            <span>Back to home</span>
+            <span>{t.common.backToHome}</span>
           </Link>
           <Link
             to={localePath("/contact")}
             className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white/80 hover:text-white border border-white/15 hover:border-white/30 hover:bg-white/[0.03] transition-all duration-300"
             style={{ fontFamily: t.fontFamilyHeading, fontSize: "0.9375rem" }}
           >
-            <span>Contact us</span>
+            <span>{t.common.contactUs404}</span>
             <ArrowRight
               weight="bold"
               size={14}

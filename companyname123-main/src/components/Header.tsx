@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
+import { useLocale } from "../i18n";
 
 interface HeaderProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ interface NavItem {
 }
 
 export default function Header({ isOpen, setIsOpen }: HeaderProps) {
+  const { isRTL } = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [openSubLists, setOpenSubLists] = useState<Record<string, boolean>>({});
@@ -439,13 +441,13 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
 
               {/* Phone */}
               <a
-                href="tel:+1234567890"
+                href="tel:+966114059419"
                 className="hidden lg:flex px-4 py-2 text-[#005E96]/70 hover:text-[#005E96] transition-colors duration-300 text-sm font-medium items-center"
               >
                 <div className="p-0.5 mr-2">
                   <Phone weight="thin" size={20} />
                 </div>
-                +1 (234) 567-890
+                <span dir="ltr">+966 11 4059419</span>
               </a>
 
               {/* Contact Us Button */}
@@ -573,7 +575,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                                   }
                                   aria-label={`Open ${item.name} submenu`}
                                 >
-                                  <div className="p-0.5">
+                                  <div className={`p-0.5 ${isRTL ? "rtl-flip" : ""}`}>
                                     <CaretRight weight="thin" size={20} />
                                   </div>
                                 </button>
@@ -603,13 +605,13 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                   {/* Mobile Contact Info */}
                   <div className="mt-6 space-y-4">
                     <a
-                      href="tel:+1234567890"
+                      href="tel:+966114059419"
                       className="flex items-center px-4 py-3 text-[#005E96]/70 hover:text-[#005E96] transition-colors duration-300"
                     >
                       <div className="p-0.5 mr-3">
                         <Phone weight="thin" size={20} />
                       </div>
-                      <span className="text-base">+1 (234) 567-890</span>
+                      <span dir="ltr" className="text-base">+966 11 4059419</span>
                     </a>
 
                     <Link
@@ -671,7 +673,7 @@ export default function Header({ isOpen, setIsOpen }: HeaderProps) {
                           className="flex items-center text-[#005E96]/90 hover:text-[#005E96] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#005E96] rounded-lg p-2 -ml-2"
                           aria-label="Back to main menu"
                         >
-                          <div className="p-0.5 mr-2">
+                          <div className={`p-0.5 mr-2 ${isRTL ? "rtl-flip" : ""}`}>
                             <ArrowLeft weight="thin" size={20} />
                           </div>
                           <span className="text-sm font-medium">Back</span>

@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useLocale, useTranslation } from "../i18n";
 import {
   CaretLeft,
   CaretRight,
@@ -17,72 +18,45 @@ import {
 } from "phosphor-react";
 import { Link } from "react-router-dom";
 
-interface SolutionItem {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
-  description: string;
-  image: string;
-}
+const SOLUTION_ICONS = [
+  <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
+  <div className="p-2"><Cloud weight="thin" size={20} /></div>,
+  <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
+  <div className="p-2"><DeviceMobile weight="thin" size={20} /></div>,
+  <div className="p-2"><HardDrives weight="thin" size={20} /></div>,
+  <div className="p-2"><Globe weight="thin" size={20} /></div>,
+];
 
-const solutions: SolutionItem[] = [
-  {
-    id: "5g-infrastructure",
-    title: "Managed WiFi",
-    icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
-    description:
-      "Next-generation mobile network infrastructure for unprecedented speed and reliability.",
-    image:
-      "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500",
-  },
-  {
-    id: "cloud-services",
-    title: "Managed Fixed Wireless Access",
-    icon: <div className="p-2"><Cloud weight="thin" size={20} /></div>,
-    description: "Scalable cloud solutions for modern business needs.",
-    image:
-      "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500",
-  },
-  {
-    id: "iot-networks",
-    title: "Managed UC",
-    icon: <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
-    description:
-      "Comprehensive IoT network solutions for smart cities and industries.",
-    image:
-      "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500",
-  },
-  {
-    id: "mobile-solutions",
-    title: "Infrastructure",
-    icon: <div className="p-2"><DeviceMobile weight="thin" size={20} /></div>,
-    description:
-      "Enterprise-grade mobile connectivity and management platforms.",
-    image:
-      "https://images.unsplash.com/photo-1603604342747-b285bb892e2f?auto=format&fit=crop&w=500",
-  },
-  {
-    id: "data-centers",
-    title: "Special MODA Solutions",
-    icon: <div className="p-2"><HardDrives weight="thin" size={20} /></div>,
-    description: "High-performance data center infrastructure and management.",
-    image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=500",
-  },
-  {
-    id: "global-connectivity",
-    title: "Remote Patient Management ( RPM )",
-    icon: <div className="p-2"><Globe weight="thin" size={20} /></div>,
-    description:
-      "Seamless international connectivity solutions for global enterprises.",
-    image:
-      "https://images.unsplash.com/photo-1747224317356-6dd1a4a078fd?auto=format&fit=crop&w=500",
-  },
+const SOLUTION_IDS = [
+  "5g-infrastructure",
+  "cloud-services",
+  "iot-networks",
+  "mobile-solutions",
+  "data-centers",
+  "global-connectivity",
+];
+
+const SOLUTION_IMAGES = [
+  "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500",
+  "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500",
+  "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500",
+  "https://images.unsplash.com/photo-1603604342747-b285bb892e2f?auto=format&fit=crop&w=500",
+  "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=500",
+  "https://images.unsplash.com/photo-1747224317356-6dd1a4a078fd?auto=format&fit=crop&w=500",
 ];
 
 const SolutionsCarousel: React.FC = () => {
+  const { isRTL } = useLocale();
+  const { t } = useTranslation();
+  const solutions = t.solutionsCarousel.solutions.map((s, i) => ({
+    id: SOLUTION_IDS[i],
+    title: s.title,
+    description: s.description,
+    icon: SOLUTION_ICONS[i],
+    image: SOLUTION_IMAGES[i],
+  }));
   const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedSolution, setSelectedSolution] = useState<SolutionItem | null>(
+  const [selectedSolution, setSelectedSolution] = useState<typeof solutions[0] | null>(
     null
   );
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -206,10 +180,10 @@ const SolutionsCarousel: React.FC = () => {
                     <button className="inline-flex items-center bg-[#44C8F5] text-white px-6 py-3 rounded-lg hover:bg-[#7CCCBF] transition-all duration-300 group">
                       <span>
                         <a href="/solutions" className="button">
-                          Learn More
+                          {t.solutionsCarousel.learnMore}
                         </a>
                       </span>
-                      <div className="p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300">
+                      <div className={`p-0.5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300 ${isRTL ? "rtl-flip" : ""}`}>
                         <ArrowRight weight="thin" size={20} />
                       </div>
                     </button>
@@ -227,14 +201,14 @@ const SolutionsCarousel: React.FC = () => {
                 onClick={handlePrev}
                 disabled={activeIndex === 0}
                 className="relative w-8 h-8 rounded-full border border-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:border-white/30 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Previous solution"
+                aria-label={t.solutionsCarousel.prevSolution}
               >
                 {/* Dark overlay */}
                 <div
                   className="absolute inset-0 rounded-full"
                   style={{ backgroundColor: "#005E96", opacity: 0.3 }}
                 ></div>
-                <CaretLeft size={16} className="relative z-10" />
+                <CaretLeft size={16} className={`relative z-10 ${isRTL ? "rtl-flip" : ""}`} />
               </button>
 
               <div className="flex space-x-1">
@@ -247,7 +221,7 @@ const SolutionsCarousel: React.FC = () => {
                         ? "w-4 bg-white"
                         : "bg-white/40 hover:bg-white/60"
                     }`}
-                    aria-label={`Go to solution ${index + 1}`}
+                    aria-label={`${t.solutionsCarousel.goToSolution} ${index + 1}`}
                   />
                 ))}
               </div>
@@ -256,14 +230,14 @@ const SolutionsCarousel: React.FC = () => {
                 onClick={handleNext}
                 disabled={activeIndex === solutions.length - 1}
                 className="relative w-8 h-8 rounded-full border border-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:border-white/30 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Next solution"
+                aria-label={t.solutionsCarousel.nextSolution}
               >
                 {/* Dark overlay */}
                 <div
                   className="absolute inset-0 rounded-full"
                   style={{ backgroundColor: "#005E96", opacity: 0.3 }}
                 ></div>
-                <div className="p-0.5 relative z-10">
+                <div className={`p-0.5 relative z-10 ${isRTL ? "rtl-flip" : ""}`}>
                   <CaretRight weight="thin" size={20} />
                 </div>
               </button>

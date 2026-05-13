@@ -2,123 +2,39 @@ import React, { useEffect } from 'react';
 import PageSEO from '../utils/PageSEO';
 import { motion } from 'framer-motion';
 import { useTranslation, useLocale } from '../i18n';
-import { WifiHighHigh, Cloud, ShareShareNetwork, Shield, ArrowRight, Lightning, Globe, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
-import SolutionsCarousel from '../components/SolutionsCarousel';
+import { WifiHigh, Cloud, ShareNetwork, Shield, ArrowRight, Database, HardDrives, Cpu, Lock } from 'phosphor-react';
 import Footer from '../components/Footer';
 import HeroCarousel from '../components/HeroCarousel';
 
 function SolutionsPage() {
   const { t } = useTranslation();
-  const { localePath } = useLocale();
-  const solutions = [
-    {
-      icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
-      title: "Managed WiFi",
-      features: [
-        "Seamless Connectivity",
-        "Centralized Management",
-        "Enhanced Security",
-        "Scalability ",
-        "Customizable User Access "
+  const { localePath, isRTL } = useLocale();
 
-      ],
-      benefits: [
-        "Improved User Experience",
-        "Reduced IT Burden",
-        "Optimized ShareNetwork Performance"
-      ],
-      image: "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Cloud weight="thin" size={20} /></div>,
-      title: "Managed Fixed Wireless access",
-      features: [
-        "High-Speed Wireless Broadband",
-        "Rapid Deployment",
-        "Scalable Bandwidth Solutions",
-        'Advanced Security & Encryption',
-        'ShareNetwork Redundancy'
-      ],
-      benefits: [
-        "Cost-Effective Deployment",
-        "Expanded Coverage",
-        "Reliable Business Operations"
-      ],
-      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
-      title: "Managed UC",
-      description: "Comprehensive IoT connectivity solutions for smart cities and industries.",
-      features: [
-        "Multi-Channel Communication",
-        "Cloud-Based Collaboration",
-        "AI-Powered Call Routing",
-        "Integrated Contact Center Solutions",
-        "Data analytics"
-      ],
-      benefits: [
-        "Enhanced Productivity",
-        "Improved Customer Engagement",
-        "Cost Savings"
-      ],
-      image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: "Infrastructure",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Scalable ShareNetwork Architecture",
-        "Cloud & Hybrid Deployments",
-        "Automated Management",
-        "High-Speed Fiber Backbone",
-        "Disaster Recovery & Redundancy"
-      ],
-      benefits: [
-        "Future-Proofing Investments",
-        "Enhanced Reliability & Uptime",
-        "Optimized IT Efficiency"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: "Special MODA solutions",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Tailored ShareNetwork Deployment",
-        "Advanced Cybersecurity Measures",
-        "Mission-Critical Connectivity",
-        "Encrypted Data Transmission",
-        "Adaptive Technology Integration"
-      ],
-      benefits: [
-        "Security & Compliance",
-        "Reliable Performance in Critical Scenarios",
-        "Adaptable to Emerging Threats"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: " RPM ( Remote Patient Management )",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Real-Time Patient Monitoring",
-        "Secure Data Transmission",
-        "AI-Based Health Analytics",
-        "Mobile Access & Telehealth Integration",
-        "Automated Alerts & Notifications"
-      ],
-      benefits: [
-        "Real-time threat response",
-        "Regulatory compliance",
-        "Comprehensive protection"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    }
+  const SOLUTION_ICONS = [
+    <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
+    <div className="p-2"><Cloud weight="thin" size={20} /></div>,
+    <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
   ];
+  const SOLUTION_IMAGES = [
+    "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+  ];
+
+  const solutions = t.whatWeDoPage.solutions.map((sol, i) => ({
+    icon: SOLUTION_ICONS[i],
+    title: sol.title,
+    description: sol.description,
+    features: sol.features,
+    benefits: sol.benefits,
+    image: SOLUTION_IMAGES[i],
+  }));
 
   const additionalSolutions = [
     {
@@ -150,12 +66,12 @@ function SolutionsPage() {
   return (
     <div className="relative">
       <PageSEO
-        title="Telecom Solutions | 5G, Cloud, IoT & Security"
-        description="Discover Hajz Telecom's end-to-end solutions: 5G infrastructure deployment, cloud services, IoT networks, cybersecurity, and unified communications for enterprises."
+        title={t.homePage.seoTitle}
+        description={t.homePage.seoDescription}
         path={localePath("/solutions")}
         breadcrumbs={[
           { name: t.common.home, path: localePath("/") },
-          { name: "Solutions", path: localePath("/solutions") },
+          { name: t.nav.items[2]?.label ?? "Solutions", path: localePath("/solutions") },
         ]}
       />
 
@@ -194,11 +110,11 @@ function SolutionsPage() {
                   <p className="text-white/80 mb-6">{solution.description}</p>
                   
                   <div className="mb-6">
-                    <h4 className="text-white font-semibold mb-3">Key Features</h4>
+                    <h4 className="text-white font-semibold mb-3">{t.whatWeDoPage.keyFeatures}</h4>
                     <ul className="space-y-3">
                       {solution.features.map((feature) => (
                         <li key={feature} className="flex items-center text-white/70">
-                          <ArrowRight size={16} className="mr-2 text-cta" />
+                          <ArrowRight size={16} className={`mr-2 text-cta ${isRTL ? "rtl-flip" : ""}`} />
                           {feature}
                         </li>
                       ))}
@@ -206,7 +122,7 @@ function SolutionsPage() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="text-white font-semibold mb-3">Benefits</h4>
+                    <h4 className="text-white font-semibold mb-3">{t.whatWeDoPage.benefits}</h4>
                     <ul className="space-y-2">
                       {solution.benefits.map((benefit) => (
                         <li key={benefit} className="text-white/70 flex items-center">
@@ -218,8 +134,8 @@ function SolutionsPage() {
                   </div>
                   
                   <a href={`/assets/htc_Overview-${index + 1}.pdf`} target="_blank" className="mt-auto btn-primary self-start group text-sm inline-flex items-center">
-                    <span className="text-xs">Learn More</span>
-                    <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    <span className="text-xs">{t.whatWeDoPage.learnMore}</span>
+                    <ArrowRight size={16} className={`ml-2 transform group-hover:translate-x-1 transition-transform duration-300 ${isRTL ? "rtl-flip" : ""}`} />
                   </a>
                 </div>
               </motion.div>

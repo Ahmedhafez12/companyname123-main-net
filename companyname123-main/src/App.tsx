@@ -22,7 +22,6 @@ const SitemapPage = lazy(() => import('./pages/SitemapPage'));
 const CommandControlPage = lazy(() => import('./pages/CommandControlPage'));
 const TelecommunicationsPage = lazy(() => import('./pages/TelecommunicationsPage'));
 const Navbar2PreviewPage = lazy(() => import('./pages/Navbar2PreviewPage'));
-const ArabicMaintenancePage = lazy(() => import('./pages/ArabicMaintenancePage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /** Transparent navbar is only for Home and About Overview. */
@@ -99,7 +98,11 @@ function App() {
 
   return (
     <div className="relative">
-      {!isNavbar2Preview && (useTransparentNavbar ? <Navbar /> : <WhiteBgNavbar basePath="" />)}
+      {!isNavbar2Preview && (
+        <Suspense fallback={null}>
+          {useTransparentNavbar ? <Navbar /> : <WhiteBgNavbar basePath="" />}
+        </Suspense>
+      )}
 
       <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.replace(locale === 'ar' ? '/ar' : '/')}>
         <Suspense fallback={<PageLoader />}>
@@ -128,9 +131,20 @@ function App() {
                 <Route path="/sitemap" element={<SitemapPage />} />
                 <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
 
-                {/* Arabic routes — under maintenance */}
-                <Route path="/ar/*" element={<ArabicMaintenancePage />} />
-                <Route path="/ar" element={<ArabicMaintenancePage />} />
+                {/* Arabic routes */}
+                <Route path="/ar" element={<HomePage />} />
+                <Route path="/ar/about" element={<AboutPage />} />
+                <Route path="/ar/about/overview" element={<AboutUsPage />} />
+                <Route path="/ar/what-we-do" element={<WhatwedoPage />} />
+                <Route path="/ar/what-we-do/command-control" element={<CommandControlPage />} />
+                <Route path="/ar/what-we-do/telecommunications" element={<TelecommunicationsPage />} />
+                <Route path="/ar/solutions" element={<SolutionsPage />} />
+                <Route path="/ar/customers" element={<CustomersPage />} />
+                <Route path="/ar/partners" element={<PartnersPage />} />
+                <Route path="/ar/contact" element={<ContactPage />} />
+                <Route path="/ar/privacy" element={<PrivacyPage />} />
+                <Route path="/ar/terms" element={<TermsPage />} />
+                <Route path="/ar/sitemap" element={<SitemapPage />} />
 
                 {/* 404 catch-all — must come last */}
                 <Route path="*" element={<NotFoundPage />} />

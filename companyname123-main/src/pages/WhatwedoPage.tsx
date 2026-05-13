@@ -7,133 +7,35 @@ import SolutionsCarousel from '../components/SolutionsCarousel';
 import Footer from '../components/Footer';
 import { useTranslation, useLocale } from '../i18n';
 
-const WHATWEDO_FAQ = [
-  {
-    question: 'What services does Hajz Telecommunication Co Ltd. offer?',
-    answer: 'We provide telecommunications infrastructure, command & control systems, managed WiFi, cloud networking, cybersecurity, network cabling, VoIP, and end-to-end managed services for enterprise and government clients.',
-  },
-  {
-    question: 'Does Hajz Telecom work with specific technology vendors?',
-    answer: 'We are vendor-agnostic and partner with leading technology providers including Ericsson, Avaya, 3CX, Cambium Networks, Patton, and others to recommend the best-fit solution for each project.',
-  },
-  {
-    question: 'Can Hajz Telecom handle large-scale government or military projects?',
-    answer: 'Yes. We have 32+ years of experience delivering mission-critical telecommunications and command & control systems for government, defence, and enterprise clients across the Middle East.',
-  },
-];
-
 function WhatwedoPage() {
   const { t } = useTranslation();
-  const { localePath } = useLocale();
-  const solutions = [
-    {
-      icon: <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
-      title: "Managed WiFi",
-      features: [
-        "Seamless Connectivity",
-        "Centralized Management",
-        "Enhanced Security",
-        "Scalability ",
-        "Customizable User Access "
+  const { localePath, isRTL } = useLocale();
 
-      ],
-      benefits: [
-        "Improved User Experience",
-        "Reduced IT Burden",
-        "Optimized ShareNetwork Performance"
-      ],
-      image: "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Cloud weight="thin" size={20} /></div>,
-      title: "Managed Fixed Wireless access",
-      features: [
-        "High-Speed Wireless Broadband",
-        "Rapid Deployment",
-        "Scalable Bandwidth Solutions",
-        'Advanced Security & Encryption',
-        'ShareNetwork Redundancy'
-      ],
-      benefits: [
-        "Cost-Effective Deployment",
-        "Expanded Coverage",
-        "Reliable Business Operations"
-      ],
-      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
-      title: "Managed UC",
-      description: "Comprehensive IoT connectivity solutions for smart cities and industries.",
-      features: [
-        "Multi-Channel Communication",
-        "Cloud-Based Collaboration",
-        "AI-Powered Call Routing",
-        "Integrated Contact Center Solutions",
-        "Data analytics"
-      ],
-      benefits: [
-        "Enhanced Productivity",
-        "Improved Customer Engagement",
-        "Cost Savings"
-      ],
-      image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: "Infrastructure",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Scalable ShareNetwork Architecture",
-        "Cloud & Hybrid Deployments",
-        "Automated Management",
-        "High-Speed Fiber Backbone",
-        "Disaster Recovery & Redundancy"
-      ],
-      benefits: [
-        "Future-Proofing Investments",
-        "Enhanced Reliability & Uptime",
-        "Optimized IT Efficiency"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: "Special MODA solutions",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Tailored ShareNetwork Deployment",
-        "Advanced Cybersecurity Measures",
-        "Mission-Critical Connectivity",
-        "Encrypted Data Transmission",
-        "Adaptive Technology Integration"
-      ],
-      benefits: [
-        "Security & Compliance",
-        "Reliable Performance in Critical Scenarios",
-        "Adaptable to Emerging Threats"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    },
-    {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
-      title: " RPM ( Remote Patient Management )",
-      description: "Advanced security measures protecting your telecommunications infrastructure.",
-      features: [
-        "Real-Time Patient Monitoring",
-        "Secure Data Transmission",
-        "AI-Based Health Analytics",
-        "Mobile Access & Telehealth Integration",
-        "Automated Alerts & Notifications"
-      ],
-      benefits: [
-        "Real-time threat response",
-        "Regulatory compliance",
-        "Comprehensive protection"
-      ],
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500"
-    }
+  const SOLUTION_ICONS = [
+    <div className="p-2"><WifiHigh weight="thin" size={20} /></div>,
+    <div className="p-2"><Cloud weight="thin" size={20} /></div>,
+    <div className="p-2"><ShareNetwork weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
+    <div className="p-2"><Shield weight="thin" size={20} /></div>,
   ];
+  const SOLUTION_IMAGES = [
+    "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+    "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=500",
+  ];
+
+  const solutions = t.whatWeDoPage.solutions.map((sol, i) => ({
+    icon: SOLUTION_ICONS[i],
+    title: sol.title,
+    description: sol.description,
+    features: sol.features,
+    benefits: sol.benefits,
+    image: SOLUTION_IMAGES[i],
+  }));
 
   const additionalSolutions = [
     {
@@ -165,14 +67,14 @@ function WhatwedoPage() {
   return (
     <div className="relative">
       <PageSEO
-        title="What We Do | Telecom & Network Infrastructure"
-        description="Explore Hajz Telecom's service areas: telecommunications, command & control systems, network infrastructure, and managed services for enterprise and government clients."
+        title={t.whatWeDoPage.seoTitle}
+        description={t.whatWeDoPage.seoDescription}
         path={localePath("/what-we-do")}
         breadcrumbs={[
-          { name: t.common.home, path: localePath("/") },
-          { name: "What We Do", path: localePath("/what-we-do") },
+          { name: t.whatWeDoPage.breadcrumbs.home, path: localePath("/") },
+          { name: t.whatWeDoPage.breadcrumbs.whatWeDo, path: localePath("/what-we-do") },
         ]}
-        faq={WHATWEDO_FAQ}
+        faq={t.whatWeDoPage.faq}
       />
 
       {/* Background gradient */}
@@ -189,14 +91,14 @@ function WhatwedoPage() {
           >
             <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-[2px] border border-white/10 rounded-full px-4 py-1.5 mb-6">
               <Lightning size={16} className="text-cta" />
-              <span className="text-sm text-white/90">Next-Generation Solutions</span>
+              <span className="text-sm text-white/90">{t.whatWeDoPage.heroBadge}</span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-              What <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">We do </span>
+              {t.whatWeDoPage.heroTitle}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">{t.whatWeDoPage.heroTitleHighlight}</span>
             </h1>
             <p className="text-xl text-white/80 mb-12">
-            Standard projects are our foundation, but breaking through limitations is our specialty.
+              {t.whatWeDoPage.heroSubtitle}
             </p>
           </motion.div>
         </div>
@@ -227,11 +129,11 @@ function WhatwedoPage() {
                   <p className="text-white/80 mb-6">{solution.description}</p>
                   
                   <div className="mb-6">
-                    <h4 className="text-white font-semibold mb-3">Key Features</h4>
+                    <h4 className="text-white font-semibold mb-3">{t.whatWeDoPage.keyFeatures}</h4>
                     <ul className="space-y-3">
                       {solution.features.map((feature) => (
                         <li key={feature} className="flex items-center text-white/70">
-                          <ArrowRight size={16} className="mr-2 text-cta" />
+                          <ArrowRight size={16} className={`mr-2 text-cta ${isRTL ? "rtl-flip" : ""}`} />
                           {feature}
                         </li>
                       ))}
@@ -239,7 +141,7 @@ function WhatwedoPage() {
                   </div>
 
                   <div className="mb-6">
-                    <h4 className="text-white font-semibold mb-3">Benefits</h4>
+                    <h4 className="text-white font-semibold mb-3">{t.whatWeDoPage.benefits}</h4>
                     <ul className="space-y-2">
                       {solution.benefits.map((benefit) => (
                         <li key={benefit} className="text-white/70 flex items-center">
@@ -251,8 +153,8 @@ function WhatwedoPage() {
                   </div>
                   
                   <a href={`/assets/htc_Overview-${index + 1}.pdf`} target="_blank" className="mt-auto btn-primary self-start group text-sm inline-flex items-center">
-                    <span className="text-xs">Learn More</span>
-                    <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    <span className="text-xs">{t.whatWeDoPage.learnMore}</span>
+                    <ArrowRight size={16} className={`ml-2 transform group-hover:translate-x-1 transition-transform duration-300 ${isRTL ? "rtl-flip" : ""}`} />
                   </a>
                 </div>
               </motion.div>
@@ -317,7 +219,7 @@ function WhatwedoPage() {
         </motion.div>
         <SolutionsCarousel />
       </section> */}
-      <FAQSection items={WHATWEDO_FAQ} subtitle="Common questions about Hajz Telecom's service capabilities." />
+      <FAQSection items={t.whatWeDoPage.faq} subtitle={t.whatWeDoPage.faqSubtitle} />
 
       {/* Footer */}
       <Footer />

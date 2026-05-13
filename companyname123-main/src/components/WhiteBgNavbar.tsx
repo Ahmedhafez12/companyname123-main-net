@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone, Globe, Mail } from "lucide-react";
@@ -194,6 +194,11 @@ const SupportLink = styled.p<{ $scrolled: boolean }>`
     margin-right: 0.5rem;
     width: 1rem;
     height: 1rem;
+  }
+
+  html[dir="rtl"] & svg {
+    margin-right: 0;
+    margin-left: 0.5rem;
   }
 `;
 
@@ -422,7 +427,7 @@ const DropdownItem = styled(Link)`
   }
 `;
 
-const DropdownSubItem = styled.a`
+const DropdownSubItem = styled(Link)`
   display: block;
   padding: 0.375rem 0.75rem 0.375rem 1.5rem;
   font-family: ${TYPOGRAPHY.body};
@@ -470,23 +475,20 @@ const DropdownSectionTitle = styled.div`
   margin-bottom: 0.1875rem;
 `;
 
-const DropdownSectionTitleLink = styled.a`
+const DropdownSectionTitleLink = styled(Link)`
   display: block;
-  padding: 0.375rem 0.75rem;
+  padding: 0.65625rem 0.9375rem;
   font-family: ${TYPOGRAPHY.heading};
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: ${BRAND_COLORS.primary};
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   text-decoration: none;
-  opacity: 0.6;
+  opacity: 1;
   border-bottom: 1px solid ${BRAND_COLORS.whiteOpacity["10"]};
   margin-bottom: 0.1875rem;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 
   &:hover {
-    opacity: 1;
     color: ${BRAND_COLORS.secondary};
   }
 `;
@@ -566,6 +568,11 @@ const NavButton = styled(Link)`
     margin-right: 0.5rem;
     position: relative;
     z-index: 1;
+  }
+
+  html[dir="rtl"] & svg {
+    margin-right: 0;
+    margin-left: 0.5rem;
   }
 
   span {
@@ -792,7 +799,7 @@ const MobileSubItem = styled(Link)`
   }
 `;
 
-const MobileSubSubItem = styled.a`
+const MobileSubSubItem = styled(Link)`
   display: block;
   padding: 0.375rem 0.75rem 0.375rem 1.5rem;
   font-family: ${TYPOGRAPHY.body};
@@ -808,6 +815,7 @@ const MobileSubSubItem = styled.a`
 
   html[dir="rtl"] & {
     padding: 0.375rem 1.5rem 0.375rem 0.75rem;
+    text-align: right;
   }
 
   html[dir="rtl"] &:hover {
@@ -816,11 +824,12 @@ const MobileSubSubItem = styled.a`
   }
 `;
 
-const MobileSubItemAnchor = styled.a`
+const MobileSubItemAnchor = styled(Link).withConfig({ shouldForwardProp: (prop) => prop !== '$hasChildren' })<{ $hasChildren?: boolean }>`
   display: block;
   padding: 0.5625rem 0.75rem;
   font-family: ${TYPOGRAPHY.body};
   font-size: 0.875rem;
+  font-weight: ${({ $hasChildren }) => ($hasChildren ? 700 : 400)};
   color: ${BRAND_COLORS.primary}CC;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -828,6 +837,10 @@ const MobileSubItemAnchor = styled.a`
   &:hover {
     color: ${BRAND_COLORS.secondary};
     padding-left: 1.5rem;
+  }
+
+  html[dir="rtl"] & {
+    text-align: right;
   }
 
   html[dir="rtl"] &:hover {
@@ -849,6 +862,7 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [openMobileMenu, setOpenMobileMenu] = useState<string | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const isMountedRef = useRef(false);
 
   // Derive nav items from translations
   const navItems = t.nav.items;
@@ -885,6 +899,10 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
   }, [isHomePage, location.pathname]);
 
   useEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
+    }
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
       document.body.style.touchAction = "none";
@@ -900,6 +918,13 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
       document.body.style.top = "";
       window.scrollTo(0, parseInt(scrollY || "0") * -1);
     }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.body.style.top = "";
+    };
   }, [isMobileMenuOpen]);
 
   const menuVariants = {
@@ -1003,7 +1028,7 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
                     {aboutItem.children?.map((child) => (
                       <DropdownSubItem
                         key={child.path}
-                        href={localePath(child.path)}
+                        to={localePath(child.path)}
                       >
                         {child.label}
                       </DropdownSubItem>
@@ -1052,14 +1077,14 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
                     {solutionsItem.children?.map((child) => (
                       <DropdownSection key={child.path}>
                         <DropdownSectionTitleLink
-                          href={localePath(child.path)}
+                          to={localePath(child.path)}
                         >
                           {child.label}
                         </DropdownSectionTitleLink>
                         {child.anchors?.map((anchor) => (
                           <DropdownSubItem
                             key={anchor.path}
-                            href={localePath(anchor.path)}
+                            to={localePath(anchor.path)}
                           >
                             {anchor.label}
                           </DropdownSubItem>
@@ -1120,7 +1145,7 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
             <LanguageSwitcher className={`text-sm font-medium ${scrolled ? 'text-[#005E96]' : 'text-white'} hover:text-[#44C8F5] transition-colors`} />
             <PhoneLink href="tel:+966114059419" $scrolled={scrolled}>
               <Phone size={16} />
-              {t.footer.contactInfo[1].text}
+              <span dir="ltr">{t.footer.contactInfo[1].text}</span>
             </PhoneLink>
             <NavButton to={localePath("/contact")}>
               <Mail size={16} />
@@ -1240,7 +1265,7 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
                       {aboutItem.children?.map((child) => (
                         <MobileSubItemAnchor
                           key={child.path}
-                          href={localePath(child.path)}
+                          to={localePath(child.path)}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           {child.label}
@@ -1281,15 +1306,16 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
                       {solutionsItem.children?.map((child) => (
                         <React.Fragment key={child.path}>
                           <MobileSubItemAnchor
-                            href={localePath(child.path)}
+                            to={localePath(child.path)}
                             onClick={() => setIsMobileMenuOpen(false)}
+                            $hasChildren={!!(child.anchors && child.anchors.length > 0)}
                           >
                             {child.label}
                           </MobileSubItemAnchor>
                           {child.anchors?.map((anchor) => (
                             <MobileSubSubItem
                               key={anchor.path}
-                              href={localePath(anchor.path)}
+                              to={localePath(anchor.path)}
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               {anchor.label}
@@ -1385,7 +1411,7 @@ const WhiteBgNavbar: React.FC<WhiteBgNavbarProps> = ({ basePath }) => {
                     }}
                   >
                     <Phone size={16} />
-                    {t.footer.contactInfo[1].text}
+                    <span dir="ltr">{t.footer.contactInfo[1].text}</span>
                   </a>
 
                   {/* Contact CTA */}

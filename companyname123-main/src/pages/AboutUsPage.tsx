@@ -16,6 +16,7 @@ import {
   ChartLineUp,
   TrendUp,
   ArrowRight,
+  ArrowUpLeft,
   ArrowUpRight,
 } from 'phosphor-react';
 import HorizontalTimeline from '../components/HorizontalTimeline';
@@ -25,104 +26,6 @@ import HeroScrollIndicator from '../components/HeroScrollIndicator';
 import WhyChooseUsSection from '../components/WhyChooseUsSection';
 import { useTranslation, useLocale } from '../i18n';
 
-// Content constants (max 3 short sentences per block for above-the-fold fit)
-const ABOUT_CONSTANTS = {
-  hero: {
-    badge: 'About HTC',
-    headline: 'Who We',
-    headlineHighlight: 'Are',
-    summary:
-      '32+ years of telecommunications excellence. We partner in legacy-to-digital migration, unified communications, and command & control. Driven by clarity, respect, and commitment.',
-    heroImageSrc: '/assets/abstracts/Soft_focus_abstract_network_blurred_glowing_partic_delpmaspu.png',
-    heroImageAlt: 'HTC telecommunications and connectivity',
-  },
-  identity: {
-    mission:
-      'Hajz Telecom crafts dependable, high-performance communication systems that propel businesses forward. We partner closely with enterprises, government, and defense clients across our markets to overcome operational hurdles with precision-engineered support and unwavering reliability nurturing homegrown talent to pioneer solutions that deliver enduring value and excellence. ',
-    vision:
-      'Bridging legacies and technology gaps to unlock true digital innovation. We empower enterprises, government, and defense across our markets with mission critical, unbreakable connectivity igniting a new generation of local experts to innovate, customize, and conquer your toughest challenges with unwavering confidence. ',
-    missionBullets: ['Empowering communities through cutting-edge technology.', 'Driving progress with high-quality solutions.', 'Enhancing connectivity for daily life and growth.'],
-    visionBullets: ['Personalized solutions for unique needs.', 'Top-tier services and products that add value.', 'Improving businesses and lives.'],
-  },
-  whyUs: {
-    sectionTitle: 'Why Us',
-    sectionSubtitle: 'What sets HTC apart in telecommunications excellence.',
-    valueProps: [
-      { title: 'Seamless Migration', description: 'Zero-downtime transitions from legacy to modern systems.' },
-      { title: 'Turnkey Projects', description: 'End-to-end delivery from design to ongoing management.' },
-      { title: 'Proactive Managed Services', description: 'Continuous monitoring and optimization for peak performance.' },
-      { title: 'Agile Delivery', description: 'Flexible teams adapt to your timelines and budgets.' },
-      { title: 'Tangible Impact', description: 'Focus on productivity, customer experience, and growth.' },
-    ],
-  },
-  journey: {
-    intro: 'From our founding to today, we have led telecommunications innovation.',
-    events: [
-      { date: '1994', title: 'First Cloud Service', description: 'Offer Worldspan ticketing system as service in the kingdom to travel agencies over STC legacy technology X.25 and connected with the world servers 700+ agencies' },
-      { date: '1998', title: 'First DID/DOD Service', description: 'STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pregain solution and serve more than 2500+ key customer' },
-      { date: '2002', title: 'First MPLS Technology', description: 'We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches' },
-      { date: '2009', title: 'First SIP Trunk', description: 'We provided with STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer' },
-      { date: '2012', title: 'STC NGN Migration', description: 'Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links' },
-      { date: '2016', title: 'STC Hazm Room', description: 'htc have been chosen by STC, MODA and RSADF to provide off hook service to all the remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links' },
-      { date: '2022', title: 'STC Service Concept and 2 Contract', description: 'Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer. Key customer Active equipment project (exclusive for htc) Customer premises equipment project' },
-    ],
-  },
-  companyIdentity: {
-    sectionTitle: 'Company Identity',
-    sectionSubtitle: 'The three pillars that define who we are and how we work with our customers and communities.',
-    blocks: [
-      {
-        title: 'Clarity, Respect & Commitment',
-        paragraphs: [
-          'We believe clarity drives confidence. By communicating transparently and aligning our actions with our words, we ensure that our goals and expectations are always understood.',
-          'Respect guides how we engage with our colleagues, customers, and partners—fostering a culture of trust, inclusiveness, and mutual growth.',
-          'Our commitment defines our reliability. We take ownership of every promise, consistently delivering quality, value, and results that strengthen our long-term partnerships and reputation.',
-        ],
-      },
-      {
-        title: 'Innovation, Quality & Community Impact',
-        paragraphs: [
-          'We strive for innovation that drives progress, developing advanced communication technologies that connect people and empower businesses.',
-          'Our commitment to quality ensures reliable, high-performance solutions that meet the evolving needs of our customers and partners.',
-          'We believe in making a positive difference—fostering economic development and enhancing the quality of life in every community we serve.',
-        ],
-      },
-      {
-        title: 'Customer Partnership, Excellence & Lasting Impact',
-        paragraphs: [
-          'We see every customer relationship as a partnership built on understanding, innovation, and shared success. By listening first and designing with purpose, we create smart, customized solutions that turn challenges into opportunities.',
-          'Our drive for excellence pushes us to go beyond expectations—delivering experiences that empower businesses, elevate performance, and enrich everyday life.',
-        ],
-      },
-    ],
-  },
-  competitiveEdge: {
-    sectionTitle: 'Competitive Edge',
-    sectionSubtitle: 'What makes us the partner of choice for complex communications and control environments.',
-    items: [
-      'Specialist in moving from legacy systems to modern, integrated communication platforms with minimal risk and disruption.',
-      'Designs and deploys end-to-end solutions across UC, IP PBX, contact center, gateways, fixed wireless access, and command and control as a single accountable partner.',
-      'Provides ongoing managed services, ensuring your environment is monitored, supported, and continuously optimized.',
-      'Operates with agile, senior-led teams that adapt to your timelines, budgets, and operational constraints.',
-      'Focuses on clear business outcomes: higher productivity, better customer experience, and improved cost efficiency.',
-    ],
-  },
-  coreStrengths: {
-    intro: 'The capabilities that drive our success and deliver value to clients.',
-    items: [
-      { title: '32+ Years', description: 'Expertise in telecom, system integration, and legacy-to-digital migration.' },
-      { title: 'Legacy-to-Digital', description: 'Transitioning legacy systems to modern infrastructure without disruption.' },
-      { title: 'Agile Delivery', description: 'Senior-led teams deliver on time and within budget.' },
-      { title: 'Senior-Led Teams', description: 'Deep industry knowledge and technical excellence on every project.' },
-      { title: 'Risk-Free Migration', description: 'Proven methodologies protect operations while enabling transformation.' },
-      { title: 'Proven Track Record', description: 'Success across defense, infrastructure, banking, and enterprise.' },
-    ],
-  },
-  cta: {
-    heading: 'Ready to Learn More?',
-    body: 'Explore our journey and see how we have shaped the telecommunications landscape.',
-  },
-};
 
 // Core Strength card (uses project .card styling, bento-friendly)
 const StrengthCard = ({ icon, title, description, className = '' }: {
@@ -304,20 +207,20 @@ function AboutUsPage() {
         <DecorativeBlob className="-top-24 -right-24 lg:right-[25%]" />
         <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-none lg:grid-cols-2 gap-0 w-full h-screen lg:h-full flex-1 min-h-0">
           {/* Text — top 50% on mobile, left 50% on desktop */}
-          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-4 lg:py-12 overflow-hidden">
+          <div className={`flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-4 lg:py-12 overflow-hidden ${isRTL ? "lg:pr-20 xl:pr-28 2xl:pr-36" : ""}`}>
             <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
               <div className="mb-4">
                 <Breadcrumbs items={[
-                  { name: "Home", path: "/" },
-                  { name: "About", path: "/about" },
-                  { name: "Overview", path: "/about/overview" },
+                  { name: t.aboutUsPage.breadcrumbs.home, path: localePath("/") },
+                  { name: t.aboutUsPage.breadcrumbs.about, path: localePath("/about") },
+                  { name: t.aboutUsPage.breadcrumbs.overview, path: localePath("/about/overview") },
                 ]} />
               </div>
               <div className="inline-flex items-center bg-primary/20 backdrop-blur-[2px] border border-primary/30 py-1.5 px-4 rounded-full mb-3 lg:mb-6">
                 <span className="text-sm sm:text-base text-white/90">{t.aboutUsPage.hero.badge}</span>
               </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-2 lg:mb-6 font-sans leading-tight">
-                Who <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">We Are</span>
+                {t.aboutUsPage.sections.whoWeAre}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.whoWeAreHighlight}</span>
               </h1>
               <p className="text-sm sm:text-base lg:text-xl text-white/80 leading-relaxed max-w-2xl">
                 {t.aboutUsPage.hero.summary}
@@ -327,8 +230,8 @@ function AboutUsPage() {
           {/* Image — bottom 60% on mobile, right 60% on desktop */}
           <div className="relative w-full overflow-hidden">
             <img
-              src={ABOUT_CONSTANTS.hero.heroImageSrc}
-              alt={ABOUT_CONSTANTS.hero.heroImageAlt}
+              src="/assets/abstracts/Soft_focus_abstract_network_blurred_glowing_partic_delpmaspu.png"
+              alt={t.aboutUsPage.hero.heroImageAlt}
               className="absolute inset-0 w-full h-full object-cover object-center"
               loading="eager"
             />
@@ -355,13 +258,13 @@ function AboutUsPage() {
           <div className="flex flex-col justify-center px-5 sm:px-10 lg:pr-16 xl:pr-24 2xl:pr-32 py-7 lg:py-12 order-1 lg:order-2 min-h-0">
             <div className="max-w-xl">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans mb-2 lg:mb-4">
-                Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Identity</span>
+                {t.aboutUsPage.sections.companyIdentity}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.companyIdentityHighlight}</span>
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed">
                 {t.aboutUsPage.companyIdentity.sectionSubtitle}
               </p>
               <div className="mt-4 lg:mt-6 text-xl sm:text-2xl lg:text-3xl font-bold text-cta font-sans">
-                {t.aboutUsPage.companyIdentity.blocks.length} Pillars
+                {t.aboutUsPage.companyIdentity.blocks.length} {t.aboutUsPage.companyIdentity.pillarsLabel}
               </div>
             </div>
           </div>
@@ -376,13 +279,13 @@ function AboutUsPage() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-6">
             <div className="max-w-2xl">
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
-                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Journey</span>
+                {t.aboutUsPage.sections.ourJourney}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.ourJourneyHighlight}</span>
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-white/80 mt-2">{t.aboutUsPage.journey.intro}</p>
             </div>
             <div className="text-right shrink-0">
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-accent font-sans">32+</div>
-              <div className="text-sm sm:text-base text-white/70 font-medium">Years of Excellence</div>
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-accent font-sans">{t.aboutUsPage.stats.yearsExperience}</div>
+              <div className="text-sm sm:text-base text-white/70 font-medium">{t.aboutUsPage.coreStrengths.items[0].title}</div>
             </div>
           </div>
           {/* Scroll hint — gently animated to telegraph horizontal interaction */}
@@ -400,7 +303,7 @@ function AboutUsPage() {
             >
               <ArrowsLeftRight weight="regular" size={14} className="text-accent/70" />
             </motion.span>
-            <span>Drag or scroll to explore</span>
+            <span>{t.aboutUsPage.dragScroll}</span>
             <motion.span
               animate={{ x: [0, 4, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
@@ -420,18 +323,18 @@ function AboutUsPage() {
         <div className="flex-1 min-h-0 w-full h-full flex flex-col">
         <ScrollReveal direction="up" delay={0} className="h-full flex-1 min-h-0 flex flex-col">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full h-full min-h-0 flex-1">
-          <div className="flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-8 lg:py-12 order-2 lg:order-1">
+          <div className={`flex flex-col justify-center px-5 sm:px-10 lg:pl-16 xl:pl-24 2xl:pl-32 py-8 lg:py-12 order-2 lg:order-1 ${isRTL ? "lg:pr-20 xl:pr-28 2xl:pr-36" : ""}`}>
             <div className="max-w-2xl mx-auto lg:mx-0 space-y-4 lg:space-y-8">
               <div className="card p-4 sm:p-6 lg:p-8 relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
-                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Mission</span></h2>
+                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">{t.aboutUsPage.sections.ourMission}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.ourMissionHighlight}</span></h2>
                 <p className="relative z-10 text-xs sm:text-sm lg:text-base text-white/80 leading-relaxed">
                   {t.aboutUsPage.identity.mission}
                 </p>
               </div>
               <div className="card p-4 sm:p-6 lg:p-8 relative">
                 <div className="absolute inset-0 bg-primary/20 rounded-xl pointer-events-none" />
-                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Vision</span></h2>
+                <h2 className="relative z-10 text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 lg:mb-4 font-sans">{t.aboutUsPage.sections.ourVision}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.ourVisionHighlight}</span></h2>
                 <p className="relative z-10 text-xs sm:text-sm lg:text-base text-white/80 leading-relaxed">
                   {t.aboutUsPage.identity.vision}
                 </p>
@@ -441,7 +344,7 @@ function AboutUsPage() {
           <div className="hidden lg:block w-full h-full min-h-0 relative overflow-hidden order-1 lg:order-2 flex-1">
             <img
               src="/assets/abstracts/Abstract_isometric_grid_of_interconnected_hexagons_delpmaspu.png"
-              alt="Telecommunications and connectivity"
+              alt={t.aboutUsPage.hero.visionMissionImageAlt}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-primary/10 to-secondary/20" aria-hidden />
@@ -460,13 +363,13 @@ function AboutUsPage() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-5">
             <div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
-                Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Strengths</span>
+                {t.aboutUsPage.sections.coreStrengths}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.coreStrengthsHighlight}</span>
               </h2>
-              <p className="text-sm sm:text-base text-white/80 max-w-2xl mt-2">{ABOUT_CONSTANTS.coreStrengths.intro}</p>
+              <p className="text-sm sm:text-base text-white/80 max-w-2xl mt-2">{t.aboutUsPage.coreStrengths.intro}</p>
             </div>
             <div className="text-right shrink-0">
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary font-sans">6</div>
-              <div className="text-sm sm:text-base text-white/70 font-medium">Core Capabilities</div>
+              <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-secondary font-sans">{t.aboutUsPage.stats.coreStrengthsCount}</div>
+              <div className="text-sm sm:text-base text-white/70 font-medium">{t.aboutUsPage.whyUs.sectionTitle}</div>
             </div>
           </div>
           </ScrollReveal>
@@ -474,7 +377,7 @@ function AboutUsPage() {
             className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 w-full"
             style={{ gridAutoRows: 'minmax(100px, 1fr)' }}
           >
-            {ABOUT_CONSTANTS.coreStrengths.items.map((strength, index) => (
+            {t.aboutUsPage.coreStrengths.items.map((strength, index) => (
               <ScrollReveal key={strength.title} direction="up" delay={index * 0.08}>
               <div
                 className={`h-full ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''}`}
@@ -544,7 +447,7 @@ function AboutUsPage() {
           <div className="relative w-full overflow-hidden">
             <img
               src="/assets/abstracts/Abstract_web_background_minimalist_neural_network__delpmaspu.png"
-              alt="Advanced telecommunications network"
+              alt={t.aboutUsPage.hero.competitiveEdgeImageAlt}
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-primary/20 to-secondary/20 pointer-events-none" />
@@ -555,19 +458,19 @@ function AboutUsPage() {
               <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 sm:mb-6">
                 <div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white font-sans">
-                    Competitive <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">Edge</span>
+                    {t.aboutUsPage.sections.competitiveEdge}{" "}<span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">{t.aboutUsPage.sections.competitiveEdgeHighlight}</span>
                   </h2>
                   <p className="text-sm sm:text-base text-white/80 max-w-md mt-2">
-                    {ABOUT_CONSTANTS.competitiveEdge.sectionSubtitle}
+                    {t.aboutUsPage.competitiveEdge.sectionSubtitle}
                   </p>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-cta font-sans">5</div>
-                  <div className="text-sm sm:text-base text-white/70 font-medium">Key Advantages</div>
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-cta font-sans">{t.aboutUsPage.stats.competitiveEdgeCount}</div>
+                  <div className="text-sm sm:text-base text-white/70 font-medium">{t.aboutUsPage.whyUs.valueProps[0].title}</div>
                 </div>
               </div>
               <ul className="text-xs sm:text-sm lg:text-base text-white/80 flex flex-col gap-3">
-                {ABOUT_CONSTANTS.competitiveEdge.items.map((item, i) => (
+                {t.aboutUsPage.competitiveEdge.items.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <span className="rounded-full w-1.5 h-1.5 sm:w-2 sm:h-2 flex-shrink-0 mt-1.5 sm:mt-2 bg-cta" />
                     <span className="leading-relaxed">{item}</span>
@@ -583,7 +486,7 @@ function AboutUsPage() {
       <section id="cta" ref={ctaRef} className={sectionClass}>
         <motion.button
           type="button"
-          className="explore-more-btn group absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+          className={`explore-more-btn group absolute top-12 z-[100] pt-[0.5in] flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full ${isRTL ? "left-4 sm:left-6 md:left-8 pl-[0.75in]" : "right-4 sm:right-6 md:right-8 pr-[0.75in]"}`}
           initial={{ opacity: 0 }}
           animate={isCtaInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -591,14 +494,14 @@ function AboutUsPage() {
           aria-label="Open menu"
         >
           <span className="text-white/60 group-hover:text-white text-[11px] sm:text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-300">
-            Explore More
+            {t.homePage.exploreMore}
           </span>
           <motion.span
             className="inline-flex text-white/60 group-hover:text-white transition-colors duration-300"
-            animate={isCtaInView ? { x: [0, 4, 0], y: [0, -4, 0] } : { x: 0, y: 0 }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            animate={isCtaInView ? { x: isRTL ? -4 : 4, y: -4 } : { x: 0, y: 0 }}
+            transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
           >
-            <ArrowUpRight weight="regular" size={16} />
+            {isRTL ? <ArrowUpLeft weight="regular" size={16} /> : <ArrowUpRight weight="regular" size={16} />}
           </motion.span>
         </motion.button>
         <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />
@@ -606,17 +509,17 @@ function AboutUsPage() {
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl w-full flex flex-col justify-center items-center text-center py-12">
           <div className="max-w-2xl">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-md mb-3 lg:mb-4 font-sans">
-              Ready to Learn More?
+              {t.aboutUsPage.cta.heading}
             </h2>
             <p className="text-sm sm:text-base lg:text-lg text-white/95 drop-shadow-sm mb-5 lg:mb-8">
-              {ABOUT_CONSTANTS.cta.body}
+              {t.aboutUsPage.cta.body}
             </p>
             <Link
-              to="/contact"
+              to={localePath("/contact")}
               className="btn-primary inline-flex items-center gap-2 group"
             >
-              <span>Contact Us</span>
-              <span className="p-0.5 group-hover:translate-x-0.5">
+              <span>{t.common.contactUs}</span>
+              <span className={`p-0.5 group-hover:translate-x-0.5 ${isRTL ? "rtl-flip" : ""}`}>
                 <ArrowRight weight="bold" size={20} />
               </span>
             </Link>

@@ -13,6 +13,7 @@ import {
   InstagramLogo,
 } from "phosphor-react";
 import { z } from "zod";
+import { useTranslation, useLocale } from "../i18n";
 
 /** Accent chevrons for custom-styled subject selects (native `appearance: none`). */
 const SUBJECT_CHEVRON_ORBITAL = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' viewBox='0 0 24 24'%3E%3Cpath stroke='%237CCCBF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`;
@@ -46,6 +47,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
   size = "normal",
   layout = "default",
 }) => {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
   const sectionRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -475,13 +478,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              01 // VOICE
+              {t.contactPage.voiceLabel}
             </span>
             <h3
               className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              Communication Hub
+              {t.contactPage.voiceHeading}
             </h3>
             <a
               href="tel:+966114059419"
@@ -489,7 +492,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               style={{ fontFamily: "var(--font-secondary)" }}
             >
               <Phone weight="regular" size={16} />
-              +966 11 405 9419
+              <span dir="ltr">+966 11 4059419</span>
             </a>
             <a
               href="mailto:htc@hajztel.com.sa"
@@ -515,13 +518,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              02 // PLACE
+              {t.contactPage.placeLabel}
             </span>
             <h3
               className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              Physical Presence
+              {t.contactPage.placeHeading}
             </h3>
             <div className="flex items-start gap-2 sm:gap-3">
               <MapPin
@@ -533,7 +536,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 className="text-white/95 text-xs sm:text-sm leading-snug"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
-                Riyadh, Saudi Arabia
+                {t.contactPage.locationShort}
               </span>
             </div>
           </div>
@@ -552,13 +555,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               className="text-primary text-[0.65rem] sm:text-xs tracking-wider block mb-1.5 sm:mb-2 md:mb-3"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              03 // DIGITAL
+              {t.contactPage.digitalLabel}
             </span>
             <h3
               className="text-[var(--color-accent)] font-semibold mb-1.5 sm:mb-2 md:mb-3 text-sm sm:text-base"
               style={{ fontFamily: "var(--font-primary)" }}
             >
-              Digital Footprint
+              {t.contactPage.digitalHeading}
             </h3>
             <ul className="flex sm:flex-col gap-1.5 sm:gap-2" role="list">
               {[
@@ -615,7 +618,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 : "clamp(1.25rem, 2.5vh, 1.5rem)",
         }}
       >
-        Get in Touch
+        {t.common.getInTouch}
       </h2>
       <div
         className={`w-full min-h-0 overflow-hidden flex-1 grid grid-cols-1 gap-6 lg:gap-8 ${
@@ -636,7 +639,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                 className="text-cta font-sans font-semibold tracking-tight mb-8"
                 style={{ fontSize: "clamp(1.25rem, 2.5vh, 1.625rem)" }}
               >
-                Contact Details
+                {t.contactPage.contactDetails}
               </h3>
               <ul className="space-y-6 mb-10" role="list">
                 <li className="flex flex-row items-start gap-5">
@@ -648,7 +651,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">
-                      Email
+                      {t.contactPage.infoCards[0].title}
                     </span>
                     <a
                       href="mailto:htc@hajztel.com.sa"
@@ -667,13 +670,13 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">
-                      Phone
+                      {t.contactPage.infoCards[1].title}
                     </span>
                     <a
                       href="tel:+966114059419"
                       className="text-white text-lg hover:text-cta transition-colors duration-200"
                     >
-                      +966 11 405 9419
+                      <span dir="ltr">+966 11 4059419</span>
                     </a>
                   </div>
                 </li>
@@ -686,10 +689,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-white/60 font-sans text-sm font-medium uppercase tracking-wider mb-2">
-                      Location
+                      {t.contactPage.infoCards[2].title}
                     </span>
                     <span className="text-white text-lg leading-snug">
-                      Riyadh, Saudi Arabia
+                      {t.contactPage.locationShort}
                     </span>
                   </div>
                 </li>
@@ -699,7 +702,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   className="text-cta font-sans font-semibold tracking-tight mb-5"
                   style={{ fontSize: "clamp(1.125rem, 2.25vh, 1.375rem)" }}
                 >
-                  Follow Us
+                  {t.contactPage.followUs}
                 </h3>
                 <ul className="flex flex-row gap-4" role="list">
                   {[
@@ -745,7 +748,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                       : "clamp(0.875rem, 1.75vh, 1.125rem)",
                 }}
               >
-                Contact Details
+                {t.contactPage.contactDetails}
               </h3>
               <ul className="space-y-5 mb-8" role="list">
                 <li className="flex flex-row items-start gap-4">
@@ -757,7 +760,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">
-                      Email
+                      {t.contactPage.infoCards[0].title}
                     </span>
                     <a
                       href="mailto:htc@hajztel.com.sa"
@@ -782,7 +785,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">
-                      Phone
+                      {t.contactPage.infoCards[1].title}
                     </span>
                     <a
                       href="tel:+966114059419"
@@ -794,7 +797,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                             : "clamp(0.8125rem, 1.25vh, 0.9375rem)",
                       }}
                     >
-                      +966 11 405 9419
+                      <span dir="ltr">+966 11 4059419</span>
                     </a>
                   </div>
                 </li>
@@ -807,7 +810,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block text-white/60 font-sans text-xs font-medium uppercase tracking-wider mb-1">
-                      Location
+                      {t.contactPage.infoCards[2].title}
                     </span>
                     <span
                       className="text-white"
@@ -818,7 +821,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                             : "clamp(0.8125rem, 1.25vh, 0.9375rem)",
                       }}
                     >
-                      Riyadh, Saudi Arabia
+                      {t.contactPage.locationShort}
                     </span>
                   </div>
                 </li>
@@ -833,7 +836,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                         : "clamp(1rem, 2vh, 1.125rem)",
                   }}
                 >
-                  Follow Us
+                  {t.contactPage.followUs}
                 </h3>
                 <ul className="flex flex-row gap-3" role="list">
                   {[

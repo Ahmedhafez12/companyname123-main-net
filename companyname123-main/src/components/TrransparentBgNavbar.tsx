@@ -353,7 +353,7 @@ const TransparentBgNavbar: React.FC<{ basePath?: string }> = ({ basePath }) => {
         {/* Action Section */}
         <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
           <a 
-            href="tel:+1234567890" 
+            href="tel:+966114059419"
             style={{ 
               display: "flex", 
               alignItems: "center", 

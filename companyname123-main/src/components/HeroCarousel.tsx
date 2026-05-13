@@ -4,6 +4,7 @@ import { ArrowRight } from "phosphor-react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import HeroCustomersBanner from "./HeroCustomersBanner";
+import { useTranslation, useLocale } from "../i18n";
 
 // Brand Color Variables
 const BRAND_COLORS = {
@@ -64,35 +65,16 @@ type Slide = {
   link: string;
 };
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    department: "Telecommunications",
-    title: "Telecommunication -Solutions",
-    subline:
-      "Transforming infrastructure chaos into competitive advantage with intelligent connectivity solutions that protect your past while accelerating your future.",
-    image:
-      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.webp",
-    link: "/what-we-do/telecommunications",
-  },
-  {
-    id: 2,
-    department: "Command & Control",
-    title: "Command & Control -Solutions",
-    subline:
-      "Connecting the dots between your ELV and other systems—ensuring smooth data flow, improved performance, and intelligent automation.",
-    image: "/assets/CommandandControl/Control_room_with_screens_37be293209.webp",
-    link: "/what-we-do/command-control",
-  },
-  {
-    id: 3,
-    department: "Fixed Wireless Access",
-    title: "Fixed Wireless Access -Solutions",
-    subline: "High-speed enterprise connectivity delivered without the wires.",
-    image:
-      "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.webp",
-    link: "/",
-  },
+const SLIDE_IMAGES = [
+  "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu.webp",
+  "/assets/CommandandControl/Control_room_with_screens_37be293209.webp",
+  "/assets/Telecommunications/Modern_premium_corporate_photography_for_a_network_delpmaspu12.webp",
+];
+
+const SLIDE_LINKS = [
+  "/what-we-do/telecommunications",
+  "/what-we-do/command-control",
+  "/",
 ];
 
 /* Extend background to cover padding and any viewport gap so no section background shows at top/bottom */
@@ -435,9 +417,20 @@ const HeroSection = styled.section`
 `;
 
 const HeroCarousel = () => {
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [key, setKey] = useState<number>(0); // Key to restart zoom in/out cycle when slide changes
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const slides: Slide[] = t.heroCarousel.slides.map((s, i) => ({
+    id: i + 1,
+    department: s.department,
+    title: s.title,
+    subline: s.subline,
+    image: SLIDE_IMAGES[i],
+    link: localePath(SLIDE_LINKS[i]),
+  }));
 
   const slideDuration = 8000; // 8 seconds
   const transitionDuration = 700; // 0.7 seconds
@@ -581,11 +574,11 @@ const HeroCarousel = () => {
                 >
                   <CTAButton to={slide.link}>
                     <span>
-                      {slide.department === "Fixed Wireless Access"
-                        ? "Coming Soon"
-                        : "Explore Department"}
+                      {index === 2
+                        ? t.heroCarousel.comingSoon
+                        : t.heroCarousel.exploreDepartment}
                     </span>
-                    <div className="p-0.5">
+                    <div className={`p-0.5 ${isRTL ? "rtl-flip" : ""}`}>
                       <ArrowRight weight="thin" size={20} />
                     </div>
                   </CTAButton>

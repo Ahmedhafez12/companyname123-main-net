@@ -22,27 +22,18 @@ import {
 import Footer from '../components/Footer';
 
 // ─── Technical Advantages Bento ───────────────────────────────────────────────
-const TECHNICAL_ADVANTAGES_ICON_MAP: Record<
-  string,
-  React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>
-> = {
-  'Expertise & Experience': Globe,
-  'Tailored Solutions': SlidersHorizontal,
-  'Security First': ShieldCheck,
-  'Future-Proof Architecture': Cpu,
-  'End-to-End Support': Lifebuoy,
-};
+const TECHNICAL_ADVANTAGES_ICONS = [Globe, SlidersHorizontal, ShieldCheck, Cpu, Lifebuoy];
 
 function TechnicalAdvantagesIcon({
-  title,
+  index,
   size,
   className,
 }: {
-  title: string;
+  index: number;
   size: number;
   className?: string;
 }) {
-  const Cmp = TECHNICAL_ADVANTAGES_ICON_MAP[title];
+  const Cmp = TECHNICAL_ADVANTAGES_ICONS[index];
   if (!Cmp) return null;
   return <Cmp weight="duotone" size={size} className={className} aria-hidden />;
 }
@@ -56,8 +47,12 @@ type TechnicalAdvantageEntry = {
 
 function TechnicalAdvantagesBento({
   items,
+  title,
+  highlight,
 }: {
   items: readonly TechnicalAdvantageEntry[];
+  title: string;
+  highlight: string;
 }) {
   const [hero, ...rest] = items;
   if (!hero) return null;
@@ -75,9 +70,9 @@ function TechnicalAdvantagesBento({
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 xl:px-8">
         <div className="mb-6 text-center sm:mb-8 lg:mb-10">
           <h2 className="mb-2 text-xl font-bold text-white sm:text-3xl lg:text-4xl">
-            Technical{' '}
+            {title}{' '}
             <span className="bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5] bg-clip-text text-transparent">
-              Advantages
+              {highlight}
             </span>
           </h2>
         </div>
@@ -93,7 +88,7 @@ function TechnicalAdvantagesBento({
           >
             <div className="flex flex-row gap-4 items-start md:items-center md:gap-8">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cta sm:h-14 sm:w-14 md:h-16 md:w-16">
-                <TechnicalAdvantagesIcon title={hero.title} size={28} className="text-cta" />
+                <TechnicalAdvantagesIcon index={0} size={28} className="text-cta" />
               </div>
               <div className="min-w-0 flex-1 text-left">
                 <h3 className="text-base font-bold text-white sm:text-2xl lg:text-3xl">
@@ -108,7 +103,7 @@ function TechnicalAdvantagesBento({
 
           {/* Bento grid — 1 col mobile → 2 tablet → 4 desktop */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-            {rest.map((item) => (
+            {rest.map((item, restIdx) => (
               <article
                 key={item.title}
                 className={[
@@ -118,7 +113,7 @@ function TechnicalAdvantagesBento({
                 ].join(' ')}
               >
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-cta sm:h-11 sm:w-11">
-                  <TechnicalAdvantagesIcon title={item.title} size={20} className="text-cta" />
+                  <TechnicalAdvantagesIcon index={restIdx + 1} size={20} className="text-cta" />
                 </div>
                 <h4 className="text-sm font-bold text-white sm:text-base lg:text-lg">{item.title}</h4>
                 <p className="mt-2 flex-1 text-xs leading-relaxed text-white/75 sm:text-sm lg:text-base">
@@ -402,25 +397,6 @@ const IndustryAccordion = ({
 };
 
 // ─── Page Component ────────────────────────────────────────────────────────────
-const CC_FAQ = [
-  {
-    question: 'What is a Command & Control system?',
-    answer: 'A Command & Control (C2) system integrates Extra-Low Voltage (ELV) and IT systems into a unified platform for intelligent building automation, security surveillance, access control, and real-time operational monitoring.',
-  },
-  {
-    question: 'What systems can Hajz Telecom integrate into a C2 solution?',
-    answer: 'We integrate CCTV, access control, fire alarm, BMS, HVAC, public address, IP telephony, network infrastructure, and other ELV/IT systems into a single command dashboard.',
-  },
-  {
-    question: 'Which sectors benefit from Command & Control solutions?',
-    answer: 'Government facilities, military installations, commercial buildings, hospitality, healthcare, education campuses, and critical infrastructure all benefit from centralised C2 systems.',
-  },
-  {
-    question: 'Does Hajz Telecom provide ongoing support for C2 systems?',
-    answer: 'Yes. We offer managed services including 24/7 monitoring, preventive maintenance, software updates, and dedicated support teams to keep your command centre running at peak performance.',
-  },
-];
-
 function CommandControlPage() {
   const { t } = useTranslation();
   const { localePath } = useLocale();
@@ -468,103 +444,39 @@ function CommandControlPage() {
   }, []);
 
   // ─── Data ──────────────────────────────────────────────────────────────────
-  const corePillars = [
-    {
-      icon: <PencilSimple weight="bold" size={20} />,
-      title: 'Design',
-      description: 'Requirements gathering, site surveys, and feasibility studies.',
-    },
-    {
-      icon: <Rocket weight="bold" size={20} />,
-      title: 'Deploy',
-      description: 'Execution with in-house engineering and trusted partners.',
-    },
-    {
-      icon: <Gear weight="bold" size={20} />,
-      title: 'Manage',
-      description: 'AMC/SLA support for system longevity.',
-    },
-    {
-      icon: <Sliders weight="bold" size={20} />,
-      title: 'Tailor-Made',
-      description: 'Custom AI and software solutions beyond off-the-shelf products.',
-    },
-    {
-      icon: <TrendDown weight="bold" size={20} />,
-      title: 'Cost Cutting',
-      description: 'Reducing manpower and operational costs through integration.',
-    },
+  const CORE_PILLAR_ICONS = [
+    <PencilSimple weight="bold" size={20} />,
+    <Rocket weight="bold" size={20} />,
+    <Gear weight="bold" size={20} />,
+    <Sliders weight="bold" size={20} />,
+    <TrendDown weight="bold" size={20} />,
   ];
 
-  const technicalAdvantages = [
-    {
-      title: 'Expertise & Experience',
-      description:
-        'At htc we Have a Team world class Engineers who have consult and deployed command center across the Globe',
-      accent: 'secondary',
-    },
-    {
-      title: 'Tailored Solutions',
-      description:
-        "Our Solutions/design are 100 % tailor made for Each Requirement; we don't sell what we have but its customer requirement only",
-      accent: 'secondary',
-    },
-    {
-      title: 'Security First',
-      description:
-        'Our prime focus during designing solution is, to secure our customer control room and premises and sites by the use of Technologies',
-      accent: 'secondary',
-    },
-    {
-      title: 'Future-Proof Architecture',
-      description:
-        'Our scalable solutions grow with your business and support emerging technologies like AI and IoT.and can be Scalable for future',
-      accent: 'secondary',
-    },
-    {
-      title: 'End-to-End Support',
-      description:
-        "From initial planning to post-deployment support, we're with you every step of the way.",
-      accent: 'secondary',
-    },
-  ] as const;
+  const corePillars = t.commandControlPage.processSteps.map((step, i) => ({
+    icon: CORE_PILLAR_ICONS[i],
+    title: step.title,
+    description: step.description,
+  }));
 
-  const subSolutions = [
-    {
-      name: 'Control Room Furniture',
-      description:
-        'We are committed to delivering innovative, reliable, and future-ready control room furniture solutions that meet the highest industry standards. By combining design expertise with technical understanding, we help organizations build efficient and comfortable control room environments that support critical decision-making around the clock with the support of our world class OEM Partner.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_30f0a44d43.jpeg',
-    },
-    {
-      name: 'Software',
-      description:
-        'Custom software solutions tailored to your command and control needs, providing intuitive interfaces and powerful analytics capabilities.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg',
-    },
-    {
-      name: 'Video Walls',
-      description:
-        'High-resolution video wall systems for real-time monitoring and visualization, enabling comprehensive oversight of all critical operations.',
-      image: '/assets/CommandandControl/Control_room_with_screens_37be293209.jpeg',
-    },
-    {
-      name: 'Servers',
-      description:
-        'Flexible server infrastructure solutions supporting on-premises, cloud, or hybrid deployments to meet your specific security and scalability requirements.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg',
-    },
-    {
-      name: 'AI/Custom Software',
-      description:
-        'Advanced AI-powered custom software solutions that go beyond off-the-shelf products, delivering intelligent automation and predictive insights.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_9802d7d127.jpeg',
-    },
+  const technicalAdvantages = t.commandControlPage.technicalAdvantages.map((adv) => ({
+    title: adv.title,
+    description: adv.description,
+    accent: 'secondary' as const,
+  }));
+
+  const SUB_SOLUTION_IMAGES = [
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_30f0a44d43.jpeg',
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg',
+    '/assets/CommandandControl/Control_room_with_screens_37be293209.jpeg',
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg',
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_9802d7d127.jpeg',
   ];
+
+  const subSolutions = t.commandControlPage.coreSolutions.map((sol, i) => ({
+    name: sol.title,
+    description: sol.description,
+    image: SUB_SOLUTION_IMAGES[i],
+  }));
 
   const [activeSubSolutionIndex, setActiveSubSolutionIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
@@ -595,35 +507,18 @@ function CommandControlPage() {
     setTouchStartX(null);
   };
 
-  const techStack = [
-    {
-      title: 'Cloud & AI',
-      description:
-        'Our Cloud and AI solutions delivers innovative, scalable, and intelligent technology solutions that help organizations transform, automate, and grow in a digital-first world. We provide solution with all major provider Like AWS, Azure Etc, By combining the power of cloud computing with advanced artificial intelligence, we enable businesses to optimize operations, enhance decision-making. Our Solutions/Applications can be run over Cloud, On Premises or Hybrid model solutions.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg',
-    },
-    {
-      title: 'Software & Analytics',
-      description:
-        'Our OEM\'s design and develop high-performance integration software applications tailored to meet the unique needs of businesses across various industries. From enterprise systems and web applications to mobile platforms and automation tools, our solutions are built to enhance productivity, improve user experience, and support business growth. These platforms are capable to integrate CCTV, access control, ANPR Frs ,IOTs, databases, etc.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b46db2bfed.jpeg',
-    },
-    {
-      title: 'Server On-premises/Cloud/Hybrid',
-      description:
-        'We offer cloud-based server solutions hosted on leading platforms such as Amazon Web Services, Microsoft Azure, and Google Cloud Platform, enabling businesses to scale resources on demand, reduce capital expenditure, and ensure high availability. At the same time, we deliver robust on-premises server solutions for organizations that require full control over their data, enhanced security, or compliance with regulatory standards. Our on-site infrastructure services include server installation, configuration, virtualization, storage solutions, and ongoing maintenance. By integrating both environments into a hybrid model, we ensure seamless data flow, optimized performance, and operational flexibility. This approach allows businesses to keep critical workloads on-premises while leveraging the cloud for scalability, backup, and disaster recovery.',
-      image: '/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg',
-    },
-    {
-      title: 'Video Wall',
-      description:
-        'We provide high-performance video wall systems tailored for control rooms, command centers, corporate environments, retail spaces, and public venues. We offer end-to-end services—from consultation and design to installation and ongoing support—ensuring that each video wall system meets the specific operational and spatial requirements of our clients. Our systems are designed for 24/7 performance, minimal downtime, and easy scalability.',
-      image:
-        '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg',
-    },
+  const TECH_STACK_IMAGES = [
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg',
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b46db2bfed.jpeg',
+    '/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg',
+    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg',
   ];
+
+  const techStack = t.commandControlPage.techStack.map((tech, i) => ({
+    title: tech.title,
+    description: tech.description,
+    image: TECH_STACK_IMAGES[i],
+  }));
 
   const publicIndustries = [
     { name: 'Smart Cities', description: 'Integrated urban management systems for traffic, utilities, and public safety.' },
@@ -651,15 +546,15 @@ function CommandControlPage() {
   return (
     <div className="relative">
       <PageSEO
-        title="Command & Control Solutions | Hajz Telecom"
-        description="Advanced command and control solutions connecting ELV and IT systems for intelligent building automation, surveillance, and operational performance monitoring."
+        title={t.commandControlPage.seoTitle}
+        description={t.commandControlPage.seoDescription}
         path={localePath("/what-we-do/command-control")}
         breadcrumbs={[
-          { name: t.common.home, path: localePath("/") },
-          { name: "What We Do", path: localePath("/what-we-do") },
-          { name: "Command & Control", path: localePath("/what-we-do/command-control") },
+          { name: t.commandControlPage.breadcrumbs.home, path: localePath("/") },
+          { name: t.commandControlPage.breadcrumbs.whatWeDo, path: localePath("/what-we-do") },
+          { name: t.commandControlPage.breadcrumbs.commandControl, path: localePath("/what-we-do/command-control") },
         ]}
-        faq={CC_FAQ}
+        faq={t.commandControlPage.faq}
       />
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
@@ -680,9 +575,9 @@ function CommandControlPage() {
         <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl relative z-10">
           <div className="mb-6">
             <Breadcrumbs items={[
-              { name: "Home", path: "/" },
-              { name: "What We Do", path: "/what-we-do" },
-              { name: "Command & Control", path: "/what-we-do/command-control" },
+              { name: t.commandControlPage.breadcrumbs.home, path: localePath("/") },
+              { name: t.commandControlPage.breadcrumbs.whatWeDo, path: localePath("/what-we-do") },
+              { name: t.commandControlPage.breadcrumbs.commandControl, path: localePath("/what-we-do/command-control") },
             ]} />
           </div>
           {/*
@@ -712,7 +607,7 @@ function CommandControlPage() {
                   className="text-white/90"
                   style={{ fontSize: 'clamp(0.6875rem, 1.1vh, 0.875rem)' }}
                 >
-                  Command & Control
+                  {t.commandControlPage.badge}
                 </span>
               </div>
 
@@ -724,9 +619,9 @@ function CommandControlPage() {
                   lineHeight: '1.15',
                 }}
               >
-                Command{' '}
+                {t.commandControlPage.headline}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                  & Control
+                  {t.commandControlPage.headlineHighlight}
                 </span>
               </h1>
 
@@ -739,11 +634,7 @@ function CommandControlPage() {
                   margin: '0 auto',
                 }}
               >
-                Control Room Solution is a centralized system designed to monitor, manage, and
-                control multiple devices (Surveillance Cameras, IOT Devices, Databases, AI, etc.)
-                across a facility or a network of sites. It plays a critical role in ensuring
-                safety, security, and operational efficiency in environments such as airports,
-                banks, city surveillance systems, industrial plants, and commercial buildings.
+                {t.commandControlPage.subheadline}
               </p>
             </motion.div>
 
@@ -760,7 +651,7 @@ function CommandControlPage() {
               >
                 <img
                   src="/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
-                  alt="Command & Control Operations Center"
+                  alt={t.commandControlPage.heroImageAlt}
                   className="block w-full object-cover object-center"
                   style={{ aspectRatio: '16/9' }}
                   loading="eager"
@@ -798,17 +689,16 @@ function CommandControlPage() {
                 marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
               }}
             >
-              Our{' '}
+              {t.commandControlPage.coreSolutionsTitle}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                Core Solutions
+                {t.commandControlPage.coreSolutionsHighlight}
               </span>
             </h2>
             <p
               className="text-white/80"
               style={{ fontSize: 'clamp(0.8125rem, 1.4vh, 1rem)', lineHeight: '1.65' }}
             >
-              We connect the dots between your ELV and other systems—ensuring smooth data flow,
-              improved performance, and intelligent automation.
+              {t.commandControlPage.coreSolutionsSubtitle}
             </p>
           </motion.div>
 
@@ -936,7 +826,7 @@ function CommandControlPage() {
                 style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.04em' }}
                 aria-hidden
               >
-                <span>←</span> swipe to explore more <span>→</span>
+                <span>←</span> {t.commandControlPage.swipeHint} <span>→</span>
               </p>
 
               {/* Auto-advance progress bar */}
@@ -955,7 +845,11 @@ function CommandControlPage() {
       </section>
 
       {/* ── Technical Advantages Bento ────────────────────────────────────── */}
-      <TechnicalAdvantagesBento items={technicalAdvantages} />
+      <TechnicalAdvantagesBento
+        items={technicalAdvantages}
+        title={t.commandControlPage.techStackTitle}
+        highlight={t.commandControlPage.techStackHighlight}
+      />
 
       {/* ── Section 2: Technology Stack (Z-pattern) ───────────────────────── */}
       <section
@@ -982,9 +876,9 @@ function CommandControlPage() {
                 lineHeight: '1.25',
               }}
             >
-              The Backbone of Every{' '}
+              {t.commandControlPage.techStackTitle}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                Command & Control Solution
+                {t.commandControlPage.techStackHighlight}
               </span>
             </h2>
           </motion.div>
@@ -1039,16 +933,16 @@ function CommandControlPage() {
                 marginBottom: 'clamp(0.375rem, 0.75vh, 0.75rem)',
               }}
             >
-              Industries{' '}
+              {t.commandControlPage.industriesTitle}{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                We Serve
+                {t.commandControlPage.industriesHighlight}
               </span>
             </h2>
             <p
               className="text-white/75"
               style={{ fontSize: 'clamp(0.8125rem, 1.4vh, 1rem)', lineHeight: '1.6' }}
             >
-              From public infrastructure to enterprise operations — we build command centers for every sector.
+              {t.commandControlPage.industriesSubtitle}
             </p>
           </motion.div>
 
@@ -1061,12 +955,12 @@ function CommandControlPage() {
             }}
           >
             <IndustryAccordion
-              title="Public & Infrastructure"
+              title={t.commandControlPage.industries[0].title}
               industries={publicIndustries}
               image="/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg"
             />
             <IndustryAccordion
-              title="Corporate & Enterprise"
+              title={t.commandControlPage.industries[1].title}
               industries={corporateIndustries}
               image="/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_3fbc7ceb1d.jpeg"
             />
@@ -1087,13 +981,13 @@ function CommandControlPage() {
                 lineHeight: '1.65',
               }}
             >
-              Design systems that connect people, data, and decisions for safer, smarter operations.
+              {t.commandControlPage.industriesFooter}
             </p>
           </motion.div>
         </div>
       </section>
 
-      <FAQSection items={CC_FAQ} subtitle="Common questions about our command and control integration services." />
+      <FAQSection items={t.commandControlPage.faq} subtitle={t.commandControlPage.faqSubtitle} />
 
       <Footer />
     </div>

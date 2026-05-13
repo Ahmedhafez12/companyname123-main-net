@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   ArrowRight,
+  ArrowUpLeft,
   ArrowUpRight,
   Lightning,
   WifiHigh,
@@ -269,6 +270,8 @@ export function ServiceCard({
   href,
 }: ServiceItem) {
   const IconComponent = PHOSPHOR_ICON_MAP[iconName] ?? Shield;
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
   return (
     <ServiceCardGlassWrapper
       to={href}
@@ -288,8 +291,10 @@ export function ServiceCard({
           {description}
         </p>
         <span className="inline-flex items-center gap-1.5 mt-4 text-cta font-sans text-sm font-medium">
-          Learn More
-          <span className="inline-flex transition-transform duration-300 ease-in-out group-hover:translate-x-1">
+          {t.common.learnMore}
+          <span
+            className={`inline-flex transition-transform duration-300 ease-in-out group-hover:translate-x-1 ${isRTL ? "rtl-flip" : ""}`}
+          >
             <ArrowRight weight="bold" size={16} />
           </span>
         </span>
@@ -547,6 +552,9 @@ const ServicesGridComponent = ({
 }: {
   category: ServicesCategory;
 }) => {
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
+
   const solutionsPageServices = [
     {
       icon: (
@@ -554,10 +562,9 @@ const ServicesGridComponent = ({
           <WifiHigh weight="bold" size={20} />
         </div>
       ),
-      title: "System Integration",
-      description:
-        "Solutions that fit your network and support digital transformation.",
-      link: "/what-we-do/telecommunications#system-integration",
+      title: t.homePage.telecomPageServices.systemIntegration.title,
+      description: t.homePage.telecomPageServices.systemIntegration.description,
+      link: localePath("/what-we-do/telecommunications#system-integration"),
     },
     {
       icon: (
@@ -565,10 +572,11 @@ const ServicesGridComponent = ({
           <Cloud weight="bold" size={20} />
         </div>
       ),
-      title: "Connectivity and Transmission",
-      description:
-        "Intelligent gateways that transform infrastructure into competitive advantage.",
-      link: "/what-we-do/telecommunications#connectivity-transmission",
+      title: t.homePage.telecomPageServices.connectivity.title,
+      description: t.homePage.telecomPageServices.connectivity.description,
+      link: localePath(
+        "/what-we-do/telecommunications#connectivity-transmission",
+      ),
     },
     {
       icon: (
@@ -576,9 +584,10 @@ const ServicesGridComponent = ({
           <ShareNetwork weight="bold" size={20} />
         </div>
       ),
-      title: "Unified Communication",
-      description: "Bridge legacy and cloud for seamless collaboration.",
-      link: "/what-we-do/telecommunications#unified-communication",
+      title: t.homePage.telecomPageServices.unifiedCommunication.title,
+      description:
+        t.homePage.telecomPageServices.unifiedCommunication.description,
+      link: localePath("/what-we-do/telecommunications#unified-communication"),
     },
     {
       icon: (
@@ -586,9 +595,9 @@ const ServicesGridComponent = ({
           <Shield weight="bold" size={20} />
         </div>
       ),
-      title: "Access LAN and OSP",
-      description: "Complete connectivity from fiber to Wi-Fi.",
-      link: "/what-we-do/telecommunications#access-lan-osp",
+      title: t.homePage.telecomPageServices.accessLan.title,
+      description: t.homePage.telecomPageServices.accessLan.description,
+      link: localePath("/what-we-do/telecommunications#access-lan-osp"),
     },
     {
       icon: (
@@ -596,9 +605,11 @@ const ServicesGridComponent = ({
           <Shield weight="bold" size={20} />
         </div>
       ),
-      title: "Military and Critical Communication",
-      description: "Encrypted, secured voice and data for critical operations.",
-      link: "/what-we-do/telecommunications#military-critical-communication",
+      title: t.homePage.telecomPageServices.militaryCritical.title,
+      description: t.homePage.telecomPageServices.militaryCritical.description,
+      link: localePath(
+        "/what-we-do/telecommunications#military-critical-communication",
+      ),
     },
   ];
 
@@ -609,10 +620,9 @@ const ServicesGridComponent = ({
           <Monitor weight="bold" size={20} />
         </div>
       ),
-      title: "Control Room Solutions",
-      description:
-        "Integrated command center environments providing 24/7 mission-critical visualization and ergonomic infrastructure.",
-      link: "/what-we-do/command-control#tech-stack",
+      title: t.homePage.commandPageServices.controlRoom.title,
+      description: t.homePage.commandPageServices.controlRoom.description,
+      link: localePath("/what-we-do/command-control#tech-stack"),
     },
     {
       icon: (
@@ -620,9 +630,9 @@ const ServicesGridComponent = ({
           <Code weight="bold" size={20} />
         </div>
       ),
-      title: "Software",
-      description: "Custom software with intuitive interfaces and analytics.",
-      link: "/what-we-do/command-control#tech-stack",
+      title: t.homePage.commandPageServices.software.title,
+      description: t.homePage.commandPageServices.software.description,
+      link: localePath("/what-we-do/command-control#tech-stack"),
     },
     {
       icon: (
@@ -630,9 +640,9 @@ const ServicesGridComponent = ({
           <GridFour weight="bold" size={20} />
         </div>
       ),
-      title: "Video Walls",
-      description: "High-resolution video walls for real-time monitoring.",
-      link: "/what-we-do/command-control#tech-stack",
+      title: t.homePage.commandPageServices.videoWalls.title,
+      description: t.homePage.commandPageServices.videoWalls.description,
+      link: localePath("/what-we-do/command-control#tech-stack"),
     },
     {
       icon: (
@@ -640,9 +650,9 @@ const ServicesGridComponent = ({
           <HardDrives weight="bold" size={20} />
         </div>
       ),
-      title: "Servers (On-prem/Cloud/Hybrid)",
-      description: "Flexible server infrastructure for security and scale.",
-      link: "/what-we-do/command-control#tech-stack",
+      title: t.homePage.commandPageServices.servers.title,
+      description: t.homePage.commandPageServices.servers.description,
+      link: localePath("/what-we-do/command-control#tech-stack"),
     },
     {
       icon: (
@@ -650,9 +660,9 @@ const ServicesGridComponent = ({
           <Brain weight="bold" size={20} />
         </div>
       ),
-      title: "AI/Custom Software",
-      description: "AI-powered automation and predictive insights.",
-      link: "/what-we-do/command-control#tech-stack",
+      title: t.homePage.commandPageServices.aiSoftware.title,
+      description: t.homePage.commandPageServices.aiSoftware.description,
+      link: localePath("/what-we-do/command-control#tech-stack"),
     },
   ];
 
@@ -660,35 +670,23 @@ const ServicesGridComponent = ({
 
   const headerConfig = showTelecom
     ? {
-        title: (
-          <>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">
-              Telecommunications
-            </span>{" "}
-            Services
-          </>
-        ),
-        subtitle: "Enterprise solutions that transform your operations.",
+        title: t.homePage.telecomServices.title,
+        subtitle: t.homePage.telecomServices.subtitle,
       }
     : {
-        title: (
-          <>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cta via-accent to-secondary">
-              Command & Control{" "}
-            </span>
-            Services
-          </>
-        ),
-        subtitle: "Control room, software, and infrastructure solutions.",
+        title: t.homePage.commandControlServices.title,
+        subtitle: t.homePage.commandControlServices.subtitle,
       };
 
   const services = showTelecom ? solutionsPageServices : commandControlServices;
-  const exploreHref = showTelecom
-    ? "/what-we-do/telecommunications"
-    : "/what-we-do/command-control";
+  const exploreHref = localePath(
+    showTelecom
+      ? "/what-we-do/telecommunications"
+      : "/what-we-do/command-control",
+  );
   const exploreLabel = showTelecom
-    ? "Explore Telecommunications"
-    : "Explore Command & Control";
+    ? t.homePage.exploreTelecom
+    : t.homePage.exploreCommandControl;
 
   return (
     <>
@@ -772,7 +770,7 @@ const ServicesGridComponent = ({
           className="btn-primary inline-flex items-center gap-2 group text-sm sm:text-base px-5 sm:px-6 py-2.5 sm:py-3"
         >
           <span>{exploreLabel}</span>
-          <span className="p-0.5">
+          <span className={`p-0.5 ${isRTL ? "rtl-flip" : ""}`}>
             <ArrowRight weight="bold" size={20} />
           </span>
         </Link>
@@ -925,22 +923,12 @@ const LiquidButton = styled.button`
 `;
 
 const DigitalDemandsComponent = () => {
+  const { t } = useTranslation();
+
   const demands = [
-    {
-      title: "Reach",
-      description:
-        "Extend your network coverage to every corner of your operation with seamless connectivity solutions.",
-    },
-    {
-      title: "Scale",
-      description:
-        "Grow your infrastructure effortlessly with flexible solutions that adapt to your business needs.",
-    },
-    {
-      title: "Speed",
-      description:
-        "Accelerate your operations with high-performance networks designed for maximum efficiency.",
-    },
+    t.homePage.reachScaleSpeed.reach,
+    t.homePage.reachScaleSpeed.scale,
+    t.homePage.reachScaleSpeed.speed,
   ];
 
   return (
@@ -963,7 +951,7 @@ const DigitalDemandsComponent = () => {
 
 function HomePage() {
   const { t } = useTranslation();
-  const { localePath } = useLocale();
+  const { localePath, isRTL } = useLocale();
   const scrollSnapRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLElement>(null);
   const isLastSectionInView = useInView(contactRef, {
@@ -994,8 +982,8 @@ function HomePage() {
   return (
     <div className="relative overflow-x-hidden">
       <PageSEO
-        title="Hajz Telecom | Telecommunications Solutions & Connectivity"
-        description="Hajz Telecommunication Co Ltd. delivers innovative telecom solutions, enterprise connectivity, and transformative network infrastructure across the globe."
+        title={t.homePage.seoTitle}
+        description={t.homePage.seoDescription}
         path={localePath("/")}
         breadcrumbs={[{ name: t.common.home, path: localePath("/") }]}
       />
@@ -1057,7 +1045,7 @@ function HomePage() {
         <section id="contact" ref={contactRef} className={sectionClass}>
           <motion.button
             type="button"
-            className="explore-more-btn group absolute top-12 right-4 sm:right-6 md:right-8 z-[100] pt-[0.5in] pr-[0.75in] flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full"
+            className={`explore-more-btn group absolute top-12 z-[100] pt-[0.5in] flex items-center gap-2 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-full ${isRTL ? "left-4 sm:left-6 md:left-8 pl-[0.75in]" : "right-4 sm:right-6 md:right-8 pr-[0.75in]"}`}
             initial={{ opacity: 0 }}
             animate={isLastSectionInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
@@ -1065,14 +1053,14 @@ function HomePage() {
             aria-label="Open menu"
           >
             <span className="text-white/60 group-hover:text-white text-[11px] sm:text-xs tracking-[0.25em] uppercase font-medium transition-colors duration-300">
-              Explore More
+              {t.homePage.exploreMore}
             </span>
             <motion.span
               className="inline-flex text-white/60 group-hover:text-white transition-colors duration-300"
-              animate={isLastSectionInView ? { x: [0, 4, 0], y: [0, -4, 0] } : { x: 0, y: 0 }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              animate={isLastSectionInView ? { x: isRTL ? -4 : 4, y: -4 } : { x: 0, y: 0 }}
+              transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
             >
-              <ArrowUpRight weight="regular" size={16} />
+              {isRTL ? <ArrowUpLeft weight="regular" size={16} /> : <ArrowUpRight weight="regular" size={16} />}
             </motion.span>
           </motion.button>
           <DecorativeBlob className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20" />

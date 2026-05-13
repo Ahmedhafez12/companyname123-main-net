@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { CaretDown, ArrowRight, Target, Trophy, Users, TrendUp, Shield } from "phosphor-react";
+import { CaretDown, Target, Trophy, Users, TrendUp, Shield } from "phosphor-react";
 import ScrollReveal from "./ScrollReveal";
+import { useTranslation } from "../i18n";
 
 const BRAND_COLORS = {
   primary: "#005E96",
@@ -204,35 +204,16 @@ const ValuePropImagePlaceholder = styled.div`
   }
 `;
 
-const FEATURES = [
-  {
-    icon: <div className="p-1"><Target weight="thin" size={20} /></div>,
-    heading: "Legacy-to-Modern Migration",
-    subtext: "We transition legacy systems to modern platforms with minimal risk and disruption.",
-  },
-  {
-    icon: <div className="p-1"><Trophy weight="thin" size={20} /></div>,
-    heading: "End-to-End Solutions",
-    subtext: "Comprehensive solutions across UC, contact center, gateways, and command and control as a single partner.",
-  },
-  {
-    icon: <div className="p-1"><Users weight="thin" size={20} /></div>,
-    heading: "Proactive Managed Services",
-    subtext: "Ongoing monitoring, support, and optimization for peak performance.",
-  },
-  {
-    icon: <div className="p-1"><TrendUp weight="thin" size={20} /></div>,
-    heading: "Agile, Senior-Led Teams",
-    subtext: "Teams that adapt to your timelines and budgets with predictable outcomes.",
-  },
-  {
-    icon: <div className="p-1"><Shield weight="thin" size={20} /></div>,
-    heading: "Clear Business Outcomes",
-    subtext: "Measurable results: productivity, customer experience, and cost efficiency for growth.",
-  },
+const FEATURE_ICONS = [
+  <div className="p-1"><Target weight="thin" size={20} /></div>,
+  <div className="p-1"><Trophy weight="thin" size={20} /></div>,
+  <div className="p-1"><Users weight="thin" size={20} /></div>,
+  <div className="p-1"><TrendUp weight="thin" size={20} /></div>,
+  <div className="p-1"><Shield weight="thin" size={20} /></div>,
 ];
 
 export default function WhyChooseUsSection() {
+  const { t } = useTranslation();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleAccordion = (index: number) => {
@@ -247,27 +228,27 @@ export default function WhyChooseUsSection() {
             <ValuePropLeftWrapper>
               <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
                 <ValuePropTitle>
-                  Value <span>Proposition</span>
+                  {t.aboutUsPage.whyUs.valuePropTitle} <span>{t.aboutUsPage.whyUs.valuePropTitleHighlight}</span>
                 </ValuePropTitle>
                 <div className="text-right">
-                  <div className="text-3xl sm:text-4xl font-bold text-secondary" style={{ fontFamily: TYPOGRAPHY.heading }}>5</div>
-                  <div className="text-sm text-white/70">Reasons</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-secondary" style={{ fontFamily: TYPOGRAPHY.heading }}>{t.aboutUsPage.whyUs.reasonsCount}</div>
+                  <div className="text-sm text-white/70">{t.aboutUsPage.whyUs.reasonsLabel}</div>
                 </div>
               </div>
               <ValuePropSubtitle>
-                What sets us apart in delivering transformative technology solutions.
+                {t.aboutUsPage.whyUs.valuePropSubtitle}
               </ValuePropSubtitle>
               <FeatureList>
-                {FEATURES.map((feature, index) => {
+                {t.aboutUsPage.whyUs.valueProps.map((prop, index) => {
                   const isOpen = openIndex === index;
                   return (
-                    <AccordionItem key={feature.heading}>
+                    <AccordionItem key={prop.title}>
                       <AccordionHeader
                         onClick={() => toggleAccordion(index)}
                         isOpen={isOpen}
                         aria-expanded={isOpen}
                       >
-                        <AccordionTitle>{feature.heading}</AccordionTitle>
+                        <AccordionTitle>{prop.title}</AccordionTitle>
                         <AccordionIcon
                           animate={{ rotate: isOpen ? 180 : 0 }}
                           transition={{ duration: 0.3 }}
@@ -283,7 +264,7 @@ export default function WhyChooseUsSection() {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
                           >
-                            <AccordionText>{feature.subtext}</AccordionText>
+                            <AccordionText>{prop.description}</AccordionText>
                           </AccordionContent>
                         )}
                       </AnimatePresence>
@@ -291,12 +272,6 @@ export default function WhyChooseUsSection() {
                   );
                 })}
               </FeatureList>
-              {/* <div className="mt-6 flex justify-start">
-                <Link to="/about/overview" className="btn-primary inline-flex items-center gap-2 group text-base sm:text-lg px-5 py-2.5">
-                  <span>Learn about us</span>
-                  <span className="p-0.5 group-hover:translate-x-0.5"><ArrowRight weight="thin" size={20} /></span>
-                </Link>
-              </div> */}
             </ValuePropLeftWrapper>
           </ScrollReveal>
         </div>

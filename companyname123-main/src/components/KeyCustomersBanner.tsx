@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "../i18n";
 
 interface KeyCustomer {
   name: string;
@@ -10,6 +11,55 @@ interface KeyCustomer {
 interface KeyCustomersBannerProps {
   keyCustomers: KeyCustomer[];
 }
+
+const customerWebsites: Record<string, string> = {
+  STC: "https://www.stc.com.sa/",
+  BT: "https://www.bt.com/",
+  Ericsson: "https://www.ericsson.com/",
+  HP: "https://www.hp.com/",
+  Microsoft: "https://www.microsoft.com/",
+  Nokia: "https://www.nokia.com/",
+  Citibank: "https://www.citibank.com/",
+  IBM: "https://www.ibm.com/",
+  "Goldman Sachs": "https://www.goldmansachs.com/",
+  Oracle: "https://www.oracle.com/",
+  Xerox: "https://www.xerox.com/",
+  "JP Morgan": "https://www.jpmorgan.com/",
+};
+
+const LogoCard = ({ customer, id, visitLabel }: { customer: KeyCustomer; id: string; visitLabel: string }) => (
+  <motion.div
+    key={id}
+    initial={{ opacity: 0, scale: 0.9 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.4 }}
+    whileHover={{ y: -4 }}
+    className="flex-shrink-0"
+  >
+    <a
+      href={customer.url ?? customerWebsites[customer.name] ?? "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center justify-center bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-md"
+      style={{
+        width: 'clamp(90px, 18vw, 120px)',
+        height: 'clamp(44px, 9vw, 60px)',
+        padding: 'clamp(0.5rem, 1vh, 0.75rem)',
+      }}
+      aria-label={visitLabel.replace("{name}", customer.name)}
+    >
+      <img
+        src={customer.logo}
+        alt={`${customer.name} logo`}
+        loading="lazy"
+        className={`max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 ${
+          customer.name === "IBM" ? "brightness-0" : ""
+        }`}
+      />
+    </a>
+  </motion.div>
+);
 
 const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
   keyCustomers = [
@@ -23,6 +73,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
     { name: "IBM", logo: "https://via.placeholder.com/120x60/ffffff/005E96?text=IBM" },
   ],
 }) => {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
   const [contentWidth, setContentWidth] = useState(0);
@@ -98,54 +149,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
     return () => stopLoop();
   }, [startLoop, stopLoop]);
 
-  const customerWebsites: Record<string, string> = {
-    STC: "https://www.stc.com.sa/",
-    BT: "https://www.bt.com/",
-    Ericsson: "https://www.ericsson.com/",
-    HP: "https://www.hp.com/",
-    Microsoft: "https://www.microsoft.com/",
-    Nokia: "https://www.nokia.com/",
-    Citibank: "https://www.citibank.com/",
-    IBM: "https://www.ibm.com/",
-    "Goldman Sachs": "https://www.goldmansachs.com/",
-    Oracle: "https://www.oracle.com/",
-    Xerox: "https://www.xerox.com/",
-    "JP Morgan": "https://www.jpmorgan.com/",
-  };
-
-  const LogoCard = ({ customer, id }: { customer: KeyCustomer; id: string }) => (
-    <motion.div
-      key={id}
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      whileHover={{ y: -4 }}
-      className="flex-shrink-0"
-    >
-      <a
-        href={customer.url ?? customerWebsites[customer.name] ?? "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 hover:shadow-md"
-        style={{
-          width: 'clamp(90px, 18vw, 120px)',
-          height: 'clamp(44px, 9vw, 60px)',
-          padding: 'clamp(0.5rem, 1vh, 0.75rem)',
-        }}
-        aria-label={`Visit ${customer.name} website`}
-      >
-        <img
-          src={customer.logo}
-          alt={`${customer.name} logo`}
-          loading="lazy"
-          className={`max-w-full max-h-full object-contain opacity-80 hover:opacity-100 transition-opacity duration-300 ${
-            customer.name === "IBM" ? "brightness-0" : ""
-          }`}
-        />
-      </a>
-    </motion.div>
-  );
+  const visitLabel = t.heroBanner.visitAriaLabel;
 
   return (
     <div
@@ -170,10 +174,10 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
             marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
           }}
         >
-          Trusted by Industry Leaders
+          {t.heroBanner.trustedHeading}
         </h2>
         <p className="text-white/80" style={{ fontSize: 'clamp(0.875rem, 1.5vh, 1rem)' }}>
-          Partnering with global enterprises to deliver innovative telecommunications solutions.
+          {t.heroBanner.trustedSubtitle}
         </p>
       </motion.div>
 
@@ -188,6 +192,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
 
         <div
           ref={containerRef}
+          dir="ltr"
           className="flex overflow-x-auto select-none"
           style={{
             paddingTop: 'clamp(0.75rem, 1.5vh, 1rem)',
@@ -204,6 +209,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
                 key={`${customer.name}-${index}`}
                 id={`${customer.name}-${index}`}
                 customer={customer}
+                visitLabel={visitLabel}
               />
             ))}
             {/* Duplicate set for seamless infinite loop */}
@@ -212,6 +218,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
                 key={`dup-${customer.name}-${index}`}
                 id={`dup-${customer.name}-${index}`}
                 customer={customer}
+                visitLabel={visitLabel}
               />
             ))}
           </div>
@@ -223,7 +230,7 @@ const KeyCustomersBanner: React.FC<KeyCustomersBannerProps> = ({
           style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.04em' }}
           aria-hidden
         >
-          <span>←</span> swipe to explore <span>→</span>
+          <span>←</span> {t.heroBanner.swipeHint} <span>→</span>
         </p>
       </div>
     </div>

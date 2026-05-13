@@ -27,13 +27,19 @@ const FONT = {
   body: '"Rubik", system-ui, sans-serif',
 } as const;
 
-const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Please enter a valid email"),
-  subject: z.string().min(1, "Please select a subject"),
-  message: z.string().min(1, "Message is required"),
-});
-type FormData = z.infer<typeof formSchema>;
+const makeFormSchema = (msgs: {
+  nameRequired: string;
+  emailInvalid: string;
+  subjectRequired: string;
+  messageRequired: string;
+}) =>
+  z.object({
+    name: z.string().min(1, msgs.nameRequired),
+    email: z.string().email(msgs.emailInvalid),
+    subject: z.string().min(1, msgs.subjectRequired),
+    message: z.string().min(1, msgs.messageRequired),
+  });
+type FormData = { name: string; email: string; subject: string; message: string };
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -56,6 +62,7 @@ interface ContactContentProps {
 const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
   const { t } = useTranslation();
   const { isRTL } = useLocale();
+  const formSchema = makeFormSchema(t.contactValidation);
 
   const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState<FormData>({
@@ -98,7 +105,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
 
     const now = Date.now();
     if (now - lastSubmitTime.current < 3600000 && submitCount >= 5) {
-      setErrors({ message: "Too many submissions. Please try again later." });
+      setErrors({ message: t.contactValidation.tooManySubmissions });
       setIsSubmitting(false);
       return;
     }
@@ -157,6 +164,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
       value: t.contactPage.infoCards[1].text,
       href: "tel:+966114059419",
       accent: C.secondary,
+      valueDir: "ltr" as const,
     },
     {
       icon: <Envelope weight="duotone" size={compact ? 20 : 24} />,
@@ -164,6 +172,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
       value: t.contactPage.infoCards[0].text,
       href: "mailto:htc@hajztel.com.sa",
       accent: C.accent,
+      valueDir: undefined,
     },
     {
       icon: <MapPin weight="duotone" size={compact ? 20 : 24} />,
@@ -171,6 +180,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
       value: t.contactPage.infoCards[2].text,
       href: undefined,
       accent: C.cta,
+      valueDir: undefined,
     },
   ];
 
@@ -276,6 +286,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                         {card.label}
                       </span>
                       <span
+                        dir={card.valueDir}
                         className="text-white font-medium transition-colors duration-300 group-hover:text-[#7CCCBF]"
                         style={{
                           fontFamily: FONT.body,
@@ -312,6 +323,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                         {card.label}
                       </span>
                       <span
+                        dir={card.valueDir}
                         className="text-white font-medium"
                         style={{
                           fontFamily: FONT.body,
@@ -601,7 +613,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                     <textarea
                       id="cc-message"
                       name="message"
-                      placeholder="Tell us about your project or inquiry..."
+                      placeholder={t.contactPage.messagePlaceholder}
                       rows={compact ? 3 : 5}
                       value={formData.message}
                       onChange={handleChange}
@@ -663,8 +675,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                     className="text-white/25 text-center"
                     style={{ fontFamily: FONT.body, fontSize: "0.6875rem" }}
                   >
-                    Your information is encrypted and will never be shared with
-                    third parties.
+                    {t.contactPage.privacyNote}
                   </p>
                 </form>
               )}

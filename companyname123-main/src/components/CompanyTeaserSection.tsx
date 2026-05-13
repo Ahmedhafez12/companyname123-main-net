@@ -3,6 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ArrowRight } from "phosphor-react";
+import { useTranslation, useLocale } from "../i18n";
 
 const MAGNETIC_STRENGTH = 0.25;
 const MAGNETIC_MAX = 12;
@@ -162,6 +163,8 @@ function clamp(value: number, max: number) {
 }
 
 export default function CompanyTeaserSection({ backgroundImage = DEFAULT_IMAGE }: CompanyTeaserSectionProps) {
+  const { t } = useTranslation();
+  const { localePath, isRTL } = useLocale();
   const imageRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const isInView = useInView(imageRef, { once: true, amount: 0.2 });
@@ -202,20 +205,20 @@ export default function CompanyTeaserSection({ backgroundImage = DEFAULT_IMAGE }
             aria-hidden
             loading="lazy"
             decoding="async"
-            fetchPriority="low"
+            fetchpriority="low"
           />
         </ImageLayer>
       </ImageColumn>
       <ContentColumn>
         <ContentInner>
-          <Label className="font-sans">Our Story</Label>
-          <Heading className="font-sans">Beyond the Cables and Connectivity.</Heading>
+          <Label className="font-sans">{t.companyTeaser.label}</Label>
+          <Heading className="font-sans">{t.companyTeaser.heading}</Heading>
           <Paragraph className="font-body">
-          We exist to bridge the gap between complex infrastructure and seamless communication. Our "why" is simple: we weave the digital fabric that keeps your operations secure, your people linked, and your data moving—so you can lead your industry without worrying about the link.
+            {t.companyTeaser.body}
           </Paragraph>
           <CtaButton
             ref={buttonRef}
-            to="/about/overview"
+            to={localePath("/about/overview")}
             className="font-sans"
             onMouseMove={onMouseMove}
             onMouseLeave={onMouseLeave}
@@ -223,8 +226,8 @@ export default function CompanyTeaserSection({ backgroundImage = DEFAULT_IMAGE }
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span>Learn More About Us</span>
-            <span className="inline-flex">
+            <span>{t.companyTeaser.cta}</span>
+            <span className={`inline-flex ${isRTL ? "rtl-flip" : ""}`}>
               <ArrowRight weight="bold" size={20} />
             </span>
           </CtaButton>

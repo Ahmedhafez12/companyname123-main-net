@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { useLocale } from "../i18n";
 
 interface LogoProps {
   className?: string;
@@ -8,6 +9,7 @@ interface LogoProps {
 }
 
 export default function Logo({ className = "", scrolled = false, textColorOverride }: LogoProps) {
+  const { isRTL } = useLocale();
   const textColor = textColorOverride ?? (scrolled ? "#005E96" : "#FFFFFF");
   const trademarkColor = textColor;
   /** Unique gradient ids so multiple logos on one page do not steal each other's defs. */
@@ -74,22 +76,24 @@ export default function Logo({ className = "", scrolled = false, textColorOverri
           r="33.45"
         />
       </g>
-      <text
-        fontFamily="Montserrat, system-ui, sans-serif"
-        fontSize="27.58px"
-        fontWeight="700"
-        fill={textColor}
-        transform="translate(498 403.08)"
-      >
-        <tspan letterSpacing=".34em" x="0" y="0">
-          HAJZ TELECOM CO. LTD.
-        </tspan>
-      </text>
-      <path
-        fill={trademarkColor}
-        d="M1003.88,154.05c0,9.66-7.85,17.43-17.43,17.43s-17.43-7.76-17.43-17.43,7.77-17.35,17.43-17.35,17.43,7.77,17.43,17.35ZM1000.42,154.05c0-7.68-6.28-13.96-13.96-13.96s-13.96,6.28-13.96,13.96,6.28,13.96,13.96,13.96,13.96-6.2,13.96-13.96ZM993.56,159.67c.41,0,.66-.16.66-.16v3.3s-.25.08-.66.08c-4.63,0-4.3-6.44-8.43-6.44-.74,0-.83.74-.83.74v5.7h-3.47v-18.42h7.35c5.95.5,6.44,8.01,1.57,10.41,2.23,1.9,2.56,4.79,3.8,4.79ZM987.61,147.69h-3.3v5.45l3.55-1.24c2.4-1.24,2.31-4.21-.25-4.21Z"
-      />
       <g>
+        {!isRTL && (
+          <text
+            fontFamily="Montserrat, system-ui, sans-serif"
+            fontSize="27.58px"
+            fontWeight="700"
+            fill={textColor}
+            transform="translate(498 403.08)"
+          >
+            <tspan letterSpacing=".34em" x="0" y="0">
+              HAJZ TELECOM CO. LTD.
+            </tspan>
+          </text>
+        )}
+        <path
+          fill={trademarkColor}
+          d="M1003.88,154.05c0,9.66-7.85,17.43-17.43,17.43s-17.43-7.76-17.43-17.43,7.77-17.35,17.43-17.35,17.43,7.77,17.43,17.35ZM1000.42,154.05c0-7.68-6.28-13.96-13.96-13.96s-13.96,6.28-13.96,13.96,6.28,13.96,13.96,13.96,13.96-6.2,13.96-13.96ZM993.56,159.67c.41,0,.66-.16.66-.16v3.3s-.25.08-.66.08c-4.63,0-4.3-6.44-8.43-6.44-.74,0-.83.74-.83.74v5.7h-3.47v-18.42h7.35c5.95.5,6.44,8.01,1.57,10.41,2.23,1.9,2.56,4.79,3.8,4.79ZM987.61,147.69h-3.3v5.45l3.55-1.24c2.4-1.24,2.31-4.21-.25-4.21Z"
+        />
         <path
           fill={textColor}
           fillRule="evenodd"

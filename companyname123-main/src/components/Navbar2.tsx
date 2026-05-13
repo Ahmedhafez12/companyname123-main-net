@@ -3,12 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Phone, ChevronDown, ArrowUpRight } from "lucide-react";
 import Logo from "./Logo";
+import { useLocale } from "../i18n";
 import { clsx } from "clsx";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const PHONE_HREF = "tel:+1234567890";
-const PHONE_LABEL = "+1 (234) 567-890";
+const PHONE_HREF = "tel:+966114059419";
+const PHONE_LABEL = "+966 11 4059419";
 
 /** Scroll depth (px) at which the bar condenses and gains a frosted backdrop */
 const SCROLL_THRESHOLD = 50;
@@ -213,6 +214,7 @@ function DropdownItem({
   children: React.ReactNode;
   indent?: boolean;
 }) {
+  const { isRTL } = useLocale();
   return (
     <Link
       to={to}
@@ -237,7 +239,7 @@ function DropdownItem({
       </span>
       {!indent && (
         <ArrowUpRight
-          className="mr-5 h-4 w-4 shrink-0 opacity-0 transition-all duration-200 group-hover:translate-x-px group-hover:-translate-y-px group-hover:opacity-40"
+          className={`mr-5 h-4 w-4 shrink-0 opacity-0 transition-all duration-200 group-hover:translate-x-px group-hover:-translate-y-px group-hover:opacity-40 ${isRTL ? "rtl-flip" : ""}`}
           style={{ color: C.teal }}
           aria-hidden
         />
@@ -394,6 +396,7 @@ function DesktopDropdowns({
 // ── Right-rail: phone + CTA ───────────────────────────────────────────────────
 
 function PhoneAndContact({ base, bar }: { base: string; bar: BarTheme }) {
+  const { isRTL } = useLocale();
   return (
     <div className="flex shrink-0 items-center gap-4">
       {/* Phone — xl only */}
@@ -404,7 +407,7 @@ function PhoneAndContact({ base, bar }: { base: string; bar: BarTheme }) {
         aria-label={`Call ${PHONE_LABEL}`}
       >
         <Phone className="h-4 w-4 shrink-0" style={{ color: bar.phoneIcon }} aria-hidden />
-        <span className="whitespace-nowrap tracking-wide">{PHONE_LABEL}</span>
+        <span dir="ltr" className="whitespace-nowrap tracking-wide">{PHONE_LABEL}</span>
       </a>
 
       {/* Vertical rule */}
@@ -438,7 +441,7 @@ function PhoneAndContact({ base, bar }: { base: string; bar: BarTheme }) {
         />
         <span className="relative">Contact Us</span>
         <ArrowUpRight
-          className="relative h-4 w-4 shrink-0 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+          className={`relative h-4 w-4 shrink-0 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 ${isRTL ? "rtl-flip" : ""}`}
           style={{ color: bar.ctaText }}
           aria-hidden
         />
@@ -546,6 +549,7 @@ function MobileLink({
  *   • Mobile open  : white sheet panel, navy text, teal accent line at top
  */
 export default function Navbar2({ basePath = "" }: Navbar2Props) {
+  const { isRTL } = useLocale();
   const { pathname } = useLocation();
   const base = basePath;
 
@@ -813,7 +817,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                     style={{ color: C.navMuted }}
                   >
                     <Phone className="h-5 w-5 shrink-0" style={{ color: C.sky }} aria-hidden />
-                    {PHONE_LABEL}
+                    <span dir="ltr">{PHONE_LABEL}</span>
                   </a>
                   <Link
                     to={`${base}/contact`}
@@ -826,7 +830,7 @@ export default function Navbar2({ basePath = "" }: Navbar2Props) {
                   >
                     Contact Us
                     <ArrowUpRight
-                      className="h-4 w-4 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100"
+                      className={`h-4 w-4 opacity-70 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100 ${isRTL ? "rtl-flip" : ""}`}
                       aria-hidden
                     />
                   </Link>

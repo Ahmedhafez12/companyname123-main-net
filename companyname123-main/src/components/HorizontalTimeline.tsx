@@ -135,6 +135,7 @@ const HorizontalTimeline: React.FC<HorizontalTimelineProps> = ({ events = [], cl
       {/* Timeline Container with horizontal scroll on mobile */}
       <div
         ref={scrollContainerRef}
+        dir="ltr"
         className="relative overflow-x-auto overflow-y-visible timeline-scroll-container"
         style={{ paddingBottom: 'clamp(1rem, 2vh, 2rem)' }}
       >
