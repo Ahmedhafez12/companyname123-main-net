@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react';
-import { Routes, Route, useLocation, Link } from 'react-router-dom';
+import { Routes, Route, useLocation, Link, Navigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ErrorBoundary } from 'react-error-boundary';
 const WhiteBgNavbar = lazy(() => import('./components/WhiteBgNavbar'));
@@ -25,7 +25,7 @@ const Navbar2PreviewPage = lazy(() => import('./pages/Navbar2PreviewPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 /** Transparent navbar is only for Home and About Overview. */
-const TRANSPARENT_NAVBAR_PATHS = ['/', '/ar', '/about/overview', '/ar/about/overview'] as const;
+const TRANSPARENT_NAVBAR_PATHS = ['/', '/about/overview'] as const;
 
 const NAVBAR2_PREVIEW_PATH = '/preview/navbar2';
 
@@ -131,20 +131,20 @@ function App() {
                 <Route path="/sitemap" element={<SitemapPage />} />
                 <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
 
-                {/* Arabic routes */}
-                <Route path="/ar" element={<HomePage />} />
-                <Route path="/ar/about" element={<AboutPage />} />
-                <Route path="/ar/about/overview" element={<AboutUsPage />} />
-                <Route path="/ar/what-we-do" element={<WhatwedoPage />} />
-                <Route path="/ar/what-we-do/command-control" element={<CommandControlPage />} />
-                <Route path="/ar/what-we-do/telecommunications" element={<TelecommunicationsPage />} />
-                <Route path="/ar/solutions" element={<SolutionsPage />} />
-                <Route path="/ar/customers" element={<CustomersPage />} />
-                <Route path="/ar/partners" element={<PartnersPage />} />
-                <Route path="/ar/contact" element={<ContactPage />} />
-                <Route path="/ar/privacy" element={<PrivacyPage />} />
-                <Route path="/ar/terms" element={<TermsPage />} />
-                <Route path="/ar/sitemap" element={<SitemapPage />} />
+                {/* Arabic routes — disabled, redirect to English equivalents */}
+                <Route path="/ar" element={<Navigate to="/" replace />} />
+                <Route path="/ar/about" element={<Navigate to="/about" replace />} />
+                <Route path="/ar/about/overview" element={<Navigate to="/about/overview" replace />} />
+                <Route path="/ar/what-we-do" element={<Navigate to="/what-we-do" replace />} />
+                <Route path="/ar/what-we-do/command-control" element={<Navigate to="/what-we-do/command-control" replace />} />
+                <Route path="/ar/what-we-do/telecommunications" element={<Navigate to="/what-we-do/telecommunications" replace />} />
+                <Route path="/ar/solutions" element={<Navigate to="/solutions" replace />} />
+                <Route path="/ar/customers" element={<Navigate to="/customers" replace />} />
+                <Route path="/ar/partners" element={<Navigate to="/partners" replace />} />
+                <Route path="/ar/contact" element={<Navigate to="/contact" replace />} />
+                <Route path="/ar/privacy" element={<Navigate to="/privacy" replace />} />
+                <Route path="/ar/terms" element={<Navigate to="/terms" replace />} />
+                <Route path="/ar/sitemap" element={<Navigate to="/sitemap" replace />} />
 
                 {/* 404 catch-all — must come last */}
                 <Route path="*" element={<NotFoundPage />} />
