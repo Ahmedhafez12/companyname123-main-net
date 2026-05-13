@@ -655,6 +655,7 @@ export default function NetworkHeroCanvas({
                     viewBox="0 0 14 14"
                     fill="none"
                     aria-hidden
+                    className="rtl:scale-x-[-1]"
                   >
                     <path
                       d="M3 7h8M7.5 3.5L11 7l-3.5 3.5"

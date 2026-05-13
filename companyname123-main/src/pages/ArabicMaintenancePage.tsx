@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Wrench, ArrowRight } from "phosphor-react";
 
@@ -44,8 +45,8 @@ function ArabicMaintenancePage() {
           سيتم الإطلاق قريباً، شكراً لصبركم.
         </p>
 
-        <a
-          href="/"
+        <Link
+          to="/"
           className="group inline-flex items-center gap-2.5 px-7 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:shadow-[0_8px_32px_rgba(166,206,57,0.25)]"
           style={{
             background: "linear-gradient(135deg, #A6CE39, #7CCCBF)",
@@ -59,7 +60,7 @@ function ArabicMaintenancePage() {
             size={16}
             className="rtl-flip transition-transform duration-300 group-hover:-translate-x-0.5"
           />
-        </a>
+        </Link>
       </motion.div>
     </div>
   );
