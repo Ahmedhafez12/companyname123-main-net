@@ -23,60 +23,83 @@ function AboutPage() {
     {
       date: "1994",
       title: "First Cloud Service",
-      description: "Offer Worldspan ticketing system as service in the kingdom to travel agencies over STC legacy technology X.25 and connected with the world servers 700+ agencies"
+      description:
+        "Offer Worldspan ticketing system as service in the kingdom to travel agencies over STC legacy technology X.25 and connected with the world servers 700+ agencies",
     },
     {
       date: "1998",
       title: "First DID/DOD Service",
-      description: "STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pregain solution and serve more than 2500+ key customer"
+      description:
+        "STC reach out to htc resolve the distance issue to serve the customers with E1, htc use the pairgain solution and serve more than 2500+ key customer",
     },
     {
       date: "2002",
       title: "First MPLS Technology",
-      description: "We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches"
+      description:
+        "We have reseller agreement with STC to serve the customer with MPLS and connect their head office with the branch office through our solutions 300+ branches",
     },
     {
       date: "2009",
       title: "First SIP Trunk",
-      description: "We provided with STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer"
+      description:
+        "We provided with STC the new technology for DID/DOD service the SIP trunk providing the solution to 450+ customer",
     },
     {
       date: "2012",
       title: "STC NGN Migration",
-      description: "Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links"
+      description:
+        "Provide STC with the solution to migrate their Key customer from the DDN technology to NGN as MODA, RSAF, RSAD 1550+ Links",
     },
     {
       date: "2016",
       title: "STC Hazm Room",
-      description: "htc have been chosen by STC, MODA and RSADF to provide off hook service to all the remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links"
+      description:
+        "htc have been chosen by STC, MODA and RSADF to provide off hook service to all the remote areas during the Hazm War over different technologies IPMPLS, MW and VSAT over 500+ links",
     },
     {
       date: "2022",
       title: "STC Service Concept and 2 Contract",
-      description: "Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer. Key customer Active equipment project (exclusive for htc) Customer premises equipment project"
-    }
+      description:
+        "Work with STC to launch new service concept for Digital convertors over PLL service with the current to project to serve the key customer. Key customer Active equipment project (exclusive for htc) Customer premises equipment project",
+    },
   ];
   const values = [
     {
-      icon: <div className="p-1.5"><Users weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-1.5">
+          <Users weight="thin" size={20} />
+        </div>
+      ),
       title: "People First",
       description:
         "Our team is our greatest asset. We foster a culture of innovation, collaboration, and continuous learning.",
     },
     {
-      icon: <div className="p-1.5"><Trophy weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-1.5">
+          <Trophy weight="thin" size={20} />
+        </div>
+      ),
       title: "Excellence",
       description:
         "We strive for excellence in everything we do, from technical solutions to customer service.",
     },
     {
-      icon: <div className="p-1.5"><Globe weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-1.5">
+          <Globe weight="thin" size={20} />
+        </div>
+      ),
       title: "Global Impact",
       description:
         "Making a positive difference in communities worldwide through innovative telecommunications solutions.",
     },
     {
-      icon: <div className="p-1.5"><Rocket weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-1.5">
+          <Rocket weight="thin" size={20} />
+        </div>
+      ),
       title: "Innovation",
       description:
         "Pushing boundaries and embracing new technologies to shape the future of telecommunications.",
@@ -85,25 +108,41 @@ function AboutPage() {
 
   const principles = [
     {
-      icon: <div className="p-2"><Target weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-2">
+          <Target weight="thin" size={20} />
+        </div>
+      ),
       title: "Strategic Vision",
       description:
         "We maintain a clear focus on long-term goals while delivering immediate value to our clients.",
     },
     {
-      icon: <div className="p-2"><Heart weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-2">
+          <Heart weight="thin" size={20} />
+        </div>
+      ),
       title: "Customer Commitment",
       description:
         "Our success is measured by the success of our clients and their satisfaction with our solutions.",
     },
     {
-      icon: <div className="p-2"><Lightbulb weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-2">
+          <Lightbulb weight="thin" size={20} />
+        </div>
+      ),
       title: "Continuous Innovation",
       description:
         "We invest in research and development to stay ahead of technological advancements.",
     },
     {
-      icon: <div className="p-2"><Shield weight="thin" size={20} /></div>,
+      icon: (
+        <div className="p-2">
+          <Shield weight="thin" size={20} />
+        </div>
+      ),
       title: "Sustainable Growth",
       description:
         "We believe in responsible expansion that benefits our stakeholders and the environment.",
@@ -125,7 +164,7 @@ function AboutPage() {
           { name: t.nav.items[1].label, path: localePath("/about") },
         ]}
       />
-      {/* Background gradient */}      
+      {/* Background gradient */}
       <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none" />
                   {/* Hero div */}     
       <div className="min-h-screen relative overflow-hidden pt-20">
@@ -201,8 +240,8 @@ function AboutPage() {
                                    
                     <li className="flex items-center">
                                        
-                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div>
-                                        Enhancing connectivity and accessibility
+                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div> 
+                                      Enhancing connectivity and accessibility
                       to improve daily life and economic growth.                
                     </li>
                                  
@@ -250,8 +289,8 @@ function AboutPage() {
                                    
                     <li className="flex items-center">
                                        
-                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div>
-                                        Committed to improving businesses and
+                      <div className="w-2 h-2 bg-cta rounded-full mr-3"></div> 
+                                      Committed to improving businesses and
                       lives through high-quality offerings.                
                     </li>
                                  
@@ -405,7 +444,7 @@ function AboutPage() {
           </p> */}
                  
         </motion.div>
-         <HorizontalTimeline events={timelineEvents} />     
+        <HorizontalTimeline events={timelineEvents} />
       </div>
     </div>
   );

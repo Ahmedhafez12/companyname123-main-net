@@ -23,6 +23,7 @@ const CommandControlPage = lazy(() => import('./pages/CommandControlPage'));
 const TelecommunicationsPage = lazy(() => import('./pages/TelecommunicationsPage'));
 const Navbar2PreviewPage = lazy(() => import('./pages/Navbar2PreviewPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ArabicMaintenancePage = lazy(() => import('./pages/ArabicMaintenancePage'));
 
 /** Transparent navbar is only for Home and About Overview. */
 const TRANSPARENT_NAVBAR_PATHS = ['/', '/ar', '/about/overview', '/ar/about/overview'] as const;
@@ -81,6 +82,7 @@ function App() {
   const { t } = useTranslation();
   const useTransparentNavbar = (TRANSPARENT_NAVBAR_PATHS as readonly string[]).includes(location.pathname);
   const isNavbar2Preview = location.pathname === NAVBAR2_PREVIEW_PATH;
+  const isArabicMaintenance = location.pathname === '/ar' || location.pathname.startsWith('/ar/');
 
   // Set HTML attributes based on locale
   useEffect(() => {
@@ -98,7 +100,7 @@ function App() {
 
   return (
     <div className="relative">
-      {!isNavbar2Preview && (
+      {!isNavbar2Preview && !isArabicMaintenance && (
         <Suspense fallback={null}>
           {useTransparentNavbar ? <Navbar /> : <WhiteBgNavbar basePath="" />}
         </Suspense>
@@ -131,20 +133,9 @@ function App() {
                 <Route path="/sitemap" element={<SitemapPage />} />
                 <Route path={NAVBAR2_PREVIEW_PATH} element={<Navbar2PreviewPage />} />
 
-                {/* Arabic routes */}
-                <Route path="/ar" element={<HomePage />} />
-                <Route path="/ar/about" element={<AboutPage />} />
-                <Route path="/ar/about/overview" element={<AboutUsPage />} />
-                <Route path="/ar/what-we-do" element={<WhatwedoPage />} />
-                <Route path="/ar/what-we-do/command-control" element={<CommandControlPage />} />
-                <Route path="/ar/what-we-do/telecommunications" element={<TelecommunicationsPage />} />
-                <Route path="/ar/solutions" element={<SolutionsPage />} />
-                <Route path="/ar/customers" element={<CustomersPage />} />
-                <Route path="/ar/partners" element={<PartnersPage />} />
-                <Route path="/ar/contact" element={<ContactPage />} />
-                <Route path="/ar/privacy" element={<PrivacyPage />} />
-                <Route path="/ar/terms" element={<TermsPage />} />
-                <Route path="/ar/sitemap" element={<SitemapPage />} />
+                {/* Arabic routes — under maintenance */}
+                <Route path="/ar" element={<ArabicMaintenancePage />} />
+                <Route path="/ar/*" element={<ArabicMaintenancePage />} />
 
                 {/* 404 catch-all — must come last */}
                 <Route path="*" element={<NotFoundPage />} />
@@ -154,7 +145,7 @@ function App() {
         </Suspense>
       </ErrorBoundary>
 
-      {!isNavbar2Preview && <StickyContactForm />}
+      {!isNavbar2Preview && !isArabicMaintenance && <StickyContactForm />}
     </div>
   );
 }
