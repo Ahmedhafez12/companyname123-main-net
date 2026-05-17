@@ -508,9 +508,9 @@ const en: Translations = {
   },
 
   homePage: {
-    seoTitle: "Hajz Telecom | Telecommunications Solutions & Connectivity",
+    seoTitle: "Hajz Telecommunications Co Ltd. | Network & Connectivity Solutions",
     seoDescription:
-      "Hajz Telecommunication Co Ltd. delivers innovative telecom solutions, enterprise connectivity, and transformative network infrastructure across the globe.",
+      "Hajz Telecommunication Co Ltd. delivers enterprise network infrastructure, system integration, command & control systems, and connectivity solutions across the globe.",
     exploreMore: "Explore More",
     telecomServices: {
       title: "Telecommunications Services",
