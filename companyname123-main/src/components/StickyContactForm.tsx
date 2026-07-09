@@ -220,7 +220,7 @@ const StickyContactForm: React.FC = () => {
                     ) : (
                       <>
                         <div className="p-0.5 me-2">
-                          <PaperPlaneTilt weight="thin" size={20} className={isRTL ? 'rtl-flip' : ''} />
+                          <PaperPlaneTilt weight="thin" size={20} style={{ transform: isRTL ? 'scaleX(-1)' : 'none', transition: 'none' }} />
                         </div>
                         {t.stickyForm.submit}
                       </>

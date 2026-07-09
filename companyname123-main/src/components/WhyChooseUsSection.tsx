@@ -88,6 +88,7 @@ const FeatureList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  width: 100%;
 `;
 
 const AccordionItem = styled(motion.div)`
@@ -145,7 +146,9 @@ const ValuePropLeftWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: clamp(1rem, 2.5vh, 2.5rem) clamp(1rem, 4vw, 3rem);
+  width: 100%;
   max-width: 42rem;
+  box-sizing: border-box;
 `;
 
 const AccordionIcon = styled(motion.div)`
@@ -223,8 +226,8 @@ export default function WhyChooseUsSection() {
   return (
     <ValuePropSection>
       <ValuePropContainer>
-        <div className="h-full flex justify-center items-center" style={{ order: 2 }}>
-          <ScrollReveal direction="up" delay={0}>
+        <div className="h-full w-full flex justify-center items-center" style={{ order: 2 }}>
+          <ScrollReveal direction="up" delay={0} className="w-full h-full flex justify-center items-center">
             <ValuePropLeftWrapper>
               <div className="flex flex-wrap items-end justify-between gap-4 mb-4">
                 <ValuePropTitle>
