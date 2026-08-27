@@ -95,7 +95,7 @@ function TechnicalAdvantagesBento({
                   {hero.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-white/80 sm:mt-3 sm:text-base lg:text-lg">
-                  A centralized system designed to monitor, manage, and control multiple devices (Surveillance Cameras, IOT Devices, Databases, AI, etc.) across a facility or a network of sites. It plays a critical role in ensuring safety, security, and operational efficiency in environments such as airports, banks, city surveillance systems, industrial plants, and commercial buildings.
+                  {hero.description}
                 </p>
               </div>
             </div>
