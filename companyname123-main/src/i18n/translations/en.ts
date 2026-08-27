@@ -858,7 +858,7 @@ const en: Translations = {
     headlineHighlight: "& Control",
     headlineSuffix: "",
     subheadline:
-      "Control Room Solution is a centralized system designed to monitor, manage, and control multiple devices (Surveillance Cameras, IOT Devices, Databases, AI, etc.) across a facility or a network of sites. It plays a critical role in ensuring safety, security, and operational efficiency in environments such as airports, banks, city surveillance systems, industrial plants, and commercial buildings.",
+      "A centralized system designed to monitor, manage, and control multiple devices (Surveillance Cameras, IOT Devices, Databases, AI, etc.) across a facility or a network of sites. It plays a critical role in ensuring safety, security, and operational efficiency in environments such as airports, banks, city surveillance systems, industrial plants, and commercial buildings.",
     heroImageAlt: "Command & Control Operations Center",
     breadcrumbs: {
       home: "Home",
