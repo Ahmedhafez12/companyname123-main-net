@@ -206,6 +206,18 @@ const en: Translations = {
     ctaText:
       "Get in touch to learn how Hajz can support your organisation's telecommunications needs.",
     ctaButton: "Contact Us",
+    statBrands: "Global Brands",
+    statSectors: "Core Sectors",
+    sectorsTitle: "A Portfolio Across",
+    sectorsHighlight: "Every Sector",
+    sectorsSubtitle:
+      "From national carriers to global banks and technology leaders — organisations that depend on communications that never fail.",
+    filterAll: "All",
+    sectors: {
+      telecom: "Telecommunications",
+      finance: "Financial Services",
+      technology: "Technology",
+    },
   },
 
   partnersPage: {
@@ -223,6 +235,12 @@ const en: Translations = {
     ctaText:
       "Get in touch to explore partnership opportunities with Hajz Telecommunication Co Ltd.",
     ctaButton: "Contact Us",
+    statPartners: "Technology Partners",
+    gridTitle: "Our Technology",
+    gridHighlight: "Alliances",
+    gridSubtitle:
+      "Best-in-class vendors we integrate, deploy and support — so you get the right technology, not just one brand.",
+    visitWebsite: "Visit website",
   },
 
   privacyPage: {
@@ -402,6 +420,9 @@ const en: Translations = {
     digitalLabel: "03 // DIGITAL",
     digitalHeading: "Digital Footprint",
     locationShort: "Riyadh, Saudi Arabia",
+    getDirections: "Get directions",
+    copy: "Copy",
+    copied: "Copied",
   },
 
   heroBanner: {
@@ -881,6 +902,10 @@ const en: Translations = {
       "Common questions about our command and control integration services.",
     industriesFooter:
       "Design systems that connect people, data, and decisions for safer, smarter operations.",
+    processTitle: "How We",
+    processHighlight: "Deliver",
+    advantagesTitle: "Why Choose",
+    advantagesHighlight: "HTC",
     technicalAdvantages: [
       {
         title: "Expertise & Experience",
@@ -958,8 +983,32 @@ const en: Translations = {
       },
     ],
     industries: [
-      { title: "Public & Infrastructure", description: "" },
-      { title: "Corporate & Enterprise", description: "" },
+      {
+        title: "Public & Infrastructure",
+        description: "",
+        items: [
+          { name: "Smart Cities", description: "Integrated urban management systems for traffic, utilities, and public safety." },
+          { name: "Defense", description: "Mission-critical command centers for defense operations and strategic planning." },
+          { name: "Transportation", description: "Traffic management and logistics control systems for efficient transportation networks." },
+          { name: "Healthcare", description: "Hospital command centers and emergency response coordination systems." },
+          { name: "Energy & Utilities", description: "Power grid monitoring and utility management for reliable energy distribution." },
+          { name: "Education", description: "Campus safety, facilities, and district-wide operations centers for schools and universities." },
+          { name: "Oil & Gas", description: "Upstream, midstream, and downstream monitoring for pipelines, plants, and field operations." },
+        ],
+      },
+      {
+        title: "Corporate & Enterprise",
+        description: "",
+        items: [
+          { name: "Banking & Finance", description: "Trading floors and financial operations centers for real-time market monitoring." },
+          { name: "Manufacturing", description: "Production control rooms and quality assurance monitoring systems." },
+          { name: "Automotive", description: "Manufacturing control centers and supply chain coordination systems." },
+          { name: "Corporate Offices", description: "Enterprise command centers for facilities management and security operations." },
+          { name: "Real Estate", description: "Property operations, smart buildings, and portfolio-wide security and facilities oversight." },
+          { name: "Retail", description: "Store networks, distribution centers, and loss-prevention operations with unified visibility." },
+          { name: "Health", description: "Life sciences, payers, and health services operations centers beyond acute-care hospital settings." },
+        ],
+      },
     ],
     processSteps: [
       {
@@ -1198,6 +1247,18 @@ const en: Translations = {
       body: "Explore our journey and see how we have shaped the telecommunications landscape.",
     },
     dragScroll: "Drag or scroll to explore",
+    labels: {
+      yearsLabel: "Years of Excellence",
+      milestonesLabel: "Industry Firsts",
+      strengthsLabel: "Core Strengths",
+      differentiatorsLabel: "Differentiators",
+      since: "Since",
+      exploreJourney: "Explore Our Journey",
+      exploreSolutions: "Explore Our Solutions",
+      previous: "Previous",
+      next: "Next",
+      milestone: "Milestone",
+    },
     companyIdentity: {
       sectionTitle: "Company Identity",
       sectionSubtitle:

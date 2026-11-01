@@ -100,6 +100,13 @@ export interface Translations {
     ctaTitle: string;
     ctaText: string;
     ctaButton: string;
+    statBrands: string;
+    statSectors: string;
+    sectorsTitle: string;
+    sectorsHighlight: string;
+    sectorsSubtitle: string;
+    filterAll: string;
+    sectors: { telecom: string; finance: string; technology: string };
   };
 
   // Partners page
@@ -115,6 +122,11 @@ export interface Translations {
     ctaTitle: string;
     ctaText: string;
     ctaButton: string;
+    statPartners: string;
+    gridTitle: string;
+    gridHighlight: string;
+    gridSubtitle: string;
+    visitWebsite: string;
   };
 
   // Privacy page
@@ -181,6 +193,9 @@ export interface Translations {
     digitalLabel: string;
     digitalHeading: string;
     locationShort: string;
+    getDirections: string;
+    copy: string;
+    copied: string;
   };
 
   // Telecommunications page
@@ -229,10 +244,18 @@ export interface Translations {
     swipeHint: string;
     faqSubtitle: string;
     industriesFooter: string;
+    processTitle: string;
+    processHighlight: string;
+    advantagesTitle: string;
+    advantagesHighlight: string;
     technicalAdvantages: { title: string; description: string }[];
     coreSolutions: { title: string; description: string }[];
     techStack: { title: string; description: string }[];
-    industries: { title: string; description: string }[];
+    industries: {
+      title: string;
+      description: string;
+      items: { name: string; description: string }[];
+    }[];
     processSteps: { title: string; description: string }[];
     faq: { question: string; answer: string }[];
   };
@@ -432,5 +455,17 @@ export interface Translations {
     };
     cta: { heading: string; body: string };
     dragScroll: string;
+    labels: {
+      yearsLabel: string;
+      milestonesLabel: string;
+      strengthsLabel: string;
+      differentiatorsLabel: string;
+      since: string;
+      exploreJourney: string;
+      exploreSolutions: string;
+      previous: string;
+      next: string;
+      milestone: string;
+    };
   };
 }

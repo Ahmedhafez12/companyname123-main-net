@@ -28,12 +28,12 @@ import {
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import ContactContent from "../components/ContactContent";
-import ScrollReveal from "../components/ScrollReveal";
 import PageSEO from "../utils/PageSEO";
 import HeroCarousel from "../components/HeroCarousel";
 import HeroScrollIndicator from "../components/HeroScrollIndicator";
 import NetworkHeroCanvas from "../components/NetworkHeroCanvas";
 import CompanyTeaserSection from "../components/CompanyTeaserSection";
+import HomeServicesShowcase from "../components/HomeServicesShowcase";
 import { useTranslation, useLocale } from "../i18n";
 
 // --- Brand Color Variables ---
@@ -545,240 +545,6 @@ const ServiceDescription = styled.p`
   }
 `;
 
-type ServicesCategory = "telecommunications" | "command-control";
-
-const ServicesGridComponent = ({
-  category,
-}: {
-  category: ServicesCategory;
-}) => {
-  const { t } = useTranslation();
-  const { localePath, isRTL } = useLocale();
-
-  const solutionsPageServices = [
-    {
-      icon: (
-        <div className="p-2">
-          <WifiHigh weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.telecomPageServices.systemIntegration.title,
-      description: t.homePage.telecomPageServices.systemIntegration.description,
-      link: localePath("/what-we-do/telecommunications#system-integration"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <Cloud weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.telecomPageServices.connectivity.title,
-      description: t.homePage.telecomPageServices.connectivity.description,
-      link: localePath(
-        "/what-we-do/telecommunications#connectivity-transmission",
-      ),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <ShareNetwork weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.telecomPageServices.unifiedCommunication.title,
-      description:
-        t.homePage.telecomPageServices.unifiedCommunication.description,
-      link: localePath("/what-we-do/telecommunications#unified-communication"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <Shield weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.telecomPageServices.accessLan.title,
-      description: t.homePage.telecomPageServices.accessLan.description,
-      link: localePath("/what-we-do/telecommunications#access-lan-osp"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <Shield weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.telecomPageServices.militaryCritical.title,
-      description: t.homePage.telecomPageServices.militaryCritical.description,
-      link: localePath(
-        "/what-we-do/telecommunications#military-critical-communication",
-      ),
-    },
-  ];
-
-  const commandControlServices = [
-    {
-      icon: (
-        <div className="p-2">
-          <Monitor weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.commandPageServices.controlRoom.title,
-      description: t.homePage.commandPageServices.controlRoom.description,
-      link: localePath("/what-we-do/command-control#tech-stack"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <Code weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.commandPageServices.software.title,
-      description: t.homePage.commandPageServices.software.description,
-      link: localePath("/what-we-do/command-control#tech-stack"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <GridFour weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.commandPageServices.videoWalls.title,
-      description: t.homePage.commandPageServices.videoWalls.description,
-      link: localePath("/what-we-do/command-control#tech-stack"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <HardDrives weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.commandPageServices.servers.title,
-      description: t.homePage.commandPageServices.servers.description,
-      link: localePath("/what-we-do/command-control#tech-stack"),
-    },
-    {
-      icon: (
-        <div className="p-2">
-          <Brain weight="bold" size={20} />
-        </div>
-      ),
-      title: t.homePage.commandPageServices.aiSoftware.title,
-      description: t.homePage.commandPageServices.aiSoftware.description,
-      link: localePath("/what-we-do/command-control#tech-stack"),
-    },
-  ];
-
-  const showTelecom = category === "telecommunications";
-
-  const headerConfig = showTelecom
-    ? {
-        title: t.homePage.telecomServices.title,
-        subtitle: t.homePage.telecomServices.subtitle,
-      }
-    : {
-        title: t.homePage.commandControlServices.title,
-        subtitle: t.homePage.commandControlServices.subtitle,
-      };
-
-  const services = showTelecom ? solutionsPageServices : commandControlServices;
-  const exploreHref = localePath(
-    showTelecom
-      ? "/what-we-do/telecommunications"
-      : "/what-we-do/command-control",
-  );
-  const exploreLabel = showTelecom
-    ? t.homePage.exploreTelecom
-    : t.homePage.exploreCommandControl;
-
-  return (
-    <>
-      <header className="text-center mb-6 sm:mb-8 md:mb-10">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white font-sans mb-2 sm:mb-3 leading-tight">
-          {headerConfig.title}
-        </h2>
-        <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto font-body px-2">
-          {headerConfig.subtitle}
-        </p>
-      </header>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 auto-rows-auto lg:auto-rows-fr">
-        {services.map((service, index) => (
-          <ServiceCardGlassWrapper
-            key={service.title}
-            to={service.link}
-            className={`group transition-all duration-300 ease-in-out hover:-translate-y-1 sm:hover:-translate-y-2 ${
-              index === 0
-                ? "sm:col-span-2 lg:col-span-2 lg:row-span-2 !bg-transparent min-h-[200px] sm:min-h-[260px] lg:min-h-0"
-                : "min-h-[120px] sm:min-h-[140px]"
-            }`}
-          >
-            {index === 0 && (
-              <>
-                <img
-                  src={
-                    showTelecom
-                      ? "/assets/Telecommunications/Telecom_tower_connecting_landscape_7cdb458686.jpeg"
-                      : "/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
-                  }
-                  alt=""
-                  aria-hidden
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 z-0 w-full h-full object-cover rounded-[inherit]"
-                />
-                <div
-                  className="absolute inset-0 z-0 rounded-[inherit] bg-primary/50"
-                  aria-hidden
-                />
-              </>
-            )}
-            <span className="absolute inset-0 z-0" aria-hidden />
-            <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full text-center min-h-0 gap-1 sm:gap-2">
-              <div
-                className={`text-cta group-hover:text-secondary transition-all duration-300 ease-in-out flex items-center justify-center flex-shrink-0 ${
-                  index === 0
-                    ? "mb-2 sm:mb-3 [&_svg]:w-10 [&_svg]:h-10 sm:[&_svg]:w-16 sm:[&_svg]:h-16 lg:[&_svg]:w-24 lg:[&_svg]:h-24"
-                    : "mb-2 [&_svg]:w-7 [&_svg]:h-7 sm:[&_svg]:w-8 sm:[&_svg]:h-8"
-                }`}
-              >
-                {service.icon}
-              </div>
-              <ServiceTitle
-                className={
-                  index === 0
-                    ? "mb-1 sm:mb-2 !text-xl sm:!text-3xl lg:!text-4xl"
-                    : "mb-1"
-                }
-              >
-                {service.title}
-              </ServiceTitle>
-              <p
-                className={`font-body text-white/80 leading-snug m-0 ${
-                  index === 0
-                    ? "text-sm sm:text-base md:text-xl lg:text-2xl line-clamp-3"
-                    : "text-xs sm:text-sm line-clamp-2"
-                }`}
-              >
-                {service.description}
-              </p>
-            </div>
-          </ServiceCardGlassWrapper>
-        ))}
-      </div>
-
-      <div className="flex justify-center w-full mt-6 sm:mt-8 md:mt-10">
-        <Link
-          to={exploreHref}
-          className="btn-primary inline-flex items-center gap-2 group text-sm sm:text-base px-5 sm:px-6 py-2.5 sm:py-3"
-        >
-          <span>{exploreLabel}</span>
-          <span className={`p-0.5 ${isRTL ? "rtl-flip" : ""}`}>
-            <ArrowRight weight="bold" size={20} />
-          </span>
-        </Link>
-      </div>
-    </>
-  );
-};
-
 const DigitalDemandsSection = styled.section`
   padding: 6rem 0;
   width: 100%;
@@ -1024,21 +790,13 @@ function HomePage() {
         {/* What We Do - Telecommunications */}
         <section id="telecommunications" className={sectionClass}>
           <DecorativeBlob className="top-1/2 -translate-y-1/2 -right-32 opacity-20" />
-          <ScrollReveal direction="up" delay={0} className="w-full">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-16 sm:py-12 md:py-16">
-              <ServicesGridComponent category="telecommunications" />
-            </div>
-          </ScrollReveal>
+          <HomeServicesShowcase category="telecommunications" />
         </section>
 
         {/* What We Do - Command & Control */}
         <section id="command-control" className={sectionClass}>
           <DecorativeBlob className="bottom-0 left-0 -translate-x-1/4 translate-y-1/4 opacity-20" />
-          <ScrollReveal direction="up" delay={0} className="w-full">
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-16 sm:py-12 md:py-16">
-              <ServicesGridComponent category="command-control" />
-            </div>
-          </ScrollReveal>
+          <HomeServicesShowcase category="command-control" reversed />
         </section>
 
         {/* Contact (last section) — Orbital snap-scroll layout */}
