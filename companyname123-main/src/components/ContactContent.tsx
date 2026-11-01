@@ -184,226 +184,8 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
     },
   ];
 
-  return (
-    <div
-      className={`w-full ${compact ? "max-w-6xl" : "max-w-6xl"} mx-auto px-4 sm:px-6 xl:px-8`}
-    >
-      {/* Heading */}
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-        custom={0}
-        className={`text-center ${compact ? "mb-8" : "mb-10"}`}
-      >
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <span
-            className="h-px w-10"
-            style={{
-              background: `linear-gradient(90deg, transparent, ${C.accent})`,
-            }}
-          />
-          <span
-            className="text-xs font-semibold tracking-[0.25em] uppercase"
-            style={{ color: C.accent, fontFamily: FONT.heading }}
-          >
-            {t.contactPage.eyebrow}
-          </span>
-          <span
-            className="h-px w-10"
-            style={{
-              background: `linear-gradient(90deg, ${C.accent}, transparent)`,
-            }}
-          />
-        </div>
-        <h2
-          className="text-white font-bold"
-          style={{
-            fontFamily: FONT.heading,
-            fontSize: compact
-              ? "clamp(1.5rem, 4vw, 2.25rem)"
-              : "clamp(2rem, 5vw, 3rem)",
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {t.contactPage.headline}
-          <span
-            className="text-transparent bg-clip-text"
-            style={{
-              backgroundImage: `linear-gradient(135deg, ${C.cta}, ${C.accent}, ${C.secondary})`,
-            }}
-          >
-            {t.contactPage.headlineHighlight}
-          </span>
-        </h2>
-        <p
-          className="max-w-lg mx-auto mt-3"
-          style={{
-            color: "rgba(255,255,255,0.5)",
-            fontFamily: FONT.body,
-            fontSize: "clamp(0.85rem, 1.3vw, 1rem)",
-            lineHeight: 1.7,
-          }}
-        >
-          {t.contactPage.subtitle}
-        </p>
-      </motion.div>
-
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-6 lg:gap-10 items-start">
-        {/* Left: Contact Info */}
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="flex flex-col gap-4"
-        >
-          {contactCards.map((card) => (
-            <motion.div key={card.label} variants={fadeUp}>
-              {card.href ? (
-                <a
-                  href={card.href}
-                  className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-4 sm:p-5 transition-all duration-400 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,94,150,0.2)]"
-                >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-                      style={{
-                        background: `${card.accent}15`,
-                        color: card.accent,
-                      }}
-                    >
-                      {card.icon}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span
-                        className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1"
-                        style={{ fontFamily: FONT.heading }}
-                      >
-                        {card.label}
-                      </span>
-                      <span
-                        dir={card.valueDir}
-                        className="text-white font-medium transition-colors duration-300 group-hover:text-[#7CCCBF]"
-                        style={{
-                          fontFamily: FONT.body,
-                          fontSize: "clamp(0.85rem, 1.2vw, 0.95rem)",
-                        }}
-                      >
-                        {card.value}
-                      </span>
-                    </div>
-                    <ArrowRight
-                      weight="bold"
-                      size={14}
-                      className={`text-white/20 mt-1 transition-all duration-300 group-hover:text-white/50 ${isRTL ? "group-hover:-translate-x-1 rtl-flip" : "group-hover:translate-x-1"}`}
-                    />
-                  </div>
-                </a>
-              ) : (
-                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-4 sm:p-5">
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
-                      style={{
-                        background: `${card.accent}15`,
-                        color: card.accent,
-                      }}
-                    >
-                      {card.icon}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span
-                        className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1"
-                        style={{ fontFamily: FONT.heading }}
-                      >
-                        {card.label}
-                      </span>
-                      <span
-                        dir={card.valueDir}
-                        className="text-white font-medium"
-                        style={{
-                          fontFamily: FONT.body,
-                          fontSize: "clamp(0.85rem, 1.2vw, 0.95rem)",
-                        }}
-                      >
-                        {card.value}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          ))}
-
-        </motion.div>
-
-        {/* Right: Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.7,
-            delay: 0.15,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-        >
-          <div
-            className="relative rounded-3xl overflow-hidden"
-            style={{
-              background: `linear-gradient(145deg, rgba(0,94,150,0.18) 0%, rgba(0,44,61,0.35) 50%, rgba(124,204,191,0.06) 100%)`,
-              boxShadow: `
-                0 1px 0 0 rgba(255,255,255,0.05) inset,
-                0 32px 64px -16px rgba(0,0,0,0.35),
-                0 0 80px -20px ${C.primary}25
-              `,
-            }}
-          >
-            {/* Top accent line */}
-            <div
-              className="h-[2px] w-full"
-              style={{
-                background: `linear-gradient(90deg, transparent 5%, ${C.cta} 30%, ${C.accent} 50%, ${C.secondary} 70%, transparent 95%)`,
-              }}
-            />
-
-            {/* Glass border */}
-            <div
-              className="absolute inset-0 rounded-3xl pointer-events-none"
-              style={{ border: "1px solid rgba(255,255,255,0.07)" }}
-            />
-
-            <div
-              className={`relative ${compact ? "p-5 sm:p-6 lg:p-8" : "p-6 sm:p-8 lg:p-10"}`}
-            >
-              {/* Form header */}
-              <div className={compact ? "mb-5" : "mb-8"}>
-                <h3
-                  className="text-white font-semibold mb-1"
-                  style={{
-                    fontFamily: FONT.heading,
-                    fontSize: compact
-                      ? "clamp(1rem, 1.8vw, 1.2rem)"
-                      : "clamp(1.125rem, 2vw, 1.375rem)",
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {t.contactPage.formTitle}
-                </h3>
-                <p
-                  className="text-white/35"
-                  style={{ fontFamily: FONT.body, fontSize: "0.8125rem" }}
-                >
-                  {t.contactPage.subtitle}
-                </p>
-              </div>
-
-              {/* Success state */}
-              {submitStatus === "success" ? (
+  const formBody =
+    submitStatus === "success" ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -657,7 +439,8 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                           <PaperPlaneTilt
                             weight="bold"
                             size={16}
-                            className={`transition-transform duration-300 ${isRTL ? "group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 rtl-flip" : "group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}`}
+                            style={isRTL ? { transform: 'scaleX(-1)', transition: 'none' } : undefined}
+                            className={isRTL ? "group-hover:-translate-x-0.5 group-hover:-translate-y-0.5" : "transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"}
                           />
                         </>
                       )}
@@ -678,7 +461,456 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
                     {t.contactPage.privacyNote}
                   </p>
                 </form>
+              );
+
+  if (compact) {
+    const promiseIcons = [Shield, Clock, Headset];
+    return (
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 xl:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="relative grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] rounded-[2rem] overflow-hidden"
+          style={{
+            background: "rgba(0,44,61,0.55)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            boxShadow: `0 48px 96px -32px rgba(0,0,0,0.55), 0 0 120px -40px ${C.secondary}40`,
+          }}
+        >
+          {/* ── Info pane ── */}
+          <div
+            className="relative overflow-hidden p-7 sm:p-9 lg:p-11"
+            style={{
+              background: `linear-gradient(160deg, ${C.primary} 0%, #00466F 48%, ${C.bg} 100%)`,
+            }}
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none opacity-20"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(255,255,255,0.55) 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+                maskImage: "linear-gradient(180deg, #000 0%, transparent 70%)",
+                WebkitMaskImage:
+                  "linear-gradient(180deg, #000 0%, transparent 70%)",
+              }}
+            />
+            <div
+              aria-hidden
+              className="absolute -top-28 -end-24 w-72 h-72 rounded-full blur-3xl opacity-40 pointer-events-none"
+              style={{ background: C.secondary }}
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-36 -start-24 w-80 h-80 rounded-full blur-3xl opacity-20 pointer-events-none"
+              style={{ background: C.cta }}
+            />
+
+            <div className="relative flex flex-col h-full">
+              <div className="flex items-center gap-3 mb-5">
+                <span
+                  className="h-px w-10"
+                  style={{
+                    background: `linear-gradient(${isRTL ? "270deg" : "90deg"}, ${C.cta}, transparent)`,
+                  }}
+                />
+                <span
+                  className="text-[11px] sm:text-xs font-semibold tracking-[0.25em] uppercase"
+                  style={{ color: C.accent, fontFamily: FONT.heading }}
+                >
+                  {t.contactPage.eyebrow}
+                </span>
+              </div>
+
+              <h2
+                className="text-white font-bold"
+                style={{
+                  fontFamily: FONT.heading,
+                  fontSize: "clamp(2.25rem, 4.2vw, 3.5rem)",
+                  lineHeight: 1.05,
+                  letterSpacing: "-0.025em",
+                }}
+              >
+                {t.contactPage.headline}
+                <span
+                  className="text-transparent bg-clip-text"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, ${C.cta}, ${C.accent}, ${C.secondary})`,
+                  }}
+                >
+                  {t.contactPage.headlineHighlight}
+                </span>
+              </h2>
+              <p
+                className="mt-4 max-w-sm text-white/65"
+                style={{
+                  fontFamily: FONT.body,
+                  fontSize: "clamp(0.9rem, 1.2vw, 1rem)",
+                  lineHeight: 1.7,
+                }}
+              >
+                {t.contactPage.reachUsBody}
+              </p>
+
+              {/* Channels */}
+              <motion.ul
+                variants={stagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                className="mt-7 lg:mt-8 border-t border-white/10"
+              >
+                {contactCards.map((card) => {
+                  const inner = (
+                    <>
+                      <span
+                        className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                        style={{
+                          background: `${card.accent}1A`,
+                          color: card.accent,
+                          border: `1px solid ${card.accent}33`,
+                        }}
+                      >
+                        {card.icon}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span
+                          className="block text-white/45 text-[11px] font-medium uppercase tracking-[0.18em] mb-0.5"
+                          style={{ fontFamily: FONT.heading }}
+                        >
+                          {card.label}
+                        </span>
+                        <span
+                          dir={card.valueDir}
+                          className="block text-white font-medium transition-colors duration-300 group-hover:text-[#A6CE39]"
+                          style={{
+                            fontFamily: FONT.body,
+                            fontSize: "clamp(0.875rem, 1.15vw, 0.975rem)",
+                            lineHeight: 1.45,
+                          }}
+                        >
+                          {card.value}
+                        </span>
+                      </span>
+                      {card.href && (
+                        <span
+                          className={`flex-shrink-0 text-white/25 transition-all duration-300 group-hover:text-white/70 ${isRTL ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}
+                        >
+                          <span className={`inline-flex ${isRTL ? "rtl-flip" : ""}`}>
+                            <ArrowRight weight="bold" size={16} />
+                          </span>
+                        </span>
+                      )}
+                    </>
+                  );
+                  return (
+                    <motion.li
+                      key={card.label}
+                      variants={fadeUp}
+                      className="border-b border-white/10"
+                    >
+                      {card.href ? (
+                        <a
+                          href={card.href}
+                          className="group flex items-center gap-4 px-0 py-4 focus:outline-none focus-visible:bg-white/[0.04]"
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        <div className="flex items-center gap-4 py-4">
+                          {inner}
+                        </div>
+                      )}
+                    </motion.li>
+                  );
+                })}
+              </motion.ul>
+
+              {/* Promises */}
+              <div className="mt-7 lg:mt-auto lg:pt-8 flex flex-wrap gap-2">
+                {t.contactPage.promises.map((promise, i) => {
+                  const Icon = promiseIcons[i] ?? Shield;
+                  return (
+                    <span
+                      key={promise.title}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.14] bg-white/[0.06] px-3 py-1.5 text-white/80 text-xs"
+                      style={{ fontFamily: FONT.body }}
+                    >
+                      <Icon weight="duotone" size={14} style={{ color: C.cta }} />
+                      {promise.title}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Form pane ── */}
+          <div className="relative p-7 sm:p-9 lg:p-11">
+            <div
+              aria-hidden
+              className="absolute top-0 inset-x-0 h-[2px]"
+              style={{
+                background: `linear-gradient(90deg, transparent 5%, ${C.cta} 30%, ${C.accent} 50%, ${C.secondary} 70%, transparent 95%)`,
+              }}
+            />
+            <div className="mb-6">
+              <h3
+                className="text-white font-semibold"
+                style={{
+                  fontFamily: FONT.heading,
+                  fontSize: "clamp(1.125rem, 1.8vw, 1.375rem)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {t.contactPage.formTitle}
+              </h3>
+              <p
+                className="mt-1 text-white/45 flex items-center gap-1.5"
+                style={{ fontFamily: FONT.body, fontSize: "0.8125rem" }}
+              >
+                <Clock weight="bold" size={13} style={{ color: C.accent }} />
+                {t.contactPage.promises[1]?.text}
+              </p>
+            </div>
+            {formBody}
+          </div>
+
+          {/* Glass border */}
+          <div
+            aria-hidden
+            className="absolute inset-0 rounded-[2rem] pointer-events-none"
+            style={{ border: "1px solid rgba(255,255,255,0.08)" }}
+          />
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-full ${compact ? "max-w-6xl" : "max-w-6xl"} mx-auto px-4 sm:px-6 xl:px-8`}
+    >
+      {/* Heading */}
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        custom={0}
+        className={`text-center ${compact ? "mb-8" : "mb-10"}`}
+      >
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <span
+            className="h-px w-10"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${C.accent})`,
+            }}
+          />
+          <span
+            className="text-xs font-semibold tracking-[0.25em] uppercase"
+            style={{ color: C.accent, fontFamily: FONT.heading }}
+          >
+            {t.contactPage.eyebrow}
+          </span>
+          <span
+            className="h-px w-10"
+            style={{
+              background: `linear-gradient(90deg, ${C.accent}, transparent)`,
+            }}
+          />
+        </div>
+        <h2
+          className="text-white font-bold"
+          style={{
+            fontFamily: FONT.heading,
+            fontSize: compact
+              ? "clamp(1.5rem, 4vw, 2.25rem)"
+              : "clamp(2rem, 5vw, 3rem)",
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {t.contactPage.headline}
+          <span
+            className="text-transparent bg-clip-text"
+            style={{
+              backgroundImage: `linear-gradient(135deg, ${C.cta}, ${C.accent}, ${C.secondary})`,
+            }}
+          >
+            {t.contactPage.headlineHighlight}
+          </span>
+        </h2>
+        <p
+          className="max-w-lg mx-auto mt-3"
+          style={{
+            color: "rgba(255,255,255,0.5)",
+            fontFamily: FONT.body,
+            fontSize: "clamp(0.85rem, 1.3vw, 1rem)",
+            lineHeight: 1.7,
+          }}
+        >
+          {t.contactPage.subtitle}
+        </p>
+      </motion.div>
+
+      {/* Two-column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-6 lg:gap-10 items-start">
+        {/* Left: Contact Info */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="flex flex-col gap-4"
+        >
+          {contactCards.map((card) => (
+            <motion.div key={card.label} variants={fadeUp}>
+              {card.href ? (
+                <a
+                  href={card.href}
+                  className="group block rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-4 sm:p-5 transition-all duration-400 hover:border-white/[0.15] hover:bg-white/[0.05] hover:shadow-[0_8px_40px_rgba(0,94,150,0.2)]"
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      style={{
+                        background: `${card.accent}15`,
+                        color: card.accent,
+                      }}
+                    >
+                      {card.icon}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1"
+                        style={{ fontFamily: FONT.heading }}
+                      >
+                        {card.label}
+                      </span>
+                      <span
+                        dir={card.valueDir}
+                        className="text-white font-medium transition-colors duration-300 group-hover:text-[#7CCCBF]"
+                        style={{
+                          fontFamily: FONT.body,
+                          fontSize: "clamp(0.85rem, 1.2vw, 0.95rem)",
+                        }}
+                      >
+                        {card.value}
+                      </span>
+                    </div>
+                    <ArrowRight
+                      weight="bold"
+                      size={14}
+                      style={isRTL ? { transform: 'scaleX(-1)', transition: 'none' } : undefined}
+                      className={`text-white/20 mt-1 transition-colors duration-300 group-hover:text-white/50 ${isRTL ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}
+                    />
+                  </div>
+                </a>
+              ) : (
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm p-4 sm:p-5">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+                      style={{
+                        background: `${card.accent}15`,
+                        color: card.accent,
+                      }}
+                    >
+                      {card.icon}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className="block text-white/40 text-xs font-medium uppercase tracking-[0.15em] mb-1"
+                        style={{ fontFamily: FONT.heading }}
+                      >
+                        {card.label}
+                      </span>
+                      <span
+                        dir={card.valueDir}
+                        className="text-white font-medium"
+                        style={{
+                          fontFamily: FONT.body,
+                          fontSize: "clamp(0.85rem, 1.2vw, 0.95rem)",
+                        }}
+                      >
+                        {card.value}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               )}
+            </motion.div>
+          ))}
+
+        </motion.div>
+
+        {/* Right: Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 24, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.7,
+            delay: 0.15,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          <div
+            className="relative rounded-3xl overflow-hidden"
+            style={{
+              background: `linear-gradient(145deg, rgba(0,94,150,0.18) 0%, rgba(0,44,61,0.35) 50%, rgba(124,204,191,0.06) 100%)`,
+              boxShadow: `
+                0 1px 0 0 rgba(255,255,255,0.05) inset,
+                0 32px 64px -16px rgba(0,0,0,0.35),
+                0 0 80px -20px ${C.primary}25
+              `,
+            }}
+          >
+            {/* Top accent line */}
+            <div
+              className="h-[2px] w-full"
+              style={{
+                background: `linear-gradient(90deg, transparent 5%, ${C.cta} 30%, ${C.accent} 50%, ${C.secondary} 70%, transparent 95%)`,
+              }}
+            />
+
+            {/* Glass border */}
+            <div
+              className="absolute inset-0 rounded-3xl pointer-events-none"
+              style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+            />
+
+            <div
+              className={`relative ${compact ? "p-5 sm:p-6 lg:p-8" : "p-6 sm:p-8 lg:p-10"}`}
+            >
+              {/* Form header */}
+              <div className={compact ? "mb-5" : "mb-8"}>
+                <h3
+                  className="text-white font-semibold mb-1"
+                  style={{
+                    fontFamily: FONT.heading,
+                    fontSize: compact
+                      ? "clamp(1rem, 1.8vw, 1.2rem)"
+                      : "clamp(1.125rem, 2vw, 1.375rem)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {t.contactPage.formTitle}
+                </h3>
+                <p
+                  className="text-white/35"
+                  style={{ fontFamily: FONT.body, fontSize: "0.8125rem" }}
+                >
+                  {t.contactPage.subtitle}
+                </p>
+              </div>
+
+              {formBody}
             </div>
           </div>
         </motion.div>

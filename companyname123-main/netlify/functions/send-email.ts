@@ -11,8 +11,13 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export async function handler(event: { httpMethod: string; body: string | null }) {
-  console.log(`[send-email] ${event.httpMethod} request received, RESEND_API_KEY=${process.env.RESEND_API_KEY ? "set" : "MISSING"}`);
+export async function handler(event: {
+  httpMethod: string;
+  body: string | null;
+}) {
+  console.log(
+    `[send-email] ${event.httpMethod} request received, RESEND_API_KEY=${process.env.RESEND_API_KEY ? "set" : "MISSING"}`,
+  );
 
   // Handle CORS preflight
   if (event.httpMethod === "OPTIONS") {
@@ -20,23 +25,39 @@ export async function handler(event: { httpMethod: string; body: string | null }
   }
 
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
+    return {
+      statusCode: 405,
+      headers,
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
   }
 
   try {
     const { name, email, subject, message } = JSON.parse(event.body || "{}");
 
     if (!name || !email || !subject || !message) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: "Missing required fields" }) };
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Missing required fields" }),
+      };
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid email address" }) };
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({ error: "Invalid email address" }),
+      };
     }
 
     const esc = (s: string) =>
-      s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      s
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
 
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
@@ -72,10 +93,18 @@ export async function handler(event: { httpMethod: string; body: string | null }
 
     if (error) {
       console.error("[send-email] Resend API error:", JSON.stringify(error));
-      return { statusCode: 500, headers, body: JSON.stringify({ error: error.message || "Failed to send email" }) };
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: error.message || "Failed to send email",
+        }),
+      };
     }
 
-    console.log(`[send-email] ✓ Sent to ${TO_EMAIL} from ${FROM_EMAIL}, id=${data?.id}`);
+    console.log(
+      `[send-email] ✓ Sent to ${TO_EMAIL} from ${FROM_EMAIL}, id=${data?.id}`,
+    );
     return {
       statusCode: 200,
       headers,
@@ -83,6 +112,10 @@ export async function handler(event: { httpMethod: string; body: string | null }
     };
   } catch (err) {
     console.error("Function error:", err);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Internal server error" }) };
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: "Internal server error" }),
+    };
   }
 }

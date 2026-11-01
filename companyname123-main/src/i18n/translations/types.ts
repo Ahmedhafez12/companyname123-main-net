@@ -432,5 +432,17 @@ export interface Translations {
     };
     cta: { heading: string; body: string };
     dragScroll: string;
+    labels: {
+      yearsLabel: string;
+      milestonesLabel: string;
+      strengthsLabel: string;
+      differentiatorsLabel: string;
+      since: string;
+      exploreJourney: string;
+      exploreSolutions: string;
+      previous: string;
+      next: string;
+      milestone: string;
+    };
   };
 }
