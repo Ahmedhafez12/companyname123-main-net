@@ -206,6 +206,18 @@ const en: Translations = {
     ctaText:
       "Get in touch to learn how Hajz can support your organisation's telecommunications needs.",
     ctaButton: "Contact Us",
+    statBrands: "Global Brands",
+    statSectors: "Core Sectors",
+    sectorsTitle: "A Portfolio Across",
+    sectorsHighlight: "Every Sector",
+    sectorsSubtitle:
+      "From national carriers to global banks and technology leaders — organisations that depend on communications that never fail.",
+    filterAll: "All",
+    sectors: {
+      telecom: "Telecommunications",
+      finance: "Financial Services",
+      technology: "Technology",
+    },
   },
 
   partnersPage: {
@@ -223,6 +235,12 @@ const en: Translations = {
     ctaText:
       "Get in touch to explore partnership opportunities with Hajz Telecommunication Co Ltd.",
     ctaButton: "Contact Us",
+    statPartners: "Technology Partners",
+    gridTitle: "Our Technology",
+    gridHighlight: "Alliances",
+    gridSubtitle:
+      "Best-in-class vendors we integrate, deploy and support — so you get the right technology, not just one brand.",
+    visitWebsite: "Visit website",
   },
 
   privacyPage: {
@@ -402,6 +420,9 @@ const en: Translations = {
     digitalLabel: "03 // DIGITAL",
     digitalHeading: "Digital Footprint",
     locationShort: "Riyadh, Saudi Arabia",
+    getDirections: "Get directions",
+    copy: "Copy",
+    copied: "Copied",
   },
 
   heroBanner: {
@@ -881,6 +902,10 @@ const en: Translations = {
       "Common questions about our command and control integration services.",
     industriesFooter:
       "Design systems that connect people, data, and decisions for safer, smarter operations.",
+    processTitle: "How We",
+    processHighlight: "Deliver",
+    advantagesTitle: "Why Choose",
+    advantagesHighlight: "HTC",
     technicalAdvantages: [
       {
         title: "Expertise & Experience",

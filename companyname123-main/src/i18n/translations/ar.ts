@@ -200,6 +200,18 @@ const ar: Translations = {
     ctaTitle: "مهتم بالعمل معنا؟",
     ctaText: "تواصل معنا لمعرفة كيف يمكن لحجز دعم احتياجات الاتصالات لمؤسستك.",
     ctaButton: "تواصل معنا",
+    statBrands: "علامة عالمية",
+    statSectors: "قطاعات رئيسية",
+    sectorsTitle: "محفظة عملاء تشمل",
+    sectorsHighlight: "كل القطاعات",
+    sectorsSubtitle:
+      "من مشغّلي الاتصالات الوطنيين إلى البنوك العالمية وروّاد التقنية — مؤسسات تعتمد على اتصالات لا تتوقف.",
+    filterAll: "الكل",
+    sectors: {
+      telecom: "الاتصالات",
+      finance: "الخدمات المالية",
+      technology: "التقنية",
+    },
   },
 
   partnersPage: {
@@ -216,6 +228,12 @@ const ar: Translations = {
     ctaTitle: "مهتم بأن تصبح شريكاً؟",
     ctaText: "تواصل معنا لاستكشاف فرص الشراكة مع شركة حجز للاتصالات المحدودة.",
     ctaButton: "تواصل معنا",
+    statPartners: "شركاء تقنيون",
+    gridTitle: "تحالفاتنا",
+    gridHighlight: "التقنية",
+    gridSubtitle:
+      "نخبة من المورّدين الذين ندمج حلولهم وننشرها وندعمها — لتحصل على التقنية الأنسب لا على علامة واحدة فقط.",
+    visitWebsite: "زيارة الموقع",
   },
 
   privacyPage: {
@@ -385,6 +403,9 @@ const ar: Translations = {
     digitalLabel: "٠٣ // الرقمي",
     digitalHeading: "البصمة الرقمية",
     locationShort: "الرياض، المملكة العربية السعودية",
+    getDirections: "احصل على الاتجاهات",
+    copy: "نسخ",
+    copied: "تم النسخ",
   },
 
   heroBanner: {
@@ -841,6 +862,10 @@ const ar: Translations = {
     faqSubtitle: "أسئلة شائعة حول خدمات القيادة والتحكم وقدرات التكامل لدينا.",
     industriesFooter:
       "نصمم أنظمة تربط الناس والبيانات والقرارات لعمليات أكثر أماناً وذكاءً.",
+    processTitle: "كيف",
+    processHighlight: "ننفّذ",
+    advantagesTitle: "لماذا تختار",
+    advantagesHighlight: "HTC",
     technicalAdvantages: [
       {
         title: "الخبرة والتجربة",

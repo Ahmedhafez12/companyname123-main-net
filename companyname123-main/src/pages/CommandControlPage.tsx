@@ -1,976 +1,543 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
+import {
+  Armchair,
+  Bank,
+  Brain,
+  Briefcase,
+  Buildings,
+  Car,
+  CloudArrowUp,
+  ChartBar,
+  Code,
+  Cpu,
+  Drop,
+  Factory,
+  Gear,
+  Globe,
+  GraduationCap,
+  GridFour,
+  HardDrives,
+  Heartbeat,
+  HouseLine,
+  Lifebuoy,
+  Lightning,
+  MonitorPlay,
+  PencilSimple,
+  Quotes,
+  Rocket,
+  ShieldCheck,
+  ShieldStar,
+  Sliders,
+  SlidersHorizontal,
+  Storefront,
+  Train,
+  TrendDown,
+} from 'phosphor-react';
 import PageSEO from '../utils/PageSEO';
-import Breadcrumbs from '../components/Breadcrumbs';
 import FAQSection from '../components/FAQSection';
-import { motion, useInView } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import Footer from '../components/Footer';
 import { useTranslation, useLocale } from '../i18n';
 import {
-  CaretDown,
-  PencilSimple,
-  Rocket,
-  Gear,
-  Sliders,
-  TrendDown,
-  Globe,
-  SlidersHorizontal,
-  ShieldCheck,
-  Cpu,
-  Lifebuoy,
-  type IconProps,
-} from 'phosphor-react';
-import Footer from '../components/Footer';
+  C,
+  CtaBand,
+  EASE,
+  GradientText,
+  SectionHeader,
+  SolutionHero,
+  pad,
+  reveal,
+  useHashScroll,
+} from '../components/solutions/SolutionKit';
 
-// ─── Technical Advantages Bento ───────────────────────────────────────────────
-const TECHNICAL_ADVANTAGES_ICONS = [Globe, SlidersHorizontal, ShieldCheck, Cpu, Lifebuoy];
+const CC = '/assets/CommandandControl/';
+const TEL = '/assets/Telecommunications/';
+const MODERN = 'Modern_premium_corporate_photography_for_a_network_';
 
-function TechnicalAdvantagesIcon({
-  index,
-  size,
-  className,
-}: {
-  index: number;
-  size: number;
-  className?: string;
-}) {
-  const Cmp = TECHNICAL_ADVANTAGES_ICONS[index];
-  if (!Cmp) return null;
-  return <Cmp weight="duotone" size={size} className={className} aria-hidden />;
-}
+const HERO_IMAGE = `${CC}Control_room_with_screens_9c4c709e86.jpeg`;
+const CTA_IMAGE = `${CC}${MODERN}c4c5289792.jpeg`;
 
-type TechnicalAdvantageEntry = {
-  readonly title: string;
-  readonly description: string;
-  readonly accent?: string;
-  readonly highlight?: boolean;
-};
+const SOLUTION_VISUALS = [
+  { icon: Armchair, image: `${CC}${MODERN}30f0a44d43.jpeg` },
+  { icon: Code, image: `${CC}${MODERN}9802d7d127.jpeg` },
+  { icon: GridFour, image: `${CC}${MODERN}42589d16b5.jpeg` },
+  { icon: HardDrives, image: `${CC}${MODERN}3fbc7ceb1d.jpeg` },
+  { icon: Brain, image: `${CC}${MODERN}db5915e486.jpeg` },
+];
 
-function TechnicalAdvantagesBento({
-  items,
-  title,
-  highlight,
-}: {
-  items: readonly TechnicalAdvantageEntry[];
-  title: string;
-  highlight: string;
-}) {
-  const [hero, ...rest] = items;
-  if (!hero) return null;
+const PROCESS_ICONS = [PencilSimple, Rocket, Gear, Sliders, TrendDown];
+const ADVANTAGE_ICONS = [Globe, SlidersHorizontal, ShieldCheck, Cpu, Lifebuoy];
+const ADVANTAGE_IMAGE = `${CC}Leadership_team_reviewing_map_5bf849bbcf.jpeg`;
 
-  const cardBase =
-    'rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/20';
+const TECH_VISUALS = [
+  { icon: CloudArrowUp, image: `${CC}${MODERN}0375503d93.jpeg` },
+  { icon: ChartBar, image: `${CC}${MODERN}84801237b1.jpeg` },
+  { icon: HardDrives, image: `${TEL}Network_company_server_corridor_a386952677.jpeg` },
+  { icon: MonitorPlay, image: `${CC}${MODERN}b715a93b98.jpeg` },
+];
+
+const INDUSTRY_GROUPS = [
+  { image: `${CC}${MODERN}726d6a0985.jpeg`, icons: [Buildings, ShieldStar, Train, Heartbeat, Lightning, GraduationCap, Drop] },
+  { image: `${CC}${MODERN}f1c5ecea36.jpeg`, icons: [Bank, Factory, Car, Briefcase, HouseLine, Storefront, Heartbeat] },
+];
+
+const AUTOPLAY_MS = 7000;
+
+// ── 01 Core solutions (tabbed showcase) ──────────────────────
+
+function CoreSolutions() {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
+  const cp = t.commandControlPage;
+  const items = cp.coreSolutions.map((s, i) => ({ ...s, ...(SOLUTION_VISUALS[i] ?? SOLUTION_VISUALS[0]) }));
+
+  const rootRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(rootRef, { amount: 0.35 });
+  const reduceMotion = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const playing = inView && !paused && !reduceMotion;
+
+  useEffect(() => {
+    if (!playing) return;
+    const id = setTimeout(() => setActive((i) => (i + 1) % items.length), AUTOPLAY_MS);
+    return () => clearTimeout(id);
+  }, [playing, active, items.length]);
+
+  const current = items[active];
+  const CurrentIcon = current.icon;
 
   return (
-    <section className="relative overflow-hidden py-10 sm:py-16 lg:py-24">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(68,200,245,0.18),transparent_55%),radial-gradient(ellipse_70%_50%_at_100%_50%,rgba(0,94,150,0.22),transparent_50%),radial-gradient(ellipse_60%_45%_at_0%_80%,rgba(166,206,57,0.08),transparent_45%)]"
-        aria-hidden
-      />
+    <section id="core-solutions" className="relative py-20 md:py-28 scroll-mt-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader index="01" eyebrow={cp.badge} lead={cp.coreSolutionsTitle} highlight={cp.coreSolutionsHighlight} subtitle={cp.coreSolutionsSubtitle} />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 xl:px-8">
-        <div className="mb-6 text-center sm:mb-8 lg:mb-10">
-          <h2 className="mb-2 text-xl font-bold text-white sm:text-3xl lg:text-4xl">
-            {title}{' '}
-            <span className="bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5] bg-clip-text text-transparent">
-              {highlight}
-            </span>
-          </h2>
-        </div>
+        <div
+          ref={rootRef}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          {/* Tabs */}
+          <motion.div {...reveal(0.05)} role="tablist" aria-orientation="vertical" className="lg:col-span-4 flex flex-col gap-2">
+            {items.map((item, i) => {
+              const Icon = item.icon;
+              const isActive = i === active;
+              return (
+                <button
+                  key={item.title}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActive(i)}
+                  onFocus={() => setActive(i)}
+                  className={`group relative overflow-hidden flex items-center gap-4 rounded-2xl px-5 py-4 min-h-0 text-start border transition-all duration-300 ${
+                    isActive ? 'border-white/20 bg-white/[0.09]' : 'border-transparent hover:bg-white/[0.05]'
+                  }`}
+                >
+                  <span
+                    className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300"
+                    style={{
+                      background: isActive ? C.cta : 'rgba(255,255,255,0.06)',
+                      color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
+                    }}
+                  >
+                    <Icon weight="duotone" size={22} />
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block font-sans text-[11px] font-semibold tabular-nums tracking-[0.15em]" style={{ color: isActive ? C.cta : 'rgba(255,255,255,0.4)' }}>
+                      {pad(i + 1)}
+                    </span>
+                    <span className={`block font-sans font-semibold text-base lg:text-lg leading-snug transition-colors ${isActive ? 'text-white' : 'text-white/65 group-hover:text-white/90'}`}>
+                      {item.title}
+                    </span>
+                  </span>
+                  {isActive && (
+                    <span className="absolute bottom-0 inset-x-0 h-[2px] bg-white/10">
+                      <motion.span
+                        key={`${active}-${playing}`}
+                        className={`absolute inset-0 ${isRTL ? 'origin-right' : 'origin-left'}`}
+                        style={{ background: `linear-gradient(90deg, ${C.secondary}, ${C.cta})` }}
+                        initial={{ scaleX: playing ? 0 : 1 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: playing ? AUTOPLAY_MS / 1000 : 0, ease: 'linear' }}
+                      />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </motion.div>
 
-        <div className="flex flex-col gap-3 sm:gap-5 lg:gap-6">
-          {/* Hero card — featured first item */}
-          <div
-            className={[
-              cardBase,
-              'p-5 sm:p-8 lg:p-10',
-              hero.highlight ? 'ring-2 ring-[#A6CE39]/30' : '',
-            ].join(' ')}
+          {/* Panel */}
+          <motion.div
+            {...reveal(0.12)}
+            role="tabpanel"
+            className="lg:col-span-8 relative overflow-hidden rounded-[2rem] min-h-[460px] lg:min-h-0 lg:h-[min(66vh,580px)]"
+            style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
           >
-            <div className="flex flex-row gap-4 items-start md:items-center md:gap-8">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cta sm:h-14 sm:w-14 md:h-16 md:w-16">
-                <TechnicalAdvantagesIcon index={0} size={28} className="text-cta" />
-              </div>
-              <div className="min-w-0 flex-1 text-left">
-                <h3 className="text-base font-bold text-white sm:text-2xl lg:text-3xl">
-                  {hero.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/80 sm:mt-3 sm:text-base lg:text-lg">
-                  {hero.description}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bento grid — 1 col mobile → 2 tablet → 4 desktop */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-            {rest.map((item, restIdx) => (
-              <article
-                key={item.title}
-                className={[
-                  cardBase,
-                  'flex h-full flex-col p-4 sm:p-5 lg:p-6',
-                  item.highlight ? 'ring-2 ring-[#A6CE39]/30' : '',
-                ].join(' ')}
-              >
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-cta sm:h-11 sm:w-11">
-                  <TechnicalAdvantagesIcon index={restIdx + 1} size={20} className="text-cta" />
-                </div>
-                <h4 className="text-sm font-bold text-white sm:text-base lg:text-lg">{item.title}</h4>
-                <p className="mt-2 flex-1 text-xs leading-relaxed text-white/75 sm:text-sm lg:text-base">
-                  {item.description}
-                </p>
-              </article>
+            {items.map((item, i) => (
+              <motion.img
+                key={item.image}
+                src={item.image}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={false}
+                animate={{ opacity: i === active ? 1 : 0, scale: i === active && !reduceMotion ? 1.06 : 1 }}
+                transition={{ opacity: { duration: 0.8 }, scale: { duration: i === active ? AUTOPLAY_MS / 1000 : 0.8, ease: 'linear' } }}
+              />
             ))}
-          </div>
+            <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${C.bg}33 0%, transparent 30%, ${C.bg}E6 72%, ${C.bg} 100%)` }} />
+            <div className="absolute inset-0 rounded-[2rem] border border-white/10 pointer-events-none" />
+
+            <div className="absolute bottom-0 inset-x-0 p-6 sm:p-8 lg:p-10">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5, ease: EASE }}
+                >
+                  <span className="inline-flex w-12 h-12 rounded-2xl items-center justify-center mb-4 border border-white/15 bg-black/25 backdrop-blur-md" style={{ color: C.cta }}>
+                    <CurrentIcon weight="duotone" size={24} />
+                  </span>
+                  <h3 className="font-sans font-bold text-white mb-3" style={{ fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)', lineHeight: 1.1 }}>
+                    {current.title}
+                  </h3>
+                  <p className="font-body text-white/80 text-sm sm:text-base leading-relaxed max-w-2xl">{current.description}</p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
 }
 
-// ─── Animation Variants ────────────────────────────────────────────────────────
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+// ── 02 Process ───────────────────────────────────────────────
 
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-};
-
-// ─── Feature Card (Core Pillars) ───────────────────────────────────────────────
-const FeatureCard = ({
-  icon,
-  title,
-  description,
-  index,
-}: {
-  icon?: React.ReactNode;
-  title: string;
-  description: string;
-  index: number;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+function Process() {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
+  const cp = t.commandControlPage;
+  const steps = cp.processSteps;
 
   return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      transition={{ delay: index * 0.08 }}
-      className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl h-full flex flex-col items-center text-center"
-      style={{
-        padding: 'clamp(0.875rem, 1.75vh, 1.25rem)',
-        borderRadius: 'clamp(0.625rem, 1.25vh, 0.875rem)',
-      }}
-    >
-      {icon && (
-        <div
-          className="text-cta flex items-center justify-center mb-3 w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex-shrink-0"
-        >
-          {React.cloneElement(icon as React.ReactElement, {
-            style: {
-              width: 'clamp(1.125rem, 2.25vh, 1.5rem)',
-              height: 'clamp(1.125rem, 2.25vh, 1.5rem)',
-            },
-          })}
-        </div>
-      )}
-      <h3
-        className="font-bold text-white"
-        style={{
-          fontSize: 'clamp(0.8125rem, 1.6vh, 1rem)',
-          marginBottom: 'clamp(0.25rem, 0.5vh, 0.375rem)',
-          lineHeight: '1.3',
-        }}
-      >
-        {title}
-      </h3>
-      <p
-        className="text-white/70"
-        style={{ fontSize: 'clamp(0.6875rem, 1.2vh, 0.8125rem)', lineHeight: '1.5' }}
-      >
-        {description}
-      </p>
-    </motion.div>
-  );
-};
+    <section id="approach" className="relative py-16 md:py-24 scroll-mt-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader index="02" eyebrow={cp.badge} lead={cp.processTitle} highlight={cp.processHighlight} center />
 
-// ─── Tech Stack Card (Z-pattern) ──────────────────────────────────────────────
-// Mobile: image on top (aspect-video), text below.
-// md+   : alternating left/right two-column layout.
-const TechStackCard = ({
-  title,
-  description,
-  image,
-  index,
-  isReversed,
-}: {
-  title: string;
-  description: string;
-  image: string;
-  index: number;
-  isReversed?: boolean;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+        <div className="relative">
+          {/* Connector (desktop) */}
+          <div aria-hidden className="hidden lg:block absolute top-8 inset-x-[10%] h-[2px] bg-white/10 overflow-hidden rounded-full">
+            <motion.div
+              className={`absolute inset-0 ${isRTL ? 'origin-right' : 'origin-left'}`}
+              style={{ background: `linear-gradient(${isRTL ? '270deg' : '90deg'}, ${C.secondary}, ${C.cta})` }}
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 1.6, ease: EASE }}
+            />
+          </div>
+          {/* Connector (mobile) */}
+          <div aria-hidden className="lg:hidden absolute top-8 bottom-8 start-8 w-[2px] bg-gradient-to-b from-[#44C8F5] to-[#A6CE39] opacity-60" />
 
-  return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      transition={{ delay: index * 0.1 }}
-      className={`flex flex-col md:grid md:grid-cols-2 md:items-center ${
-        isReversed ? 'md:grid-flow-dense' : ''
-      }`}
-      style={{ gap: 'clamp(1rem, 2.5vh, 2rem)' }}
-    >
-      {/* Image */}
-      <div className={isReversed ? 'md:col-start-2' : ''}>
-        <div
-          className="relative w-full overflow-hidden bg-white/5"
-          style={{
-            aspectRatio: '16/9',
-            borderRadius: 'clamp(0.625rem, 1.25vh, 1rem)',
-          }}
-        >
-          <img
-            src={image}
-            alt={title}
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/60 via-transparent to-transparent" />
+          <ol className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-6">
+            {steps.map((step, i) => {
+              const Icon = PROCESS_ICONS[i] ?? Gear;
+              return (
+                <motion.li key={step.title} {...reveal(0.15 + i * 0.12, 20)} className="group relative flex lg:flex-col items-start lg:items-center gap-5 lg:text-center">
+                  <span
+                    className="relative z-10 flex-shrink-0 w-16 h-16 rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                    style={{ background: C.bg, color: C.cta, border: `2px solid ${C.cta}`, boxShadow: `0 0 0 8px ${C.bg}80, 0 0 30px ${C.cta}40` }}
+                  >
+                    <Icon weight="duotone" size={26} />
+                  </span>
+                  <div className="lg:mt-3">
+                    <span className="block font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45 mb-1.5 tabular-nums">{pad(i + 1)}</span>
+                    <h3 className="font-sans font-bold text-white text-xl mb-2">{step.title}</h3>
+                    <p className="font-body text-sm text-white/65 leading-relaxed max-w-[16rem] lg:mx-auto">{step.description}</p>
+                  </div>
+                </motion.li>
+              );
+            })}
+          </ol>
         </div>
       </div>
-
-      {/* Text */}
-      <div
-        className={`${isReversed ? 'md:col-start-1 md:row-start-1' : ''} ${
-          !isReversed ? 'md:text-right' : ''
-        }`}
-      >
-        <h3
-          className="font-bold text-white"
-          style={{
-            fontSize: 'clamp(1.0625rem, 2.25vh, 1.75rem)',
-            marginBottom: 'clamp(0.5rem, 1.25vh, 0.875rem)',
-            lineHeight: '1.25',
-          }}
-        >
-          {title}
-        </h3>
-        <p
-          className="text-white/80 leading-relaxed"
-          style={{ fontSize: 'clamp(0.8125rem, 1.5vh, 1.0625rem)', lineHeight: '1.65' }}
-        >
-          {description}
-        </p>
-      </div>
-    </motion.div>
+    </section>
   );
-};
+}
 
-// ─── Industry Accordion ────────────────────────────────────────────────────────
-const IndustryAccordion = ({
-  title,
-  industries,
-  image,
-}: {
-  title: string;
-  industries: Array<{ name: string; icon?: React.ReactNode; description?: string }>;
-  image: string;
-}) => {
-  const [openItems, setOpenItems] = useState<Set<number>>(new Set());
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+// ── 03 Advantages (bento) ────────────────────────────────────
 
-  const toggleItem = (index: number) => {
-    setOpenItems((prev) => {
-      const next = new Set(prev);
-      next.has(index) ? next.delete(index) : next.add(index);
-      return next;
-    });
-  };
+function Advantages() {
+  const { t } = useTranslation();
+  const { isRTL } = useLocale();
+  const cp = t.commandControlPage;
+  const items = cp.technicalAdvantages;
+  // Layout: [0 0][1] / [2][3][4]
+  const spans = ['lg:col-span-2 sm:col-span-2', '', '', '', ''];
 
   return (
-    <motion.div
-      ref={ref}
-      variants={fadeInUp}
-      initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden flex flex-col"
-      style={{ borderRadius: 'clamp(0.625rem, 1.25vh, 1rem)' }}
-    >
-      {/* Image header */}
-      <div
-        className="relative overflow-hidden flex-shrink-0"
-        style={{ height: 'clamp(130px, 18vh, 200px)' }}
-      >
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover object-center"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/90 via-[#005E96]/50 to-transparent" />
-        <h3
-          className="absolute font-bold text-white"
-          style={{
-            fontSize: 'clamp(0.9375rem, 1.85vh, 1.375rem)',
-            bottom: 'clamp(0.625rem, 1.25vh, 1rem)',
-            left: 'clamp(0.75rem, 1.5vh, 1.25rem)',
-            right: 'clamp(0.75rem, 1.5vh, 1.25rem)',
-            lineHeight: '1.3',
-          }}
-        >
-          {title}
-        </h3>
-      </div>
+    <section id="advantages" className="relative py-16 md:py-24 scroll-mt-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader index="03" eyebrow={cp.badge} lead={cp.advantagesTitle} highlight={cp.advantagesHighlight} />
 
-      {/* Accordion items */}
-      <div
-        className="flex-1 flex flex-col"
-        style={{
-          padding: 'clamp(0.75rem, 1.5vh, 1.25rem)',
-          gap: 'clamp(0.125rem, 0.25vh, 0.25rem)',
-        }}
-      >
-        {industries.map((industry, index) => (
-          <div key={industry.name} className="border-b border-white/10 last:border-0">
-            <button
-              onClick={() => toggleItem(index)}
-              className="w-full flex items-center justify-between text-left hover:bg-white/5 rounded-lg transition-colors"
-              style={{
-                padding: 'clamp(0.5rem, 1vh, 0.875rem)',
-                gap: 'clamp(0.375rem, 0.75vh, 0.625rem)',
-                borderRadius: 'clamp(0.375rem, 0.75vh, 0.625rem)',
-              }}
-            >
-              <span
-                className="font-medium text-white"
-                style={{ fontSize: 'clamp(0.8125rem, 1.4vh, 0.9375rem)' }}
-              >
-                {industry.name}
-              </span>
-              <CaretDown
-                weight="bold"
-                size={16}
-                className={`text-white/60 transition-transform flex-shrink-0 ${
-                  openItems.has(index) ? 'rotate-180' : ''
-                }`}
-              />
-            </button>
-            {openItems.has(index) && industry.description && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-                className="text-white/70"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {items.map((item, i) => {
+            const Icon = ADVANTAGE_ICONS[i] ?? ShieldCheck;
+            const featured = i === 0;
+            return (
+              <motion.article
+                key={item.title}
+                {...reveal(0.06 * i, 24)}
+                className={`group relative overflow-hidden rounded-[1.5rem] border border-white/10 p-7 lg:p-8 flex flex-col min-h-[240px] transition-all duration-500 hover:-translate-y-1 hover:border-white/25 ${spans[i]}`}
                 style={{
-                  padding: '0 clamp(0.5rem, 1vh, 0.875rem) clamp(0.5rem, 1vh, 0.875rem)',
-                  fontSize: 'clamp(0.75rem, 1.3vh, 0.875rem)',
-                  lineHeight: '1.55',
+                  background: featured ? C.bg : 'linear-gradient(160deg, rgba(0,94,150,0.35), rgba(0,44,61,0.78))',
+                  backdropFilter: featured ? undefined : 'blur(10px)',
+                  boxShadow: '0 30px 60px -30px rgba(0,0,0,0.55)',
                 }}
               >
-                {industry.description}
-              </motion.div>
-            )}
-          </div>
-        ))}
+                {featured && (
+                  <>
+                    <img src={ADVANTAGE_IMAGE} alt="" aria-hidden loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(${isRTL ? '270deg' : '90deg'}, ${C.bg}F7 0%, ${C.bg}CC 50%, ${C.bg}40 100%)` }} />
+                  </>
+                )}
+                <div
+                  aria-hidden
+                  className="absolute top-0 inset-x-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: `linear-gradient(90deg, transparent, ${C.cta}, ${C.secondary}, transparent)` }}
+                />
+                <div className="relative flex items-center justify-between mb-auto">
+                  <span className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: `${C.cta}1F`, color: C.cta, border: `1px solid ${C.cta}40` }}>
+                    <Icon weight="duotone" size={24} />
+                  </span>
+                  <span className="font-sans text-xs font-semibold tabular-nums text-white/40">{pad(i + 1)}</span>
+                </div>
+                <div className={`relative mt-8 ${featured ? 'max-w-md' : ''}`}>
+                  <h3 className={`font-sans font-bold text-white leading-snug mb-3 ${featured ? 'text-2xl lg:text-3xl' : 'text-lg lg:text-xl'}`}>{item.title}</h3>
+                  <p className={`font-body text-white/70 leading-relaxed ${featured ? 'text-base' : 'text-sm'}`}>{item.description}</p>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
       </div>
-    </motion.div>
+    </section>
   );
-};
+}
 
-// ─── Page Component ────────────────────────────────────────────────────────────
+// ── 04 Tech stack ────────────────────────────────────────────
+
+function TechStack() {
+  const { t } = useTranslation();
+  const cp = t.commandControlPage;
+
+  return (
+    <section id="tech-stack" className="relative py-16 md:py-24 scroll-mt-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader index="04" eyebrow={cp.badge} lead={cp.techStackTitle} highlight={cp.techStackHighlight} subtitle={cp.techStackSubtitle || undefined} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          {cp.techStack.map((item, i) => {
+            const visual = TECH_VISUALS[i] ?? TECH_VISUALS[0];
+            const Icon = visual.icon;
+            return (
+              <motion.article
+                key={item.title}
+                {...reveal(0.08 * (i % 2), 28)}
+                className="group relative overflow-hidden rounded-[1.75rem] border border-white/10 flex flex-col transition-all duration-500 hover:border-white/25"
+                style={{ background: 'linear-gradient(180deg, rgba(0,94,150,0.30), rgba(0,44,61,0.85))', boxShadow: '0 40px 80px -40px rgba(0,0,0,0.6)' }}
+              >
+                <div className="relative aspect-[16/9] overflow-hidden">
+                  <img src={visual.image} alt={item.title} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, transparent 40%, ${C.bg}E6 100%)` }} />
+                  <span className="absolute top-5 start-5 rounded-full border border-white/20 bg-black/25 backdrop-blur-md px-3 py-1 font-sans text-xs font-bold tabular-nums" style={{ color: C.cta }}>
+                    {pad(i + 1)}
+                  </span>
+                </div>
+                <div className="relative p-7 lg:p-8 -mt-10">
+                  <span
+                    className="inline-flex w-14 h-14 rounded-2xl items-center justify-center mb-5 transition-transform duration-300 group-hover:-translate-y-1"
+                    style={{ background: C.cta, color: '#fff', boxShadow: `0 14px 30px -10px ${C.cta}99` }}
+                  >
+                    <Icon weight="duotone" size={26} />
+                  </span>
+                  <h3 className="font-sans font-bold text-white text-2xl leading-tight mb-3">{item.title}</h3>
+                  <p className="font-body text-sm lg:text-[0.95rem] text-white/70 leading-[1.75]">{item.description}</p>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── 05 Industries ────────────────────────────────────────────
+
+function Industries() {
+  const { t } = useTranslation();
+  const cp = t.commandControlPage;
+  const groups = cp.industries;
+  const [group, setGroup] = useState(0);
+  const current = groups[group];
+  const visual = INDUSTRY_GROUPS[group] ?? INDUSTRY_GROUPS[0];
+
+  return (
+    <section id="industries-served" className="relative py-16 md:py-24 scroll-mt-20">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeader
+          index="05"
+          eyebrow={cp.badge}
+          lead={cp.industriesTitle}
+          highlight={cp.industriesHighlight}
+          subtitle={cp.industriesSubtitle}
+          aside={
+            <div role="tablist" className="inline-flex rounded-full border border-white/15 bg-[#002C3D]/50 backdrop-blur-md p-1.5">
+              {groups.map((g, i) => (
+                <button
+                  key={g.title}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === group}
+                  onClick={() => setGroup(i)}
+                  className="relative rounded-full px-4 sm:px-5 py-2.5 min-h-0 font-sans text-sm font-semibold transition-colors"
+                  style={{ color: i === group ? '#fff' : 'rgba(255,255,255,0.65)' }}
+                >
+                  {i === group && (
+                    <motion.span layoutId="industry-pill" className="absolute inset-0 rounded-full" style={{ background: C.cta }} transition={{ duration: 0.4, ease: EASE }} />
+                  )}
+                  <span className="relative">{g.title}</span>
+                </button>
+              ))}
+            </div>
+          }
+        />
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={group}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.45, ease: EASE }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            <div className="relative overflow-hidden rounded-[1.5rem] min-h-[220px] sm:col-span-2 lg:col-span-1 border border-white/10">
+              <img src={visual.image} alt={current.title} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: `linear-gradient(180deg, ${C.bg}26 0%, ${C.bg}F2 100%)` }} />
+              <div className="absolute bottom-0 inset-x-0 p-6">
+                <div className="font-sans font-bold text-5xl leading-none mb-2">
+                  <GradientText>{pad(current.items.length)}</GradientText>
+                </div>
+                <div className="font-sans font-bold text-white text-xl leading-snug">{current.title}</div>
+              </div>
+            </div>
+
+            {current.items.map((item, i) => {
+              const Icon = visual.icons[i] ?? Buildings;
+              return (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.05 * i, ease: EASE }}
+                  className="group relative overflow-hidden rounded-[1.5rem] border border-white/10 p-6 transition-all duration-400 hover:-translate-y-1 hover:border-white/25"
+                  style={{ background: 'linear-gradient(160deg, rgba(0,94,150,0.30), rgba(0,44,61,0.78))', backdropFilter: 'blur(10px)' }}
+                >
+                  <span
+                    className="inline-flex w-11 h-11 rounded-xl items-center justify-center mb-4 transition-colors duration-300 group-hover:bg-[#A6CE39] group-hover:text-white"
+                    style={{ background: `${C.secondary}1F`, color: C.secondary }}
+                  >
+                    <Icon weight="duotone" size={22} />
+                  </span>
+                  <h3 className="font-sans font-bold text-white text-lg mb-1.5">{item.name}</h3>
+                  <p className="font-body text-sm text-white/65 leading-relaxed">{item.description}</p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
+
+        <motion.figure {...reveal(0.1)} className="mt-14 max-w-3xl mx-auto text-center">
+          <Quotes weight="fill" size={36} className="mx-auto mb-4" style={{ color: C.cta }} />
+          <blockquote className="font-sans font-semibold text-white leading-snug" style={{ fontSize: 'clamp(1.25rem, 2.2vw, 1.75rem)' }}>
+            {cp.industriesFooter}
+          </blockquote>
+        </motion.figure>
+      </div>
+    </section>
+  );
+}
+
+// ── Page ─────────────────────────────────────────────────────
+
 function CommandControlPage() {
   const { t } = useTranslation();
   const { localePath } = useLocale();
-  const location = useLocation();
+  const cp = t.commandControlPage;
+  useHashScroll();
 
-  const scrollToHash = (hash: string) => {
-    if (!hash) return;
-    const element = document.querySelector(hash);
-    if (element) {
-      requestAnimationFrame(() => {
-        const rect = element.getBoundingClientRect();
-        const elementTop = rect.top + window.pageYOffset;
-        const elementHeight = rect.height;
-        const viewportHeight = window.innerHeight;
-        const targetTop = elementTop - (viewportHeight / 2) + (elementHeight / 2);
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
-      });
-    }
-  };
-
-  useEffect(() => {
-    const hash = location.hash;
-    if (hash) {
-      const attemptScroll = (attempts = 0) => {
-        const element = document.querySelector(hash);
-        if (element) {
-          scrollToHash(hash);
-        } else if (attempts < 5) {
-          setTimeout(() => attemptScroll(attempts + 1), 100 * (attempts + 1));
-        }
-      };
-      setTimeout(() => attemptScroll(), 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [location.hash, location.pathname]);
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash) setTimeout(() => scrollToHash(hash), 100);
-    };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
-
-  // ─── Data ──────────────────────────────────────────────────────────────────
-  const CORE_PILLAR_ICONS = [
-    <PencilSimple weight="bold" size={20} />,
-    <Rocket weight="bold" size={20} />,
-    <Gear weight="bold" size={20} />,
-    <Sliders weight="bold" size={20} />,
-    <TrendDown weight="bold" size={20} />,
+  const breadcrumbs = [
+    { name: cp.breadcrumbs.home, path: localePath('/') },
+    { name: cp.breadcrumbs.whatWeDo, path: localePath('/what-we-do') },
+    { name: cp.breadcrumbs.commandControl, path: localePath('/what-we-do/command-control') },
   ];
 
-  const corePillars = t.commandControlPage.processSteps.map((step, i) => ({
-    icon: CORE_PILLAR_ICONS[i],
-    title: step.title,
-    description: step.description,
-  }));
-
-  const technicalAdvantages = t.commandControlPage.technicalAdvantages.map((adv) => ({
-    title: adv.title,
-    description: adv.description,
-    accent: 'secondary' as const,
-  }));
-
-  const SUB_SOLUTION_IMAGES = [
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_30f0a44d43.jpeg',
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_c6f6c6bbe5.jpeg',
-    '/assets/CommandandControl/Control_room_with_screens_37be293209.jpeg',
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_33e9818a2b.jpeg',
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_9802d7d127.jpeg',
+  const navItems = [
+    { id: 'core-solutions', label: `${cp.coreSolutionsTitle} ${cp.coreSolutionsHighlight}` },
+    { id: 'approach', label: `${cp.processTitle} ${cp.processHighlight}` },
+    { id: 'advantages', label: `${cp.advantagesTitle} ${cp.advantagesHighlight}` },
+    { id: 'tech-stack', label: cp.techStackHighlight },
+    { id: 'industries-served', label: `${cp.industriesTitle} ${cp.industriesHighlight}` },
   ];
-
-  const subSolutions = t.commandControlPage.coreSolutions.map((sol, i) => ({
-    name: sol.title,
-    description: sol.description,
-    image: SUB_SOLUTION_IMAGES[i],
-  }));
-
-  const [activeSubSolutionIndex, setActiveSubSolutionIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const subSolutionsLength = subSolutions.length;
-
-  // Auto-advance: reset the timer every time the slide changes
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setActiveSubSolutionIndex((p) => (p + 1) % subSolutionsLength);
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [activeSubSolutionIndex, subSolutionsLength]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const delta = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(delta) > 50) {
-      setActiveSubSolutionIndex((p) =>
-        delta > 0
-          ? (p + 1) % subSolutionsLength
-          : (p - 1 + subSolutionsLength) % subSolutionsLength
-      );
-    }
-    setTouchStartX(null);
-  };
-
-  const TECH_STACK_IMAGES = [
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_db5915e486.jpeg',
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b46db2bfed.jpeg',
-    '/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg',
-    '/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_b715a93b98.jpeg',
-  ];
-
-  const techStack = t.commandControlPage.techStack.map((tech, i) => ({
-    title: tech.title,
-    description: tech.description,
-    image: TECH_STACK_IMAGES[i],
-  }));
-
-  const publicIndustries = t.commandControlPage.industries[0].items;
-  const corporateIndustries = t.commandControlPage.industries[1].items;
-
-  const heroRef = useRef(null);
-  const heroInView = useInView(heroRef, { once: true, margin: '-100px' });
 
   return (
     <div className="relative">
       <PageSEO
-        title={t.commandControlPage.seoTitle}
-        description={t.commandControlPage.seoDescription}
-        path={localePath("/what-we-do/command-control")}
-        breadcrumbs={[
-          { name: t.commandControlPage.breadcrumbs.home, path: localePath("/") },
-          { name: t.commandControlPage.breadcrumbs.whatWeDo, path: localePath("/what-we-do") },
-          { name: t.commandControlPage.breadcrumbs.commandControl, path: localePath("/what-we-do/command-control") },
-        ]}
-        faq={t.commandControlPage.faq}
+        title={cp.seoTitle}
+        description={cp.seoDescription}
+        path={localePath('/what-we-do/command-control')}
+        breadcrumbs={breadcrumbs}
+        faq={cp.faq}
       />
 
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
-      <section
-        ref={heroRef}
-        id="overview"
-        className="relative scroll-mt-20"
-        style={{
-          minHeight: '100dvh',
-          display: 'flex',
-          alignItems: 'center',
-          paddingTop: 'clamp(7rem, 14vh, 9rem)',
-          paddingBottom: 'clamp(3rem, 6vh, 5rem)',
-        }}
-      >
-        <div className="absolute inset-0 bg-[#005E96] opacity-20 pointer-events-none" aria-hidden="true" />
+      <div className="fixed inset-0 bg-[#005E96] opacity-20 pointer-events-none -z-10" />
 
-        <div className="container mx-auto px-4 sm:px-6 xl:px-8 w-full max-w-7xl relative z-10">
-          <div className="mb-6">
-            <Breadcrumbs items={[
-              { name: t.commandControlPage.breadcrumbs.home, path: localePath("/") },
-              { name: t.commandControlPage.breadcrumbs.whatWeDo, path: localePath("/what-we-do") },
-              { name: t.commandControlPage.breadcrumbs.commandControl, path: localePath("/what-we-do/command-control") },
-            ]} />
-          </div>
-          {/*
-            Mobile  : stacked — text then image.
-            Desktop : side-by-side two-column grid.
-          */}
-          <div
-            className="grid grid-cols-1 lg:grid-cols-2 items-center"
-            style={{ gap: 'clamp(2rem, 4vh, 3rem)' }}
-          >
-            {/* Text */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="text-center lg:text-left min-w-0"
-            >
-              <div
-                className="inline-flex items-center bg-white/5 backdrop-blur-[2px] border border-white/10"
-                style={{
-                  padding: 'clamp(0.375rem, 0.75vh, 0.5rem) clamp(0.75rem, 1.5vh, 1rem)',
-                  borderRadius: '9999px',
-                  marginBottom: 'clamp(0.75rem, 1.5vh, 1.25rem)',
-                }}
-              >
-                <span
-                  className="text-white/90"
-                  style={{ fontSize: 'clamp(0.6875rem, 1.1vh, 0.875rem)' }}
-                >
-                  {t.commandControlPage.badge}
-                </span>
-              </div>
-
-              <h1
-                className="font-bold text-white"
-                style={{
-                  fontSize: 'clamp(1.25rem, 3vw, 2.5rem)',
-                  marginBottom: 'clamp(0.75rem, 1.75vh, 1.5rem)',
-                  lineHeight: '1.15',
-                }}
-              >
-                {t.commandControlPage.headline}{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                  {t.commandControlPage.headlineHighlight}
-                </span>
-              </h1>
-
-              <p
-                className="text-white/80"
-                style={{
-                  fontSize: 'clamp(0.8125rem, 1.6vh, 1.0625rem)',
-                  lineHeight: '1.65',
-                  maxWidth: '42rem',
-                  margin: '0 auto',
-                }}
-              >
-                {t.commandControlPage.subheadline}
-              </p>
-            </motion.div>
-
-            {/* Hero Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={heroInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-              transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative w-full min-w-0"
-            >
-              <div
-                className="relative w-full overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10"
-                style={{ borderRadius: 'clamp(0.75rem, 1.5vh, 1.5rem)' }}
-              >
-                <img
-                  src="/assets/CommandandControl/Control_room_with_screens_9c4c709e86.jpeg"
-                  alt={t.commandControlPage.heroImageAlt}
-                  className="block w-full object-cover object-center"
-                  style={{ aspectRatio: '16/9' }}
-                  loading="eager"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#005E96]/40 via-transparent to-transparent pointer-events-none" />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 1: Core Solutions ─────────────────────────────────────── */}
-      <section
-        id="core-solutions"
-        className="relative scroll-mt-20"
-        style={{
-          paddingTop: 'clamp(4rem, 8vh, 9rem)',
-          paddingBottom: 'clamp(2.5rem, 5vh, 4rem)',
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
-          {/* Heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.25rem, 2.5vh, 2.25rem)' }}
-          >
-            <h2
-              className="font-bold text-white"
-              style={{
-                fontSize: 'clamp(1.25rem, 3.25vh, 2.5rem)',
-                marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
-              }}
-            >
-              {t.commandControlPage.coreSolutionsTitle}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                {t.commandControlPage.coreSolutionsHighlight}
-              </span>
-            </h2>
-            <p
-              className="text-white/80"
-              style={{ fontSize: 'clamp(0.8125rem, 1.4vh, 1rem)', lineHeight: '1.65' }}
-            >
-              {t.commandControlPage.coreSolutionsSubtitle}
-            </p>
-          </motion.div>
-
-          {/*
-            Core Pillars grid:
-            Mobile  : 2 columns (so all 5 cards show as 2-2-1).
-            sm      : 3 columns.
-            lg      : 5 columns (all in one row).
-          */}
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-50px' }}
-            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
-            style={{
-              gap: 'clamp(0.625rem, 1.25vh, 1.125rem)',
-              marginBottom: 'clamp(1.25rem, 2.5vh, 2rem)',
-            }}
-          >
-            {corePillars.map((pillar, index) => (
-              <FeatureCard
-                key={pillar.title}
-                icon={pillar.icon}
-                title={pillar.title}
-                description={pillar.description}
-                index={index}
-              />
-            ))}
-          </motion.div>
-
-          {/* ── Sub-solutions Carousel ────────────────────────────────────── */}
-          {/*
-            Mobile  : image stacks on top (aspect-video), text below, nav bar at bottom.
-            Desktop : image left 40%, text right 60%, side-by-side in a fixed-height box.
-          */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div
-              className="relative bg-white/5 backdrop-blur-sm border border-white/10 overflow-hidden select-none"
-              style={{ borderRadius: 'clamp(0.75rem, 1.5vh, 1.25rem)', cursor: 'grab' }}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              <motion.div
-                key={activeSubSolutionIndex}
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -40 }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {/*
-                  flex-col on mobile: image (aspect-video banner) then text.
-                  lg:flex-row on desktop: image left 40%, text right 60%, min-h fixed.
-                */}
-                <div
-                  className="flex flex-col lg:flex-row"
-                  style={{ minHeight: 'clamp(0px, 0px, 0px)' }}
-                >
-                  {/* Image — aspect-video on mobile, fixed height on desktop */}
-                  <div
-                    className="relative w-full lg:w-[40%] flex-shrink-0"
-                    style={{
-                      /* aspect-video equivalent on mobile, fixed height desktop */
-                      aspectRatio: '16/9',
-                    }}
-                  >
-                    {/* Override aspect-ratio on desktop via an inner absolute image */}
-                    <div className="absolute inset-0 lg:static lg:h-full" style={{ position: 'relative' }}>
-                      <div
-                        className="relative w-full overflow-hidden"
-                        style={{
-                          aspectRatio: '16/9',
-                        }}
-                      >
-                        <motion.img
-                          key={`img-${activeSubSolutionIndex}`}
-                          src={subSolutions[activeSubSolutionIndex].image}
-                          alt={subSolutions[activeSubSolutionIndex].name}
-                          initial={{ opacity: 0, scale: 1.05 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                          className="absolute inset-0 w-full h-full object-cover object-center"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-[#005E96]/60 via-transparent to-transparent" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Text */}
-                  <div
-                    className="w-full lg:w-[60%] flex flex-col justify-center"
-                    style={{ padding: 'clamp(1rem, 2vh, 2rem)' }}
-                  >
-                    <h4
-                      className="font-bold text-white"
-                      style={{
-                        fontSize: 'clamp(0.9375rem, 1.9vh, 1.625rem)',
-                        marginBottom: 'clamp(0.5rem, 1vh, 0.75rem)',
-                        lineHeight: '1.3',
-                      }}
-                    >
-                      {subSolutions[activeSubSolutionIndex].name}
-                    </h4>
-                    <p
-                      className="text-white/80 leading-relaxed"
-                      style={{
-                        fontSize: 'clamp(0.75rem, 1.25vh, 0.9375rem)',
-                        lineHeight: '1.65',
-                      }}
-                    >
-                      {subSolutions[activeSubSolutionIndex].description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Swipe hint — mobile only */}
-              <p
-                className="flex lg:hidden items-center justify-center gap-1.5 py-2 select-none"
-                style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.04em' }}
-                aria-hidden
-              >
-                <span>←</span> {t.commandControlPage.swipeHint} <span>→</span>
-              </p>
-
-              {/* Auto-advance progress bar */}
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-white/10">
-                <motion.div
-                  key={activeSubSolutionIndex}
-                  className="h-full bg-gradient-to-r from-[#A6CE39] to-[#44C8F5]"
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 5, ease: 'linear' }}
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Technical Advantages Bento ────────────────────────────────────── */}
-      <TechnicalAdvantagesBento
-        items={technicalAdvantages}
-        title={t.commandControlPage.techStackTitle}
-        highlight={t.commandControlPage.techStackHighlight}
+      <SolutionHero
+        breadcrumbs={breadcrumbs}
+        badge={cp.badge}
+        title={
+          <>
+            {cp.headline} <GradientText>{cp.headlineHighlight}</GradientText>
+          </>
+        }
+        subtitle={cp.subheadline}
+        image={HERO_IMAGE}
+        imageAlt={cp.heroImageAlt}
+        primaryCta={{ to: localePath('/contact'), label: t.common.contactUs }}
+        secondaryCta={{ targetId: 'core-solutions', label: `${cp.coreSolutionsTitle} ${cp.coreSolutionsHighlight}` }}
+        navItems={navItems}
+        navLabel={cp.badge}
       />
 
-      {/* ── Section 2: Technology Stack (Z-pattern) ───────────────────────── */}
-      <section
-        id="tech-stack"
-        className="relative scroll-mt-20"
-        style={{
-          paddingTop: 'clamp(4rem, 8vh, 9rem)',
-          paddingBottom: 'clamp(3rem, 6vh, 5rem)',
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.5rem, 3vh, 3rem)' }}
-          >
-            <h2
-              className="font-bold text-white"
-              style={{
-                fontSize: 'clamp(1.125rem, 3vh, 2.5rem)',
-                lineHeight: '1.25',
-              }}
-            >
-              {t.commandControlPage.techStackTitle}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                {t.commandControlPage.techStackHighlight}
-              </span>
-            </h2>
-          </motion.div>
+      <CoreSolutions />
+      <Process />
+      <Advantages />
+      <TechStack />
+      <Industries />
 
-          {/*
-            CRITICAL FIX: was gap clamp(7rem, 14vh, 9rem) = 112px min on mobile!
-            Now: clamp(2.5rem, 5vh, 9rem) = 40px min — sensible on all screens.
-          */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'clamp(2.5rem, 5vh, 9rem)',
-            }}
-          >
-            {techStack.map((tech, index) => (
-              <TechStackCard
-                key={tech.title}
-                title={tech.title}
-                description={tech.description}
-                image={tech.image}
-                index={index}
-                isReversed={index % 2 === 1}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <FAQSection items={cp.faq} subtitle={cp.faqSubtitle} />
 
-      {/* ── Section 3: Industries We Serve ───────────────────────────────── */}
-      <section
-        id="industries-served"
-        className="relative scroll-mt-20"
-        style={{
-          paddingTop: 'clamp(4rem, 8vh, 9rem)',
-          paddingBottom: 'clamp(4rem, 8vh, 9rem)',
-        }}
-      >
-        <div className="container mx-auto px-4 sm:px-6 xl:px-8 max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl mx-auto text-center"
-            style={{ marginBottom: 'clamp(1.25rem, 2.5vh, 2rem)' }}
-          >
-            <h2
-              className="font-bold text-white"
-              style={{
-                fontSize: 'clamp(1.25rem, 3.5vh, 3rem)',
-                marginBottom: 'clamp(0.375rem, 0.75vh, 0.75rem)',
-              }}
-            >
-              {t.commandControlPage.industriesTitle}{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A6CE39] via-[#7CCCBF] to-[#44C8F5]">
-                {t.commandControlPage.industriesHighlight}
-              </span>
-            </h2>
-            <p
-              className="text-white/75"
-              style={{ fontSize: 'clamp(0.8125rem, 1.4vh, 1rem)', lineHeight: '1.6' }}
-            >
-              {t.commandControlPage.industriesSubtitle}
-            </p>
-          </motion.div>
-
-          {/* On mobile: stacked (1 col). sm+: side-by-side (2 col). */}
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2"
-            style={{
-              gap: 'clamp(0.875rem, 1.75vh, 1.5rem)',
-              marginBottom: 'clamp(1.25rem, 2.5vh, 2rem)',
-            }}
-          >
-            <IndustryAccordion
-              title={t.commandControlPage.industries[0].title}
-              industries={publicIndustries}
-              image="/assets/CommandandControl/Leadership_team_reviewing_map_5bf849bbcf.jpeg"
-            />
-            <IndustryAccordion
-              title={t.commandControlPage.industries[1].title}
-              industries={corporateIndustries}
-              image="/assets/CommandandControl/Modern_premium_corporate_photography_for_a_network_3fbc7ceb1d.jpeg"
-            />
-          </div>
-
-          {/* Footer statement */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl mx-auto text-center"
-          >
-            <p
-              className="text-white/90 font-medium italic"
-              style={{
-                fontSize: 'clamp(0.875rem, 1.75vh, 1.125rem)',
-                lineHeight: '1.65',
-              }}
-            >
-              {t.commandControlPage.industriesFooter}
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      <FAQSection items={t.commandControlPage.faq} subtitle={t.commandControlPage.faqSubtitle} />
+      <CtaBand image={CTA_IMAGE} secondary={{ to: localePath('/what-we-do/telecommunications'), label: t.homePage.exploreTelecom }} />
 
       <Footer />
     </div>

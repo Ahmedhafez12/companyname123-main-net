@@ -627,7 +627,7 @@ function JourneySection({ containerClass }: { containerClass: string }) {
       </div>
 
       {/* Rail */}
-      <motion.div {...reveal(0.15)} className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-none">
+      <motion.div {...reveal(0.15)} className="overflow-x-auto -mx-4 px-4 pb-2 scrollbar-hide">
         <div
           className="relative min-w-[560px]"
           role="tablist"
