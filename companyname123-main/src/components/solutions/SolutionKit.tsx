@@ -101,7 +101,7 @@ export function SectionTitle({ lead, highlight, className = '' }: { lead: string
   return (
     <h2
       className={`font-sans font-bold text-white leading-[1.08] ${className}`}
-      style={{ fontSize: 'clamp(2rem, 3.6vw, 3.25rem)', letterSpacing: '-0.02em' }}
+      style={{ fontSize: 'clamp(1.75rem, 1rem + 2.6vw, 4rem)', letterSpacing: '-0.02em', overflowWrap: 'break-word', hyphens: 'auto' }}
     >
       {lead}
       {highlight && (
@@ -140,7 +140,7 @@ export function SectionHeader({
       <motion.div {...reveal()} className="max-w-2xl">
         <Eyebrow index={index} label={eyebrow} center={center} />
         <SectionTitle lead={lead} highlight={highlight} />
-        {subtitle && <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{subtitle}</p>}
+        {subtitle && <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{subtitle}</p>}
       </motion.div>
       {aside && <motion.div {...reveal(0.1)} className="shrink-0">{aside}</motion.div>}
     </div>
@@ -233,8 +233,8 @@ export function SolutionHero({
         }}
       />
 
-      <div className="relative flex-1 flex items-center w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12">
-        <div className="max-w-3xl">
+      <div className="relative flex-1 flex items-center page-container pt-32 pb-12">
+        <div className="max-w-3xl xl:max-w-5xl 2xl:max-w-6xl 3xl:max-w-[80rem]">
           <motion.div {...reveal(0, 16)} className="mb-6">
             <Breadcrumbs items={breadcrumbs} />
           </motion.div>
@@ -251,11 +251,11 @@ export function SolutionHero({
           <motion.h1
             {...reveal(0.1)}
             className="font-sans font-bold text-white mb-6"
-            style={{ fontSize: 'clamp(2.5rem, 5.6vw, 5rem)', lineHeight: 1.04, letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(1.375rem, 0.25rem + 5.8vw, 6rem)', lineHeight: 1.04, letterSpacing: '-0.03em', overflowWrap: 'break-word', hyphens: 'auto' }}
           >
             {title}
           </motion.h1>
-          <motion.p {...reveal(0.18)} className="font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-2xl">
+          <motion.p {...reveal(0.18)} className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-2xl 3xl:max-w-3xl">
             {subtitle}
           </motion.p>
           <motion.div {...reveal(0.26)} className="mt-9 flex flex-wrap items-center gap-3">
@@ -276,7 +276,7 @@ export function SolutionHero({
       <motion.nav
         {...reveal(0.4, 20)}
         aria-label={navLabel}
-        className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10"
+        className="relative page-container pb-10"
       >
         <div className="rounded-2xl border border-white/10 bg-[#002C3D]/55 backdrop-blur-xl p-2 flex gap-2 overflow-x-auto scrollbar-hide">
           {navItems.map((item, i) => (
@@ -326,7 +326,7 @@ export function CtaBand({
 
   return (
     <section className="relative py-16 md:py-24">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -346,12 +346,12 @@ export function CtaBand({
               <Eyebrow label={c.eyebrow} />
               <h2
                 className="font-sans font-bold text-white"
-                style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', lineHeight: 1.05, letterSpacing: '-0.025em' }}
+                style={{ fontSize: 'clamp(1.75rem, 0.9rem + 3.2vw, 4.25rem)', lineHeight: 1.05, letterSpacing: '-0.025em' }}
               >
                 {c.title}
                 {c.highlight && <GradientText>{c.highlight}</GradientText>}
               </h2>
-              <p className="mt-4 font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">{c.text}</p>
+              <p className="mt-4 font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">{c.text}</p>
             </div>
             <div className="flex flex-wrap lg:flex-col lg:items-end gap-3">
               <PrimaryLink to={localePath('/contact')} className="px-7 py-3.5">

@@ -77,7 +77,7 @@ function Orbit() {
               <LogoPlate
                 name={p.name}
                 logo={p.logo}
-                className="w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full shadow-[0_20px_40px_-12px_rgba(0,0,0,0.55)] ring-4 ring-[#002C3D]/60"
+                className="w-12 h-12 xs:w-14 xs:h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 3xl:w-28 3xl:h-28 rounded-full shadow-[0_20px_40px_-12px_rgba(0,0,0,0.55)] ring-4 ring-[#002C3D]/60"
                 imgClassName="max-h-[45%] max-w-[70%]"
               />
             </motion.div>
@@ -88,7 +88,7 @@ function Orbit() {
   );
 
   return (
-    <div className="relative w-full max-w-[560px] aspect-square mx-auto">
+    <div className="relative w-full max-w-[560px] 3xl:max-w-[700px] aspect-square mx-auto">
       {/* rings */}
       <div aria-hidden className="absolute inset-[25%] rounded-full border border-dashed border-white/20" />
       <div aria-hidden className="absolute inset-[9%] rounded-full border border-white/10" />
@@ -118,7 +118,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[100dvh] flex items-center pt-28 pb-16 lg:py-0">
       <div aria-hidden className="absolute bottom-0 -end-40 w-[34rem] h-[34rem] rounded-full blur-3xl opacity-25" style={{ background: C.primary }} />
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+      <div className="relative page-container grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
         <div className="lg:col-span-6">
           <motion.div {...reveal(0, 16)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] backdrop-blur-md px-3.5 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full" style={{ background: C.cta }} />
@@ -127,12 +127,12 @@ function Hero() {
           <motion.h1
             {...reveal(0.08)}
             className="font-sans font-bold text-white mb-6"
-            style={{ fontSize: 'clamp(2.6rem, 5.6vw, 5rem)', lineHeight: 1.04, letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(2.1rem, 0.75rem + 4.8vw, 6rem)', lineHeight: 1.04, letterSpacing: '-0.03em', overflowWrap: 'break-word' }}
           >
             {pp.headline}
             <GradientText>{pp.headlineHighlight}</GradientText>
           </motion.h1>
-          <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
+          <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">
             {pp.subtitle}
           </motion.p>
           <motion.div {...reveal(0.24)} className="mt-9 flex flex-wrap items-center gap-3">
@@ -183,7 +183,7 @@ function PartnerGrid() {
 
   return (
     <section id="partners" className="relative py-20 md:py-28 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader
           index="01"
           eyebrow={pp.bannerLabel}
@@ -246,7 +246,7 @@ function ValueSection() {
 
   return (
     <section className="relative py-16 md:py-24">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-7 lg:order-last">
             <SectionHeader index="02" eyebrow={pp.eyebrow} lead={why.valuePropTitle} highlight={why.valuePropTitleHighlight} subtitle={why.valuePropSubtitle} />
@@ -276,7 +276,7 @@ function ValueSection() {
 
           <motion.div
             {...reveal()}
-            className="lg:col-span-5 relative h-[340px] lg:h-[min(72vh,620px)] rounded-[2rem] overflow-hidden"
+            className="lg:col-span-5 relative h-[300px] xs:h-[340px] lg:h-[min(72vh,620px)] 3xl:h-[min(72vh,760px)] rounded-[2rem] overflow-hidden"
             style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
           >
             <img src={VALUE_IMAGE} alt="" aria-hidden loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />

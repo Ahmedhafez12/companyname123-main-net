@@ -109,7 +109,7 @@ function CoreSolutions() {
 
   return (
     <section id="core-solutions" className="relative py-20 md:py-28 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader index="01" eyebrow={cp.badge} lead={cp.coreSolutionsTitle} highlight={cp.coreSolutionsHighlight} subtitle={cp.coreSolutionsSubtitle} />
 
         <div
@@ -173,7 +173,7 @@ function CoreSolutions() {
           <motion.div
             {...reveal(0.12)}
             role="tabpanel"
-            className="lg:col-span-8 relative overflow-hidden rounded-[2rem] min-h-[460px] lg:min-h-0 lg:h-[min(66vh,580px)]"
+            className="lg:col-span-8 relative overflow-hidden rounded-[2rem] min-h-[420px] xs:min-h-[460px] lg:min-h-0 lg:h-[min(66vh,580px)] 3xl:h-[min(66vh,720px)]"
             style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
           >
             {items.map((item, i) => (
@@ -229,7 +229,7 @@ function Process() {
 
   return (
     <section id="approach" className="relative py-16 md:py-24 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader index="02" eyebrow={cp.badge} lead={cp.processTitle} highlight={cp.processHighlight} center />
 
         <div className="relative">
@@ -285,7 +285,7 @@ function Advantages() {
 
   return (
     <section id="advantages" className="relative py-16 md:py-24 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader index="03" eyebrow={cp.badge} lead={cp.advantagesTitle} highlight={cp.advantagesHighlight} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -341,7 +341,7 @@ function TechStack() {
 
   return (
     <section id="tech-stack" className="relative py-16 md:py-24 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader index="04" eyebrow={cp.badge} lead={cp.techStackTitle} highlight={cp.techStackHighlight} subtitle={cp.techStackSubtitle || undefined} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
@@ -393,7 +393,7 @@ function Industries() {
 
   return (
     <section id="industries-served" className="relative py-16 md:py-24 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader
           index="05"
           eyebrow={cp.badge}
@@ -401,7 +401,7 @@ function Industries() {
           highlight={cp.industriesHighlight}
           subtitle={cp.industriesSubtitle}
           aside={
-            <div role="tablist" className="inline-flex rounded-full border border-white/15 bg-[#002C3D]/50 backdrop-blur-md p-1.5">
+            <div role="tablist" className="flex w-full sm:inline-flex sm:w-auto rounded-2xl sm:rounded-full border border-white/15 bg-[#002C3D]/50 backdrop-blur-md p-1.5">
               {groups.map((g, i) => (
                 <button
                   key={g.title}
@@ -409,11 +409,11 @@ function Industries() {
                   role="tab"
                   aria-selected={i === group}
                   onClick={() => setGroup(i)}
-                  className="relative rounded-full px-4 sm:px-5 py-2.5 min-h-0 font-sans text-sm font-semibold transition-colors"
+                  className="relative flex-1 sm:flex-none rounded-xl sm:rounded-full px-3 sm:px-5 py-2.5 min-h-0 font-sans text-xs xs:text-sm font-semibold leading-tight text-center transition-colors"
                   style={{ color: i === group ? '#fff' : 'rgba(255,255,255,0.65)' }}
                 >
                   {i === group && (
-                    <motion.span layoutId="industry-pill" className="absolute inset-0 rounded-full" style={{ background: C.cta }} transition={{ duration: 0.4, ease: EASE }} />
+                    <motion.span layoutId="industry-pill" className="absolute inset-0 rounded-xl sm:rounded-full" style={{ background: C.cta }} transition={{ duration: 0.4, ease: EASE }} />
                   )}
                   <span className="relative">{g.title}</span>
                 </button>

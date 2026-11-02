@@ -259,8 +259,8 @@ function ContactPage() {
           />
         </div>
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+        <div className="relative page-container">
+          <div className="max-w-3xl xl:max-w-4xl 3xl:max-w-5xl">
             <motion.div {...reveal(0, 16)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] backdrop-blur-md px-3.5 py-1.5 mb-6">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping" style={{ background: C.cta }} />
@@ -271,12 +271,12 @@ function ContactPage() {
             <motion.h1
               {...reveal(0.08)}
               className="font-sans font-bold text-white mb-6"
-              style={{ fontSize: 'clamp(3rem, 7vw, 6rem)', lineHeight: 1, letterSpacing: '-0.035em' }}
+              style={{ fontSize: 'clamp(2.5rem, 1rem + 5.4vw, 6.75rem)', lineHeight: 1, letterSpacing: '-0.035em' }}
             >
               {cp.headline}
               <GradientText>{cp.headlineHighlight}</GradientText>
             </motion.h1>
-            <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
+            <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">
               {cp.subtitle}
             </motion.p>
             <motion.div {...reveal(0.24)} className="mt-8 flex flex-wrap gap-2">
@@ -303,13 +303,13 @@ function ContactPage() {
 
       {/* ━━━ FORM + EXPECTATIONS ━━━ */}
       <section id="contact-form" className="relative py-16 md:py-24 scroll-mt-20">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="page-container grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Left: info */}
           <div className="lg:col-span-5 lg:sticky lg:top-28">
             <motion.div {...reveal()}>
               <Eyebrow index="01" label={cp.eyebrow} />
               <SectionTitle lead={cp.reachUsTitle} />
-              <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{cp.reachUsBody}</p>
+              <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{cp.reachUsBody}</p>
             </motion.div>
 
             <motion.div {...reveal(0.1)} className="mt-10">
@@ -532,10 +532,10 @@ function ContactPage() {
 
       {/* ━━━ LOCATION ━━━ */}
       <section className="relative pb-20 md:pb-28">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="page-container">
           <motion.div
             {...reveal()}
-            className="relative overflow-hidden rounded-[2.25rem] border border-white/10 h-[480px] lg:h-[520px]"
+            className="relative overflow-hidden rounded-[2.25rem] border border-white/10 h-[520px] sm:h-[480px] lg:h-[520px] 3xl:h-[640px]"
             style={{ background: C.bg, boxShadow: '0 50px 100px -40px rgba(0,0,0,0.6)' }}
           >
             <iframe

@@ -112,7 +112,7 @@ function SectionTitle({ lead, highlight, className = '' }: { lead: string; highl
   return (
     <h2
       className={`font-sans font-bold text-white leading-[1.08] ${className}`}
-      style={{ fontSize: 'clamp(2rem, 3.6vw, 3.25rem)', letterSpacing: '-0.02em' }}
+      style={{ fontSize: 'clamp(1.75rem, 1rem + 2.6vw, 4rem)', letterSpacing: '-0.02em', overflowWrap: 'break-word' }}
     >
       {lead}
       {highlight && (
@@ -218,7 +218,7 @@ function AboutUsPage() {
 
   const sectionClass =
     'snap-start relative overflow-hidden shrink-0 min-h-[100dvh] lg:py-16 flex flex-col justify-center';
-  const containerClass = 'w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8';
+  const containerClass = 'page-container';
 
   return (
     <div className="relative overflow-x-hidden">
@@ -353,12 +353,12 @@ function HeroSection({ onJourney, containerClass }: { onJourney: () => void; con
           <motion.h1
             {...reveal(0.1)}
             className="font-sans font-bold text-white mb-6"
-            style={{ fontSize: 'clamp(2.75rem, 6vw, 5.25rem)', lineHeight: 1.02, letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(2.25rem, 1rem + 4.6vw, 6.5rem)', lineHeight: 1.02, letterSpacing: '-0.03em' }}
           >
             {a.sections.whoWeAre} <GradientText>{a.sections.whoWeAreHighlight}</GradientText>
           </motion.h1>
 
-          <motion.p {...reveal(0.18)} className="font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
+          <motion.p {...reveal(0.18)} className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">
             {a.hero.summary}
           </motion.p>
 
@@ -394,7 +394,7 @@ function HeroSection({ onJourney, containerClass }: { onJourney: () => void; con
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 1, ease: EASE }}
-          className="lg:col-span-6 relative h-[52vh] min-h-[340px] lg:h-[min(72vh,620px)]"
+          className="lg:col-span-6 relative h-[52vh] min-h-[300px] xs:min-h-[340px] lg:h-[min(72vh,620px)] 3xl:h-[min(72vh,780px)]"
         >
           <div
             className="absolute top-0 bottom-[12%] end-0 w-[86%] rounded-[2rem] overflow-hidden"
@@ -465,7 +465,7 @@ function IdentitySection({ isLg, containerClass }: { isLg: boolean; containerCla
         <motion.div {...reveal()} className="max-w-2xl">
           <Eyebrow index="01" label={a.companyIdentity.sectionTitle} isRTL={isRTL} />
           <SectionTitle lead={a.sections.companyIdentity} highlight={a.sections.companyIdentityHighlight} />
-          <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{a.companyIdentity.sectionSubtitle}</p>
+          <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{a.companyIdentity.sectionSubtitle}</p>
         </motion.div>
         <motion.div {...reveal(0.1)} className="flex items-baseline gap-3 shrink-0">
           <span className="font-sans font-bold text-6xl lg:text-7xl leading-none">
@@ -475,7 +475,7 @@ function IdentitySection({ isLg, containerClass }: { isLg: boolean; containerCla
         </motion.div>
       </div>
 
-      <motion.div {...reveal(0.15)} className="flex flex-col lg:flex-row gap-4 lg:h-[min(54vh,500px)]">
+      <motion.div {...reveal(0.15)} className="flex flex-col lg:flex-row gap-4 lg:h-[min(54vh,500px)] 3xl:h-[min(56vh,640px)]">
         {blocks.map((block, i) => {
           const isActive = !isLg || i === active;
           return (
@@ -601,7 +601,7 @@ function JourneySection({ containerClass }: { containerClass: string }) {
         <motion.div {...reveal()} className="max-w-2xl">
           <Eyebrow index="02" label={`${a.journey.events[0]?.date} — ${events[events.length - 1]?.date}`} isRTL={isRTL} />
           <SectionTitle lead={a.sections.ourJourney} highlight={a.sections.ourJourneyHighlight} />
-          <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{a.journey.intro}</p>
+          <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{a.journey.intro}</p>
         </motion.div>
         <motion.div {...reveal(0.1)} className="flex items-center gap-2 shrink-0">
           <button
@@ -853,7 +853,7 @@ function StrengthsSection({ containerClass }: { containerClass: string }) {
         <motion.div {...reveal()} className="max-w-2xl">
           <Eyebrow index="04" label={a.labels.strengthsLabel} isRTL={isRTL} />
           <SectionTitle lead={a.sections.coreStrengths} highlight={a.sections.coreStrengthsHighlight} />
-          <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{a.coreStrengths.intro}</p>
+          <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{a.coreStrengths.intro}</p>
         </motion.div>
       </div>
 
@@ -937,7 +937,7 @@ function WhyUsSection({ containerClass }: { containerClass: string }) {
         <motion.div {...reveal()} className="text-center max-w-2xl mx-auto mb-12 lg:mb-14">
           <Eyebrow index="05" label={`${a.whyUs.reasonsCount} ${a.whyUs.reasonsLabel}`} isRTL={isRTL} center />
           <SectionTitle lead={a.whyUs.valuePropTitle} highlight={a.whyUs.valuePropTitleHighlight} />
-          <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed">{a.whyUs.valuePropSubtitle}</p>
+          <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed">{a.whyUs.valuePropSubtitle}</p>
         </motion.div>
 
         <div className="relative">
@@ -995,7 +995,7 @@ function EdgeSection({ containerClass }: { containerClass: string }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
         <motion.div
           {...reveal(0)}
-          className="lg:col-span-5 relative h-[40vh] min-h-[280px] lg:h-[min(70vh,600px)] rounded-[2rem] overflow-hidden"
+          className="lg:col-span-5 relative h-[40vh] min-h-[260px] lg:h-[min(70vh,600px)] 3xl:h-[min(70vh,760px)] rounded-[2rem] overflow-hidden"
           style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
         >
           <img src={IMG.edge} alt={a.hero.competitiveEdgeImageAlt} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
@@ -1015,7 +1015,7 @@ function EdgeSection({ containerClass }: { containerClass: string }) {
           <motion.div {...reveal(0.05)}>
             <Eyebrow index="06" label={a.competitiveEdge.sectionTitle} isRTL={isRTL} />
             <SectionTitle lead={a.sections.competitiveEdge} highlight={a.sections.competitiveEdgeHighlight} />
-            <p className="mt-4 font-body text-white/65 text-base sm:text-lg leading-relaxed max-w-xl">{a.competitiveEdge.sectionSubtitle}</p>
+            <p className="mt-4 font-body text-white/65 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">{a.competitiveEdge.sectionSubtitle}</p>
           </motion.div>
 
           <ul className="mt-8 border-t border-white/10">
@@ -1087,7 +1087,7 @@ function CtaSection({ containerClass }: { containerClass: string }) {
           >
             {a.cta.heading}
           </h2>
-          <p className="font-body text-white/75 text-base sm:text-lg leading-relaxed mb-9">{a.cta.body}</p>
+          <p className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed mb-9">{a.cta.body}</p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link to={localePath('/contact')} className="btn-primary inline-flex items-center gap-2 group px-7 py-3.5 text-sm sm:text-base">

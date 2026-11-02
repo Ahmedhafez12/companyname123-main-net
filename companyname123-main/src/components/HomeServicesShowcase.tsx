@@ -189,7 +189,7 @@ export default function HomeServicesShowcase({
   return (
     <div
       ref={rootRef}
-      className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-16 lg:py-0"
+      className="page-container py-20 md:py-16 lg:py-0"
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
         {/* ── Visual panel ── */}
@@ -203,7 +203,7 @@ export default function HomeServicesShowcase({
           onMouseLeave={() => setPaused(false)}
         >
           <div
-            className="relative w-full overflow-hidden rounded-[1.75rem] h-[46vh] min-h-[300px] sm:h-[52vh] lg:h-[min(74vh,640px)]"
+            className="relative w-full overflow-hidden rounded-[1.75rem] h-[46vh] min-h-[280px] xs:min-h-[300px] sm:h-[52vh] lg:h-[min(74vh,640px)] 3xl:h-[min(74vh,780px)]"
             style={{
               boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08) inset, 0 0 120px -40px ${C.secondary}55`,
             }}
@@ -366,13 +366,13 @@ export default function HomeServicesShowcase({
             <h2
               className="font-sans font-bold text-white leading-[1.08] mb-4"
               style={{
-                fontSize: "clamp(2rem, 3.6vw, 3.25rem)",
+                fontSize: "clamp(1.75rem, 1rem + 2.6vw, 4rem)",
                 letterSpacing: "-0.02em",
               }}
             >
               {data.title}
             </h2>
-            <p className="font-body text-white/60 text-base sm:text-lg leading-relaxed max-w-lg">
+            <p className="font-body text-white/60 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-lg 3xl:max-w-xl">
               {data.subtitle}
             </p>
           </motion.div>

@@ -742,3 +742,20 @@ section#hero.snap-section {
     opacity: 0.7;
   }
 }
+/* ─────────────────────────────────────────────
+   PAGE CONTAINER — 8 responsive levels
+   <375 · xs 375 · sm 640 · md 768 · lg 1024 · xl 1280 · 2xl 1536 · 3xl 1920
+   ───────────────────────────────────────────── */
+.page-container {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 80rem;
+  padding-inline: 1rem;
+}
+@media (min-width: 375px) { .page-container { padding-inline: 1.25rem; } }
+@media (min-width: 640px) { .page-container { padding-inline: 1.5rem; } }
+@media (min-width: 768px) { .page-container { padding-inline: 2rem; } }
+@media (min-width: 1024px) { .page-container { padding-inline: 2.5rem; } }
+@media (min-width: 1280px) { .page-container { padding-inline: 3rem; max-width: 84rem; } }
+@media (min-width: 1536px) { .page-container { max-width: 92rem; } }
+@media (min-width: 1920px) { .page-container { padding-inline: 4rem; max-width: 110rem; } }
