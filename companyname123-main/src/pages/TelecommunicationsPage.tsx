@@ -73,7 +73,7 @@ function CoreSolutions({ units }: { units: Unit[] }) {
 
   return (
     <section id="business-unit" className="relative py-20 md:py-28 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader
           index="01"
           eyebrow={tp.badge}
@@ -93,7 +93,7 @@ function CoreSolutions({ units }: { units: Unit[] }) {
           {/* Sticky visual (desktop) */}
           <div className="hidden lg:block lg:col-span-5">
             <div
-              className="sticky top-28 h-[calc(100vh-9rem)] max-h-[680px] rounded-[2rem] overflow-hidden"
+              className="sticky top-28 h-[calc(100vh-9rem)] max-h-[680px] 3xl:max-h-[840px] rounded-[2rem] overflow-hidden"
               style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
             >
               {units.map((unit, i) => (
@@ -205,7 +205,7 @@ function ServiceStandards() {
 
   return (
     <section id="service-Standards" className="relative py-16 md:py-24 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <motion.div
           {...reveal()}
           className="relative overflow-hidden rounded-[2.25rem] border border-white/10 px-6 sm:px-10 lg:px-14 py-14 lg:py-20"
@@ -218,14 +218,14 @@ function ServiceStandards() {
           <div className="relative">
             <SectionHeader index="02" eyebrow={tp.badge} lead={tp.serviceStandardsTitle} highlight={tp.serviceStandardsHighlight} center />
 
-            <div className="grid grid-cols-1 md:grid-cols-3">
+            <div className="grid grid-cols-1 lg:grid-cols-3">
               {tp.serviceStandards.map((item, i) => {
                 const Icon = STANDARD_ICONS[i] ?? ShieldCheck;
                 return (
                   <motion.div
                     key={item.title}
                     {...reveal(0.1 + i * 0.1, 24)}
-                    className={`group relative py-8 md:py-2 md:px-8 lg:px-10 ${i > 0 ? 'border-t md:border-t-0 md:border-s border-white/10' : ''}`}
+                    className={`group relative py-8 lg:py-2 lg:px-8 xl:px-10 ${i > 0 ? 'border-t lg:border-t-0 lg:border-s border-white/10' : ''}`}
                   >
                     <div
                       aria-hidden

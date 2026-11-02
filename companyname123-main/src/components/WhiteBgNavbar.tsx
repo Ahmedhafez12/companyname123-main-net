@@ -83,6 +83,11 @@ const NavContainer = styled.div`
   position: relative;
   z-index: 10;
   gap: 2rem;
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    gap: 1rem;
+    padding: 0 1.25rem;
+  }
 `;
 
 const GlowLine = styled.div<{ $scrolled: boolean }>`
@@ -141,6 +146,10 @@ const VerticalSeparator = styled.div<{ $scrolled: boolean }>`
   @media (min-width: 1024px) {
     display: block;
   }
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    margin: 0 0.5rem;
+  }
 `;
 
 const NavLinks = styled.div`
@@ -153,6 +162,10 @@ const NavLinks = styled.div`
   @media (max-width: 1023px) {
     display: none;
   }
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    gap: 0;
+  }
 `;
 
 const RightNavSection = styled.div`
@@ -160,6 +173,7 @@ const RightNavSection = styled.div`
   align-items: center;
   gap: 0.75rem;
   margin-left: auto;
+  flex-shrink: 0;
 
   html[dir="rtl"] & {
     margin-left: 0;
@@ -168,6 +182,10 @@ const RightNavSection = styled.div`
 
   @media (min-width: 1024px) {
     display: flex;
+  }
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    gap: 0.25rem;
   }
 `;
 
@@ -216,6 +234,11 @@ const PhoneLink = styled.a<{ $scrolled: boolean }>`
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-radius: 0.375rem;
+  white-space: nowrap;
+
+  @media (max-width: 1439px) {
+    display: none;
+  }
 
   &:hover {
     color: ${BRAND_COLORS.secondary};
@@ -252,6 +275,11 @@ const NavLink = styled(Link).withConfig({
   position: relative;
   padding: 0.46875rem 0.75rem;
   text-transform: uppercase;
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    padding: 0.46875rem 0.5rem;
+    letter-spacing: 0.02em;
+  }
   letter-spacing: 0.05em;
   border-radius: 0.375rem;
   white-space: nowrap;
@@ -307,6 +335,11 @@ const NavItemButton = styled.button.withConfig({
   gap: 0.5rem;
   padding: 0.46875rem 0.75rem;
   text-transform: uppercase;
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    padding: 0.46875rem 0.5rem;
+    letter-spacing: 0.02em;
+  }
   letter-spacing: 0.05em;
   position: relative;
   border-radius: 0.375rem;
@@ -518,6 +551,11 @@ const NavButton = styled(Link)`
   box-shadow: 0 4px 12px ${BRAND_COLORS.secondaryOpacity["20"]};
   border: none;
   white-space: nowrap;
+  flex-shrink: 0;
+
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    padding: 0.46875rem 0.875rem;
+  }
 
   &::before {
     content: "";

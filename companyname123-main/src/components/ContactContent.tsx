@@ -466,7 +466,7 @@ const ContactContent: React.FC<ContactContentProps> = ({ compact = false }) => {
   if (compact) {
     const promiseIcons = [Shield, Clock, Headset];
     return (
-      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 xl:px-8">
+      <div className="w-full max-w-6xl 3xl:max-w-7xl mx-auto px-4 sm:px-6 xl:px-8">
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}

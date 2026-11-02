@@ -89,7 +89,7 @@ function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[100dvh] flex items-center pt-28 pb-16 lg:py-0">
       <div aria-hidden className="absolute top-1/4 -start-40 w-[34rem] h-[34rem] rounded-full blur-3xl opacity-25" style={{ background: C.primary }} />
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+      <div className="relative page-container grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
         <div className="lg:col-span-6">
           <motion.div {...reveal(0, 16)} className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] backdrop-blur-md px-3.5 py-1.5 mb-6">
             <span className="w-2 h-2 rounded-full" style={{ background: C.cta }} />
@@ -98,12 +98,12 @@ function Hero() {
           <motion.h1
             {...reveal(0.08)}
             className="font-sans font-bold text-white mb-6"
-            style={{ fontSize: 'clamp(2.6rem, 5.6vw, 5rem)', lineHeight: 1.04, letterSpacing: '-0.03em' }}
+            style={{ fontSize: 'clamp(2.1rem, 0.75rem + 4.8vw, 6rem)', lineHeight: 1.04, letterSpacing: '-0.03em', overflowWrap: 'break-word' }}
           >
             {cp.headline}
             <GradientText>{cp.headlineHighlight}</GradientText>
           </motion.h1>
-          <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg leading-relaxed max-w-xl">
+          <motion.p {...reveal(0.16)} className="font-body text-white/75 text-base sm:text-lg 3xl:text-xl leading-relaxed max-w-xl">
             {cp.subtitle}
           </motion.p>
           <motion.div {...reveal(0.24)} className="mt-9 flex flex-wrap items-center gap-3">
@@ -135,7 +135,7 @@ function Hero() {
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: EASE }}
-          className="lg:col-span-6 relative h-[440px] lg:h-[min(80vh,700px)] rounded-[2rem] overflow-hidden border border-white/10 p-4 sm:p-5"
+          className="lg:col-span-6 relative h-[380px] xs:h-[440px] lg:h-[min(80vh,700px)] 3xl:h-[min(80vh,860px)] rounded-[2rem] overflow-hidden border border-white/10 p-4 sm:p-5"
           style={{
             background: `linear-gradient(160deg, ${C.primary}66, ${C.bg}E6)`,
             boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55`,
@@ -170,7 +170,7 @@ function Portfolio() {
 
   return (
     <section id="portfolio" className="relative py-20 md:py-28 scroll-mt-20">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <SectionHeader index="01" eyebrow={cp.bannerLabel} lead={cp.sectorsTitle} highlight={cp.sectorsHighlight} subtitle={cp.sectorsSubtitle} />
 
         <motion.div {...reveal(0.05, 16)} role="tablist" className="flex flex-wrap gap-2 mb-8">
@@ -195,7 +195,7 @@ function Portfolio() {
           })}
         </motion.div>
 
-        <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-6 gap-3 xs:gap-4">
           <AnimatePresence mode="popLayout">
             {visible.map((c) => (
               <motion.article
@@ -250,11 +250,11 @@ function Industries() {
 
   return (
     <section className="relative py-16 md:py-24">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="page-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <motion.div
             {...reveal()}
-            className="lg:col-span-5 relative h-[340px] lg:h-[min(68vh,560px)] rounded-[2rem] overflow-hidden"
+            className="lg:col-span-5 relative h-[300px] xs:h-[340px] lg:h-[min(68vh,560px)] 3xl:h-[min(68vh,700px)] rounded-[2rem] overflow-hidden"
             style={{ boxShadow: `0 40px 80px -30px rgba(0,0,0,0.6), 0 0 120px -40px ${C.secondary}55` }}
           >
             <img src={INDUSTRY_IMAGE} alt="" aria-hidden loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover" />
